@@ -7,9 +7,9 @@ import Paper from '@mui/material/Paper';
 import RestoreIcon from '@mui/icons-material/Restore';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 
-import Index from '../page/Index';
+import Body from '../../page/Body';
 
-export default function SimpleBottomNavigation() {
+const SimpleBottomNavigation = () => {
     const [value, setValue] = React.useState("");
     const navigate = useNavigate();
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
@@ -19,7 +19,7 @@ export default function SimpleBottomNavigation() {
     return (
         <div>
             <Box>
-                <Index />
+                <Body />
             </Box>
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
                 <BottomNavigation
@@ -34,3 +34,5 @@ export default function SimpleBottomNavigation() {
         </div>
     );
 }
+
+export default SimpleBottomNavigation;

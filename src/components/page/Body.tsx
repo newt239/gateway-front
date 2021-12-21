@@ -3,11 +3,11 @@ import {
     Routes,
     Route
 } from "react-router-dom";
-import Home from '../page/Home';
-import Login from '../page/Login';
-import Operate from '../page/Operate';
+import Home from './Home';
+import Login from './Login';
+import Operate from './Operate';
 
-const Index: React.VFC = () => {
+const Body = () => {
     return (
         <Routes>
             <Route path="/" element={<Home />} />
@@ -17,4 +17,4 @@ const Index: React.VFC = () => {
     )
 }
 
-export default Index;
+export default Body;

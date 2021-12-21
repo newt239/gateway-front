@@ -1,7 +1,6 @@
 import React from "react"
 
-// 実際の使用例（詳しくは後述）
-const Login: React.VFC = () => {
+const Login = () => {
     return <div>Hello login!</div>
 }
 
