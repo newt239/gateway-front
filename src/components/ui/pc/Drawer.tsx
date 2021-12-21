@@ -11,7 +11,7 @@ import Divider from '@mui/material/Divider';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import SvgIcon from '@mui/material/SvgIcon';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
 import AutoGraphRoundedIcon from '@mui/icons-material/AutoGraphRounded';
 import MapRoundedIcon from '@mui/icons-material/MapRounded';
@@ -60,21 +60,26 @@ const DrawerLeft = () => {
                 <Divider />
                 <List>
                     <ListItemButton selected={selectedIndex === 0}
-                        onClick={(event) => handleListItemClick(event, 0, 'operate')}>
+                        onClick={(event) => handleListItemClick(event, 0, '')}>
+                        <ListItemIcon><HomeRoundedIcon /></ListItemIcon>
+                        <ListItemText primary='ホーム' />
+                    </ListItemButton>
+                    <ListItemButton selected={selectedIndex === 1}
+                        onClick={(event) => handleListItemClick(event, 1, 'operate')}>
                         <ListItemIcon><MeetingRoomRoundedIcon /></ListItemIcon>
                         <ListItemText primary='入退室処理' />
                     </ListItemButton>
-                    <ListItemButton selected={selectedIndex === 1}
-                        onClick={(event) => handleListItemClick(event, 1, 'chart')}>
-                        <ListItemIcon><AutoGraphRoundedIcon /></ListItemIcon>
-                        <ListItemText primary='混雑状況' />
-                    </ListItemButton>
                     <ListItemButton selected={selectedIndex === 2}
-                        onClick={(event) => handleListItemClick(event, 2, 'crowd')}>
-                        <ListItemIcon><MapRoundedIcon /></ListItemIcon>
-                        <ListItemText primary='履歴' />
+                        onClick={(event) => handleListItemClick(event, 2, 'chart')}>
+                        <ListItemIcon><AutoGraphRoundedIcon /></ListItemIcon>
+                        <ListItemText primary='統計' />
                     </ListItemButton>
                     <ListItemButton selected={selectedIndex === 3}
+                        onClick={(event) => handleListItemClick(event, 3, 'crowd')}>
+                        <ListItemIcon><MapRoundedIcon /></ListItemIcon>
+                        <ListItemText primary='混雑状況' />
+                    </ListItemButton>
+                    <ListItemButton selected={selectedIndex === 4}
                         onClick={(event) => handleListItemClick(event, 4, 'history')}>
                         <ListItemIcon><HistoryRoundedIcon /></ListItemIcon>
                         <ListItemText primary='履歴' />

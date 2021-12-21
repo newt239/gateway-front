@@ -4,8 +4,8 @@ import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import RestoreIcon from '@mui/icons-material/Restore';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
 
 import Body from '../../page/Body';
 
@@ -27,8 +27,8 @@ const SimpleBottomNavigation = () => {
                     value={value}
                     onChange={handleChange}
                 >
-                    <BottomNavigationAction label="Home" value="" icon={<RestoreIcon />} />
-                    <BottomNavigationAction label="Operate" value="operate" icon={<FavoriteIcon />} />
+                    <BottomNavigationAction label="ホーム" value="" icon={<HomeRoundedIcon />} />
+                    <BottomNavigationAction label="入退室処理" value="operate" icon={<MeetingRoomRoundedIcon />} />
                 </BottomNavigation>
             </Paper>
         </div>
