@@ -1,17 +1,17 @@
 import React from "react";
-import { useDispatch } from 'react-redux';
-import { clearToken } from '../../stores/auth';
-import { Button } from '@mui/material';
+
+import Box from '@mui/material/Box';
+import { Typography } from '@mui/material';
+
+import UserInfo from '../ui/UserInfo';
+
 const Home = () => {
-    const dispatch = useDispatch();
-    const logout = () => {
-        dispatch(clearToken());
-    }
-    return <div>トップ
-        <Button color="primary" onClick={logout}>
-            ログアウト
-        </Button>
-    </div>
+    return (
+        <Box>
+            <Typography variant="h2">ホーム</Typography>
+            <UserInfo />
+        </Box>
+    )
 }
 
 export default Home;

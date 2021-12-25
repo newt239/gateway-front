@@ -7,9 +7,9 @@ const ScreenWidth = () => {
     function MediaQuery() {
         const sm = useMediaQuery('(max-width:600px)');
         if (sm) {
-            return <PC />
-        } else {
             return <SM />
+        } else {
+            return <PC />
         }
     }
     return (

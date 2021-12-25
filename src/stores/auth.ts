@@ -9,7 +9,7 @@ const slice = createSlice({
     initialState,
     reducers: {
         setToken: (state, token) => {
-            return Object.assign({}, state, { token: token });
+            return Object.assign({}, state, { token: token.payload });
         },
         clearToken: state => {
             return Object.assign({}, state, { token: "" });

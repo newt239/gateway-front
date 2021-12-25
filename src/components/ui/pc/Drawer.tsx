@@ -18,6 +18,7 @@ import MapRoundedIcon from '@mui/icons-material/MapRounded';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 
 import Body from '../../page/Body';
+import UserInfo from '../UserInfo';
 const drawerWidth = 240;
 
 const DrawerLeft = () => {
@@ -58,6 +59,8 @@ const DrawerLeft = () => {
             >
                 <Toolbar />
                 <Divider />
+                <UserInfo />
+                <Divider />
                 <List>
                     <ListItemButton selected={selectedIndex === 0}
                         onClick={(event) => handleListItemClick(event, 0, '')}>
@@ -84,13 +87,11 @@ const DrawerLeft = () => {
                         <ListItemIcon><HistoryRoundedIcon /></ListItemIcon>
                         <ListItemText primary='履歴' />
                     </ListItemButton>
-
                 </List>
                 <Divider />
             </Drawer>
             <Box
-                component="main"
-                sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
+                sx={{ p: 3, width: '100%' }}
             >
                 <Toolbar />
                 <Body />

@@ -12,6 +12,11 @@ const theme = createTheme({
         h1: {
             fontSize: '2rem',
             fontWeight: '800'
+        },
+        h2: {
+            fontSize: '1.8rem',
+            fontWeight: 800,
+            marginBottom: '1rem'
         }
     }
 });
