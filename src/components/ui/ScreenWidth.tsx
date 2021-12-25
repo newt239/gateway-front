@@ -1,15 +1,15 @@
 import * as React from 'react';
-import Drawer from './pc/Drawer'
-import BottomNav from './sm/BottomNav'
+import PC from './pc/Index'
+import SM from './sm/Index'
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 const ScreenWidth = () => {
     function MediaQuery() {
         const sm = useMediaQuery('(max-width:600px)');
         if (sm) {
-            return <BottomNav />
+            return <PC />
         } else {
-            return <Drawer />
+            return <SM />
         }
     }
     return (

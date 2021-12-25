@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 export default function Exit() {
     return (
         <Box sx={{ width: '100%' }}>
-            <p>exit</p>
+            <div>exit</div>
         </Box>
     );
 }

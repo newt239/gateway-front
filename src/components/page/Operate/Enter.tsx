@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 export default function Enter() {
     return (
         <Box sx={{ width: '100%' }}>
-            <p>enter</p>
+            <div>enter</div>
         </Box>
     );
 }
