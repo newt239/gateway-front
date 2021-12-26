@@ -21,7 +21,7 @@ interface messageType {
 const Login = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [inputValue, updateValue] = useState({ username: "", password: "" });
+    const [inputValue, updateValue] = useState({ userid: "", password: "" });
     const [message, updateMessage] = useState<messageType>({ display: "none", severity: "error", message: "" });
     const login = () => {
         console.log("start");
@@ -45,10 +45,10 @@ const Login = () => {
                 </Grid>
                 <Grid item xs={12}>
                     <TextField
-                        id="username"
+                        id="userid"
                         label="ユーザー名"
                         type="text"
-                        onChange={(event) => updateValue({ "username": event.target.value, "password": inputValue.password })}
+                        onChange={(event) => updateValue({ "userid": event.target.value, "password": inputValue.password })}
                         fullWidth
                     />
                 </Grid>
@@ -57,7 +57,7 @@ const Login = () => {
                         id="password"
                         label="パスワード"
                         type="password"
-                        onChange={(event) => updateValue({ "username": inputValue.username, "password": event.target.value })}
+                        onChange={(event) => updateValue({ "userid": inputValue.userid, "password": event.target.value })}
                         fullWidth
                     />
                 </Grid>

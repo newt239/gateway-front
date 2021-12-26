@@ -9,7 +9,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
 type QrReaderProps = {
     type: string;
@@ -70,7 +70,8 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
                 open={open}
                 onClose={handleClose}
             >
-                <DialogTitle sx={{ color: `${dialog.type}.main` }}>
+                <DialogTitle sx={{ color: `${dialog.type}.main`, display: "inline-flex", alignItems: "center" }}>
+                    {dialog.type === "success" && <CheckCircleRoundedIcon />}
                     {dialog.title}
                 </DialogTitle>
                 <DialogContent>

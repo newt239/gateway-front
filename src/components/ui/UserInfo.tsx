@@ -19,7 +19,7 @@ const UserInfo = () => {
     useEffect(() => {
         axios.get(API_BASE_URL + "/v1/users/me", { headers: { Authorization: "Bearer " + token } }).then(res => {
             console.log(res.data);
-            updateUserProfile(res.data.username);
+            updateUserProfile(res.data.userid);
         })
     }, [token]);
     return (
