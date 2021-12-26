@@ -8,8 +8,8 @@ const slice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        setToken: (state, token) => {
-            return Object.assign({}, state, { token: token.payload });
+        setToken: (state, action) => {
+            return Object.assign({}, state, { token: action.payload });
         },
         clearToken: state => {
             return Object.assign({}, state, { token: "" });

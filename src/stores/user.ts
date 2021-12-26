@@ -1,22 +1,25 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    name: ''
+    userid: '',
+    display_name: '',
+    user_type: '',
+    role: '',
+    available: '',
+    note: '',
 };
 
 const slice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        setName: (state, action) => {
-            return Object.assign({}, state, { name: action.payload })
-        },
-        clearName: state => {
-            return Object.assign({}, state, { name: "" })
+        setProfile: (state, action) => {
+            console.log(action.payload)
+            return Object.assign({}, state, action.payload);
         },
     }
 });
 
 export default slice.reducer;
 
-export const { setName, clearName } = slice.actions;
+export const { setProfile } = slice.actions;

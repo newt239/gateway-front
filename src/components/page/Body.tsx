@@ -13,18 +13,17 @@ const Body = () => {
     const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.auth.token);
     useEffect(() => {
-        console.log(location);
         if (location.pathname !== "/login") {
-            if (token === "") {
+            if (!token) {
                 const localStorageToken: string | null = localStorage.getItem('gatewayApiToken');
                 if (localStorageToken) {
-                    dispatch(setToken(token));
+                    dispatch(setToken(localStorageToken));
                 } else {
                     navigate("/login", { replace: true });
                 }
             }
         }
-    }, [token, location]);
+    }, [localStorage.getItem('gatewayApiToken'), location]);
     return (
         <Routes>
             <Route path="/" element={<Home />} />

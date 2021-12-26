@@ -29,9 +29,9 @@ const Login = () => {
             console.log(res);
             if (res.data.status === "success") {
                 updateMessage({ display: "block", severity: "success", message: "ログインに成功しました。" });
+                localStorage.setItem('gatewayApiToken', res.data.token);
                 dispatch(setToken(res.data.token));
                 navigate("/", { replace: true });
-                localStorage.setItem('gatewayApiToken', res.data.token);
             } else {
                 updateMessage({ display: "block", severity: "error", message: "パスワードが間違っています。" });
             }

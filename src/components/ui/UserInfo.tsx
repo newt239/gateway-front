@@ -4,37 +4,64 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../stores/index'
 import { clearToken } from '../../stores/auth';
+import { setProfile } from '../../stores/user';
 
 import Box from '@mui/material/Box';
 import { Button, Typography } from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import GroupIcon from '@mui/icons-material/Group';
+import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 const UserInfo = () => {
-    const [userProfile, updateUserProfile] = useState("unknown");
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.auth.token);
+    const userProfile = useSelector((state: RootState) => state.user);
     const logout = () => {
         dispatch(clearToken());
         localStorage.removeItem('gatewayApiToken');
         navigate("/login", { replace: true });
-    }
+    };
     useEffect(() => {
-        axios.get(API_BASE_URL + "/v1/users/me", { headers: { Authorization: "Bearer " + token } }).then(res => {
-            console.log(res.data);
-            updateUserProfile(res.data.userid);
-        })
+        if (token) {
+            axios.get(API_BASE_URL + "/v1/users/me", { headers: { Authorization: "Bearer " + token } }).then(res => {
+                if (res.data) {
+                    dispatch(setProfile(res.data));
+                };
+            });
+        };
     }, [token]);
+    const AccountIcon = () => {
+        switch (userProfile.user_type) {
+            case "admin":
+                return <AdminPanelSettingsIcon />;
+            case "moderator":
+                return <ManageAccountsIcon />;
+            case "user":
+                return <AccountCircleIcon />;
+            case "group":
+                return <GroupIcon />;
+            default:
+                return <NoAccountsIcon />;
+        };
+    };
     return (
-        <Box sx={{ p: 2 }}>
-            <Typography sx={{ fontSize: 20, fontWeight: 800 }}>{userProfile}</Typography>
-            <Typography sx={{ fontSize: 10 }}>@{userProfile}</Typography>
-            <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
-                ログアウト
-            </Button>
+        <Box>
+            {userProfile.available && (
+                <Box sx={{ p: 2 }}>
+                    <AccountIcon />
+                    <Typography sx={{ fontSize: 20, fontWeight: 800 }}>{userProfile.display_name}</Typography>
+                    <Typography sx={{ fontSize: 10 }}>@{userProfile.userid}</Typography>
+                    <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
+                        ログアウト
+                    </Button>
+                </Box>)}
         </Box>
-    )
+    );
 }
 
 export default UserInfo;
