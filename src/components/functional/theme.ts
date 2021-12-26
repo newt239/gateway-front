@@ -8,14 +8,15 @@ const theme = createTheme({
     },
     typography: {
         // Use the system font instead of the default Roboto font.
-        fontFamily: '"BIZ UDPGothic"',
+        fontFamily: '"Noto Sans JP", "BIZ UDPGothic"',
         h1: {
             fontSize: '2rem',
-            fontWeight: '800'
+            fontWeight: 900,
+            lineHeight: '3rem'
         },
         h2: {
             fontSize: '1.8rem',
-            fontWeight: 800,
+            fontWeight: 400,
             marginBottom: '1rem'
         }
     }

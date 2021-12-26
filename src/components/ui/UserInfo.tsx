@@ -54,7 +54,7 @@ const UserInfo = () => {
             {userProfile.available && (
                 <Box sx={{ p: 2 }}>
                     <AccountIcon />
-                    <Typography sx={{ fontSize: 20, fontWeight: 800 }}>{userProfile.display_name}</Typography>
+                    <Typography sx={{ fontSize: 20, fontWeight: 900 }}>{userProfile.display_name}</Typography>
                     <Typography sx={{ fontSize: 10 }}>@{userProfile.userid}</Typography>
                     <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
                         ログアウト
