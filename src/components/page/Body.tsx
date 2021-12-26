@@ -6,6 +6,9 @@ import { setToken } from '../../stores/auth';
 import Home from './Home';
 import Login from './Login';
 import Operate from './Operate/Index';
+import Crowd from './Crowd';
+import Chart from './Chart/Index';
+import History from './History/Index';
 
 const Body = () => {
     const location = useLocation();
@@ -29,6 +32,9 @@ const Body = () => {
             <Route path="/" element={<Home />} />
             <Route path="login" element={<Login />} />
             <Route path="operate" element={<Operate />} />
+            <Route path="crowd" element={<Crowd />} />
+            <Route path="chart" element={<Chart />} />
+            <Route path="history" element={<History />} />
         </Routes>
     )
 }

@@ -32,13 +32,14 @@ function TabPanel(props: TabPanelProps) {
     );
 }
 
-export default function Index() {
+export default function Operate() {
     const [value, setValue] = React.useState(0);
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
     return (
         <Box sx={{ width: '100%' }}>
+            <Typography variant="h2">入退室処理</Typography>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} variant="fullWidth" onChange={handleChange} aria-label="basic tabs example" centered>
                     <Tab icon={<PhoneMissedIcon />} iconPosition="start" label="入室" />
