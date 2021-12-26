@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import QrReader from 'react-qr-reader';
+import { useLocation } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -21,6 +22,16 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
     const [open, setOpen] = useState(false);
     const [qrReaderState, pauseQrReader] = useState(true);
     const [dialog, updateDialog] = useState({ type: "success", title: "success scan", message: "hello" });
+
+    // location以外のパスに移動したときにカメラを切る
+    const location = useLocation();
+    useEffect(() => {
+        if (location.pathname === "/operate") {
+            pauseQrReader(true);
+        } else {
+            pauseQrReader(false);
+        }
+    }, [location]);
 
     // out of memory の対策として、5 分ごとに react-qr-reader を unmount して、直後に mount している
     // https://github.com/afes-website/cappuccino-app/blob/d0201aa5506e6b3aa7c3cc887171d83b0e773b18/src/components/QRScanner.tsx#L146
