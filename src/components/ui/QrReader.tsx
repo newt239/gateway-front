@@ -26,7 +26,7 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
     // location以外のパスに移動したときにカメラを切る
     const location = useLocation();
     useEffect(() => {
-        if (location.pathname === "/operate") {
+        if (location.pathname.match(/operate/)) {
             pauseQrReader(true);
         } else {
             pauseQrReader(false);
@@ -71,11 +71,13 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
     return (
         <Box sx={{ p: 2 }}>
             {qrReaderState && refreshQrReader && (
-                <QrReader
-                    delay={1}
-                    onError={handleError}
-                    onScan={handleScan}
-                />)}
+                <Box>
+                    <QrReader
+                        delay={1}
+                        onError={handleError}
+                        onScan={handleScan}
+                        style={{ margin: 'auto', width: '100%', maxWidth: '50vh' }}
+                    /></Box>)}
             <p>{id}</p>
             <Dialog
                 open={open}

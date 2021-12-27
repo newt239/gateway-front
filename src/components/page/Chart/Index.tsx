@@ -7,7 +7,7 @@ import Apexchart from './Chart';
 
 export default function Chart() {
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{ width: '100%', overflowX: 'scroll' }}>
             <Typography variant="h2">統計</Typography>
             <Apexchart />
         </Box>

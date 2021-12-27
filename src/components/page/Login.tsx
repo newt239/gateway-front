@@ -24,9 +24,7 @@ const Login = () => {
     const [inputValue, updateValue] = useState({ userid: "", password: "" });
     const [message, updateMessage] = useState<messageType>({ display: "none", severity: "error", message: "" });
     const login = () => {
-        console.log("start");
         axios.post(API_BASE_URL + "/v1/auth/login", inputValue).then(res => {
-            console.log(res);
             if (res.data.status === "success") {
                 updateMessage({ display: "block", severity: "success", message: "ログインに成功しました。" });
                 localStorage.setItem('gatewayApiToken', res.data.token);
@@ -39,7 +37,6 @@ const Login = () => {
     }
     return (
         <Box>
-            <Typography variant='h2'>ログイン</Typography>
             <Grid container spacing={2} columnSpacing={2}>
                 <Grid item xs={12} sx={{ display: message.display }}>
                     <Alert severity={message.severity}>{message.message}</Alert>

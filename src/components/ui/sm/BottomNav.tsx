@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useNavigate } from "react-router-dom";
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import Box from '@mui/material/Box';
+import { Container, Box } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
@@ -17,10 +17,7 @@ const SimpleBottomNavigation = () => {
         setValue(newValue);
     };
     return (
-        <div>
-            <Box sx={{ p: 2 }}>
-                <Body />
-            </Box>
+        <>
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
                 <BottomNavigation
                     showLabels
@@ -31,7 +28,7 @@ const SimpleBottomNavigation = () => {
                     <BottomNavigationAction label="入退室処理" value="operate" icon={<MeetingRoomRoundedIcon />} />
                 </BottomNavigation>
             </Paper>
-        </div>
+        </>
     );
 }
 

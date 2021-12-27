@@ -7,7 +7,9 @@ export default function Enter() {
     return (
         <Box>
             <div>enter</div>
-            <QrReader type="enter" />
+            <Box>
+                <QrReader type="enter" />
+            </Box>
         </Box>
     );
 }

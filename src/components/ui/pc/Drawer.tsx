@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from "react-router-dom";
-import Box from '@mui/material/Box';
+import { Container, Box } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import CssBaseline from '@mui/material/CssBaseline';
 import AppBar from '@mui/material/AppBar';
@@ -35,16 +35,6 @@ const DrawerLeft = () => {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar
-                position="fixed"
-                sx={{ width: `calc(100% - ${drawerWidth}px)`, ml: `${drawerWidth}px` }}
-            >
-                <Toolbar>
-                    <Typography variant="h1" noWrap component="div">
-                        Gateway
-                    </Typography>
-                </Toolbar>
-            </AppBar>
             <Drawer
                 sx={{
                     width: drawerWidth,
@@ -82,20 +72,13 @@ const DrawerLeft = () => {
                         <ListItemIcon><MapRoundedIcon /></ListItemIcon>
                         <ListItemText primary='混雑状況' />
                     </ListItemButton>
-                    <ListItemButton selected={selectedIndex === 4}
-                        onClick={(event) => handleListItemClick(event, 4, 'history')}>
-                        <ListItemIcon><HistoryRoundedIcon /></ListItemIcon>
-                        <ListItemText primary='履歴' />
-                    </ListItemButton>
                 </List>
                 <Divider />
             </Drawer>
-            <Box
-                sx={{ p: 3, width: '100%' }}
-            >
+            <Container>
                 <Toolbar />
                 <Body />
-            </Box>
+            </Container>
         </Box>
     );
 }

@@ -19,18 +19,12 @@ const Apexchart = () => {
         ]
     };
     return (
-        <div className="app">
-            <div className="row">
-                <div className="mixed-chart">
-                    <Chart
-                        options={state.options}
-                        series={state.series}
-                        type="bar"
-                        width="500"
-                    />
-                </div>
-            </div>
-        </div>
+        <Chart
+            options={state.options}
+            series={state.series}
+            type="bar"
+            width="500"
+        />
     );
 }
 

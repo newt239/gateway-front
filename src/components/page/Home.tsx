@@ -1,16 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 
 import UserInfo from '../ui/UserInfo';
 
 const Home = () => {
     return (
-        <Box sx={{ width: '100%' }}>
-            <Typography variant="h2">ホーム</Typography>
-            <UserInfo />
-        </Box>
+        <>
+            <Grid container spacing={{ xs: 2, md: 3 }}>
+                <Grid item xs={12} md={6}>
+                    <Paper elevation={3} sx={{ width: '100%' }}>
+                        <UserInfo />
+                    </Paper>
+                </Grid>
+            </Grid>
+        </>
     )
 }
 

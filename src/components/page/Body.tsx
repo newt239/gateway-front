@@ -6,9 +6,11 @@ import { setToken } from '../../stores/auth';
 import Home from './Home';
 import Login from './Login';
 import Operate from './Operate/Index';
+import Enter from './Operate/Enter';
+import Exit from './Operate/Exit';
+import Pass from './Operate/Pass';
 import Crowd from './Crowd';
 import Chart from './Chart/Index';
-import History from './History/Index';
 
 const Body = () => {
     const location = useLocation();
@@ -29,12 +31,18 @@ const Body = () => {
     }, [localStorage.getItem('gatewayApiToken'), location]);
     return (
         <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="login" element={<Login />} />
-            <Route path="operate" element={<Operate />} />
-            <Route path="crowd" element={<Crowd />} />
-            <Route path="chart" element={<Chart />} />
-            <Route path="history" element={<History />} />
+            <Route path="/">
+                <Route index element={<Home />} />
+                <Route path="login" element={<Login />} />
+                <Route path="operate" >
+                    <Route index element={<Operate />} />
+                    <Route path="enter" element={<Enter />} />
+                    <Route path="exit" element={<Exit />} />
+                    <Route path="pass" element={<Pass />} />
+                </Route>
+                <Route path="crowd" element={<Crowd />} />
+                <Route path="chart" element={<Chart />} />
+            </Route>
         </Routes>
     )
 }

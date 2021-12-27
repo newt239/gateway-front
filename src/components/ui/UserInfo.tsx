@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../stores/index'
+import { RootState } from '../../stores/index';
 import { clearToken } from '../../stores/auth';
 import { setProfile } from '../../stores/user';
 
@@ -28,9 +28,10 @@ const UserInfo = () => {
     };
     useEffect(() => {
         if (token) {
-            axios.get(API_BASE_URL + "/v1/users/me", { headers: { Authorization: "Bearer " + token } }).then(res => {
+            axios.get(API_BASE_URL + "/v1/auth/me", { headers: { Authorization: "Bearer " + token } }).then(res => {
+                console.log(res);
                 if (res.data) {
-                    dispatch(setProfile(res.data));
+                    dispatch(setProfile(res.data.data));
                 };
             });
         };

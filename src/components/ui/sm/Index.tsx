@@ -1,9 +1,19 @@
-import * as React from 'react';
-import BottomNav from './BottomNav';
+import React from 'react';
+import { Container, Box, Toolbar } from '@mui/material';
 
+import BottomNav from './BottomNav';
+import TopBar from '../TopBar';
+import Body from '../../page/Body';
 const Index = () => {
     return (
-        <BottomNav />
+        <>
+            <BottomNav />
+            <Container>
+                <Toolbar />
+                <Body />
+            </Container>
+            <TopBar />
+        </>
     )
 }
 
