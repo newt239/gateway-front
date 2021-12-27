@@ -1,15 +1,15 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { Paper, Typography } from '@mui/material';
 
 import Apexchart from './Chart';
 
 
 export default function Chart() {
     return (
-        <Box sx={{ width: '100%', overflowX: 'scroll' }}>
-            <Typography variant="h2">統計</Typography>
-            <Apexchart />
-        </Box>
+        <>
+            <Paper elevation={3} sx={{ width: '100%', overflowX: 'scroll' }}>
+                <Apexchart />
+            </Paper>
+        </>
     );
 }

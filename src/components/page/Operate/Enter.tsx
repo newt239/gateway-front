@@ -1,15 +1,15 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+import { Container } from '@mui/material';
 
 import QrReader from '../../ui/QrReader';
 
 export default function Enter() {
     return (
-        <Box>
-            <div>enter</div>
-            <Box>
+        <>
+            <Container sx={{ width: '100%' }}>
+                <div>enter</div>
                 <QrReader type="enter" />
-            </Box>
-        </Box>
+            </Container>
+        </>
     );
 }

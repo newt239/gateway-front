@@ -4,18 +4,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../stores/index';
 import { setTitle } from '../../stores/page';
 
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
+import { Container, Box, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
 
 const TopBar = () => {
     const dispatch = useDispatch();
@@ -36,26 +26,26 @@ const TopBar = () => {
     return (
         <AppBar position="fixed" sx={{ width: { xs: '100%', sm: `calc(100% - 240px)` } }}>
             <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                    <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+                <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Box sx={{ display: 'flex' }}>
                         <IconButton
                             size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
                             color="inherit"
                         >
                             <MenuIcon />
                         </IconButton>
                     </Box>
-                    <Typography
-                        variant="h2"
-                        noWrap
-                        component="div"
-                        sx={{ display: 'flex' }}
-                    >
+                    <Typography variant="h2" noWrap component="div">
                         {pageProps.title}
                     </Typography>
+                    <Box sx={{ display: 'flex' }}>
+                        <IconButton
+                            size="large"
+                            color="inherit"
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                    </Box>
                 </Toolbar>
             </Container>
         </AppBar>

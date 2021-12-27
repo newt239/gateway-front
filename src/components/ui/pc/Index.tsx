@@ -1,14 +1,23 @@
 import * as React from 'react';
+import { Container, Box, Toolbar } from '@mui/material';
+
 import Drawer from './Drawer';
 import TopBar from '../TopBar';
+import Body from '../../page/Body';
 
-const Index = () => {
+const PC = () => {
     return (
         <>
-            <Drawer />
             <TopBar />
+            <Box sx={{ display: 'flex' }}>
+                <Drawer />
+                <Container sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                    <Toolbar sx={{ p: 1 }} />
+                    <Body />
+                </Container>
+            </Box>
         </>
     )
 }
 
-export default Index
+export default PC
