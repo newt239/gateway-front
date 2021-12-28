@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../stores/index';
 import { clearToken } from '../../stores/auth';
-import { setProfile } from '../../stores/user';
+import user, { setProfile } from '../../stores/user';
 
 import Box from '@mui/material/Box';
 import { Button, Typography } from '@mui/material';
@@ -21,6 +21,9 @@ const UserInfo = () => {
     const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.auth.token);
     const userProfile = useSelector((state: RootState) => state.user);
+    if (userProfile.userid === "") {
+        console.log(userProfile)
+    }
     const logout = () => {
         dispatch(clearToken());
         localStorage.removeItem('gatewayApiToken');
@@ -32,7 +35,7 @@ const UserInfo = () => {
                 console.log(res);
                 if (res.data) {
                     dispatch(setProfile(res.data.data));
-                };
+                }
             });
         };
     }, [token]);
@@ -51,16 +54,19 @@ const UserInfo = () => {
         };
     };
     return (
-        <Box>
-            {userProfile.available && (
-                <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2 }}>
+            {userProfile.available ? (
+                <>
                     <AccountIcon />
                     <Typography variant='h3'>{userProfile.display_name}</Typography>
                     <Typography sx={{ fontSize: 10 }}>@{userProfile.userid}</Typography>
                     <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
                         ログアウト
                     </Button>
-                </Box>)}
+                </>)
+                : (
+                    <Typography>ログインしていません</Typography>
+                )}
         </Box>
     );
 }
