@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import store, { RootState } from '../../../stores/index';
 import { updateReservationInfo } from '../../../stores/reservation';
+import { pauseQrReader } from '../../../stores/scan';
 import { Grid, Box, Typography, Button } from '@mui/material';
 import Scanner from '../../ui/Scanner';
 import axios from 'axios';
@@ -18,6 +19,7 @@ export default function ReserveCheck() {
     const handleScan = (scanText: string | null) => {
         if (scanText) {
             if (scanText.length === 8 && scanText.startsWith('G')) {
+                dispatch(pauseQrReader({ state: false }));
                 setText(scanText);
                 axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
                     if (res.data.status === "success") {
@@ -27,6 +29,10 @@ export default function ReserveCheck() {
             };
         };
     };
+    const retry = () => {
+        dispatch(updateReservationInfo({ available: false }));
+        dispatch(pauseQrReader({ state: false }));
+    }
     return (
         <Grid container spacing={{ xs: 2, md: 3 }}>
             <Grid item xs={12}>
@@ -47,6 +53,7 @@ export default function ReserveCheck() {
                         <Typography variant="h4">人数</Typography>
                         <Typography>{reservationInfo.count}人</Typography>
                         <Button variant="contained" onClick={() => navigate("/entrance/enter", { replace: true })}>リストバンドを登録</Button>
+                        <Button variant="contained" onClick={retry}>スキャンし直す</Button>
                     </>
                 )}
             </Grid>

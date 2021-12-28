@@ -1,22 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from "react-redux";
+import store from "../../stores/index";
+import { pauseQrReader } from '../../stores/scan';
 import QrReader from 'react-qr-reader';
 
 type ScannerProps = {
     handleScan: (text: string | null) => void;
 }
 
-const Scanner: React.FC<ScannerProps> = (QrReaderProps) => {
-    const { handleScan } = QrReaderProps;
+const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
 
     // location以外のパスに移動したときにカメラを切る
     const location = useLocation();
-    const [qrReaderState, pauseQrReader] = useState(true);
+    const dispatch = useDispatch();
+    const qrReaderState = store.getState().scan;
     useEffect(() => {
-        if (location.pathname.match(/entrance/)) {
-            pauseQrReader(true);
+        if (location.pathname.match(/entrance|exhibit/)) {
+            dispatch(pauseQrReader({ state: true }));
         } else {
-            pauseQrReader(false);
+            dispatch(pauseQrReader({ state: false }));
         }
     }, [location]);
 
@@ -39,11 +42,11 @@ const Scanner: React.FC<ScannerProps> = (QrReaderProps) => {
         console.log(err);
     }
     return (<>
-        {qrReaderState && refreshQrReader && (
+        {qrReaderState.state && refreshQrReader && (
             <QrReader
                 delay={1}
                 onError={handleError}
-                onScan={handleScan}
+                onScan={(text) => handleScan(text)}
                 style={{ margin: 'auto', width: '100%', maxWidth: '70vh' }}
             />)}
     </>)

@@ -6,13 +6,15 @@ import userReducer from "./user";
 import pageReducer from './page';
 import placeReducer from './place';
 import reservationReducer from './reservation';
+import scanReducer from './scan';
 
 const reducer = combineReducers({
     auth: authReducer,
     user: userReducer,
     page: pageReducer,
     place: placeReducer,
-    reservation: reservationReducer
+    reservation: reservationReducer,
+    scan: scanReducer
 });
 
 const store = configureStore({ reducer });

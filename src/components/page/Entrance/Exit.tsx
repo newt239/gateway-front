@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
-import store, { RootState } from '../../../stores/index';
+import { useDispatch } from 'react-redux';
+import store from '../../../stores/index';
+import { pauseQrReader } from '../../../stores/scan';
 import { Grid, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Button } from '@mui/material';
 import Scanner from '../../ui/Scanner';
 import axios from 'axios';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
-type guestListProp = {
-    guest_id: string;
-    guest_type: string;
-    reservation_id: string;
-    userid: string;
-}
+
 export default function EntranceEnter() {
+    const dispatch = useDispatch();
     const token = store.getState().auth.token;
     const user = store.getState().user;
+    const qrReaderState = store.getState().scan;
     const [open, setOpen] = useState(false);
     const [text, setText] = useState<string | null>("");
     const handleScan = (scanText: string | null) => {
         if (scanText) {
+            console.log(scanText);
             if (scanText.length === 8 && scanText.startsWith('G')) {
+                dispatch(pauseQrReader({ state: false }));
                 setText(scanText);
             }
         }
@@ -35,6 +36,7 @@ export default function EntranceEnter() {
         });
     };
     const handleClose = () => {
+        dispatch(pauseQrReader({ state: false }));
         setOpen(false);
     };
     return (
