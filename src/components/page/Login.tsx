@@ -31,26 +31,26 @@ const Login = () => {
                 dispatch(setToken(res.data.token));
                 navigate("/", { replace: true });
             } else {
-                updateMessage({ display: "block", severity: "error", message: "パスワードが間違っています。" });
+                updateMessage({ display: "block", severity: "error", message: "ユーザーidまたはパスワードが間違っています。" });
             }
         })
     }
     return (
-        <Box>
-            <Grid container spacing={2} columnSpacing={2}>
+        <>
+            <Grid container spacing={{ xs: 2, md: 3 }}>
                 <Grid item xs={12} sx={{ display: message.display }}>
                     <Alert severity={message.severity}>{message.message}</Alert>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={6}>
                     <TextField
                         id="userid"
-                        label="ユーザー名"
+                        label="ユーザーid"
                         type="text"
                         onChange={(event) => updateValue({ "userid": event.target.value, "password": inputValue.password })}
                         fullWidth
                     />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={12} md={6}>
                     <TextField
                         id="password"
                         label="パスワード"
@@ -65,7 +65,7 @@ const Login = () => {
                     </Button>
                 </Grid>
             </Grid>
-        </Box>
+        </>
     )
 }
 

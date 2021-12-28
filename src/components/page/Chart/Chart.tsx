@@ -1,6 +1,8 @@
 import React from "react";
 import Chart from "react-apexcharts";
 
+import { Box } from '@mui/material';
+
 const Apexchart = () => {
     const state = {
         options: {
@@ -23,7 +25,7 @@ const Apexchart = () => {
             options={state.options}
             series={state.series}
             type="bar"
-            width="500"
+            width="100%"
         />
     );
 }

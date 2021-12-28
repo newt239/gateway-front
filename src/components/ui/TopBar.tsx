@@ -19,6 +19,24 @@ const TopBar = () => {
             case "/operate":
                 dispatch(setTitle("入退室処理"));
                 break;
+            case "/operate/enter":
+                dispatch(setTitle("入室処理"));
+                break;
+            case "/operate/exit":
+                dispatch(setTitle("退室処理"));
+                break;
+            case "/operate/pass":
+                dispatch(setTitle("通過処理"));
+                break;
+            case "/login":
+                dispatch(setTitle("ログイン"));
+                break;
+            case "/chart":
+                dispatch(setTitle("統計"));
+                break;
+            case "/crowd":
+                dispatch(setTitle("混雑状況"));
+                break;
             default:
                 dispatch(setTitle("unkwon page"));
         }

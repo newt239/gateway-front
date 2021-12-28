@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { Paper, Typography } from '@mui/material';
+import { Grid, Paper, Typography } from '@mui/material';
 
 import Apexchart from './Chart';
 
 
 export default function Chart() {
     return (
-        <>
-            <Paper elevation={3} sx={{ width: '100%', overflowX: 'scroll' }}>
+        <Grid container spacing={{ xs: 2, md: 3 }}>
+            <Grid item xs={12} md={6}>
                 <Apexchart />
-            </Paper>
-        </>
+            </Grid>
+        </Grid>
     );
 }

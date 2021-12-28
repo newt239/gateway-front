@@ -10,13 +10,17 @@ const theme = createTheme({
         // Use the system font instead of the default Roboto font.
         fontFamily: '"Noto Sans JP", "BIZ UDPGothic"',
         h1: {
-            fontSize: '2rem',
+            fontSize: '1.5rem',
             fontWeight: 900,
             lineHeight: '3rem'
         },
         h2: {
             fontSize: '1.5rem',
-            fontWeight: 400,
+            fontWeight: 700,
+        },
+        h3: {
+            fontSize: '1.3rem',
+            fontWeight: 900,
         }
     }
 });

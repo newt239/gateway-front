@@ -2,13 +2,7 @@ import React, { useState, useEffect } from "react";
 import QrReader from 'react-qr-reader';
 import { useLocation } from 'react-router-dom';
 
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import { Container, Dialog, Button, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
 
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
@@ -69,16 +63,17 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
         pauseQrReader(true);
     };
     return (
-        <Box sx={{ p: 2 }}>
-            {qrReaderState && refreshQrReader && (
-                <Box>
+        <>
+            <Container sx={{ display: { md: 'flex' } }}>
+                {qrReaderState && refreshQrReader && (
                     <QrReader
                         delay={1}
                         onError={handleError}
                         onScan={handleScan}
-                        style={{ margin: 'auto', width: '100%', maxWidth: '50vh' }}
-                    /></Box>)}
-            <p>{id}</p>
+                        style={{ margin: 'auto', width: '100%', maxWidth: '70vh' }}
+                    />)}
+                <Typography>{id}</Typography>
+            </Container>
             <Dialog
                 open={open}
                 onClose={handleClose}
@@ -98,7 +93,7 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
                     <Button onClick={registActivity} sx={{ display: dialog.type === 'success' ? "block" : "none" }}>登録</Button>
                 </DialogActions>
             </Dialog>
-        </Box>
+        </>
     )
 }
 

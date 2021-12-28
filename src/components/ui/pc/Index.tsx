@@ -11,7 +11,7 @@ const PC = () => {
             <TopBar />
             <Box sx={{ display: 'flex' }}>
                 <Drawer />
-                <Container sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                <Container sx={{ display: 'flex', flexWrap: 'wrap', m: 0 }}>
                     <Toolbar sx={{ p: 1 }} />
                     <Body />
                 </Container>

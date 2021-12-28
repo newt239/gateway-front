@@ -7,14 +7,37 @@ const Home = () => {
     const navigate = useNavigate();
     return (
         <>
-            <Typography variant="h2">入退室処理</Typography>
             <Grid container spacing={{ xs: 2, md: 3 }}>
                 <Grid item xs={12} md={6}>
                     <Paper elevation={3} sx={{ width: '100%' }}>
                         <Box sx={{ p: 2 }}>
-                            <Typography variant="h4">入室処理</Typography>
-                            <Typography>入室処理</Typography>
-                            <Button onClick={() => navigate("enter")}>開く</Button>
+                            <Typography variant="h3">入室処理</Typography>
+                            <Typography>展示への入室を記録します。</Typography>
+                            <Box sx={{ width: '100%', textAlign: 'right' }}>
+                                <Button onClick={() => navigate("enter")} variant='outlined'>開く</Button>
+                            </Box>
+                        </Box>
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Paper elevation={3} sx={{ width: '100%' }}>
+                        <Box sx={{ p: 2 }}>
+                            <Typography variant="h3">退室処理</Typography>
+                            <Typography>展示からの退室を記録します。</Typography>
+                            <Box sx={{ width: '100%', textAlign: 'right' }}>
+                                <Button onClick={() => navigate("exit")} variant='outlined'>開く</Button>
+                            </Box>
+                        </Box>
+                    </Paper>
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Paper elevation={3} sx={{ width: '100%' }}>
+                        <Box sx={{ p: 2 }}>
+                            <Typography variant="h3">通過処理</Typography>
+                            <Typography>展示の通過を記録します。</Typography>
+                            <Box sx={{ width: '100%', textAlign: 'right' }}>
+                                <Button onClick={() => navigate("pass")} variant='outlined'>開く</Button>
+                            </Box>
                         </Box>
                     </Paper>
                 </Grid>

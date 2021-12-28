@@ -1,11 +1,10 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
+import { Grid, Typography } from '@mui/material';
 
 export default function Crowd() {
     return (
-        <Box sx={{ width: '100%' }}>
+        <Grid sx={{ width: '100%' }}>
             <Typography variant="h2">混雑状況</Typography>
-        </Box>
+        </Grid>
     );
 }
