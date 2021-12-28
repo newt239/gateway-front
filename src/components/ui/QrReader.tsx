@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import QrReader from 'react-qr-reader';
 import { useLocation } from 'react-router-dom';
 
-import { Container, Dialog, Button, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
+import { Grid, Container, Dialog, Button, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography } from '@mui/material';
 
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
@@ -12,7 +12,7 @@ type QrReaderProps = {
 
 const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
     const { type } = QrReaderProps;
-    const [id, updateId] = useState("http://localhost/aaa");
+    const [id, updateId] = useState("");
     const [open, setOpen] = useState(false);
     const [qrReaderState, pauseQrReader] = useState(true);
     const [dialog, updateDialog] = useState({ type: "success", title: "success scan", message: "hello" });
@@ -64,16 +64,21 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
     };
     return (
         <>
-            <Container sx={{ display: { md: 'flex' } }}>
-                {qrReaderState && refreshQrReader && (
-                    <QrReader
-                        delay={1}
-                        onError={handleError}
-                        onScan={handleScan}
-                        style={{ margin: 'auto', width: '100%', maxWidth: '70vh' }}
-                    />)}
-                <Typography>{id}</Typography>
-            </Container>
+            <Grid container spacing={{ xs: 2, md: 3 }}>
+                <Grid item xs={12} md={6}>
+                    {qrReaderState && refreshQrReader && (
+                        <QrReader
+                            delay={1}
+                            onError={handleError}
+                            onScan={handleScan}
+                            style={{ margin: 'auto', width: '100%', maxWidth: '70vh' }}
+                        />)}
+                </Grid>
+                <Grid item xs={12} md={6}>
+                    <Typography variant='h4'>認識したテキスト：</Typography>
+                    <Typography sx={{ color: 'primary.main' }}>{id}</Typography>
+                </Grid>
+            </Grid>
             <Dialog
                 open={open}
                 onClose={handleClose}

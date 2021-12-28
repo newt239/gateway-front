@@ -2,13 +2,14 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Grid, Paper, Box, Typography, Button } from '@mui/material';
 
+import SelectPlace from '../../ui/SelectPlace';
 
 const Home = () => {
     const navigate = useNavigate();
     return (
         <>
             <Grid container spacing={{ xs: 2, md: 3 }}>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6} lg={4}>
                     <Paper elevation={3} sx={{ width: '100%' }}>
                         <Box sx={{ p: 2 }}>
                             <Typography variant="h3">入室処理</Typography>
@@ -19,7 +20,7 @@ const Home = () => {
                         </Box>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6} lg={4}>
                     <Paper elevation={3} sx={{ width: '100%' }}>
                         <Box sx={{ p: 2 }}>
                             <Typography variant="h3">退室処理</Typography>
@@ -30,7 +31,7 @@ const Home = () => {
                         </Box>
                     </Paper>
                 </Grid>
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12} md={6} lg={4}>
                     <Paper elevation={3} sx={{ width: '100%' }}>
                         <Box sx={{ p: 2 }}>
                             <Typography variant="h3">通過処理</Typography>
@@ -42,6 +43,7 @@ const Home = () => {
                     </Paper>
                 </Grid>
             </Grid>
+            <SelectPlace />
         </>
     )
 }

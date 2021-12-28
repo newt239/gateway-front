@@ -4,11 +4,13 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./auth";
 import userReducer from "./user";
 import pageReducer from './page';
+import placeReducer from './place';
 
 const reducer = combineReducers({
     auth: authReducer,
     user: userReducer,
-    page: pageReducer
+    page: pageReducer,
+    place: placeReducer
 });
 
 const store = configureStore({ reducer });

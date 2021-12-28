@@ -1,10 +1,15 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
+import { Container, Box, Typography } from '@mui/material';
 
-export default function Exit() {
+import QrReader from '../../ui/QrReader';
+
+export default function Enter() {
     return (
-        <Box sx={{ width: '100%' }}>
-            <div>exit</div>
-        </Box>
+        <Container sx={{ width: '100%' }}>
+            <Typography variant='h3'>QRコードスキャン</Typography>
+            <Box sx={{ mt: 2 }}>
+                <QrReader type="exit" />
+            </Box>
+        </Container>
     );
 }
