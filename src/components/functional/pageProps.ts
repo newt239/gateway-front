@@ -19,6 +19,22 @@ const allPageProps = [{
     title: "通過処理",
     description: ""
 }, {
+    path: "/entrance",
+    title: "エントランス",
+    description: ""
+}, {
+    path: "/entrance/reserve-check",
+    title: "予約情報照会",
+    description: ""
+}, {
+    path: "/entrance/enter",
+    title: "リストバンド連携",
+    description: ""
+}, {
+    path: "/entrance/exit",
+    title: "退場処理",
+    description: ""
+}, {
     path: "/login",
     title: "ログイン",
     description: ""

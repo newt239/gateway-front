@@ -10,6 +10,10 @@ import Enter from './Operate/Enter';
 import Exit from './Operate/Exit';
 import Pass from './Operate/Pass';
 import Crowd from './Crowd/Index';
+import Entrance from './Entrance/Index';
+import ReserveCheck from './Entrance/ReserveCheck';
+import EntranceEnter from './Entrance/Enter';
+import EntranceExit from './Entrance/Exit';
 import Settings from './Settings';
 
 const Body = () => {
@@ -39,6 +43,12 @@ const Body = () => {
                     <Route path="enter" element={<Enter />} />
                     <Route path="exit" element={<Exit />} />
                     <Route path="pass" element={<Pass />} />
+                </Route>
+                <Route path="entrance" >
+                    <Route index element={<Entrance />} />
+                    <Route path="reserve-check" element={<ReserveCheck />} />
+                    <Route path="enter" element={<EntranceEnter />} />
+                    <Route path="exit" element={<EntranceExit />} />
                 </Route>
                 <Route path="crowd" element={<Crowd />} />
                 <Route path="settings" element={<Settings />} />

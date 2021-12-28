@@ -4,20 +4,14 @@ import { Drawer, Toolbar, List, Divider, ListItemButton, ListItemIcon, ListItemT
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
 import MapRoundedIcon from '@mui/icons-material/MapRounded';
-
+import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import UserInfo from '../UserInfo';
 const drawerWidth = 240;
 
 const DrawerLeft = () => {
     const path = useLocation().pathname;
     const navigate = useNavigate();
-    const handleListItemClick = (
-        event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-        index: number,
-        path: string
-    ) => {
-        navigate(`${path}`);
-    };
     return (
         <Drawer
             sx={{
@@ -39,22 +33,34 @@ const DrawerLeft = () => {
             <Divider />
             <List>
                 <ListItemButton selected={path === '/'}
-                    onClick={(event) => handleListItemClick(event, 0, '')}>
+                    onClick={() => navigate('/')}>
                     <ListItemIcon><HomeRoundedIcon /></ListItemIcon>
                     <ListItemText primary='ホーム' />
                 </ListItemButton>
                 <ListItemButton selected={/operate/.test(path)}
-                    onClick={(event) => handleListItemClick(event, 1, 'operate')}>
+                    onClick={() => navigate('/operate')}>
                     <ListItemIcon><MeetingRoomRoundedIcon /></ListItemIcon>
                     <ListItemText primary='入退室処理' />
                 </ListItemButton>
                 <ListItemButton selected={/crowd/.test(path)}
-                    onClick={(event) => handleListItemClick(event, 3, 'crowd')}>
+                    onClick={() => navigate('/crowd')}>
                     <ListItemIcon><MapRoundedIcon /></ListItemIcon>
                     <ListItemText primary='混雑状況' />
                 </ListItemButton>
             </List>
             <Divider />
+            <List>
+                <ListItemButton selected={/entrance\/reserve-check/.test(path)}
+                    onClick={() => navigate('/entrance/reserve-check')}>
+                    <ListItemIcon><LoginRoundedIcon /></ListItemIcon>
+                    <ListItemText primary='入場処理' />
+                </ListItemButton>
+                <ListItemButton selected={/entrance\/exit/.test(path)}
+                    onClick={() => navigate('/entrance/exit')}>
+                    <ListItemIcon><LogoutRoundedIcon /></ListItemIcon>
+                    <ListItemText primary='退場処理' />
+                </ListItemButton>
+            </List>
         </Drawer>
     );
 }
