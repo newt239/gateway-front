@@ -9,8 +9,7 @@ import Operate from './Operate/Index';
 import Enter from './Operate/Enter';
 import Exit from './Operate/Exit';
 import Pass from './Operate/Pass';
-import Crowd from './Crowd';
-import Chart from './Chart/Index';
+import Crowd from './Crowd/Index';
 import Settings from './Settings';
 
 const Body = () => {
@@ -42,7 +41,6 @@ const Body = () => {
                     <Route path="pass" element={<Pass />} />
                 </Route>
                 <Route path="crowd" element={<Crowd />} />
-                <Route path="chart" element={<Chart />} />
                 <Route path="settings" element={<Settings />} />
             </Route>
         </Routes>

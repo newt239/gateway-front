@@ -8,43 +8,26 @@ import { Container, Box, AppBar, Toolbar, Typography, IconButton } from '@mui/ma
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
 import SettingsIcon from '@mui/icons-material/Settings';
 
+import allPageProps from '../functional/pageProps';
+
+interface pagePropsObject {
+    path: string;
+    title: string;
+    description: string;
+}
+
 const TopBar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const locationPath = useLocation().pathname;
     const pageProps = useSelector((state: RootState) => state.page);
     useEffect(() => {
-        switch (locationPath) {
-            case "/":
-                dispatch(setTitle("ホーム"));
-                break;
-            case "/operate":
-                dispatch(setTitle("入退室処理"));
-                break;
-            case "/operate/enter":
-                dispatch(setTitle("入室処理"));
-                break;
-            case "/operate/exit":
-                dispatch(setTitle("退室処理"));
-                break;
-            case "/operate/pass":
-                dispatch(setTitle("通過処理"));
-                break;
-            case "/login":
-                dispatch(setTitle("ログイン"));
-                break;
-            case "/chart":
-                dispatch(setTitle("統計"));
-                break;
-            case "/crowd":
-                dispatch(setTitle("混雑状況"));
-                break;
-            case "settings":
-                dispatch(setTitle("設定"));
-                break;
-            default:
-                dispatch(setTitle("unkwon page"));
-        }
+        const props = allPageProps.find((e: pagePropsObject) => e.path === locationPath);
+        if (props) {
+            dispatch(setTitle(props.title));
+        } else {
+            dispatch(setTitle("unknown page"));
+        };
     }, [locationPath]);
     const backPreviousPage = () => {
         navigate(-1);
