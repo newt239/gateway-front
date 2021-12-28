@@ -1,17 +1,25 @@
-import * as React from 'react';
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import { Container, Box } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
 
-import Body from '../../page/Body';
 
 const SimpleBottomNavigation = () => {
-    const [value, setValue] = React.useState("");
+    const path = useLocation().pathname;
+    const [value, setValue] = React.useState("other");
     const navigate = useNavigate();
+    useEffect(() => {
+        if (path === '/') {
+            setValue('');
+        } else if (/operate/.test(path)) {
+            setValue('operate');
+        } else {
+            setValue("other");
+        }
+    }, [path]);
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         navigate(`${newValue}`);
         setValue(newValue);

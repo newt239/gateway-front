@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Drawer, Toolbar, List, Divider, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
@@ -11,6 +11,7 @@ const drawerWidth = 240;
 
 const DrawerLeft = () => {
     const [selectedIndex, setSelectedIndex] = React.useState(0);
+    const path = useLocation().pathname;
     const navigate = useNavigate();
     const handleListItemClick = (
         event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -40,22 +41,22 @@ const DrawerLeft = () => {
             <UserInfo />
             <Divider />
             <List>
-                <ListItemButton selected={selectedIndex === 0}
+                <ListItemButton selected={path === '/'}
                     onClick={(event) => handleListItemClick(event, 0, '')}>
                     <ListItemIcon><HomeRoundedIcon /></ListItemIcon>
                     <ListItemText primary='ホーム' />
                 </ListItemButton>
-                <ListItemButton selected={selectedIndex === 1}
+                <ListItemButton selected={/operate/.test(path)}
                     onClick={(event) => handleListItemClick(event, 1, 'operate')}>
                     <ListItemIcon><MeetingRoomRoundedIcon /></ListItemIcon>
                     <ListItemText primary='入退室処理' />
                 </ListItemButton>
-                <ListItemButton selected={selectedIndex === 2}
+                <ListItemButton selected={/chart/.test(path)}
                     onClick={(event) => handleListItemClick(event, 2, 'chart')}>
                     <ListItemIcon><AutoGraphRoundedIcon /></ListItemIcon>
                     <ListItemText primary='統計' />
                 </ListItemButton>
-                <ListItemButton selected={selectedIndex === 3}
+                <ListItemButton selected={/crowd/.test(path)}
                     onClick={(event) => handleListItemClick(event, 3, 'crowd')}>
                     <ListItemIcon><MapRoundedIcon /></ListItemIcon>
                     <ListItemText primary='混雑状況' />
