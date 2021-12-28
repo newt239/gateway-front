@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = { available: false, guest_type: "", part: "", count: 0 };
+const initialState = { reservation_id: "", available: false, guest_type: "", part: "", count: 0 };
 
 const slice = createSlice({
     name: "reservation",

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../../stores/index';
+import store, { RootState } from '../../../stores/index';
 import { updateReservationInfo } from '../../../stores/reservation';
 import { Grid, Box, Typography, Button } from '@mui/material';
 import Scanner from '../../ui/Scanner';
@@ -12,13 +12,14 @@ const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 export default function ReserveCheck() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const token = store.getState().auth.token;
     const reservationInfo = useSelector((state: RootState) => state.reservation);
     const [text, setText] = useState("");
-    const handleScan = (text: string | null) => {
-        if (text) {
-            if (text.length === 8 && text.startsWith('G')) {
-                setText(text);
-                axios.get(`${API_BASE_URL}/v1/reservation/${text}`).then(res => {
+    const handleScan = (scanText: string | null) => {
+        if (scanText) {
+            if (scanText.length === 8 && scanText.startsWith('G')) {
+                setText(scanText);
+                axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
                     if (res.data.status === "success") {
                         dispatch(updateReservationInfo(res.data.data));
                     };
