@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../stores/index';
 import { clearToken } from '../../stores/auth';
-import user, { setProfile } from '../../stores/user';
+import { setProfile } from '../../stores/user';
 
 import Box from '@mui/material/Box';
 import { Button, Typography } from '@mui/material';

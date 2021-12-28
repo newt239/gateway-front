@@ -4,10 +4,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setToken } from '../../stores/auth';
 
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Alert from '@mui/material/Alert';
-import { TextField, Button, Typography } from '@mui/material';
+import { Grid, Alert, TextField, Button } from '@mui/material';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
@@ -24,17 +21,19 @@ const Login = () => {
     const [inputValue, updateValue] = useState({ userid: "", password: "" });
     const [message, updateMessage] = useState<messageType>({ display: "none", severity: "error", message: "" });
     const login = () => {
-        axios.post(API_BASE_URL + "/v1/auth/login", inputValue).then(res => {
-            if (res.data.status === "success") {
-                updateMessage({ display: "block", severity: "success", message: "ログインに成功しました。" });
-                localStorage.setItem('gatewayApiToken', res.data.token);
-                dispatch(setToken(res.data.token));
-                navigate("/", { replace: true });
-            } else {
-                updateMessage({ display: "block", severity: "error", message: "ユーザーidまたはパスワードが間違っています。" });
-            }
-        })
-    }
+        if (inputValue.userid !== "") {
+            axios.post(API_BASE_URL + "/v1/auth/login", inputValue).then(res => {
+                if (res.data.status === "success") {
+                    updateMessage({ display: "block", severity: "success", message: "ログインに成功しました。" });
+                    localStorage.setItem('gatewayApiToken', res.data.token);
+                    dispatch(setToken(res.data.token));
+                    navigate("/", { replace: true });
+                } else {
+                    updateMessage({ display: "block", severity: "error", message: "ユーザーidまたはパスワードが間違っています。" });
+                };
+            });
+        };
+    };
     return (
         <>
             <Grid container spacing={{ xs: 2, md: 3 }}>
