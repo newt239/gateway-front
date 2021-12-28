@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
-export default function EntranceEnter() {
+export default function ExhibitExit() {
     const dispatch = useDispatch();
     const place = useSelector((state: RootState) => state.place);
     const [text, setText] = useState<string>("");
