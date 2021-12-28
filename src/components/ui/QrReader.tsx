@@ -27,7 +27,7 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
     // location以外のパスに移動したときにカメラを切る
     const location = useLocation();
     useEffect(() => {
-        if (location.pathname.match(/operate/)) {
+        if (location.pathname.match(/exhibit/)) {
             pauseQrReader(true);
         } else {
             pauseQrReader(false);

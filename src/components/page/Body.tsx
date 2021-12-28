@@ -5,10 +5,10 @@ import { RootState } from '../../stores/index';
 import { setToken } from '../../stores/auth';
 import Home from './Home';
 import Login from './Login';
-import Operate from './Operate/Index';
-import Enter from './Operate/Enter';
-import Exit from './Operate/Exit';
-import Pass from './Operate/Pass';
+import Exhibit from './Exhibit/Index';
+import ExhibitEnter from './Exhibit/Enter';
+import ExhibitExit from './Exhibit/Exit';
+import ExhibitPass from './Exhibit/Pass';
 import Crowd from './Crowd/Index';
 import Entrance from './Entrance/Index';
 import ReserveCheck from './Entrance/ReserveCheck';
@@ -38,11 +38,11 @@ const Body = () => {
             <Route path="/">
                 <Route index element={<Home />} />
                 <Route path="login" element={<Login />} />
-                <Route path="operate" >
-                    <Route index element={<Operate />} />
-                    <Route path="enter" element={<Enter />} />
-                    <Route path="exit" element={<Exit />} />
-                    <Route path="pass" element={<Pass />} />
+                <Route path="exhibit" >
+                    <Route index element={<Exhibit />} />
+                    <Route path="enter" element={<ExhibitEnter />} />
+                    <Route path="exit" element={<ExhibitExit />} />
+                    <Route path="pass" element={<ExhibitPass />} />
                 </Route>
                 <Route path="entrance" >
                     <Route index element={<Entrance />} />

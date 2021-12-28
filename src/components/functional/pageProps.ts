@@ -3,20 +3,20 @@ const allPageProps = [{
     title: "ホーム",
     description: ""
 }, {
-    path: "/operate",
-    title: "入退室処理",
+    path: "/exhibit",
+    title: "展示企画処理",
     description: ""
 }, {
-    path: "/operate/enter",
-    title: "入室処理",
+    path: "/exhibit/enter",
+    title: "展示企画 入室スキャン",
     description: ""
 }, {
-    path: "/operate/exit",
-    title: "退室処理",
+    path: "/exhibit/exit",
+    title: "展示企画 退室スキャン",
     description: ""
 }, {
-    path: "/operate/pass",
-    title: "通過処理",
+    path: "/exhibit/pass",
+    title: "展示企画 通過スキャン",
     description: ""
 }, {
     path: "/entrance",
