@@ -40,11 +40,7 @@ const DrawerLeft = () => {
                 </ListItemButton>
             </List>
             <Divider />
-            <List subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                    展示企画
-                </ListSubheader>
-            }>
+            <List subheader={<ListSubheader>展示企画</ListSubheader>}>
                 <ListItemButton selected={/exhibit\/enter/.test(path)}
                     onClick={() => navigate('/exhibit/enter')}>
                     <ListItemIcon><LoginRoundedIcon /></ListItemIcon>
@@ -62,11 +58,7 @@ const DrawerLeft = () => {
                 </ListItemButton>
             </List>
             <Divider />
-            <List subheader={
-                <ListSubheader component="div" id="nested-list-subheader">
-                    エントランス
-                </ListSubheader>
-            }>
+            <List subheader={<ListSubheader>エントランス</ListSubheader>}>
                 <ListItemButton selected={/entrance\/reserve-check/.test(path)}
                     onClick={() => navigate('/entrance/reserve-check')}>
                     <ListItemIcon><LoginRoundedIcon /></ListItemIcon>
@@ -76,6 +68,19 @@ const DrawerLeft = () => {
                     onClick={() => navigate('/entrance/exit')}>
                     <ListItemIcon><LogoutRoundedIcon /></ListItemIcon>
                     <ListItemText primary='退場スキャン' />
+                </ListItemButton>
+            </List>
+            <Divider />
+            <List subheader={<ListSubheader>混雑状況</ListSubheader>}>
+                <ListItemButton selected={/crowd\/status/.test(path)}
+                    onClick={() => navigate('/crowd/status')}>
+                    <ListItemIcon><LoginRoundedIcon /></ListItemIcon>
+                    <ListItemText primary='滞在状況' />
+                </ListItemButton>
+                <ListItemButton selected={/crowd\/heatmap/.test(path)}
+                    onClick={() => navigate('/crowd/heatmap')}>
+                    <ListItemIcon><LogoutRoundedIcon /></ListItemIcon>
+                    <ListItemText primary='ヒートマップ' />
                 </ListItemButton>
             </List>
         </Drawer >

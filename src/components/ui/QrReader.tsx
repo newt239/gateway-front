@@ -21,33 +21,7 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
     const [id, updateId] = useState("");
     const place = useSelector((state: RootState) => state.place);
     const [open, setOpen] = useState(false);
-    const [qrReaderState, pauseQrReader] = useState(true);
     const [dialog, updateDialog] = useState({ type: "success", title: "success scan", message: "hello" });
-
-    // location以外のパスに移動したときにカメラを切る
-    const location = useLocation();
-    useEffect(() => {
-        if (location.pathname.match(/exhibit/)) {
-            pauseQrReader(true);
-        } else {
-            pauseQrReader(false);
-        }
-    }, [location]);
-
-    // out of memory の対策として、5 分ごとに react-qr-reader を unmount して、直後に mount している
-    // https://github.com/afes-website/cappuccino-app/blob/d0201aa5506e6b3aa7c3cc887171d83b0e773b18/src/components/QRScanner.tsx#L146
-    const [refreshQrReader, refreshQrReaderSet] = useState(true);
-    useEffect(() => {
-        const intervalId = setInterval(() => {
-            refreshQrReaderSet(false);
-        }, 5 * 60 * 1000);
-        return () => {
-            clearInterval(intervalId);
-        };
-    }, []);
-    useEffect(() => {
-        if (!refreshQrReader) refreshQrReaderSet(true);
-    }, [refreshQrReader]);
 
     const handleScan = (data: any) => {
         if (data) {
@@ -63,7 +37,6 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
                     }
                 };
             });
-            pauseQrReader(false);
             updateId(data);
             setOpen(true);
         }
@@ -74,7 +47,6 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
     }
     const handleClose = () => {
         setOpen(false);
-        pauseQrReader(true);
     };
     const postApi = async () => {
         const result = await registActivity(type, id, place.list[place.current].place_id);
@@ -86,13 +58,12 @@ const UserInfo: React.FC<QrReaderProps> = (QrReaderProps) => {
         <>
             <Grid container spacing={{ xs: 2, md: 3 }}>
                 <Grid item xs={12} md={6}>
-                    {qrReaderState && refreshQrReader && (
-                        <QrReader
-                            delay={1}
-                            onError={handleError}
-                            onScan={handleScan}
-                            style={{ margin: 'auto', width: '100%', maxWidth: '70vh' }}
-                        />)}
+                    <QrReader
+                        delay={1}
+                        onError={handleError}
+                        onScan={handleScan}
+                        style={{ margin: 'auto', width: '100%', maxWidth: '70vh' }}
+                    />
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Typography variant='h4'>認識したテキスト：</Typography>

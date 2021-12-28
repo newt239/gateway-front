@@ -35,12 +35,20 @@ const allPageProps = [{
     title: "退場処理",
     description: ""
 }, {
-    path: "/login",
-    title: "ログイン",
-    description: ""
-}, {
     path: "/crowd",
     title: "混雑状況",
+    description: ""
+}, {
+    path: "/crowd/status",
+    title: "滞在状況",
+    description: ""
+}, {
+    path: "/crowd/heatmap",
+    title: "ヒートマップ",
+    description: ""
+}, {
+    path: "/login",
+    title: "ログイン",
     description: ""
 }, {
     path: "/settings",

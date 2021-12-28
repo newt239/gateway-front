@@ -5,12 +5,14 @@ import authReducer from "./auth";
 import userReducer from "./user";
 import pageReducer from './page';
 import placeReducer from './place';
+import reservationReducer from './reservation';
 
 const reducer = combineReducers({
     auth: authReducer,
     user: userReducer,
     page: pageReducer,
-    place: placeReducer
+    place: placeReducer,
+    reservation: reservationReducer
 });
 
 const store = configureStore({ reducer });
