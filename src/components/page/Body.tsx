@@ -10,6 +10,8 @@ import ExhibitEnter from './Exhibit/Enter';
 import ExhibitExit from './Exhibit/Exit';
 import ExhibitPass from './Exhibit/Pass';
 import Crowd from './Crowd/Index';
+import Heatmap from './Crowd/Heatmap';
+import Status from './Crowd/Status';
 import Entrance from './Entrance/Index';
 import ReserveCheck from './Entrance/ReserveCheck';
 import EntranceEnter from './Entrance/Enter';
@@ -50,7 +52,11 @@ const Body = () => {
                     <Route path="enter" element={<EntranceEnter />} />
                     <Route path="exit" element={<EntranceExit />} />
                 </Route>
-                <Route path="crowd" element={<Crowd />} />
+                <Route path="crowd" >
+                    <Route index element={<Crowd />} />
+                    <Route path="heatmap" element={<Heatmap />} />
+                    <Route path="status" element={<Status />} />
+                </Route>
                 <Route path="settings" element={<Settings />} />
             </Route>
         </Routes>

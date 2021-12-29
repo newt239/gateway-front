@@ -59,4 +59,4 @@ export default function ReserveCheck() {
             </Grid>
         </Grid>
     );
-}
+};
