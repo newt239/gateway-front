@@ -22,6 +22,14 @@ const Body = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const user = useSelector((state: RootState) => state.user);
+
+    // 展示のリストを取得
+    useEffect(() => {
+
+    }, [user]);
+
+    // 未ログイン時ログインページへ遷移
     const token = useSelector((state: RootState) => state.auth.token);
     useEffect(() => {
         if (location.pathname !== "/login") {
@@ -60,7 +68,7 @@ const Body = () => {
                 <Route path="settings" element={<Settings />} />
             </Route>
         </Routes>
-    )
-}
+    );
+};
 
 export default Body;

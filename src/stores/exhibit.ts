@@ -1,15 +1,22 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
+type exhibitProp = {
+    current: number;
+    list: {
+        exhibit_id: string;
+        exhibit_name: string;
+    }[]
+}
+const initialState: exhibitProp = {
     current: 0,
-    list: [{ place_id: "g2itc", place_name: "情報技術同好会" }, { place_id: "h1104", place_name: "高校1年4組" }]
+    list: []
 };
 
 const slice = createSlice({
-    name: "place",
+    name: "exhibit",
     initialState,
     reducers: {
-        updateCurrentPlace: (state, action) => {
+        updateCurrentExhibit: (state, action) => {
             console.log(action.payload)
             return Object.assign({}, state, { current: action.payload });
         },
@@ -18,4 +25,4 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export const { updateCurrentPlace } = slice.actions;
+export const { updateCurrentExhibit } = slice.actions;

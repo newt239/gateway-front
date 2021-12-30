@@ -4,7 +4,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./auth";
 import userReducer from "./user";
 import pageReducer from './page';
-import placeReducer from './place';
+import exhibitReducer from './exhibit';
 import reservationReducer from './reservation';
 import scanReducer from './scan';
 
@@ -12,7 +12,7 @@ const reducer = combineReducers({
     auth: authReducer,
     user: userReducer,
     page: pageReducer,
-    place: placeReducer,
+    exhibit: exhibitReducer,
     reservation: reservationReducer,
     scan: scanReducer
 });

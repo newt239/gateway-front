@@ -12,4 +12,4 @@ export default function ExhibitEnter() {
             <ExhibitScan scanType="enter" />
         </Grid>
     );
-}
+};

@@ -26,14 +26,14 @@ const SimpleBottomNavigation = () => {
     };
     return (
         <>
-            <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
+            <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
                 <BottomNavigation
                     showLabels
                     value={value}
                     onChange={handleChange}
                 >
                     <BottomNavigationAction label="ホーム" value="" icon={<HomeRoundedIcon />} />
-                    <BottomNavigationAction label="入退室処理" value="operate" icon={<MeetingRoomRoundedIcon />} />
+                    <BottomNavigationAction label="入退室処理" value="exhibit" icon={<MeetingRoomRoundedIcon />} />
                 </BottomNavigation>
             </Paper>
         </>

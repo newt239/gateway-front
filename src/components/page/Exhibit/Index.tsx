@@ -2,8 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Grid, Paper, Box, Typography, Button } from '@mui/material';
 
-import SelectPlace from '../../ui/SelectPlace';
-
 const Home = () => {
     const navigate = useNavigate();
     return (
@@ -43,7 +41,6 @@ const Home = () => {
                     </Paper>
                 </Grid>
             </Grid>
-            <SelectPlace />
         </>
     )
 }

@@ -42,7 +42,7 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
     const handleError = (err: any) => {
         console.log(err);
     }
-    return (<Box sx={{ margin: 'auto', width: '50vh', maxWidth: '100%', backgroundColor: 'black' }}>
+    return (<Box sx={{ margin: 'auto', width: { xs: '30vh', md: '50vh' }, maxWidth: '100%', height: { xs: '30vh', md: '50vh' }, backgroundColor: 'black' }}>
         {qrReaderState.state && refreshQrReader && (
             <QrReader
                 delay={1}

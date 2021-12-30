@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Grid, Paper, Box, Typography, Button } from '@mui/material';
 
-import SelectPlace from '../../ui/SelectPlace';
+import SelectExhibit from '../../ui/SelectExhibit';
 
 const Home = () => {
     const navigate = useNavigate();
@@ -32,7 +32,7 @@ const Home = () => {
                     </Paper>
                 </Grid>
             </Grid>
-            <SelectPlace />
+            <SelectExhibit />
         </>
     )
 }
