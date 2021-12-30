@@ -16,8 +16,10 @@ const slice = createSlice({
     name: "exhibit",
     initialState,
     reducers: {
+        setExhibitList: (state, action) => {
+            return Object.assign({}, state, { list: action.payload });
+        },
         updateCurrentExhibit: (state, action) => {
-            console.log(action.payload)
             return Object.assign({}, state, { current: action.payload });
         },
     }
@@ -25,4 +27,4 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export const { updateCurrentExhibit } = slice.actions;
+export const { setExhibitList, updateCurrentExhibit } = slice.actions;

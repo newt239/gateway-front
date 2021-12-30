@@ -3,6 +3,8 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../stores/index';
 import { setToken } from '../../stores/auth';
+import { setExhibitList } from '../../stores/exhibit';
+import axios from 'axios';
 import Home from './Home';
 import Login from './Login';
 import Exhibit from './Exhibit/Index';
@@ -18,19 +20,28 @@ import EntranceEnter from './Entrance/Enter';
 import EntranceExit from './Entrance/Exit';
 import Settings from './Settings';
 
+const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
+
 const Body = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user);
+    const token = useSelector((state: RootState) => state.auth.token);
 
     // 展示のリストを取得
     useEffect(() => {
-
+        if (token) {
+            axios.get(`${API_BASE_URL}/v1/exhibit/info/`, { headers: { Authorization: "Bearer " + token } }).then(res => {
+                console.log(res);
+                if (res.data) {
+                    dispatch(setExhibitList(res.data.data));
+                };
+            });
+        };
     }, [user]);
 
     // 未ログイン時ログインページへ遷移
-    const token = useSelector((state: RootState) => state.auth.token);
     useEffect(() => {
         if (location.pathname !== "/login") {
             if (!token) {
