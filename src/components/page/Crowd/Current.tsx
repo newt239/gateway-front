@@ -6,11 +6,13 @@ import axios from 'axios';
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
+import SelectExhibit from '../../ui/SelectExhibit';
+
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ゲストID', width: 70 },
-    { field: 'guest_type', headerName: 'ゲストタイプ', width: 130 },
+    { field: 'id', headerName: 'ゲストID', width: 200 },
+    { field: 'guest_type', headerName: 'ゲストタイプ', width: 200 },
 ];
 
 export default function Current() {
@@ -18,22 +20,29 @@ export default function Current() {
     const token = useSelector((state: RootState) => state.auth.token);
     const exhibit = useSelector((state: RootState) => state.exhibit);
     useEffect(() => {
-        axios.get(`${API_BASE_URL}/v1/exhibit/current/${exhibit.list[exhibit.current].exhibit_id}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
-            console.log(res);
-            if (res.data) {
-                setRows(res.data.data);
-            };
-        });
-    }, []);
+        if (exhibit.list.length !== 0) {
+            axios.get(`${API_BASE_URL}/v1/exhibit/current/${exhibit.list[exhibit.current].exhibit_id}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
+                console.log(res);
+                if (res.data) {
+                    setRows(res.data.data);
+                };
+            });
+        }
+    }, [exhibit]);
     return (
-        <Box sx={{ height: 400, width: '100%' }}>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={5}
-                rowsPerPageOptions={[5]}
-                checkboxSelection
-            />
-        </Box>
+        <>
+            <SelectExhibit />
+            <Box sx={{ height: 400, width: '100%' }}>
+                {exhibit && (
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        pageSize={5}
+                        rowsPerPageOptions={[5]}
+                        checkboxSelection
+                    />
+                )}
+            </Box>
+        </>
     );
 }

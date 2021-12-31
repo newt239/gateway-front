@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 
-const SelectPlace = () => {
+const SelectExhibit = () => {
     const dispatch = useDispatch();
     const exhibit = useSelector((state: RootState) => state.exhibit);
     const handleChange = (event: SelectChangeEvent) => {
@@ -25,4 +25,4 @@ const SelectPlace = () => {
     )
 }
 
-export default SelectPlace;
+export default SelectExhibit;
