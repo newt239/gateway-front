@@ -14,8 +14,8 @@ const SimpleBottomNavigation = () => {
     useEffect(() => {
         if (path === '/') {
             setValue('');
-        } else if (/operate/.test(path)) {
-            setValue('operate');
+        } else if (/exhibit/.test(path)) {
+            setValue('exhibit');
         } else {
             setValue("other");
         }

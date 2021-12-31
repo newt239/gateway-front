@@ -54,20 +54,22 @@ const UserInfo = () => {
         };
     };
     return (
-        <Box sx={{ p: 2 }}>
-            {userProfile.available ? (
-                <>
-                    <AccountIcon />
-                    <Typography variant='h3'>{userProfile.display_name}</Typography>
-                    <Typography sx={{ fontSize: 10 }}>@{userProfile.userid}</Typography>
-                    <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
-                        ログアウト
-                    </Button>
-                </>)
-                : (
-                    <Typography>ログインしていません</Typography>
-                )}
-        </Box>
+        <>
+            {
+                userProfile.available ? (
+                    <>
+                        <AccountIcon />
+                        <Typography variant='h3'>{userProfile.display_name}</Typography>
+                        <Typography sx={{ fontSize: 10 }}>@{userProfile.userid}</Typography>
+                        <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
+                            ログアウト
+                        </Button>
+                    </>)
+                    : (
+                        <Typography>ログインしていません</Typography>
+                    )
+            }
+        </>
     );
 }
 

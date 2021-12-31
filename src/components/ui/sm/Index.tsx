@@ -7,12 +7,12 @@ import Body from '../../page/Body';
 const SM = () => {
     return (
         <>
-            <BottomNav />
-            <Container sx={{ display: 'flex', flexWrap: 'wrap' }}>
+            <TopBar />
+            <Container sx={{ display: 'flex', flexWrap: 'wrap', pb: 7 }}>
                 <Toolbar sx={{ p: 1 }} />
                 <Body />
             </Container>
-            <TopBar />
+            <BottomNav />
         </>
     )
 }

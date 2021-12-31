@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import { Drawer, Toolbar, List, ListSubheader, Divider, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { Drawer, Box, Toolbar, List, ListSubheader, Divider, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
-import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
-import MapRoundedIcon from '@mui/icons-material/MapRounded';
 import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
+import TableChartRoundedIcon from '@mui/icons-material/TableChartRounded';
+import MapRoundedIcon from '@mui/icons-material/MapRounded';
+
 import UserInfo from '../UserInfo';
 const drawerWidth = 240;
 
@@ -30,7 +32,9 @@ const DrawerLeft = () => {
                 <Typography variant="h1" sx={{ color: 'primary.main' }}>Gateway</Typography>
             </Toolbar>
             <Divider />
-            <UserInfo />
+            <Box sx={{ p: 2 }}>
+                <UserInfo />
+            </Box>
             <Divider />
             <List>
                 <ListItemButton selected={path === '/'}
@@ -74,12 +78,12 @@ const DrawerLeft = () => {
             <List subheader={<ListSubheader>混雑状況</ListSubheader>}>
                 <ListItemButton selected={/crowd\/status/.test(path)}
                     onClick={() => navigate('/crowd/status')}>
-                    <ListItemIcon><LoginRoundedIcon /></ListItemIcon>
+                    <ListItemIcon><TableChartRoundedIcon /></ListItemIcon>
                     <ListItemText primary='滞在状況' />
                 </ListItemButton>
                 <ListItemButton selected={/crowd\/heatmap/.test(path)}
                     onClick={() => navigate('/crowd/heatmap')}>
-                    <ListItemIcon><LogoutRoundedIcon /></ListItemIcon>
+                    <ListItemIcon><MapRoundedIcon /></ListItemIcon>
                     <ListItemText primary='ヒートマップ' />
                 </ListItemButton>
             </List>

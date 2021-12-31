@@ -5,7 +5,7 @@ import { RootState } from '../../stores/index';
 import { setTitle } from '../../stores/page';
 
 import { Container, Box, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
-import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
+import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';
 import SettingsIcon from '@mui/icons-material/Settings';
 
 import allPageProps from '../functional/pageProps';
@@ -29,20 +29,17 @@ const TopBar = () => {
             dispatch(setTitle("unknown page"));
         };
     }, [locationPath]);
-    const backPreviousPage = () => {
-        navigate(-1);
-    };
     return (
-        <AppBar position="fixed" sx={{ width: { xs: '100%', sm: `calc(100% - 240px)` } }}>
+        <AppBar position="fixed" elevation={0} sx={{ width: { xs: '100%', sm: `calc(100% - 240px)` } }}>
             <Container maxWidth="xl">
                 <Toolbar disableGutters sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     {locationPath !== "/login" && (
                         <Box sx={{ display: 'flex' }}>
-                            <IconButton onClick={backPreviousPage}
+                            <IconButton onClick={() => navigate(-1)}
                                 size="large"
                                 color="inherit"
                             >
-                                <ArrowBackIosNewRoundedIcon />
+                                <ArrowBackRoundedIcon />
                             </IconButton>
                         </Box>)}
                     <Typography variant="h2" noWrap>

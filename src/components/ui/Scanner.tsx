@@ -49,6 +49,7 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
                 onError={handleError}
                 onScan={(text) => handleScan(text)}
                 style={{ margin: 'auto', width: '100%' }}
+                showViewFinder={false}
             />)}
     </Box>)
 }
