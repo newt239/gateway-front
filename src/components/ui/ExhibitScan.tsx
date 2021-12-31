@@ -68,7 +68,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
         const payload = {
             guest_id: text,
             guest_type: guestInfo.guest_type,
-            exhibit_id: exhibit.list[exhibit.current].exhibit_id,
+            exhibit_id: exhibit.current.exhibit_id,
             userid: user.userid
         };
         const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
@@ -86,10 +86,6 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                 <Scanner handleScan={handleScan} />
             </Grid>
             <Grid item xs={12} md={6}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <Typography variant='h4' sx={{ minWidth: '7rem' }}>展示名</Typography>
-                    <SelectExhibit />
-                </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Typography variant='h4' sx={{ minWidth: '7rem' }}>認識したid</Typography>
                     <FormControl sx={{ m: 1 }} variant="outlined">
@@ -123,6 +119,10 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                 {message.type === "scanSuccess" && (
                     <Card variant="outlined" sx={{ p: 2 }}>
                         <Typography variant="h4">ゲスト情報</Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                            <Typography variant='h4' sx={{ minWidth: '7rem' }}>展示名</Typography>
+                            <SelectExhibit />
+                        </Box>
                         <List dense>
                             <ListItem>
                                 <ListItemIcon>

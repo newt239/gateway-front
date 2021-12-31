@@ -16,12 +16,12 @@ const columns: GridColDef[] = [
 ];
 
 export default function Current() {
-    const [rows, setRows] = useState([{ id: 1, guest_type: 'Snow' }]);
+    const [rows, setRows] = useState([]);
     const token = useSelector((state: RootState) => state.auth.token);
     const exhibit = useSelector((state: RootState) => state.exhibit);
     useEffect(() => {
-        if (exhibit.list.length !== 0) {
-            axios.get(`${API_BASE_URL}/v1/exhibit/current/${exhibit.list[exhibit.current].exhibit_id}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
+        if (exhibit.current.exhibit_id !== "") {
+            axios.get(`${API_BASE_URL}/v1/exhibit/current/${exhibit.current.exhibit_id}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
                 console.log(res);
                 if (res.data) {
                     setRows(res.data.data);

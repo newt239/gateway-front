@@ -1,14 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 type exhibitProp = {
-    current: number;
+    current: {
+        exhibit_id: string;
+        exhibit_name: string;
+    };
     list: {
         exhibit_id: string;
         exhibit_name: string;
     }[]
 }
 const initialState: exhibitProp = {
-    current: 0,
+    current: {
+        exhibit_id: "",
+        exhibit_name: ""
+    },
     list: []
 };
 
@@ -20,6 +26,7 @@ const slice = createSlice({
             return Object.assign({}, state, { list: action.payload });
         },
         updateCurrentExhibit: (state, action) => {
+            console.log(action.payload)
             return Object.assign({}, state, { current: action.payload });
         },
     }
