@@ -19,7 +19,7 @@ export default function ReserveCheck() {
     const handleScan = (scanText: string | null) => {
         if (scanText) {
             if (scanText.length === 8 && scanText.startsWith('G')) {
-                dispatch(pauseQrReader({ state: false }));
+                dispatch(pauseQrReader(false));
                 setText(scanText);
                 axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
                     if (res.data.status === "success") {
@@ -31,7 +31,7 @@ export default function ReserveCheck() {
     };
     const retry = () => {
         dispatch(updateReservationInfo({ available: false }));
-        dispatch(pauseQrReader({ state: false }));
+        dispatch(pauseQrReader(false));
     }
     return (
         <Grid container spacing={{ xs: 2, md: 3 }}>

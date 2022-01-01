@@ -19,7 +19,7 @@ export default function EntranceEnter() {
         if (scanText) {
             console.log(scanText);
             if (scanText.length === 8 && scanText.startsWith('G')) {
-                dispatch(pauseQrReader({ state: false }));
+                dispatch(pauseQrReader(false));
                 setText(scanText);
             }
         }
@@ -36,7 +36,7 @@ export default function EntranceEnter() {
         });
     };
     const handleClose = () => {
-        dispatch(pauseQrReader({ state: false }));
+        dispatch(pauseQrReader(false));
         setOpen(false);
     };
     return (

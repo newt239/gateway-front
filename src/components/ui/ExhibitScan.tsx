@@ -40,7 +40,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
             if (scanText.length === 10 && scanText.startsWith('G')) {
-                dispatch(pauseQrReader({ state: false }));
+                dispatch(pauseQrReader(false));
                 setText(scanText);
                 setLoading(true);
                 const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
@@ -72,11 +72,11 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
             userid: user.userid
         };
         const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-        dispatch(pauseQrReader({ state: true }));
+        dispatch(pauseQrReader(true));
         console.log(res);
     };
     const retry = () => {
-        dispatch(pauseQrReader({ state: true }));
+        dispatch(pauseQrReader(true));
         setText("");
         setMessage({ type: "beforeScan", title: "スキャンしてください" });
     }
