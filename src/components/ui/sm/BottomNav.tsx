@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import Paper from '@mui/material/Paper';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../stores/index';
+
+import { Paper, BottomNavigation, BottomNavigationAction } from '@mui/material/';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
 
 
 const SimpleBottomNavigation = () => {
+    const user = useSelector((state: RootState) => state.user);
     const path = useLocation().pathname;
     const [value, setValue] = React.useState("other");
     const navigate = useNavigate();
@@ -26,16 +28,23 @@ const SimpleBottomNavigation = () => {
     };
     return (
         <>
-            <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
-                <BottomNavigation
-                    showLabels
-                    value={value}
-                    onChange={handleChange}
-                >
-                    <BottomNavigationAction label="ホーム" value="" icon={<HomeRoundedIcon />} />
-                    <BottomNavigationAction label="入退室処理" value="exhibit" icon={<MeetingRoomRoundedIcon />} />
-                </BottomNavigation>
-            </Paper>
+            {user.user_type !== "" && (
+                <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
+                    <BottomNavigation
+                        showLabels
+                        value={value}
+                        onChange={handleChange}
+                    >
+                        <BottomNavigationAction label="ホーム" value="" icon={<HomeRoundedIcon />} />
+                        {["admin", "moderator", "exhibit"].indexOf(user.user_type, -1) && (
+                            <BottomNavigationAction label="入退室処理" value="exhibit" icon={<MeetingRoomRoundedIcon />} />
+                        )}
+                        {["admin", "moderator", "user"].indexOf(user.user_type, -1) && (
+                            <BottomNavigationAction label="エントランス" value="entrance" icon={<MeetingRoomRoundedIcon />} />
+                        )}
+                    </BottomNavigation>
+                </Paper>
+            )}
         </>
     );
 }

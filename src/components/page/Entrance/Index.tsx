@@ -2,9 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Grid, Paper, Box, Typography, Button } from '@mui/material';
 
-import SelectExhibit from '../../ui/SelectExhibit';
-
-const Home = () => {
+const Entrance = () => {
     const navigate = useNavigate();
     return (
         <>
@@ -32,9 +30,8 @@ const Home = () => {
                     </Paper>
                 </Grid>
             </Grid>
-            <SelectExhibit />
         </>
     )
 }
 
-export default Home;
+export default Entrance;
