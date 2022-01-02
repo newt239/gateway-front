@@ -3,14 +3,12 @@ import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../stores/index';
 import { setToken } from '../../stores/auth';
-import { setExhibitList } from '../../stores/exhibit';
+import { setExhibitList, updateCurrentExhibit } from '../../stores/exhibit';
 import axios from 'axios';
 import Home from './Home';
 import Login from './Login';
-import Exhibit from './Exhibit/Index';
-import ExhibitEnter from './Exhibit/Enter';
-import ExhibitExit from './Exhibit/Exit';
-import ExhibitPass from './Exhibit/Pass';
+import ExhibitIndex from './Exhibit/Index';
+import Exhibit from './Exhibit/Exhibit';
 import Crowd from './Crowd/Index';
 import Heatmap from './Crowd/Heatmap';
 import Status from './Crowd/Status';
@@ -36,6 +34,7 @@ const Body = () => {
                 console.log(res);
                 if (res.data) {
                     dispatch(setExhibitList(res.data.data));
+                    dispatch(updateCurrentExhibit(res.data.data[0]))
                 };
             });
         };
@@ -60,10 +59,10 @@ const Body = () => {
                 <Route index element={<Home />} />
                 <Route path="login" element={<Login />} />
                 <Route path="exhibit" >
-                    <Route index element={<Exhibit />} />
-                    <Route path="enter" element={<ExhibitEnter />} />
-                    <Route path="exit" element={<ExhibitExit />} />
-                    <Route path="pass" element={<ExhibitPass />} />
+                    <Route index element={<ExhibitIndex />} />
+                    <Route path="enter" element={<Exhibit scanType="enter" />} />
+                    <Route path="exit" element={<Exhibit scanType="exit" />} />
+                    <Route path="pass" element={<Exhibit scanType="pass" />} />
                 </Route>
                 <Route path="entrance" >
                     <Route index element={<Entrance />} />

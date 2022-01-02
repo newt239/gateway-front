@@ -67,8 +67,8 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
         setRefreshQrReader(false);
     };
 
-    return (<Box sx={{ margin: 'auto', width: { xs: '30vh', md: '50vh' }, maxWidth: '100%', height: { xs: '30vh', md: '50vh' }, backgroundColor: 'black' }}>
-        {qrReaderState.state && refreshQrReader && (
+    return (<Box sx={{ margin: 'auto', width: '100%', maxWidth: '70vh', aspectRatio: '1 / 1', backgroundColor: 'black', borderRadius: '1rem' }}>
+        {(qrReaderState.state && refreshQrReader) && (
             <div style={{ position: 'relative' }}>
                 <QrReader
                     onScan={(text) => handleScan(text)}
@@ -79,7 +79,7 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
                     // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-qr-reader/index.d.ts
                     // @types/react-qr-readerがv2.1.0用でv2.1.1に追加されたconstraints propの型定義に対応していなかったため追記
                     constraints={{ deviceId: currentDevice.deviceId, facingMode: "environment" }}
-                    style={{ margin: 'auto', width: '100%' }}
+                    className="qrcode"
                 />
                 <IconButton onClick={() => setSelectCameraModalOpen(true)} sx={{ position: 'absolute', color: "white", top: 0, left: 0 }}>
                     <CameraswitchRoundedIcon />

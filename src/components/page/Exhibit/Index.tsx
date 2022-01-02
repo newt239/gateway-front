@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Grid, Card, Box, Typography, Button } from '@mui/material';
 
-const Home = () => {
+const ExhibitIndex = () => {
     const navigate = useNavigate();
     return (
         <>
@@ -39,4 +39,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default ExhibitIndex;

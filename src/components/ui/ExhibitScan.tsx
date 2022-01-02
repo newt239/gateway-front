@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux';
 import store from '../../stores/index';
 import { pauseQrReader } from '../../stores/scan';
 
-import { Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar } from '@mui/material';
+import { Alert, SwipeableDrawer, Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
@@ -49,9 +49,8 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const [message, setMessage] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [guestInfo, setGuestInfo] = useState<guestInfoProp>(null);
-    const [disabled, setButtonStatus] = useState<boolean>(true);
-    const [copySnack, setCopySnack] = useState(false);
-    const [smDialogOpen, setSmDialogStatus] = useState(false);
+    const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
+    const [smDrawerOpen, setSmDrawerStatus] = useState(false);
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
             if (scanText.length === 10 && scanText.startsWith('G')) {
@@ -63,29 +62,29 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                 if (res.data.status === "success") {
                     setGuestInfo(res.data.data);
                     const guestData = res.data.data;
-                    if (!guestData.available) {
+                    if (guestData.available === 0) {
+                        setScanStatus("error");
                         setMessage(["このゲストは無効です。"]);
+                        setSmDrawerStatus(true);
+                    } else if (scanType === "enter" && guestData.exhibit_id !== "") {
+                        setScanStatus("error");
+                        setMessage([`このゲストはすでに${guestData.exhibit_id}に入室しています。`, "入室処理と間違えていませんか？"]);
+                        setSmDrawerStatus(true);
                     } else {
                         setScanStatus("success");
-                        setMessage(["スキャンに成功しました。"]);
-                        setSmDialogStatus(true);
+                        setSmDrawerStatus(true);
                     }
                 } else {
                     setScanStatus("error");
-                    setMessage(["何らかの問題が発生しました。"]);
+                    setMessage([res.data.message]);
+                    setSmDrawerStatus(true);
                 };
-                setButtonStatus(false);
             } else {
                 setScanStatus("error");
                 setMessage(["ゲストidの形式が正しくありません。"]);
-            }
-        }
-    };
-    const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
-        if (reason === 'clickaway') {
-            return;
-        }
-        setCopySnack(false);
+                setSmDrawerStatus(true);
+            };
+        };
     };
     const postApi = async () => {
         if (guestInfo) {
@@ -96,18 +95,45 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                 userid: user.userid
             };
             const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-            dispatch(pauseQrReader(true));
-            console.log(res);
+            if (res.data.status === "success") {
+                dispatch(pauseQrReader(true));
+                setText("");
+                setMessage([]);
+                setSnackbar({ status: false, message: "", severity: "success" });
+                setScanStatus("waiting");
+                setSmDrawerStatus(false);
+            } else {
+                console.log(res.data);
+                if (res.data.message) {
+                    setSnackbar({ status: true, message: res.data.message, severity: "error" });
+                } else {
+                    setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
+                }
+                setText("");
+                dispatch(pauseQrReader(true));
+                setSmDrawerStatus(false);
+            };
         };
     };
     const retry = () => {
         dispatch(pauseQrReader(true));
         setText("");
         setMessage([]);
+        setSnackbar({ status: false, message: "", severity: "success" });
+        setScanStatus("waiting");
+        setSmDrawerStatus(false);
     };
     const GuestInfoCard = () => {
         return (
             <>
+                {scanStatus === "error" && (
+                    <Card variant="outlined" sx={{ p: 2 }} >
+                        <Alert severity="error">
+                            <AlertTitle>エラー</AlertTitle>
+                            {message.map((text, index) => <span key={index}>{text}</span>)}
+                        </Alert>
+                    </Card>
+                )}
                 {guestInfo && (
                     <Card variant="outlined" sx={{ p: 2 }} >
                         <Typography variant="h4">ゲスト情報</Typography>
@@ -140,20 +166,21 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                         <Box
                             m={1}
                             sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
-                            <Button variant="outlined" onClick={retry}>スキャンし直す</Button>
-                            <Button variant="contained" onClick={postApi} disabled={disabled}>登録</Button>
+                            <Button variant="text" onClick={retry}>スキャンし直す</Button>
+                            <Button variant="contained" onClick={postApi}>登録</Button>
                         </Box>
                     </Card >
                 )}
             </>
         )
-    }
+    };
+
     return (
         <>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} lg={4}>
                 <Scanner handleScan={handleScan} />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={6} lg={4}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Typography variant='h4'>id:</Typography>
                     <FormControl sx={{ m: 1 }} variant="outlined">
@@ -165,7 +192,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton aria-label="copy id to clipboard" onClick={() => {
-                                        if (text !== "") { navigator.clipboard.writeText(text); setCopySnack(true); }
+                                        if (text !== "") { navigator.clipboard.writeText(text); setSnackbar({ status: true, message: "コピーしました", severity: "success" }); }
                                     }} edge="end">
                                         <ContentCopyRoundedIcon />
                                     </IconButton>
@@ -174,32 +201,33 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                             disabled
                             fullWidth
                         />
-                        <Snackbar
-                            open={copySnack}
-                            autoHideDuration={6000}
-                            onClose={handleClose}
-                            message="コピーしました"
-                        />
                     </FormControl>
                 </Box>
                 {loading && (<Box sx={{ width: '100%' }}>
                     <LinearProgress />
                 </Box>)}
-                {scanStatus === "success" && (
+                {scanStatus !== "waiting" && (
                     matches ? (
                         <GuestInfoCard />
                     ) : (
-                        <Dialog
-                            fullScreen
-                            open={smDialogOpen}
-                            onClose={handleClose}
-                            TransitionComponent={Transition}
+                        <SwipeableDrawer
+                            anchor="bottom"
+                            open={smDrawerOpen}
+                            onClose={() => retry()}
+                            onOpen={() => setSmDrawerStatus(true)}
                         >
                             <GuestInfoCard />
-                        </Dialog>
+                        </SwipeableDrawer>
                     )
                 )}
             </Grid >
+            <Snackbar
+                open={snackbar.status}
+                autoHideDuration={6000}
+                onClose={() => setSnackbar({ status: false, message: "", severity: "success" })}
+            >
+                <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+            </Snackbar>
         </>
     );
 };
