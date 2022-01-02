@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../stores/index';
+import { RootState } from '#/stores/index';
 
 import { Paper, BottomNavigation, BottomNavigationAction } from '@mui/material/';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';

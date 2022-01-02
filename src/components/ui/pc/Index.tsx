@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import { Container, Box, Toolbar } from '@mui/material';
 
-import Drawer from './Drawer';
-import TopBar from '../TopBar';
-import Body from '../../page/Body';
+import Drawer from '#/components/ui/pc/Drawer';
+import TopBar from '#/components/ui/TopBar';
+import Body from '#/components/page/Body';
 
 const PC = () => {
     return (

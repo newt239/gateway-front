@@ -1,9 +1,10 @@
 import React from 'react';
 import { Container, Toolbar } from '@mui/material';
 
-import BottomNav from './BottomNav';
-import TopBar from '../TopBar';
-import Body from '../../page/Body';
+import BottomNav from '#/components/ui/sm/BottomNav';
+import TopBar from '#/components/ui/TopBar';
+import Body from '#/components/page/Body';
+
 const SM = () => {
     return (
         <>

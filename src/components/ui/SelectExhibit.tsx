@@ -1,14 +1,9 @@
 import React from "react";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../stores/index';
-import { updateCurrentExhibit } from '../../stores/exhibit';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Stack from '@mui/material/Stack';
-import Chip from '@mui/material/Chip';
-import Autocomplete from '@mui/material/Autocomplete';
-import { TextField } from "@mui/material";
+import { RootState } from '#/stores/index';
+import { updateCurrentExhibit } from '#/stores/exhibit';
+
+import { Stack, FormControl, TextField, Autocomplete } from "@mui/material";
 
 const SelectExhibit: React.FunctionComponent<{ disabled?: boolean | false }> = ({ disabled }) => {
     const dispatch = useDispatch();

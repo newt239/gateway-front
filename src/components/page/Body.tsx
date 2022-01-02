@@ -1,22 +1,23 @@
 import React, { useEffect } from "react"
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '../../stores/index';
-import { setToken } from '../../stores/auth';
-import { setExhibitList, updateCurrentExhibit } from '../../stores/exhibit';
+import { RootState } from '#/stores/index';
+import { setToken } from '#/stores/auth';
+import { setExhibitList, updateCurrentExhibit } from '#/stores/exhibit';
 import axios from 'axios';
-import Home from './Home';
-import Login from './Login';
-import ExhibitIndex from './Exhibit/Index';
-import Exhibit from './Exhibit/Exhibit';
-import Crowd from './Crowd/Index';
-import Heatmap from './Crowd/Heatmap';
-import Status from './Crowd/Status';
-import Entrance from './Entrance/Index';
-import ReserveCheck from './Entrance/ReserveCheck';
-import EntranceEnter from './Entrance/Enter';
-import EntranceExit from './Entrance/Exit';
-import Settings from './Settings';
+
+import Home from '#/components/page/Home';
+import Login from '#/components/page/Login';
+import ExhibitIndex from '#/components/page/Exhibit/Index';
+import Exhibit from '#/components/page/Exhibit/Exhibit';
+import Crowd from '#/components/page/Crowd/Index';
+import Heatmap from '#/components/page/Crowd/Heatmap';
+import Status from '#/components/page/Crowd/Status';
+import Entrance from '#/components/page/Entrance/Index';
+import ReserveCheck from '#/components/page/Entrance/ReserveCheck';
+import EntranceEnter from '#/components/page/Entrance/Enter';
+import EntranceExit from '#/components/page/Entrance/Exit';
+import Settings from '#/components/page/Settings';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 

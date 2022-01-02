@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Grid, Card, Typography } from '@mui/material';
+import React from 'react';
+import { Grid, Card } from '@mui/material';
 
-import Current from './Current';
+import Current from '#/components/page/Crowd/Current';
 
 
 export default function Heatmap() {

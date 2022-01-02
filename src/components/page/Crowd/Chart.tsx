@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from 'react-redux';
-import store from '../../../stores/index';
+import store from '#/stores/index';
 import axios from 'axios';
 import Chart from "react-apexcharts";
-
-import { Box } from '@mui/material';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 

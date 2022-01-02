@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../../stores/index';
-import { updateCurrentExhibit } from '../../../stores/exhibit';
+import { RootState } from '#/stores/index';
 import axios from 'axios';
+
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
-import SelectExhibit from '../../ui/SelectExhibit';
+import SelectExhibit from '#/components/ui/SelectExhibit';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 

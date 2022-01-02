@@ -1,9 +1,10 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../stores/index';
+import { RootState } from '#/stores/index';
+
 import { Grid, Typography } from '@mui/material';
 
-import ExhibitScan from '../../ui/ExhibitScan';
+import ExhibitScan from '#/components/ui/ExhibitScan';
 
 const Exhibit: React.FunctionComponent<{ scanType: string; }> = ({ scanType }) => {
     const exhibit = useSelector((state: RootState) => state.exhibit);

@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import store, { RootState } from '../../../stores/index';
-import { updateReservationInfo } from '../../../stores/reservation';
-import { pauseQrReader } from '../../../stores/scan';
-import { Grid, Box, Typography, Button } from '@mui/material';
-import Scanner from '../../ui/Scanner';
+import store, { RootState } from '#/stores/index';
+import { updateReservationInfo } from '#/stores/reservation';
+import { pauseQrReader } from '#/stores/scan';
 import axios from 'axios';
+
+import { Grid, Typography, Button } from '@mui/material';
+
+import Scanner from '#/components/ui/Scanner';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 

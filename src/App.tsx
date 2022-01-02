@@ -1,8 +1,11 @@
 import React from 'react';
 import { BrowserRouter } from "react-router-dom";
+
 import { ThemeProvider } from '@mui/material';
-import theme from './components/functional/theme';
-import ScreenWidth from './components/ui/ScreenWidth';
+
+import theme from '#/components/functional/theme';
+import ScreenWidth from '#/components/ui/ScreenWidth';
+
 require('dotenv').config()
 
 const App = () => {

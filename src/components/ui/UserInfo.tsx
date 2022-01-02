@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../stores/index';
-import { clearToken } from '../../stores/auth';
-import { setProfile } from '../../stores/user';
+import { RootState } from '#/stores/index';
+import { clearToken } from '#/stores/auth';
+import { setProfile } from '#/stores/user';
 
-import Box from '@mui/material/Box';
 import { Button, Typography } from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';

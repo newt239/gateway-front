@@ -1,12 +1,12 @@
 import { combineReducers } from "redux";
 import { configureStore } from "@reduxjs/toolkit";
 
-import authReducer from "./auth";
-import userReducer from "./user";
-import pageReducer from './page';
-import exhibitReducer from './exhibit';
-import reservationReducer from './reservation';
-import scanReducer from './scan';
+import authReducer from "#/stores/auth";
+import userReducer from "#/stores/user";
+import pageReducer from '#/stores/page';
+import exhibitReducer from '#/stores/exhibit';
+import reservationReducer from '#/stores/reservation';
+import scanReducer from '#/stores/scan';
 
 const reducer = combineReducers({
     auth: authReducer,

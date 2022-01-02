@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import store, { RootState } from '../../../stores/index';
-import { updateReservationInfo } from '../../../stores/reservation';
-import { Grid, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Button } from '@mui/material';
-import Scanner from '../../ui/Scanner';
+import store, { RootState } from '#/stores/index';
 import axios from 'axios';
+
+import { Grid, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Button } from '@mui/material';
+
+import Scanner from '#/components/ui/Scanner';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 type guestListProp = {

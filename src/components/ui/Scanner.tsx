@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../stores/index";
-import { pauseQrReader, setDeviceList, setCurrentDevice } from '../../stores/scan';
+import { RootState } from "#/stores/index";
+import { pauseQrReader, setDeviceList, setCurrentDevice } from '#/stores/scan';
 import QrReader from 'react-qr-reader';
 
 import { Box, Dialog, DialogContent, DialogActions, Button, IconButton, Autocomplete, TextField, DialogTitle } from '@mui/material';

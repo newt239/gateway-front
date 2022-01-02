@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
-import { RootState } from '../../../stores/index';
+import { RootState } from '#/stores/index';
 import { Drawer, Box, Toolbar, List, ListSubheader, Divider, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
@@ -11,7 +11,7 @@ import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
 import TableChartRoundedIcon from '@mui/icons-material/TableChartRounded';
 import MapRoundedIcon from '@mui/icons-material/MapRounded';
 
-import UserInfo from '../UserInfo';
+import UserInfo from '#/components/ui/UserInfo';
 const drawerWidth = 240;
 
 const DrawerLeft = () => {

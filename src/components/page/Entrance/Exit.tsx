@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import store from '../../../stores/index';
-import { pauseQrReader } from '../../../stores/scan';
-import { Grid, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Button } from '@mui/material';
-import Scanner from '../../ui/Scanner';
+import store from '#/stores/index';
+import { pauseQrReader } from '#/stores/scan';
 import axios from 'axios';
+
+import { Grid, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Button } from '@mui/material';
+
+import Scanner from '#/components/ui/Scanner';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 

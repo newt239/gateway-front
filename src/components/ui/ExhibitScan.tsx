@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import store from '../../stores/index';
-import { pauseQrReader } from '../../stores/scan';
+import store from '#/stores/index';
+import { pauseQrReader } from '#/stores/scan';
+import axios from 'axios';
 
 import { Alert, SwipeableDrawer, Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -13,7 +13,7 @@ import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { TransitionProps } from '@mui/material/transitions';
 
-import Scanner from '../ui/Scanner';
+import Scanner from '#/components/ui/Scanner';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 

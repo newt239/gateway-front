@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../stores/index';
-import { setTitle } from '../../stores/page';
+import { RootState } from '#/stores/index';
+import { setTitle } from '#/stores/page';
 
 import { Container, Box, AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import ArrowBackRoundedIcon from '@mui/icons-material/ArrowBackRounded';

@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { Grid, Card, Typography } from '@mui/material';
 
-import UserInfo from '../ui/UserInfo';
+import UserInfo from '#/components/ui/UserInfo';
 
 const Settings = () => {
     return (

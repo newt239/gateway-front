@@ -1,7 +1,9 @@
-import * as React from 'react';
-import PC from './pc/Index'
-import SM from './sm/Index'
+import React from 'react';
+
 import useMediaQuery from '@mui/material/useMediaQuery';
+
+import PC from '#/components/ui/pc/Index';
+import SM from '#/components/ui/sm/Index';
 
 const ScreenWidth = () => {
     function MediaQuery() {
