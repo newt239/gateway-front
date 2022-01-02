@@ -2,7 +2,7 @@ import React from "react";
 
 import { Grid, Card } from '@mui/material';
 
-import UserInfo from '#/components/ui/UserInfo';
+import UserInfo from '#/components/block/UserInfo';
 
 const Home = () => {
     return (

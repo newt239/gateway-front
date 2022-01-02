@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import { Grid, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Button } from '@mui/material';
 
-import Scanner from '#/components/ui/Scanner';
+import Scanner from '#/components/block/Scanner';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 

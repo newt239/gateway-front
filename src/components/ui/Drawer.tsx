@@ -11,7 +11,7 @@ import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
 import TableChartRoundedIcon from '@mui/icons-material/TableChartRounded';
 import MapRoundedIcon from '@mui/icons-material/MapRounded';
 
-import UserInfo from '#/components/ui/UserInfo';
+import UserInfo from '#/components/block/UserInfo';
 const drawerWidth = 240;
 
 const DrawerLeft = () => {

@@ -1,11 +1,11 @@
 import React from 'react';
 import { Container, Toolbar } from '@mui/material';
 
-import BottomNav from '#/components/ui/sm/BottomNav';
+import BottomNav from '#/components/ui/BottomNav';
 import TopBar from '#/components/ui/TopBar';
 import Body from '#/components/page/Body';
 
-const SM = () => {
+const Mobile = () => {
     return (
         <>
             <TopBar />
@@ -18,4 +18,4 @@ const SM = () => {
     )
 }
 
-export default SM
+export default Mobile

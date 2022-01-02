@@ -4,7 +4,7 @@ import { RootState } from '#/stores/index';
 
 import { Grid, Typography } from '@mui/material';
 
-import ExhibitScan from '#/components/ui/ExhibitScan';
+import ExhibitScan from '#/components/page/Exhibit/ExhibitScan';
 
 const Exhibit: React.FunctionComponent<{ scanType: string; }> = ({ scanType }) => {
     const exhibit = useSelector((state: RootState) => state.exhibit);

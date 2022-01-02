@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Box } from '@mui/material';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
-import SelectExhibit from '#/components/ui/SelectExhibit';
+import SelectExhibit from '#/components/block/SelectExhibit';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 

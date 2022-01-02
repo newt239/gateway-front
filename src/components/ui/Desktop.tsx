@@ -1,11 +1,11 @@
 import React from 'react';
 import { Container, Box, Toolbar } from '@mui/material';
 
-import Drawer from '#/components/ui/pc/Drawer';
+import Drawer from '#/components/ui/Drawer';
 import TopBar from '#/components/ui/TopBar';
 import Body from '#/components/page/Body';
 
-const PC = () => {
+const Desktop = () => {
     return (
         <>
             <TopBar />
@@ -20,4 +20,4 @@ const PC = () => {
     )
 }
 
-export default PC
+export default Desktop

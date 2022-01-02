@@ -13,7 +13,7 @@ import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { TransitionProps } from '@mui/material/transitions';
 
-import Scanner from '#/components/ui/Scanner';
+import Scanner from '#/components/block/Scanner';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
