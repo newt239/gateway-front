@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import store from '#/stores/index';
+import { useDispatch, useSelector } from 'react-redux';
+import store, { RootState } from '#/stores/index';
 import { pauseQrReader } from '#/stores/scan';
 import axios from 'axios';
 
@@ -41,8 +41,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const dispatch = useDispatch();
-    const token = store.getState().auth.token;
-    const user = store.getState().user;
+    const user = useSelector((state: RootState) => state.user);
     const exhibit = store.getState().exhibit;
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
@@ -57,7 +56,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                 dispatch(pauseQrReader(false));
                 setText(scanText);
                 setLoading(true);
-                const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
+                const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
                 setLoading(false);
                 if (res.data.status === "success") {
                     setGuestInfo(res.data.data);
@@ -92,9 +91,9 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                 guest_id: text,
                 guest_type: guestInfo.guest_type,
                 exhibit_id: exhibit.current.exhibit_id,
-                userid: user.userid
+                userid: user.info.userid
             };
-            const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
+            const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
             if (res.data.status === "success") {
                 dispatch(pauseQrReader(true));
                 setText("");

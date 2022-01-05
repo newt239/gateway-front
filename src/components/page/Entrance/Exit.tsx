@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import store from '#/stores/index';
+import { useDispatch, useSelector } from 'react-redux';
+import store, { RootState } from '#/stores/index';
 import { pauseQrReader } from '#/stores/scan';
 import axios from 'axios';
 
@@ -12,14 +12,11 @@ const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 export default function EntranceEnter() {
     const dispatch = useDispatch();
-    const token = store.getState().auth.token;
-    const user = store.getState().user;
-    const qrReaderState = store.getState().scan;
+    const user = useSelector((state: RootState) => state.user);
     const [open, setOpen] = useState(false);
     const [text, setText] = useState<string | null>("");
     const handleScan = (scanText: string | null) => {
         if (scanText) {
-            console.log(scanText);
             if (scanText.length === 8 && scanText.startsWith('G')) {
                 dispatch(pauseQrReader(false));
                 setText(scanText);
@@ -29,9 +26,9 @@ export default function EntranceEnter() {
     const postApi = () => {
         const payload = {
             guest_id: text,
-            userid: user.userid
+            userid: user.info.userid
         }
-        axios.post(`${API_BASE_URL}/v1/guests/revoke`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => {
+        axios.post(`${API_BASE_URL}/v1/guests/revoke`, payload, { headers: { Authorization: "Bearer " + user.token } }).then(res => {
             if (res.data.status === "success") {
                 setOpen(true);
             };

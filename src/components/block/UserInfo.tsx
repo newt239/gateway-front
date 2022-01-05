@@ -3,8 +3,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '#/stores/index';
-import { clearToken } from '#/stores/auth';
-import { setProfile } from '#/stores/user';
+import { setProfile, clearToken } from '#/stores/user';
 
 import { Button, Typography } from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
@@ -18,11 +17,9 @@ const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 const UserInfo = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const token = useSelector((state: RootState) => state.auth.token);
-    const userProfile = useSelector((state: RootState) => state.user);
-    if (userProfile.userid === "") {
-        console.log(userProfile)
-    }
+    const user = useSelector((state: RootState) => state.user);
+    const token = user.token;
+    const userProfile = user.info;
     const logout = () => {
         dispatch(clearToken());
         localStorage.removeItem('gatewayApiToken');

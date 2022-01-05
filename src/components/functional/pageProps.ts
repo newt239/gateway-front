@@ -54,6 +54,6 @@ const allPageProps = [{
     path: "/settings",
     title: "設定",
     description: ""
-}]
+}];
 
 export default allPageProps;

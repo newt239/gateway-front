@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import store, { RootState } from '#/stores/index';
 import axios from 'axios';
 
@@ -17,9 +17,7 @@ type guestListProp = {
 }
 export default function EntranceEnter() {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const token = store.getState().auth.token;
-    const user = store.getState().user;
+    const user = useSelector((state: RootState) => state.user);
     const [open, setOpen] = useState(false);
     const [guestList, setGuest] = useState<guestListProp[]>([]);
     const reservationInfo = useSelector((state: RootState) => state.reservation);
@@ -27,18 +25,18 @@ export default function EntranceEnter() {
     const handleScan = (scanText: string | null) => {
         if (scanText) {
             setText(scanText);
-            if (scanText.length === 8 && scanText.startsWith('G')) {
+            if (scanText.length === 7 && scanText.startsWith('R')) {
                 setGuest([...guestList, {
                     guest_id: scanText,
                     guest_type: reservationInfo.guest_type,
                     reservation_id: reservationInfo.reservation_id,
-                    userid: user.userid
+                    userid: user.info.userid
                 }]);
             }
         }
     };
     const postApi = () => {
-        axios.post(`${API_BASE_URL}/v1/guests/regist`, guestList, { headers: { Authorization: "Bearer " + token } }).then(res => {
+        axios.post(`${API_BASE_URL}/v1/guests/regist`, guestList, { headers: { Authorization: "Bearer " + user.token } }).then(res => {
             if (res.data.status === "success") {
                 setOpen(true);
             };

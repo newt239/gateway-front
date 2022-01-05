@@ -28,7 +28,7 @@ const SimpleBottomNavigation = () => {
     };
     return (
         <>
-            {user.user_type !== "" && (
+            {user.info.user_type !== "" && (
                 <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
                     <BottomNavigation
                         showLabels
@@ -36,10 +36,10 @@ const SimpleBottomNavigation = () => {
                         onChange={handleChange}
                     >
                         <BottomNavigationAction label="ホーム" value="" icon={<HomeRoundedIcon />} />
-                        {["admin", "moderator", "exhibit"].indexOf(user.user_type, -1) && (
+                        {["admin", "moderator", "exhibit"].indexOf(user.info.user_type, -1) && (
                             <BottomNavigationAction label="入退室処理" value="exhibit" icon={<MeetingRoomRoundedIcon />} />
                         )}
-                        {["admin", "moderator", "user"].indexOf(user.user_type, -1) && (
+                        {["admin", "moderator", "user"].indexOf(user.info.user_type, -1) && (
                             <BottomNavigationAction label="エントランス" value="entrance" icon={<MeetingRoomRoundedIcon />} />
                         )}
                     </BottomNavigation>

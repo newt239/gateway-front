@@ -38,7 +38,7 @@ const DrawerLeft = () => {
             <Box sx={{ p: 2 }}>
                 <UserInfo />
             </Box>
-            {user.user_type !== "" && (
+            {user.info.user_type !== "" && (
                 <>
                     <Divider />
                     <List>
@@ -48,7 +48,7 @@ const DrawerLeft = () => {
                             <ListItemText primary='ホーム' />
                         </ListItemButton>
                     </List>
-                    {["admin", "moderator", "exhibit"].indexOf(user.user_type, -1) && (
+                    {["admin", "moderator", "exhibit"].indexOf(user.info.user_type, -1) && (
                         <>
                             <Divider />
                             <List subheader={<ListSubheader>展示企画</ListSubheader>}>
@@ -70,7 +70,7 @@ const DrawerLeft = () => {
                             </List>
                         </>
                     )}
-                    {["admin", "moderator", "user"].indexOf(user.user_type, -1) && (
+                    {["admin", "moderator", "user"].indexOf(user.info.user_type, -1) && (
                         <>
                             <Divider />
                             <List subheader={<ListSubheader>エントランス</ListSubheader>}>

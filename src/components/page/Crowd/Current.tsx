@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '#/stores/index';
 import axios from 'axios';
 
@@ -17,7 +17,7 @@ const columns: GridColDef[] = [
 
 export default function Current() {
     const [rows, setRows] = useState([]);
-    const token = useSelector((state: RootState) => state.auth.token);
+    const token = useSelector((state: RootState) => state.user).token;
     const exhibit = useSelector((state: RootState) => state.exhibit);
     useEffect(() => {
         if (exhibit.current.exhibit_id !== "") {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
-import { setToken } from '../../stores/auth';
+import { setToken } from '#/stores/user';
 import axios from 'axios';
 
 import { Grid, Alert, TextField, Button } from '@mui/material';

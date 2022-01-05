@@ -2,16 +2,16 @@ import React from 'react';
 
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import PC from '#/components/ui/pc/Index';
-import SM from '#/components/ui/sm/Index';
+import Desktop from '#/components/ui/Desktop';
+import Mobile from '#/components/ui/Mobile';
 
 const ScreenWidth = () => {
     function MediaQuery() {
-        const sm = useMediaQuery('(max-width:600px)');
-        if (sm) {
-            return <SM />
+        const mobile = useMediaQuery('(max-width:600px)');
+        if (mobile) {
+            return <Mobile />
         } else {
-            return <PC />
+            return <Desktop />
         }
     }
     return (
