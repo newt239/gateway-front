@@ -16,6 +16,7 @@ import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { TransitionProps } from '@mui/material/transitions';
 
 import Scanner from '#/components/block/Scanner';
+import ReservationTicket from '#/components/block/ReservationTicket';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -33,7 +34,7 @@ export default function ReserveCheck() {
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const token = store.getState().auth.token;
+    const token = useSelector((state: RootState) => state.user).token;
     const [reservationInfo, setReservationInfo] = useState<reservationInfoProp>(null);
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
     const [text, setText] = useState("");
