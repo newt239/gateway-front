@@ -25,7 +25,10 @@ const theme = createTheme({
         h4: {
             fontSize: '1.3rem',
             fontWeight: 700
-        }
+        },
+        body2: {
+            padding: ".5rem 0",
+        },
     }
 });
 
