@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import store, { RootState } from '#/stores/index';
-import { updateReservationInfo } from '#/stores/reservation';
+import { RootState } from '#/stores/index';
+import { setReservationInfo, resetReservationInfo } from '#/stores/reservation';
 import { pauseQrReader } from '#/stores/scan';
 import axios from 'axios';
 
@@ -20,22 +20,13 @@ import ReservationTicket from '#/components/block/ReservationTicket';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
-type reservationInfoProp = {
-    reservation_id: string;
-    guest_type: string;
-    part: string;
-    available: 0 | 1;
-    count: number;
-    note: string;
-} | null;
-
 export default function ReserveCheck() {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.user).token;
-    const [reservationInfo, setReservationInfo] = useState<reservationInfoProp>(null);
+    const reservationInfo = useSelector((state: RootState) => state.reservation);
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
     const [text, setText] = useState("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
@@ -51,7 +42,7 @@ export default function ReserveCheck() {
                 const res = await axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } });
                 setLoading(false);
                 if (res.data.status === "success") {
-                    setReservationInfo(res.data.data);
+                    dispatch(setReservationInfo(res.data.data));
                     if (reservationInfo) {
                         if (reservationInfo.available === 0) {
                             setScanStatus("error");
@@ -74,9 +65,9 @@ export default function ReserveCheck() {
             };
         };
     };
-    
+
     const retry = () => {
-        dispatch(updateReservationInfo({ available: false }));
+        dispatch(resetReservationInfo());
         dispatch(pauseQrReader(false));
     }
     const ReservationInfoCard = () => {
@@ -90,7 +81,7 @@ export default function ReserveCheck() {
                         </Alert>
                     </Card>
                 )}
-                {reservationInfo && (
+                {reservationInfo && scanStatus === "success" && (
                     <Card variant="outlined" sx={{ p: 2 }} >
                         <Typography variant="h4">ゲスト情報</Typography>
                         <List dense>
@@ -130,8 +121,8 @@ export default function ReserveCheck() {
                         <Box
                             m={1}
                             sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
-                        <Button variant="contained" onClick={() => navigate("/entrance/enter", { replace: true })}>リストバンドを登録</Button>
-                        <Button variant="contained" onClick={retry}>スキャンし直す</Button>
+                            <Button variant="contained" onClick={retry}>スキャンし直す</Button>
+                            <Button variant="contained" onClick={() => navigate("/entrance/enter", { replace: true })}>リストバンドの登録</Button>
                         </Box>
                     </Card>
                 )}

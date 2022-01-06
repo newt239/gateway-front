@@ -1,34 +1,55 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import store, { RootState } from '#/stores/index';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '#/stores/index';
+import { setReservationInfo, resetReservationInfo } from '#/stores/reservation';
+import { pauseQrReader } from '#/stores/scan';
 import axios from 'axios';
 
-import { Grid, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Typography, Button } from '@mui/material';
-
+import { MobileStepper, Alert, SwipeableDrawer, Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
+import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
+import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
+import { TransitionProps } from '@mui/material/transitions';
 import Scanner from '#/components/block/Scanner';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
-type guestListProp = {
+type guestInfoListProp = {
     guest_id: string;
     guest_type: string;
+    part: string;
     reservation_id: string;
     userid: string;
-}
+}[];
 export default function EntranceEnter() {
     const navigate = useNavigate();
+    const theme = useTheme();
+    const matches = useMediaQuery(theme.breakpoints.up('sm'));
+    const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user);
-    const [open, setOpen] = useState(false);
-    const [guestList, setGuest] = useState<guestListProp[]>([]);
+    const exhibit = useSelector((state: RootState) => state.exhibit);
+    const [text, setText] = useState<string>("");
+    const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
+    const [message, setMessage] = useState<string[]>([]);
+    const [loading, setLoading] = useState<boolean>(false);
     const reservationInfo = useSelector((state: RootState) => state.reservation);
-    const [text, setText] = useState<string | null>("");
-    const handleScan = (scanText: string | null) => {
+    const [guestInfoList, setGuestInfo] = useState<guestInfoListProp>([]);
+    const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
+    const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+    const [activeStep, setActiveStep] = useState(0);
+    const handleScan = async (scanText: string | null) => {
         if (scanText) {
             setText(scanText);
             if (scanText.length === 7 && scanText.startsWith('R')) {
-                setGuest([...guestList, {
+                setGuestInfo([...guestInfoList, {
                     guest_id: scanText,
                     guest_type: reservationInfo.guest_type,
+                    part: reservationInfo.part,
                     reservation_id: reservationInfo.reservation_id,
                     userid: user.info.userid
                 }]);
@@ -36,15 +57,106 @@ export default function EntranceEnter() {
         }
     };
     const postApi = () => {
-        axios.post(`${API_BASE_URL}/v1/guests/regist`, guestList, { headers: { Authorization: "Bearer " + user.token } }).then(res => {
-            if (res.data.status === "success") {
-                setOpen(true);
-            };
-        });
+        if (guestInfoList.length === reservationInfo.count) {
+            axios.post(`${API_BASE_URL}/v1/guests/regist`, guestInfoList, { headers: { Authorization: "Bearer " + user.token } }).then(res => {
+                if (res.data.status === "success") {
+                    dispatch(pauseQrReader(true));
+                    setText("");
+                    setMessage([]);
+                    setSnackbar({ status: false, message: "", severity: "success" });
+                    setScanStatus("waiting");
+                    setSmDrawerStatus(false);
+                    navigate("entrance/reserve-check", { replace: true });
+                } else {
+                    console.log(res.data);
+                    if (res.data.message) {
+                        setSnackbar({ status: true, message: res.data.message, severity: "error" });
+                    } else {
+                        setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
+                    }
+                    setText("");
+                    dispatch(pauseQrReader(true));
+                    setSmDrawerStatus(false);
+                };
+            });
+        }
+
     };
-    const handleClose = () => {
-        setOpen(false);
-        navigate("/entrance/reserve-check", { replace: true });
+    const GuestInfoCard = () => {
+        return (
+            <>
+                <MobileStepper
+                    variant="dots"
+                    steps={guestInfoList.length}
+                    position="static"
+                    activeStep={activeStep}
+                    sx={{ maxWidth: 400, flexGrow: 1 }}
+                    nextButton={
+                        <Button size="small" onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)} disabled={activeStep === guestInfoList.length - 1}>
+                            Next
+                            {theme.direction === 'rtl' ? (
+                                <KeyboardArrowLeft />
+                            ) : (
+                                <KeyboardArrowRight />
+                            )}
+                        </Button>
+                    }
+                    backButton={
+                        <Button size="small" onClick={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)} disabled={activeStep === 0}>
+                            {theme.direction === 'rtl' ? (
+                                <KeyboardArrowRight />
+                            ) : (
+                                <KeyboardArrowLeft />
+                            )}
+                            Back
+                        </Button>
+                    }
+                />
+                <Card variant="outlined" sx={{ p: 2 }} >
+                    <Typography variant="h4">ゲスト情報</Typography>
+                    <List dense>
+                        <ListItem>
+                            <ListItemIcon>
+                                <PersonRoundedIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={text}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                                <PeopleRoundedIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={guestInfoList[activeStep].guest_type === "student" ? "生徒" : guestInfoList[activeStep].guest_type}
+                            />
+                        </ListItem>
+                        <ListItem>
+                            <ListItemIcon>
+                                <AccessTimeRoundedIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={guestInfoList[activeStep].part === "all" ? "全時間帯" : guestInfoList[activeStep].part}
+                            />
+                        </ListItem>
+                    </List>
+                    <Box
+                        m={1}
+                        sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
+                        <Button variant="text" onClick={retry}>スキャンし直す</Button>
+                        <Button variant="contained" onClick={postApi}>登録</Button>
+                    </Box>
+                </Card >
+            </>
+        )
+    };
+    const retry = () => {
+        dispatch(pauseQrReader(true));
+        setText("");
+        setMessage([]);
+        setSnackbar({ status: false, message: "", severity: "success" });
+        setScanStatus("waiting");
+        setSmDrawerStatus(false);
     };
     return (
         <>
@@ -70,20 +182,31 @@ export default function EntranceEnter() {
                         </>
                     )}
                 </Grid>
+                {loading && (<Box sx={{ width: '100%' }}>
+                    <LinearProgress />
+                </Box>)}
+                {scanStatus !== "waiting" && (
+                    matches ? (
+                        <GuestInfoCard />
+                    ) : (
+                        <SwipeableDrawer
+                            anchor="bottom"
+                            open={smDrawerOpen}
+                            onClose={() => retry()}
+                            onOpen={() => setSmDrawerStatus(true)}
+                        >
+                            <GuestInfoCard />
+                        </SwipeableDrawer>
+                    )
+                )}
             </Grid>
-            <Dialog
-                open={open}
-                onClose={handleClose}
+            <Snackbar
+                open={snackbar.status}
+                autoHideDuration={6000}
+                onClose={() => setSnackbar({ status: false, message: "", severity: "success" })}
             >
-                <DialogTitle sx={{ color: `primary.main`, display: "inline-flex", alignItems: "center" }}>
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText>登録が完了しました。</DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose} >閉じる</Button>
-                </DialogActions>
-            </Dialog>
+                <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+            </Snackbar>
         </>
     );
 }
