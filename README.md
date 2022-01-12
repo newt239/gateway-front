@@ -1,6 +1,14 @@
 # Gateway-front
 
-Guests management system
+frontend of Guests management system
+
+## System Info
+
+- react v17.0.2
+- mui v5.2.4
+- react-qr-reader github:JodusNodus/react-qr-reader#pull/192/head
+
+more details, please check `package.json`.
 
 ## For developer: how to reproduce
 
@@ -23,7 +31,7 @@ NODE_PATH=src
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Open [http://localhost:8000](http://localhost:8000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
