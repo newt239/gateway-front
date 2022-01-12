@@ -32,7 +32,6 @@ export default function EntranceEnter() {
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const dispatch = useDispatch();
     const user = useSelector((state: RootState) => state.user);
-    const exhibit = useSelector((state: RootState) => state.exhibit);
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
     const [message, setMessage] = useState<string[]>([]);
@@ -45,16 +44,20 @@ export default function EntranceEnter() {
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
             setText(scanText);
-            if (scanText.length === 7 && scanText.startsWith('R')) {
-                setGuestInfo([...guestInfoList, {
-                    guest_id: scanText,
-                    guest_type: reservationInfo.guest_type,
-                    part: reservationInfo.part,
-                    reservation_id: reservationInfo.reservation_id,
-                    userid: user.info.userid
-                }]);
-            }
-        }
+            if (scanText.length === 10 && scanText.startsWith('G')) {
+                if (!guestInfoList.some(guest => guest.guest_id === scanText)) {
+                    setGuestInfo([...guestInfoList, {
+                        guest_id: scanText,
+                        guest_type: reservationInfo.guest_type,
+                        part: reservationInfo.part,
+                        reservation_id: reservationInfo.reservation_id,
+                        userid: user.info.userid
+                    }]);
+                    setScanStatus("success");
+                    setActiveStep(guestInfoList.length);
+                };
+            };
+        };
     };
     const postApi = () => {
         if (guestInfoList.length === reservationInfo.count) {
@@ -66,7 +69,7 @@ export default function EntranceEnter() {
                     setSnackbar({ status: false, message: "", severity: "success" });
                     setScanStatus("waiting");
                     setSmDrawerStatus(false);
-                    navigate("entrance/reserve-check", { replace: true });
+                    navigate("/entrance/reserve-check", { replace: true });
                 } else {
                     console.log(res.data);
                     if (res.data.message) {
@@ -85,78 +88,93 @@ export default function EntranceEnter() {
     const GuestInfoCard = () => {
         return (
             <>
-                <MobileStepper
-                    variant="dots"
-                    steps={guestInfoList.length}
-                    position="static"
-                    activeStep={activeStep}
-                    sx={{ maxWidth: 400, flexGrow: 1 }}
-                    nextButton={
-                        <Button size="small" onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)} disabled={activeStep === guestInfoList.length - 1}>
-                            Next
-                            {theme.direction === 'rtl' ? (
-                                <KeyboardArrowLeft />
-                            ) : (
-                                <KeyboardArrowRight />
-                            )}
-                        </Button>
-                    }
-                    backButton={
-                        <Button size="small" onClick={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)} disabled={activeStep === 0}>
-                            {theme.direction === 'rtl' ? (
-                                <KeyboardArrowRight />
-                            ) : (
-                                <KeyboardArrowLeft />
-                            )}
-                            Back
-                        </Button>
-                    }
-                />
-                <Card variant="outlined" sx={{ p: 2 }} >
-                    <Typography variant="h4">ゲスト情報</Typography>
-                    <List dense>
-                        <ListItem>
-                            <ListItemIcon>
-                                <PersonRoundedIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={text}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemIcon>
-                                <PeopleRoundedIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={guestInfoList[activeStep].guest_type === "student" ? "生徒" : guestInfoList[activeStep].guest_type}
-                            />
-                        </ListItem>
-                        <ListItem>
-                            <ListItemIcon>
-                                <AccessTimeRoundedIcon />
-                            </ListItemIcon>
-                            <ListItemText
-                                primary={guestInfoList[activeStep].part === "all" ? "全時間帯" : guestInfoList[activeStep].part}
-                            />
-                        </ListItem>
-                    </List>
-                    <Box
-                        m={1}
-                        sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
-                        <Button variant="text" onClick={retry}>スキャンし直す</Button>
-                        <Button variant="contained" onClick={postApi}>登録</Button>
-                    </Box>
-                </Card >
+                {guestInfoList.length !== 0 && (
+                    <>
+                        <MobileStepper
+                            variant="dots"
+                            steps={reservationInfo.count}
+                            position="static"
+                            activeStep={activeStep}
+                            sx={{ maxWidth: 400, flexGrow: 1 }}
+                            nextButton={
+                                <Button size="small" onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)} disabled={activeStep === guestInfoList.length - 1}>
+                                    Next
+                                    {theme.direction === 'rtl' ? (
+                                        <KeyboardArrowLeft />
+                                    ) : (
+                                        <KeyboardArrowRight />
+                                    )}
+                                </Button>
+                            }
+                            backButton={
+                                <Button size="small" onClick={() => setActiveStep((prevActiveStep) => prevActiveStep - 1)} disabled={activeStep === 0}>
+                                    {theme.direction === 'rtl' ? (
+                                        <KeyboardArrowRight />
+                                    ) : (
+                                        <KeyboardArrowLeft />
+                                    )}
+                                    Back
+                                </Button>
+                            }
+                        />
+                        <Card variant="outlined" sx={{ p: 2 }} >
+                            <Typography variant="h4">ゲスト情報</Typography>
+                            <List dense>
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <PersonRoundedIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={guestInfoList[activeStep].guest_id}
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <PeopleRoundedIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={guestInfoList[activeStep].guest_type === "student" ? "生徒" : guestInfoList[activeStep].guest_type}
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemIcon>
+                                        <AccessTimeRoundedIcon />
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={guestInfoList[activeStep].part === "all" ? "全時間帯" : guestInfoList[activeStep].part}
+                                    />
+                                </ListItem>
+                            </List>
+                            <Box
+                                m={1}
+                                sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
+                                <Button variant="text" onClick={() => retry(activeStep)}>スキャンし直す</Button>
+                            </Box>
+                        </Card >
+                        <Box
+                            m={1}
+                            sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
+                            <Button variant="text" onClick={() => retry(0)}>全てスキャンし直す</Button>
+                            <Button variant="contained" onClick={postApi}>登録</Button>
+                        </Box>
+                    </>
+                )}
             </>
         )
     };
-    const retry = () => {
+    const retry = (activeStep: number) => {
         dispatch(pauseQrReader(true));
         setText("");
         setMessage([]);
         setSnackbar({ status: false, message: "", severity: "success" });
         setScanStatus("waiting");
         setSmDrawerStatus(false);
+        if (activeStep === 0) {
+            setGuestInfo([]);
+        } else {
+            let newGuestList = guestInfoList;
+            setGuestInfo(newGuestList.splice(activeStep - 1, 1));
+        }
     };
     return (
         <>
@@ -168,45 +186,54 @@ export default function EntranceEnter() {
                     <Scanner handleScan={handleScan} />
                 </Grid>
                 <Grid item xs={12} md={6}>
-                    <Typography variant="h4">認識したid</Typography>
-                    <Typography>{text}</Typography>
-                    {reservationInfo.available && (
-                        <>
-                            <Typography variant="h4">ゲストタイプ</Typography>
-                            <Typography>{reservationInfo.guest_type}</Typography>
-                            <Typography variant="h4">時間帯</Typography>
-                            <Typography>{reservationInfo.part}</Typography>
-                            <Typography variant="h4">人数</Typography>
-                            <Typography> / {reservationInfo.count}人中</Typography>
-                            <Button variant="contained" onClick={postApi}>すべて登録</Button>
-                        </>
+                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                        <Typography variant='h4'>id:</Typography>
+                        <FormControl sx={{ m: 1 }} variant="outlined">
+                            <OutlinedInput
+                                type='text'
+                                size="small"
+                                value={text}
+                                onChange={(e) => setText(e.target.value)}
+                                endAdornment={
+                                    <InputAdornment position="end">
+                                        <IconButton aria-label="copy id to clipboard" onClick={() => {
+                                            if (text !== "") { navigator.clipboard.writeText(text); setSnackbar({ status: true, message: "コピーしました", severity: "success" }); }
+                                        }} edge="end">
+                                            <ContentCopyRoundedIcon />
+                                        </IconButton>
+                                    </InputAdornment>
+                                }
+                                disabled
+                                fullWidth
+                            />
+                        </FormControl>
+                    </Box>
+                    {loading && (<Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                    </Box>)}
+                    {scanStatus !== "waiting" && (
+                        matches ? (
+                            <GuestInfoCard />
+                        ) : (
+                            <SwipeableDrawer
+                                anchor="bottom"
+                                open={smDrawerOpen}
+                                onClose={() => retry(0)}
+                                onOpen={() => setSmDrawerStatus(true)}
+                            >
+                                <GuestInfoCard />
+                            </SwipeableDrawer>
+                        )
                     )}
                 </Grid>
-                {loading && (<Box sx={{ width: '100%' }}>
-                    <LinearProgress />
-                </Box>)}
-                {scanStatus !== "waiting" && (
-                    matches ? (
-                        <GuestInfoCard />
-                    ) : (
-                        <SwipeableDrawer
-                            anchor="bottom"
-                            open={smDrawerOpen}
-                            onClose={() => retry()}
-                            onOpen={() => setSmDrawerStatus(true)}
-                        >
-                            <GuestInfoCard />
-                        </SwipeableDrawer>
-                    )
-                )}
+                <Snackbar
+                    open={snackbar.status}
+                    autoHideDuration={6000}
+                    onClose={() => setSnackbar({ status: false, message: "", severity: "success" })}
+                >
+                    <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+                </Snackbar>
             </Grid>
-            <Snackbar
-                open={snackbar.status}
-                autoHideDuration={6000}
-                onClose={() => setSnackbar({ status: false, message: "", severity: "success" })}
-            >
-                <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
-            </Snackbar>
         </>
     );
 }

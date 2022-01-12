@@ -39,19 +39,18 @@ export default function ReserveCheck() {
                 dispatch(pauseQrReader(false));
                 setText(scanText);
                 setLoading(true);
-                const res = await axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } });
+                const res = await axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } })
                 setLoading(false);
+                console.log(res);
                 if (res.data.status === "success") {
                     dispatch(setReservationInfo(res.data.data));
-                    if (reservationInfo) {
-                        if (reservationInfo.available === 0) {
-                            setScanStatus("error");
-                            setMessage(["この予約idは無効です。"]);
-                            setSmDrawerStatus(true);
-                        } else {
-                            setScanStatus("success");
-                            setSmDrawerStatus(true);
-                        };
+                    if (res.data.data.available === 0) {
+                        setScanStatus("error");
+                        setMessage(["この予約idは無効です。"]);
+                        setSmDrawerStatus(true);
+                    } else {
+                        setScanStatus("success");
+                        setSmDrawerStatus(true);
                     };
                 } else {
                     setScanStatus("error");

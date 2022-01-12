@@ -10,11 +10,11 @@ type reservationInfoProp = {
 };
 
 const initialState: reservationInfoProp = {
-    reservation_id: "",
-    guest_type: "",
-    part: "",
-    available: 0,
-    count: 0,
+    reservation_id: "R072648",
+    guest_type: "general",
+    part: "0",
+    available: 1,
+    count: 2,
     note: ""
 };
 
@@ -23,7 +23,7 @@ const slice = createSlice({
     initialState,
     reducers: {
         setReservationInfo: (state, action) => {
-            return Object.assign({}, state, action.payload);
+            return action.payload;
         },
         resetReservationInfo: state => {
             return initialState;
