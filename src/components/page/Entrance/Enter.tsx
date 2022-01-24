@@ -6,22 +6,21 @@ import { resetReservationInfo } from '#/stores/reservation';
 import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
-import { MobileStepper, Alert, SwipeableDrawer, Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
+import { MobileStepper, Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import GroupWorkRoundedIcon from '@mui/icons-material/GroupWorkRounded';
-import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import { TransitionProps } from '@mui/material/transitions';
 
 import generalProps from "#/components/functional/generalProps";
 import Scanner from '#/components/block/Scanner';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
+
 type guestInfoListProp = {
     guest_id: string;
     guest_type: "general" | "student" | "special";
@@ -29,6 +28,7 @@ type guestInfoListProp = {
     reservation_id: string;
     userid: string;
 }[];
+
 export default function EntranceEnter() {
     const navigate = useNavigate();
     const theme = useTheme();

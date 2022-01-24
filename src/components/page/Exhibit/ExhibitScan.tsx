@@ -64,15 +64,16 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                     if (guestData.available === 0) {
                         setScanStatus("error");
                         setMessage(["このゲストは無効です。"]);
-                        setSmDrawerStatus(true);
-                    } else if (scanType === "enter" && guestData.exhibit_id !== "") {
+                    } else if (guestData.revoke_at !== null || guestData.revoke_at === "") {
                         setScanStatus("error");
-                        setMessage([`このゲストはすでに${guestData.exhibit_id}に入室しています。`, "入室処理と間違えていませんか？"]);
-                        setSmDrawerStatus(true);
+                        setMessage(["このゲストは既に退場処理が行われています。"]);
+                    } else if (scanType === "enter" && (guestData.exhibit_id !== null || guestData.exhibit_id === "")) {
+                        setScanStatus("error");
+                        setMessage([`このゲストはすでに${guestData.exhibit_id}に入室しています。`, "退室処理と間違えていませんか？"]);
                     } else {
                         setScanStatus("success");
-                        setSmDrawerStatus(true);
                     }
+                    setSmDrawerStatus(true);
                 } else {
                     setScanStatus("error");
                     setMessage([res.data.message]);
@@ -98,7 +99,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                 dispatch(useQrReader(true));
                 setText("");
                 setMessage([]);
-                setSnackbar({ status: false, message: "", severity: "success" });
+                setSnackbar({ status: true, message: "処理が完了しました。", severity: "success" });
                 setScanStatus("waiting");
                 setSmDrawerStatus(false);
             } else {
@@ -126,14 +127,11 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
         return (
             <>
                 {scanStatus === "error" && (
-                    <Card variant="outlined" sx={{ p: 2 }} >
-                        <Alert severity="error">
-                            <AlertTitle>エラー</AlertTitle>
-                            {message.map((text, index) => <span key={index}>{text}</span>)}
-                        </Alert>
-                    </Card>
+                    <Alert severity="error" action={<Button variant="text" color="error" onClick={retry}>スキャンし直す</Button>}>
+                        {message.map((text, index) => <span key={index}>{text}</span>)}
+                    </Alert>
                 )}
-                {guestInfo && (
+                {scanStatus === "success" && guestInfo && (
                     <Card variant="outlined" sx={{ p: 2 }} >
                         <Typography variant="h4">ゲスト情報</Typography>
                         <List dense>
@@ -165,7 +163,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                         <Box
                             m={1}
                             sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
-                            <Button variant="text" onClick={retry}>スキャンし直す</Button>
+                            <Button variant="outlined" onClick={retry}>スキャンし直す</Button>
                             <Button variant="contained" onClick={postApi}>登録</Button>
                         </Box>
                     </Card >
@@ -175,7 +173,10 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     };
 
     return (
-        <>
+        <Grid container spacing={2} sx={{ p: 2 }}>
+            <Grid item xs={12}>
+                <Typography variant='h3'>{exhibit.current.exhibit_name}</Typography>
+            </Grid>
             <Grid item xs={12} md={6} lg={4}>
                 <Scanner handleScan={handleScan} />
             </Grid>
@@ -227,7 +228,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
             >
                 <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
             </Snackbar>
-        </>
+        </Grid>
     );
 };
 

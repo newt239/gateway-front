@@ -9,7 +9,7 @@ import axios from 'axios';
 import Home from '#/components/page/Home';
 import Login from '#/components/page/Login';
 import ExhibitIndex from '#/components/page/Exhibit/Index';
-import Exhibit from '#/components/page/Exhibit/Exhibit';
+import ExhibitScan from '#/components/page/Exhibit/ExhibitScan';
 import Crowd from '#/components/page/Crowd/Index';
 import Heatmap from '#/components/page/Crowd/Heatmap';
 import Status from '#/components/page/Crowd/Status';
@@ -59,9 +59,9 @@ const Body = () => {
                 <Route path="login" element={<Login />} />
                 <Route path="exhibit" >
                     <Route index element={<ExhibitIndex />} />
-                    <Route path="enter" element={<Exhibit scanType="enter" />} />
-                    <Route path="exit" element={<Exhibit scanType="exit" />} />
-                    <Route path="pass" element={<Exhibit scanType="pass" />} />
+                    <Route path="enter" element={<ExhibitScan scanType="enter" />} />
+                    <Route path="exit" element={<ExhibitScan scanType="exit" />} />
+                    <Route path="pass" element={<ExhibitScan scanType="pass" />} />
                 </Route>
                 <Route path="entrance" >
                     <Route index element={<Entrance />} />
