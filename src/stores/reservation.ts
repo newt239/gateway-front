@@ -6,6 +6,7 @@ type reservationInfoProp = {
     part: string;
     available: 0 | 1;
     count: number;
+    registed: number;
     note: string;
 };
 
@@ -13,8 +14,9 @@ const initialState: reservationInfoProp = {
     reservation_id: "",
     guest_type: "general",
     part: "all",
-    available: 1,
-    count: 2,
+    available: 0,
+    count: 0,
+    registed: 0,
     note: ""
 };
 

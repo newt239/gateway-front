@@ -102,7 +102,7 @@ export default function EntranceEnter() {
                     <>
                         <MobileStepper
                             variant="dots"
-                            steps={reservationInfo.count}
+                            steps={reservationInfo.count - reservationInfo.registed}
                             position="static"
                             activeStep={activeStep}
                             sx={{ flexGrow: 1 }}
@@ -128,7 +128,7 @@ export default function EntranceEnter() {
                             }
                         />
                         <Card variant="outlined" sx={{ p: 2 }} >
-                            <Typography variant="h4">ゲスト情報 ( {activeStep + 1} / {guestInfoList.length} )</Typography>
+                            <Typography variant="h4">ゲスト情報 ( {activeStep + 1} / {reservationInfo.count - reservationInfo.registed} )</Typography>
                             <List dense>
                                 <ListItem>
                                     <ListItemIcon>
