@@ -12,7 +12,7 @@ const Desktop = () => {
             <Box sx={{ display: 'flex' }}>
                 <Drawer />
                 <Container sx={{ display: 'flex', flexWrap: 'wrap', m: 0 }}>
-                    <Toolbar sx={{ p: 1 }} />
+                    <Toolbar sx={{ p: 2 }} />
                     <Body />
                 </Container>
             </Box>

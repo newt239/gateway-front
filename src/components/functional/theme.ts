@@ -30,21 +30,7 @@ const theme = createTheme({
         body2: {
             padding: ".5rem 0",
         },
-    },
-    components: {
-        MuiCssBaseline: {
-            styleOverrides: `
-            ::-webkit-scrollbar {
-                width: 10px;
-                display: "none"
-            },
-            ::-webkit-scrollbar-thumb {
-                background-color: ${teal[300]};
-                border-radius: 5px;
-            }
-            `
-        },
-    },
+    }
 });
 
 export default theme;

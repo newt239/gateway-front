@@ -36,7 +36,7 @@ const Login = () => {
     };
     return (
         <>
-            <Grid container spacing={{ xs: 2, md: 3 }}>
+            <Grid container spacing={2} sx={{ p: 2 }}>
                 <Grid item xs={12} sx={{ display: message.display }}>
                     <Alert severity={message.severity}>{message.message}</Alert>
                 </Grid>

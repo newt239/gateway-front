@@ -4,8 +4,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '#/stores/index';
 import { setProfile, clearToken } from '#/stores/user';
+import Identicon from "boring-avatars";
 
-import { Button, Typography } from '@mui/material';
+import { Button, Box, Typography } from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
@@ -35,7 +36,7 @@ const UserInfo = () => {
             });
         };
     }, [token]);
-    const AccountIcon = () => {
+    const AccountType = () => {
         switch (userProfile.user_type) {
             case "admin":
                 return <AdminPanelSettingsIcon />;
@@ -54,7 +55,15 @@ const UserInfo = () => {
             {
                 userProfile.available ? (
                     <>
-                        <AccountIcon />
+                        <Box sx={{ width: '100%', textAlign: 'right' }}>
+                            <AccountType />
+                        </Box>
+                        <Identicon
+                            size={40}
+                            name={userProfile.userid}
+                            variant="beam"
+                            colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+                        />
                         <Typography variant='h3'>{userProfile.display_name}</Typography>
                         <Typography sx={{ fontSize: 10 }}>@{userProfile.userid}</Typography>
                         <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>

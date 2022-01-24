@@ -7,7 +7,7 @@ const Entrance = () => {
     const navigate = useNavigate();
     return (
         <>
-            <Grid container spacing={{ xs: 2, md: 3 }}>
+            <Grid container spacing={2} sx={{ p: 2 }}>
                 <Grid item xs={12} md={6} lg={4}>
                     <Card variant="outlined" sx={{ width: '100%' }}>
                         <Box sx={{ p: 2 }}>

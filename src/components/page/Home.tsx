@@ -18,7 +18,7 @@ const Home = () => {
         };
     }, []);
     return (
-        <Grid container spacing={{ xs: 2, md: 3 }}>
+        <Grid container spacing={2} sx={{ p: 2 }}>
             <Grid item xs={12} md={6} lg={4}>
                 <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
                     <UserInfo />
@@ -39,7 +39,7 @@ const Home = () => {
                     </Typography>
                     <Typography variant="body2">ここに人数とか棒グラフとか</Typography>
                     <Box sx={{ width: '100%', textAlign: 'right' }}>
-                        <Button onClick={() => navigate("crowd")} variant="outlined" sx={{ mt: 2 }}>
+                        <Button onClick={() => navigate("crowd")} variant="outlined">
                             詳細
                         </Button>
                     </Box>
