@@ -87,8 +87,8 @@ const DrawerLeft = () => {
                             </List>
                             <Divider />
                             <List subheader={<ListSubheader>混雑状況</ListSubheader>}>
-                                <ListItemButton selected={/crowd\/status/.test(path)}
-                                    onClick={() => navigate('/crowd/status')}>
+                                <ListItemButton selected={/crowd\/current/.test(path)}
+                                    onClick={() => navigate('/crowd/current')}>
                                     <ListItemIcon><TableChartRoundedIcon /></ListItemIcon>
                                     <ListItemText primary='滞在状況' />
                                 </ListItemButton>

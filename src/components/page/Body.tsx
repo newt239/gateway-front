@@ -12,7 +12,7 @@ import ExhibitIndex from '#/components/page/Exhibit/Index';
 import ExhibitScan from '#/components/page/Exhibit/ExhibitScan';
 import Crowd from '#/components/page/Crowd/Index';
 import Heatmap from '#/components/page/Crowd/Heatmap';
-import Status from '#/components/page/Crowd/Status';
+import Current from '#/components/page/Crowd/Current';
 import Entrance from '#/components/page/Entrance/Index';
 import ReserveCheck from '#/components/page/Entrance/ReserveCheck';
 import EntranceEnter from '#/components/page/Entrance/Enter';
@@ -72,7 +72,7 @@ const Body = () => {
                 <Route path="crowd" >
                     <Route index element={<Crowd />} />
                     <Route path="heatmap" element={<Heatmap />} />
-                    <Route path="status" element={<Status />} />
+                    <Route path="current" element={<Current />} />
                 </Route>
                 <Route path="settings" element={<Settings />} />
             </Route>

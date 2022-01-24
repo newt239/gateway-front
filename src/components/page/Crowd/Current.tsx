@@ -4,7 +4,7 @@ import { RootState } from '#/stores/index';
 import { setPageInfo } from '#/stores/page';
 import axios from 'axios';
 
-import { Box } from '@mui/material';
+import { Grid, Box } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import SelectExhibit from '#/components/block/SelectExhibit';
@@ -24,7 +24,7 @@ export default function Current() {
     const exhibit = useSelector((state: RootState) => state.exhibit);
 
     useEffect(() => {
-        dispatch(setPageInfo({ title: "現在の混雑状況" }));
+        dispatch(setPageInfo({ title: "現在の滞在状況" }));
     }, []);
 
     useEffect(() => {
@@ -38,19 +38,21 @@ export default function Current() {
         }
     }, [exhibit]);
     return (
-        <>
-            <SelectExhibit />
-            <Box sx={{ height: '70vh', width: '100%' }}>
-                {exhibit && (
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        pageSize={5}
-                        rowsPerPageOptions={[5]}
-                        checkboxSelection
-                    />
-                )}
-            </Box>
-        </>
+        <Grid container spacing={2} sx={{ p: 2 }}>
+            <Grid item xs={12}>
+                <SelectExhibit />
+                <Box sx={{ height: '70vh', width: '100%' }}>
+                    {exhibit && (
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            pageSize={5}
+                            rowsPerPageOptions={[5]}
+                            checkboxSelection
+                        />
+                    )}
+                </Box>
+            </Grid>
+        </Grid >
     );
 }

@@ -7,7 +7,7 @@ import { setPageInfo } from '#/stores/page';
 import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
-import { Alert, SwipeableDrawer, Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
+import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
@@ -15,11 +15,9 @@ import GroupWorkRoundedIcon from '@mui/icons-material/GroupWorkRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
-import { TransitionProps } from '@mui/material/transitions';
 
 import generalProps from "#/components/functional/generalProps";
 import Scanner from '#/components/block/Scanner';
-import ReservationTicket from '#/components/block/ReservationTicket';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
