@@ -9,7 +9,7 @@ const slice = createSlice({
     name: "scan",
     initialState,
     reducers: {
-        pauseQrReader: (state, action) => {
+        useQrReader: (state, action) => {
             return Object.assign({}, state, { state: action.payload });
         },
         setDeviceList: (state, action) => {
@@ -23,4 +23,4 @@ const slice = createSlice({
 
 export default slice.reducer;
 
-export const { pauseQrReader, setDeviceList, setCurrentDevice } = slice.actions;
+export const { useQrReader, setDeviceList, setCurrentDevice } = slice.actions;

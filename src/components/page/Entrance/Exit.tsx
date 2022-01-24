@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import store, { RootState } from '#/stores/index';
-import { pauseQrReader } from '#/stores/scan';
+import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
 import { Alert, SwipeableDrawer, Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
@@ -53,7 +53,7 @@ const EntranceExit = () => {
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
             if (scanText.length === 10 && scanText.startsWith('G')) {
-                dispatch(pauseQrReader(false));
+                dispatch(useQrReader(false));
                 setText(scanText);
                 setLoading(true);
                 const res = await axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
@@ -91,7 +91,7 @@ const EntranceExit = () => {
             };
             const res = await axios.post(`${API_BASE_URL}/v1/activity/revoke`, payload, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
             if (res.data.status === "success") {
-                dispatch(pauseQrReader(true));
+                dispatch(useQrReader(true));
                 setText("");
                 setMessage([]);
                 setSnackbar({ status: false, message: "", severity: "success" });
@@ -105,13 +105,13 @@ const EntranceExit = () => {
                     setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
                 }
                 setText("");
-                dispatch(pauseQrReader(true));
+                dispatch(useQrReader(true));
                 setSmDrawerStatus(false);
             };
         };
     };
     const retry = () => {
-        dispatch(pauseQrReader(true));
+        dispatch(useQrReader(true));
         setText("");
         setMessage([]);
         setSnackbar({ status: false, message: "", severity: "success" });

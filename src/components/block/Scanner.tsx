@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "#/stores/index";
-import { pauseQrReader, setDeviceList, setCurrentDevice } from '#/stores/scan';
+import { useQrReader, setDeviceList, setCurrentDevice } from '#/stores/scan';
 import QrReader from 'react-qr-reader';
 
 import { Box, Dialog, DialogContent, DialogActions, Button, IconButton, Autocomplete, TextField, DialogTitle } from '@mui/material';
@@ -37,9 +37,9 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
     const qrReaderState = useSelector((state: RootState) => state.scan);
     useEffect(() => {
         if (location.pathname.match(/entrance|exhibit/)) {
-            dispatch(pauseQrReader(true));
+            dispatch(useQrReader(true));
         } else {
-            dispatch(pauseQrReader(false));
+            dispatch(useQrReader(false));
         }
     }, [location]);
 
@@ -85,8 +85,8 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
                     <CameraswitchRoundedIcon />
                 </IconButton>
                 <Dialog open={selectCameraModalOpen} onClose={() => setSelectCameraModalOpen(false)}>
+                    <DialogTitle>カメラ切り替え</DialogTitle>
                     <DialogContent>
-                        <DialogTitle>カメラ切り替え</DialogTitle>
                         <Autocomplete
                             disablePortal
                             disableClearable

@@ -3,25 +3,28 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
 import { setReservationInfo, resetReservationInfo } from '#/stores/reservation';
-import { pauseQrReader } from '#/stores/scan';
+import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
 import { MobileStepper, Alert, SwipeableDrawer, Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
+import GroupWorkRoundedIcon from '@mui/icons-material/GroupWorkRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import { TransitionProps } from '@mui/material/transitions';
+
+import generalProps from "#/components/functional/generalProps";
 import Scanner from '#/components/block/Scanner';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 type guestInfoListProp = {
     guest_id: string;
-    guest_type: string;
+    guest_type: "general" | "student" | "special";
     part: string;
     reservation_id: string;
     userid: string;
@@ -63,7 +66,7 @@ export default function EntranceEnter() {
         if (guestInfoList.length === reservationInfo.count) {
             axios.post(`${API_BASE_URL}/v1/guests/regist`, guestInfoList, { headers: { Authorization: "Bearer " + user.token } }).then(res => {
                 if (res.data.status === "success") {
-                    dispatch(pauseQrReader(true));
+                    dispatch(useQrReader(true));
                     setText("");
                     setMessage([]);
                     setSnackbar({ status: false, message: "", severity: "success" });
@@ -78,12 +81,11 @@ export default function EntranceEnter() {
                         setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
                     }
                     setText("");
-                    dispatch(pauseQrReader(true));
+                    dispatch(useQrReader(true));
                     setSmDrawerStatus(false);
                 };
             });
-        }
-
+        };
     };
     const GuestInfoCard = () => {
         return (
@@ -95,7 +97,7 @@ export default function EntranceEnter() {
                             steps={reservationInfo.count}
                             position="static"
                             activeStep={activeStep}
-                            sx={{ maxWidth: 400, flexGrow: 1 }}
+                            sx={{ flexGrow: 1 }}
                             nextButton={
                                 <Button size="small" onClick={() => setActiveStep((prevActiveStep) => prevActiveStep + 1)} disabled={activeStep === guestInfoList.length - 1}>
                                     Next
@@ -118,11 +120,11 @@ export default function EntranceEnter() {
                             }
                         />
                         <Card variant="outlined" sx={{ p: 2 }} >
-                            <Typography variant="h4">ゲスト情報</Typography>
+                            <Typography variant="h4">ゲスト情報 ( {activeStep + 1} / {guestInfoList.length} )</Typography>
                             <List dense>
                                 <ListItem>
                                     <ListItemIcon>
-                                        <PersonRoundedIcon />
+                                        <AssignmentIndRoundedIcon />
                                     </ListItemIcon>
                                     <ListItemText
                                         primary={guestInfoList[activeStep].guest_id}
@@ -130,10 +132,10 @@ export default function EntranceEnter() {
                                 </ListItem>
                                 <ListItem>
                                     <ListItemIcon>
-                                        <PeopleRoundedIcon />
+                                        <GroupWorkRoundedIcon />
                                     </ListItemIcon>
                                     <ListItemText
-                                        primary={guestInfoList[activeStep].guest_type === "student" ? "生徒" : guestInfoList[activeStep].guest_type}
+                                        primary={generalProps.reservation.guest_type[guestInfoList[activeStep].guest_type]}
                                     />
                                 </ListItem>
                                 <ListItem>
@@ -148,13 +150,13 @@ export default function EntranceEnter() {
                             <Box
                                 m={1}
                                 sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
-                                <Button variant="text" onClick={() => retry(activeStep)}>スキャンし直す</Button>
+                                <Button variant="outlined" onClick={() => retry(activeStep)}>スキャンし直す</Button>
                             </Box>
                         </Card >
                         <Box
                             m={1}
                             sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
-                            <Button variant="text" onClick={() => retry(0)}>全てスキャンし直す</Button>
+                            <Button variant="outlined" onClick={() => retry(0)}>全てスキャンし直す</Button>
                             <Button variant="contained" onClick={postApi}>登録</Button>
                         </Box>
                     </>
@@ -163,7 +165,7 @@ export default function EntranceEnter() {
         )
     };
     const retry = (activeStep: number) => {
-        dispatch(pauseQrReader(true));
+        dispatch(useQrReader(true));
         setText("");
         setMessage([]);
         setSnackbar({ status: false, message: "", severity: "success" });

@@ -3,18 +3,20 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
 import { setReservationInfo, resetReservationInfo } from '#/stores/reservation';
-import { pauseQrReader } from '#/stores/scan';
+import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
 import { Alert, SwipeableDrawer, Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
+import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
+import GroupWorkRoundedIcon from '@mui/icons-material/GroupWorkRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 import { TransitionProps } from '@mui/material/transitions';
 
+import generalProps from "#/components/functional/generalProps";
 import Scanner from '#/components/block/Scanner';
 import ReservationTicket from '#/components/block/ReservationTicket';
 
@@ -35,13 +37,12 @@ export default function ReserveCheck() {
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
+            setText(scanText);
             if (scanText.length === 7 && scanText.startsWith('R')) {
-                dispatch(pauseQrReader(false));
-                setText(scanText);
+                dispatch(useQrReader(false));
                 setLoading(true);
                 const res = await axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } })
                 setLoading(false);
-                console.log(res);
                 if (res.data.status === "success") {
                     dispatch(setReservationInfo(res.data.data));
                     if (res.data.data.available === 0) {
@@ -66,19 +67,20 @@ export default function ReserveCheck() {
     };
 
     const retry = () => {
+        setScanStatus("waiting");
+        setText("");
         dispatch(resetReservationInfo());
-        dispatch(pauseQrReader(false));
+        dispatch(useQrReader(true));
     }
     const ReservationInfoCard = () => {
         return (
             <>
                 {scanStatus === "error" && (
-                    <Card variant="outlined" sx={{ p: 2 }} >
-                        <Alert severity="error">
-                            <AlertTitle>エラー</AlertTitle>
-                            {message.map((text, index) => <span key={index}>{text}</span>)}
-                        </Alert>
-                    </Card>
+                    <Alert severity="error" action={
+                        <Button color="error" onClick={retry}>スキャンし直す</Button>
+                    }>
+                        {message.map((text, index) => <span key={index}>{text}</span>)}
+                    </Alert>
                 )}
                 {reservationInfo && scanStatus === "success" && (
                     <Card variant="outlined" sx={{ p: 2 }} >
@@ -86,7 +88,7 @@ export default function ReserveCheck() {
                         <List dense>
                             <ListItem>
                                 <ListItemIcon>
-                                    <PersonRoundedIcon />
+                                    <AssignmentIndRoundedIcon />
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={text}
@@ -94,10 +96,10 @@ export default function ReserveCheck() {
                             </ListItem>
                             <ListItem>
                                 <ListItemIcon>
-                                    <PeopleRoundedIcon />
+                                    <GroupWorkRoundedIcon />
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={reservationInfo.guest_type === "student" ? "生徒" : reservationInfo.guest_type}
+                                    primary={generalProps.reservation.guest_type[reservationInfo.guest_type]}
                                 />
                             </ListItem>
                             <ListItem>
@@ -110,7 +112,7 @@ export default function ReserveCheck() {
                             </ListItem>
                             <ListItem>
                                 <ListItemIcon>
-                                    <AccessTimeRoundedIcon />
+                                    <PeopleRoundedIcon />
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={`${reservationInfo.count}人`}
@@ -120,7 +122,7 @@ export default function ReserveCheck() {
                         <Box
                             m={1}
                             sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
-                            <Button variant="contained" onClick={retry}>スキャンし直す</Button>
+                            <Button variant="outlined" onClick={retry}>スキャンし直す</Button>
                             <Button variant="contained" onClick={() => navigate("/entrance/enter", { replace: true })}>リストバンドの登録</Button>
                         </Box>
                     </Card>
@@ -129,7 +131,7 @@ export default function ReserveCheck() {
         )
     }
     return (
-        <Grid container spacing={{ xs: 2, md: 3 }}>
+        <Grid container spacing={2} sx={{ p: 2 }}>
             <Grid item xs={12}>
                 <Typography variant='h3'>Step1: 予約用QRコードスキャン</Typography>
             </Grid>

@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 type reservationInfoProp = {
     reservation_id: string;
-    guest_type: string;
+    guest_type: "general" | "student" | "special";
     part: string;
     available: 0 | 1;
     count: number;
