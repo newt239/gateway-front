@@ -4,38 +4,27 @@ import store, { RootState } from '#/stores/index';
 import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
-import { Alert, SwipeableDrawer, Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
+import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
+import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
+import GroupWorkRoundedIcon from '@mui/icons-material/GroupWorkRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
-import { TransitionProps } from '@mui/material/transitions';
 
+import generalProps from "#/components/functional/generalProps";
 import Scanner from '#/components/block/Scanner';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
-type ExhibitScanProps = {
-    scanType: string;
-};
 type guestInfoProp = {
     guest_id: string;
-    guest_type: string;
+    guest_type: "general" | "student" | "special";
     exhibit_id: string;
     part: string;
     available: false;
     note: string;
 } | null;
-const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-        children: React.ReactElement;
-    },
-    ref: React.Ref<unknown>,
-) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const EntranceExit = () => {
     const theme = useTheme();
@@ -52,11 +41,11 @@ const EntranceExit = () => {
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
+            setText(scanText);
             if (scanText.length === 10 && scanText.startsWith('G')) {
                 dispatch(useQrReader(false));
-                setText(scanText);
                 setLoading(true);
-                const res = await axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
+                const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
                 setLoading(false);
                 if (res.data.status === "success") {
                     setGuestInfo(res.data.data);
@@ -64,6 +53,10 @@ const EntranceExit = () => {
                     if (guestData.available === 0) {
                         setScanStatus("error");
                         setMessage(["このゲストは無効です。"]);
+                        setSmDrawerStatus(true);
+                    } else if (guestData.revoke_at !== null || guestData.revoke_at === "") {
+                        setScanStatus("error");
+                        setMessage(["このゲストは既に退場処理が行われています。"]);
                         setSmDrawerStatus(true);
                     } else {
                         setScanStatus("success");
@@ -81,6 +74,7 @@ const EntranceExit = () => {
             };
         };
     };
+
     const postApi = async () => {
         if (guestInfo) {
             const payload = {
@@ -89,7 +83,7 @@ const EntranceExit = () => {
                 exhibit_id: exhibit.current.exhibit_id,
                 userid: user.info.userid
             };
-            const res = await axios.post(`${API_BASE_URL}/v1/activity/revoke`, payload, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
+            const res = await axios.post(`${API_BASE_URL}/v1/guests/revoke`, payload, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
             if (res.data.status === "success") {
                 dispatch(useQrReader(true));
                 setText("");
@@ -97,6 +91,7 @@ const EntranceExit = () => {
                 setSnackbar({ status: false, message: "", severity: "success" });
                 setScanStatus("waiting");
                 setSmDrawerStatus(false);
+                setSnackbar({ status: true, message: `${payload.guest_id}の退場処理に成功しました。`, severity: "success" });
             } else {
                 console.log(res.data);
                 if (res.data.message) {
@@ -110,32 +105,29 @@ const EntranceExit = () => {
             };
         };
     };
+
     const retry = () => {
-        dispatch(useQrReader(true));
-        setText("");
-        setMessage([]);
-        setSnackbar({ status: false, message: "", severity: "success" });
         setScanStatus("waiting");
-        setSmDrawerStatus(false);
+        setText("");
+        setGuestInfo(null);
+        dispatch(useQrReader(true));
     };
+
     const GuestInfoCard = () => {
         return (
             <>
                 {scanStatus === "error" && (
-                    <Card variant="outlined" sx={{ p: 2 }} >
-                        <Alert severity="error">
-                            <AlertTitle>エラー</AlertTitle>
-                            {message.map((text, index) => <span key={index}>{text}</span>)}
-                        </Alert>
-                    </Card>
+                    <Alert severity="error" action={<Button color="error" onClick={retry}>スキャンし直す</Button>}>
+                        {message.map((text, index) => <span key={index}>{text}</span>)}
+                    </Alert>
                 )}
-                {guestInfo && (
+                {scanStatus === "success" && guestInfo && (
                     <Card variant="outlined" sx={{ p: 2 }} >
                         <Typography variant="h4">ゲスト情報</Typography>
                         <List dense>
                             <ListItem>
                                 <ListItemIcon>
-                                    <PersonRoundedIcon />
+                                    <AssignmentIndRoundedIcon />
                                 </ListItemIcon>
                                 <ListItemText
                                     primary={text}
@@ -143,10 +135,10 @@ const EntranceExit = () => {
                             </ListItem>
                             <ListItem>
                                 <ListItemIcon>
-                                    <PeopleRoundedIcon />
+                                    <GroupWorkRoundedIcon />
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={guestInfo.guest_type === "student" ? "生徒" : guestInfo.guest_type}
+                                    primary={generalProps.reservation.guest_type[guestInfo.guest_type]}
                                 />
                             </ListItem>
                             <ListItem>
@@ -161,8 +153,8 @@ const EntranceExit = () => {
                         <Box
                             m={1}
                             sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
-                            <Button variant="text" onClick={retry}>スキャンし直す</Button>
-                            <Button variant="contained" onClick={postApi}>登録</Button>
+                            <Button variant="outlined" onClick={retry}>スキャンし直す</Button>
+                            <Button variant="contained" onClick={postApi}>退場</Button>
                         </Box>
                     </Card >
                 )}
@@ -171,11 +163,11 @@ const EntranceExit = () => {
     };
 
     return (
-        <>
-            <Grid item xs={12} md={6} lg={4}>
+        <Grid container spacing={2} sx={{ p: 2 }}>
+            <Grid item xs={12} md={6}>
                 <Scanner handleScan={handleScan} />
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Typography variant='h4'>id:</Typography>
                     <FormControl sx={{ m: 1 }} variant="outlined">
@@ -223,7 +215,7 @@ const EntranceExit = () => {
             >
                 <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
             </Snackbar>
-        </>
+        </Grid>
     );
 };
 
