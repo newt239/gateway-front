@@ -10,9 +10,9 @@ type reservationInfoProp = {
 };
 
 const initialState: reservationInfoProp = {
-    reservation_id: "R072648",
+    reservation_id: "",
     guest_type: "general",
-    part: "0",
+    part: "all",
     available: 1,
     count: 2,
     note: ""

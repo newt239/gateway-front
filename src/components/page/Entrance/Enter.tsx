@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
-import { setReservationInfo, resetReservationInfo } from '#/stores/reservation';
+import { resetReservationInfo } from '#/stores/reservation';
 import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
@@ -44,6 +44,14 @@ export default function EntranceEnter() {
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
+
+    useEffect(() => {
+        // reserve-checkのフローを経ていない場合はreserve-checkのページに遷移させる
+        if (reservationInfo.reservation_id === "") {
+            navigate("/entrance/reserve-check", { replace: true });
+        }
+    }, [reservationInfo]);
+
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
             setText(scanText);
@@ -66,6 +74,7 @@ export default function EntranceEnter() {
         if (guestInfoList.length === reservationInfo.count) {
             axios.post(`${API_BASE_URL}/v1/guests/regist`, guestInfoList, { headers: { Authorization: "Bearer " + user.token } }).then(res => {
                 if (res.data.status === "success") {
+                    dispatch(resetReservationInfo());
                     dispatch(useQrReader(true));
                     setText("");
                     setMessage([]);
@@ -74,7 +83,6 @@ export default function EntranceEnter() {
                     setSmDrawerStatus(false);
                     navigate("/entrance/reserve-check", { replace: true });
                 } else {
-                    console.log(res.data);
                     if (res.data.message) {
                         setSnackbar({ status: true, message: res.data.message, severity: "error" });
                     } else {
