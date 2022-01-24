@@ -13,6 +13,7 @@ const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ゲストID', width: 200 },
     { field: 'guest_type', headerName: 'ゲストタイプ', width: 200 },
+    { field: 'enter_at', headerName: '入室時刻', width: 200 },
 ];
 
 export default function Current() {
@@ -32,7 +33,7 @@ export default function Current() {
     return (
         <>
             <SelectExhibit />
-            <Box sx={{ height: 400, width: '100%' }}>
+            <Box sx={{ height: '70vh', width: '100%' }}>
                 {exhibit && (
                     <DataGrid
                         rows={rows}
