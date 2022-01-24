@@ -18,6 +18,8 @@ const SimpleBottomNavigation = () => {
             setValue('');
         } else if (/exhibit/.test(path)) {
             setValue('exhibit');
+        } else if (/entrance/.test(path)) {
+            setValue('entrance');
         } else {
             setValue("other");
         }
@@ -27,25 +29,21 @@ const SimpleBottomNavigation = () => {
         setValue(newValue);
     };
     return (
-        <>
-            {user.info.user_type !== "" && (
-                <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
-                    <BottomNavigation
-                        showLabels
-                        value={value}
-                        onChange={handleChange}
-                    >
-                        <BottomNavigationAction label="ホーム" value="" icon={<HomeRoundedIcon />} />
-                        {["admin", "moderator", "exhibit"].indexOf(user.info.user_type, -1) && (
-                            <BottomNavigationAction label="入退室処理" value="exhibit" icon={<MeetingRoomRoundedIcon />} />
-                        )}
-                        {["admin", "moderator", "user"].indexOf(user.info.user_type, -1) && (
-                            <BottomNavigationAction label="エントランス" value="entrance" icon={<MeetingRoomRoundedIcon />} />
-                        )}
-                    </BottomNavigation>
-                </Paper>
-            )}
-        </>
+        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
+            <BottomNavigation
+                showLabels
+                value={value}
+                onChange={handleChange}
+            >
+                <BottomNavigationAction label="ホーム" value="" icon={<HomeRoundedIcon />} />
+                {["admin", "moderator", "exhibit"].indexOf(user.info.user_type, -1) && (
+                    <BottomNavigationAction label="入退室処理" value="exhibit" icon={<MeetingRoomRoundedIcon />} />
+                )}
+                {["admin", "moderator", "user"].indexOf(user.info.user_type, -1) && (
+                    <BottomNavigationAction label="エントランス" value="entrance" icon={<MeetingRoomRoundedIcon />} />
+                )}
+            </BottomNavigation>
+        </Paper>
     );
 }
 

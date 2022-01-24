@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
+import { setPageInfo } from '#/stores/page';
 import axios from 'axios';
 
 import { Box } from '@mui/material';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import SelectExhibit from '#/components/block/SelectExhibit';
 
@@ -17,9 +18,15 @@ const columns: GridColDef[] = [
 ];
 
 export default function Current() {
+    const dispatch = useDispatch();
     const [rows, setRows] = useState([]);
     const token = useSelector((state: RootState) => state.user).token;
     const exhibit = useSelector((state: RootState) => state.exhibit);
+
+    useEffect(() => {
+        dispatch(setPageInfo({ title: "現在の混雑状況" }));
+    }, []);
+
     useEffect(() => {
         if (exhibit.current.exhibit_id !== "") {
             axios.get(`${API_BASE_URL}/v1/exhibit/current/${exhibit.current.exhibit_id}`, { headers: { Authorization: "Bearer " + token } }).then(res => {

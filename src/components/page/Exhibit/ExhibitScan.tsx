@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import store, { RootState } from '#/stores/index';
+import { setPageInfo } from '#/stores/page';
 import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
-import { Alert, SwipeableDrawer, Slide, Grid, Dialog, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
+import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
 import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
-import { TransitionProps } from '@mui/material/transitions';
 
 import Scanner from '#/components/block/Scanner';
 
@@ -28,14 +28,6 @@ type guestInfoProp = {
     available: false;
     note: string;
 } | null;
-const Transition = React.forwardRef(function Transition(
-    props: TransitionProps & {
-        children: React.ReactElement;
-    },
-    ref: React.Ref<unknown>,
-) {
-    return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) => {
     const theme = useTheme();
@@ -50,6 +42,17 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const [guestInfo, setGuestInfo] = useState<guestInfoProp>(null);
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+    useEffect(() => {
+        let pageTitle = "展示処理";
+        if (scanType === "enter") {
+            pageTitle = "入室スキャン";
+        } else if (scanType === "exit") {
+            pageTitle = "退室スキャン";
+        } else if (scanType === "pass") {
+            pageTitle = "通過スキャン";
+        }
+        dispatch(setPageInfo({ title: pageTitle }));
+    }, [scanType]);
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
             if (scanText.length === 10 && scanText.startsWith('G')) {

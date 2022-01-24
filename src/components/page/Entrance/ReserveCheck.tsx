@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
 import { setReservationInfo, resetReservationInfo } from '#/stores/reservation';
+import { setPageInfo } from '#/stores/page';
 import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
@@ -23,10 +24,13 @@ import ReservationTicket from '#/components/block/ReservationTicket';
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 export default function ReserveCheck() {
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(setPageInfo({ title: "予約確認" }));
+    }, []);
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const token = useSelector((state: RootState) => state.user).token;
     const reservationInfo = useSelector((state: RootState) => state.reservation);
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });

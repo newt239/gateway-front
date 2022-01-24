@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import store, { RootState } from '#/stores/index';
+import { setPageInfo } from '#/stores/page';
 import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
@@ -39,6 +40,11 @@ const EntranceExit = () => {
     const [guestInfo, setGuestInfo] = useState<guestInfoProp>(null);
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+
+    useEffect(() => {
+        dispatch(setPageInfo({ title: "退場処理" }));
+    }, []);
+
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
             setText(scanText);

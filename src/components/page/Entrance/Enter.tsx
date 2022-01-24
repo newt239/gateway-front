@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
+import { setPageInfo } from '#/stores/page';
 import { resetReservationInfo } from '#/stores/reservation';
 import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
@@ -46,6 +47,10 @@ export default function EntranceEnter() {
     const [activeStep, setActiveStep] = useState(0);
 
     useEffect(() => {
+        dispatch(setPageInfo({ title: "入場処理" }));
+    }, []);
+    useEffect(() => {
+        dispatch(setPageInfo({ title: "入場処理" }));
         // reserve-checkのフローを経ていない場合はreserve-checkのページに遷移させる
         if (reservationInfo.reservation_id === "") {
             navigate("/entrance/reserve-check", { replace: true });

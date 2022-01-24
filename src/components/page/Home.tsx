@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from "react";
 import moment, { Moment } from "moment";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { setPageInfo } from '#/stores/page';
 
 import { Grid, Card, Box, Button, Typography } from '@mui/material';
 
 import UserInfo from '#/components/block/UserInfo';
 
 const Home = () => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [datetime, setDatetime] = useState<Moment>(moment());
     useEffect(() => {
+        dispatch(setPageInfo({ title: "ホーム" }));
         const intervalId = setInterval(() => {
             setDatetime(moment());
         }, 60 * 1000);

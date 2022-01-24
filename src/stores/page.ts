@@ -8,12 +8,13 @@ const slice = createSlice({
     name: "page",
     initialState,
     reducers: {
-        setTitle: (state, action) => {
-            return Object.assign({}, state, { title: action.payload });
+        setPageInfo: (state, action) => {
+            document.title = `${action.payload.title} | Gateway`;
+            return Object.assign({}, state, action.payload);
         },
     }
 });
 
 export default slice.reducer;
 
-export const { setTitle } = slice.actions;
+export const { setPageInfo } = slice.actions;

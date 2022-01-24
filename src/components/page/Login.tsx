@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from 'react-redux';
+import { setPageInfo } from '#/stores/page';
 import { setToken } from '#/stores/user';
 import axios from 'axios';
 
@@ -16,8 +17,11 @@ interface messageType {
 }
 
 const Login = () => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch(setPageInfo({ title: "ログイン" }));
+    }, []);
+    const navigate = useNavigate();
     const [inputValue, updateValue] = useState({ userid: "", password: "" });
     const [message, updateMessage] = useState<messageType>({ display: "none", severity: "error", message: "" });
     const login = () => {
