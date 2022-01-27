@@ -7,16 +7,17 @@ const initialState = {
         display_name: '',
         user_type: '',
         role: '',
-        available: '',
+        available: false,
         note: '',
-}};
+    }
+};
 
 const slice = createSlice({
     name: "user",
     initialState,
     reducers: {
         setProfile: (state, action) => {
-            return Object.assign({}, state,{ info: action.payload });
+            return Object.assign({}, state, { info: action.payload });
         },
         setToken: (state, action) => {
             return Object.assign({}, state, { token: action.payload });

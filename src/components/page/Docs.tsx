@@ -4,7 +4,7 @@ import { setPageInfo } from '#/stores/page';
 
 import { Grid, Card, Typography } from '@mui/material';
 
-const Settings = () => {
+const Docs = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(setPageInfo({ title: "設定" }));
@@ -20,4 +20,4 @@ const Settings = () => {
     )
 }
 
-export default Settings;
+export default Docs;

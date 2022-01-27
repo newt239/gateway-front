@@ -9,31 +9,35 @@ import moment from "moment";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
-const ExhibitEnterCountBarChart = () => {
+const ExhibitEnterCountBarChart: React.FunctionComponent<{ exhibit_id: string; }> = ({ exhibit_id }) => {
     const token = useSelector((state: RootState) => state.user).token;
     const [categories, setCategories] = useState<string[]>([]);
     const [data, setData] = useState<number[]>([]);
     useEffect(() => {
-        const getApi = async () => {
-            const res = await axios.get(`${API_BASE_URL}/v1/exhibit/crowd`, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-            const rawData: { time: string; count: number; }[] = res.data.data;
-            let timeList: string[] = [];
-            let countList: number[] = [];
-            let ctime = moment(rawData[0].time);
-            for (const eachData of rawData) {
-                const eachTime = moment(eachData.time);
-                while (ctime < eachTime) {
-                    timeList.push(ctime.format("MM/DD HH:MM:SS"));
-                    countList.push(0);
-                    ctime = ctime.add(1, "hours");
-                }
-                timeList.push(eachTime.format("MM/DD HH:MM:SS"));
-                countList.push(eachData.count);
+        if (token) {
+            const getApi = async () => {
+                const res = await axios.get(`${API_BASE_URL}/v1/exhibit/enter-chart/${exhibit_id}`, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
+                if (res.data.status === "success" && res.data.data.length !== 0) {
+                    const rawData: { time: string; count: number; }[] = res.data.data;
+                    let timeList: string[] = [];
+                    let countList: number[] = [];
+                    let ctime = moment(rawData[0].time);
+                    for (const eachData of rawData) {
+                        const eachTime = moment(eachData.time);
+                        while (ctime < eachTime) {
+                            timeList.push(ctime.format("MM/DD HH:MM:SS"));
+                            countList.push(0);
+                            ctime = ctime.add(1, "hours");
+                        }
+                        timeList.push(eachTime.format("MM/DD HH:MM:SS"));
+                        countList.push(eachData.count);
+                    };
+                    setCategories(timeList);
+                    setData(countList);
+                };
             };
-            setCategories(timeList);
-            setData(countList);
+            getApi();
         };
-        getApi();
     }, [token]);
     const options: ApexOptions = {
         chart: {
@@ -58,7 +62,7 @@ const ExhibitEnterCountBarChart = () => {
             name: '入室数',
             data: data
         }
-    ]
+    ];
     return (
         <>
             <Chart
@@ -69,6 +73,6 @@ const ExhibitEnterCountBarChart = () => {
             />
         </>
     );
-}
+};
 
 export default ExhibitEnterCountBarChart;

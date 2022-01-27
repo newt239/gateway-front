@@ -5,16 +5,23 @@ import { useDispatch } from 'react-redux';
 import { setPageInfo } from '#/stores/page';
 
 import { Grid, Card, Box, Button, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import UserInfo from '#/components/block/UserInfo';
-import ExhibitEnterCountBarChart from '#/components/page/Crowd/Chart';
 
 const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const theme = useTheme();
+    const sm = useMediaQuery(theme.breakpoints.up('sm'));
     const [datetime, setDatetime] = useState<Moment>(moment());
+
     useEffect(() => {
-        dispatch(setPageInfo({ title: "ホーム" }));
+        dispatch(setPageInfo({ title: "Gateway" }));
+    }, []);
+
+    useEffect(() => {
         const intervalId = setInterval(() => {
             setDatetime(moment());
         }, 60 * 1000);
@@ -48,11 +55,6 @@ const Home = () => {
                             詳細
                         </Button>
                     </Box>
-                </Card>
-            </Grid>
-            <Grid item xs={12} md={6} lg={4}>
-                <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-                    <ExhibitEnterCountBarChart />
                 </Card>
             </Grid>
         </Grid >

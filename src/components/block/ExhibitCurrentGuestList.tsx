@@ -7,8 +7,6 @@ import axios from 'axios';
 import { Grid, Box } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
-import SelectExhibit from '#/components/block/SelectExhibit';
-
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const columns: GridColDef[] = [
@@ -17,42 +15,40 @@ const columns: GridColDef[] = [
     { field: 'enter_at', headerName: '入室時刻', width: 200 },
 ];
 
-export default function Current() {
+const ExhibitCurrentGuestList: React.FunctionComponent<{ exhibit_id: string; }> = ({ exhibit_id }) => {
     const dispatch = useDispatch();
     const [rows, setRows] = useState([]);
     const token = useSelector((state: RootState) => state.user).token;
-    const exhibit = useSelector((state: RootState) => state.exhibit);
 
     useEffect(() => {
         dispatch(setPageInfo({ title: "現在の滞在状況" }));
     }, []);
 
     useEffect(() => {
-        if (exhibit.current.exhibit_id !== "") {
-            axios.get(`${API_BASE_URL}/v1/exhibit/current/${exhibit.current.exhibit_id}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
+        if (exhibit_id !== "") {
+            axios.get(`${API_BASE_URL}/v1/exhibit/current/${exhibit_id}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
                 console.log(res);
                 if (res.data) {
                     setRows(res.data.data);
                 };
             });
-        }
-    }, [exhibit]);
+        };
+    }, [exhibit_id]);
     return (
         <Grid container spacing={2} sx={{ p: 2 }}>
             <Grid item xs={12}>
-                <SelectExhibit />
                 <Box sx={{ height: '70vh', width: '100%' }}>
-                    {exhibit && (
-                        <DataGrid
-                            rows={rows}
-                            columns={columns}
-                            pageSize={5}
-                            rowsPerPageOptions={[5]}
-                            checkboxSelection
-                        />
-                    )}
+                    <DataGrid
+                        rows={rows}
+                        columns={columns}
+                        pageSize={5}
+                        rowsPerPageOptions={[5]}
+                        checkboxSelection
+                    />
                 </Box>
             </Grid>
         </Grid >
     );
-}
+};
+
+export default ExhibitCurrentGuestList;

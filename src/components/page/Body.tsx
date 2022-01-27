@@ -10,14 +10,14 @@ import Home from '#/components/page/Home';
 import Login from '#/components/page/Login';
 import ExhibitIndex from '#/components/page/Exhibit/Index';
 import ExhibitScan from '#/components/page/Exhibit/ExhibitScan';
-import Crowd from '#/components/page/Crowd/Index';
-import Heatmap from '#/components/page/Crowd/Heatmap';
-import Current from '#/components/page/Crowd/Current';
+import ChartAll from '#/components/page/Chart/All';
+import ChartExhibit from '#/components/page/Chart/Exhibit';
+import Heatmap from '#/components/page/Chart/Heatmap';
 import Entrance from '#/components/page/Entrance/Index';
 import ReserveCheck from '#/components/page/Entrance/ReserveCheck';
 import EntranceEnter from '#/components/page/Entrance/Enter';
 import EntranceExit from '#/components/page/Entrance/Exit';
-import Settings from '#/components/page/Settings';
+import Docs from '#/components/page/Docs';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -69,12 +69,12 @@ const Body = () => {
                     <Route path="enter" element={<EntranceEnter />} />
                     <Route path="exit" element={<EntranceExit />} />
                 </Route>
-                <Route path="crowd" >
-                    <Route index element={<Crowd />} />
+                <Route path="chart" >
+                    <Route path="all" element={<ChartAll />} />
+                    <Route path="exhibit/:exhibit_id" element={<ChartExhibit />} />
                     <Route path="heatmap" element={<Heatmap />} />
-                    <Route path="current" element={<Current />} />
                 </Route>
-                <Route path="settings" element={<Settings />} />
+                <Route path="docs" element={<Docs />} />
             </Route>
         </Routes>
     );

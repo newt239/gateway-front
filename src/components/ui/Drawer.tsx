@@ -31,10 +31,6 @@ const DrawerLeft = () => {
             variant="permanent"
             anchor="left"
         >
-            <Toolbar>
-                <Typography variant="h1" sx={{ color: 'primary.main' }}>Gateway</Typography>
-            </Toolbar>
-            <Divider />
             <Box sx={{ p: 2 }}>
                 <UserInfo />
             </Box>
@@ -87,13 +83,13 @@ const DrawerLeft = () => {
                             </List>
                             <Divider />
                             <List subheader={<ListSubheader>混雑状況</ListSubheader>}>
-                                <ListItemButton selected={/crowd\/current/.test(path)}
-                                    onClick={() => navigate('/crowd/current')}>
+                                <ListItemButton selected={/chart\/all/.test(path)}
+                                    onClick={() => navigate('/chart/all')}>
                                     <ListItemIcon><TableChartRoundedIcon /></ListItemIcon>
-                                    <ListItemText primary='滞在状況' />
+                                    <ListItemText primary='全体の滞在状況' />
                                 </ListItemButton>
-                                <ListItemButton selected={/crowd\/heatmap/.test(path)}
-                                    onClick={() => navigate('/crowd/heatmap')}>
+                                <ListItemButton selected={/chart\/heatmap/.test(path)}
+                                    onClick={() => navigate('/chart/heatmap')}>
                                     <ListItemIcon><MapRoundedIcon /></ListItemIcon>
                                     <ListItemText primary='ヒートマップ' />
                                 </ListItemButton>
