@@ -8,7 +8,6 @@ import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 
 const TopBar = () => {
     const navigate = useNavigate();
-    const locationPath = useLocation().pathname;
     const pageProps = useSelector((state: RootState) => state.page);
     return (
         <AppBar position="fixed" elevation={0} sx={{ width: { xs: '100%', sm: `calc(100% - 240px)` } }}>
@@ -18,7 +17,7 @@ const TopBar = () => {
                         {pageProps.title}
                     </Typography>
                     <Box sx={{ display: 'flex' }}>
-                        <IconButton onClick={() => navigate('docs', { replace: true })}
+                        <IconButton onClick={() => navigate('/docs/', { replace: true })}
                             size="large"
                             color="inherit"
                         >

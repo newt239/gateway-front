@@ -17,7 +17,8 @@ import Entrance from '#/components/page/Entrance/Index';
 import ReserveCheck from '#/components/page/Entrance/ReserveCheck';
 import EntranceEnter from '#/components/page/Entrance/Enter';
 import EntranceExit from '#/components/page/Entrance/Exit';
-import Docs from '#/components/page/Docs';
+import DocsIndex from '#/components/page/Docs/Index';
+import DocsEach from '#/components/page/Docs/Each';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -74,7 +75,10 @@ const Body = () => {
                     <Route path="exhibit/:exhibit_id" element={<ChartExhibit />} />
                     <Route path="heatmap" element={<Heatmap />} />
                 </Route>
-                <Route path="docs" element={<Docs />} />
+                <Route path="docs">
+                    <Route index element={<DocsIndex />} />
+                    <Route path=":doc_id" element={<DocsEach />} />
+                </Route>
             </Route>
         </Routes>
     );
