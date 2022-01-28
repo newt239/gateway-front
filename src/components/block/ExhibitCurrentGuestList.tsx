@@ -2,15 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '#/stores/index';
 import axios from 'axios';
+import moment from "moment";
 
 import { Grid, Box } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
+
+import generalProps, { exhibitCurrentGuestProp } from "#/components/functional/generalProps";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const columns: GridColDef[] = [
     { field: 'id', headerName: 'ゲストID' },
-    { field: 'guest_type', headerName: 'ゲストタイプ', width: 120 },
+    { field: 'guest_type', headerName: '属性' },
     { field: 'enter_at', headerName: '入室時刻', width: 200 },
 ];
 
@@ -22,8 +25,13 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{ exhibit_id: string; }> 
         if (exhibit_id !== "") {
             axios.get(`${API_BASE_URL}/v1/exhibit/current/${exhibit_id}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
                 console.log(res);
+                const tableData = res.data.data.map((e: exhibitCurrentGuestProp) => ({
+                    id: e.id,
+                    guest_type: generalProps.guest.guest_type[e.guest_type],
+                    enter_at: moment(e.enter_at).format("MM/DD HH:MM:SS")
+                }));
                 if (res.data) {
-                    setRows(res.data.data);
+                    setRows(tableData);
                 };
             });
         };
@@ -31,12 +39,11 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{ exhibit_id: string; }> 
     return (
         <Grid container spacing={2} sx={{ p: 2 }}>
             <Grid item xs={12}>
-                <Box sx={{ height: '70vh', width: '100%' }}>
+                <Box sx={{ height: '60vh', width: '100%' }}>
                     <DataGrid
                         rows={rows}
                         columns={columns}
-                        pageSize={5}
-                        rowsPerPageOptions={[10]}
+                        pageSize={10}
                         checkboxSelection
                     />
                 </Box>

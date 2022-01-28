@@ -31,6 +31,10 @@ const DrawerLeft = () => {
             variant="permanent"
             anchor="left"
         >
+            <Toolbar>
+                <Typography variant="h1">Gateway</Typography>
+            </Toolbar>
+            <Divider />
             <Box sx={{ p: 2 }}>
                 <UserInfo />
             </Box>
