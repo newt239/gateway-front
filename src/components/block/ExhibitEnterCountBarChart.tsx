@@ -34,6 +34,7 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{ exhibit_id: string; }
                     };
                     setCategories(timeList);
                     setData(countList);
+                    console.log(countList);
                 };
             };
             getApi();
@@ -52,9 +53,24 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{ exhibit_id: string; }
                 borderRadius: 2
             }
         },
+        dataLabels: {
+            enabled: false
+        },
         xaxis: {
             type: "datetime",
             categories: categories,
+        },
+        yaxis: {
+            labels: {
+                formatter: (value) => {
+                    return value.toFixed(1)
+                }
+            }
+        },
+        tooltip: {
+            x: {
+                format: "MM/dd HH:00"
+            }
         }
     };
     const series = [
