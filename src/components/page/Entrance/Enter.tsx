@@ -49,8 +49,8 @@ export default function EntranceEnter() {
     useEffect(() => {
         dispatch(setPageInfo({ title: "入場処理" }));
     }, []);
+
     useEffect(() => {
-        dispatch(setPageInfo({ title: "入場処理" }));
         // reserve-checkのフローを経ていない場合はreserve-checkのページに遷移させる
         if (reservationInfo.reservation_id === "") {
             navigate("/entrance/reserve-check", { replace: true });

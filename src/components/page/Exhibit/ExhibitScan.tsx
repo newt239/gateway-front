@@ -37,7 +37,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const exhibit = store.getState().exhibit;
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
-    const [message, setMessage] = useState<string[]>([]);
+    const [message, setMessage] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
     const [guestInfo, setGuestInfo] = useState<guestInfoProp>(null);
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
@@ -66,25 +66,28 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                     const guestData = res.data.data;
                     if (guestData.available === 0) {
                         setScanStatus("error");
-                        setMessage(["このゲストは無効です。"]);
+                        setMessage("このゲストは無効です。");
                     } else if (guestData.revoke_at !== null || guestData.revoke_at === "") {
                         setScanStatus("error");
-                        setMessage(["このゲストは既に退場処理が行われています。"]);
-                    } else if (scanType === "enter" && (guestData.exhibit_id !== null || guestData.exhibit_id === "")) {
+                        setMessage("このゲストは既に退場処理が行われています。");
+                    } else if (scanType === "enter" && (guestData.exhibit_id !== null && guestData.exhibit_id !== "")) {
                         setScanStatus("error");
-                        setMessage([`このゲストはすでに${guestData.exhibit_id}に入室しています。`, "退室処理と間違えていませんか？"]);
+                        setMessage(`このゲストはすでに${guestData.exhibit_id}に入室しています。退室処理と間違えていませんか？`);
+                    } else if (scanType === "exit" && (guestData.exhibit_id === null || guestData.exhibit_id === "")) {
+                        setScanStatus("error");
+                        setMessage("このゲストはどこの展示にも入室中ではありません。入室処理と間違えていませんか？");
                     } else {
                         setScanStatus("success");
                     }
                     setSmDrawerStatus(true);
                 } else {
                     setScanStatus("error");
-                    setMessage([res.data.message]);
+                    setMessage(res.data.message);
                     setSmDrawerStatus(true);
                 };
             } else {
                 setScanStatus("error");
-                setMessage(["ゲストidの形式が正しくありません。"]);
+                setMessage("ゲストidの形式が正しくありません。");
                 setSmDrawerStatus(true);
             };
         };
@@ -101,7 +104,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
             if (res.data.status === "success") {
                 dispatch(useQrReader(true));
                 setText("");
-                setMessage([]);
+                setMessage("");
                 setSnackbar({ status: true, message: "処理が完了しました。", severity: "success" });
                 setScanStatus("waiting");
                 setSmDrawerStatus(false);
@@ -121,7 +124,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const retry = () => {
         dispatch(useQrReader(true));
         setText("");
-        setMessage([]);
+        setMessage("");
         setSnackbar({ status: false, message: "", severity: "success" });
         setScanStatus("waiting");
         setSmDrawerStatus(false);
@@ -131,7 +134,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
             <>
                 {scanStatus === "error" && (
                     <Alert severity="error" action={<Button variant="text" color="error" onClick={retry}>スキャンし直す</Button>}>
-                        {message.map((text, index) => <span key={index}>{text}</span>)}
+                        {message}
                     </Alert>
                 )}
                 {scanStatus === "success" && guestInfo && (
@@ -180,10 +183,10 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
             <Grid item xs={12}>
                 <Typography variant='h3'>{exhibit.current.exhibit_name}</Typography>
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6}>
                 <Scanner handleScan={handleScan} />
             </Grid>
-            <Grid item xs={12} md={6} lg={4}>
+            <Grid item xs={12} md={6}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Typography variant='h4'>id:</Typography>
                     <FormControl sx={{ m: 1 }} variant="outlined">

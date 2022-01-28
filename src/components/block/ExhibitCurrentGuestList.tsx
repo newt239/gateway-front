@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { RootState } from '#/stores/index';
-import { setPageInfo } from '#/stores/page';
 import axios from 'axios';
 
 import { Grid, Box } from '@mui/material';
@@ -10,19 +9,14 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const columns: GridColDef[] = [
-    { field: 'id', headerName: 'ゲストID', width: 200 },
-    { field: 'guest_type', headerName: 'ゲストタイプ', width: 200 },
+    { field: 'id', headerName: 'ゲストID' },
+    { field: 'guest_type', headerName: 'ゲストタイプ', width: 120 },
     { field: 'enter_at', headerName: '入室時刻', width: 200 },
 ];
 
 const ExhibitCurrentGuestList: React.FunctionComponent<{ exhibit_id: string; }> = ({ exhibit_id }) => {
-    const dispatch = useDispatch();
     const [rows, setRows] = useState([]);
     const token = useSelector((state: RootState) => state.user).token;
-
-    useEffect(() => {
-        dispatch(setPageInfo({ title: "現在の滞在状況" }));
-    }, []);
 
     useEffect(() => {
         if (exhibit_id !== "") {
@@ -42,7 +36,7 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{ exhibit_id: string; }> 
                         rows={rows}
                         columns={columns}
                         pageSize={5}
-                        rowsPerPageOptions={[5]}
+                        rowsPerPageOptions={[10]}
                         checkboxSelection
                     />
                 </Box>
