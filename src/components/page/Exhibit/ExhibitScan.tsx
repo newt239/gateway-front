@@ -43,6 +43,8 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
     useEffect(() => {
+        setScanStatus("waiting");
+        setMessage("");
         let pageTitle = "展示処理";
         if (scanType === "enter") {
             pageTitle = "入室スキャン";

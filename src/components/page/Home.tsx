@@ -18,7 +18,7 @@ const Home = () => {
     const [datetime, setDatetime] = useState<Moment>(moment());
 
     useEffect(() => {
-        dispatch(setPageInfo({ title: "Gateway" }));
+        dispatch(setPageInfo({ title: "ホーム" }));
     }, []);
 
     useEffect(() => {
