@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '#/stores/index';
+import { useRecoilValue } from "recoil";
+import { tokenState } from "#/recoil/user";
 import axios from 'axios';
 import moment from "moment";
 
@@ -19,7 +19,7 @@ const columns: GridColDef[] = [
 
 const ExhibitCurrentGuestList: React.FunctionComponent<{ exhibit_id: string; }> = ({ exhibit_id }) => {
     const [rows, setRows] = useState([]);
-    const token = useSelector((state: RootState) => state.user).token;
+    const token = useRecoilValue(tokenState);
 
     useEffect(() => {
         if (exhibit_id !== "") {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from 'react-redux';
-import { RootState } from '#/stores/index';
+import { useRecoilValue } from "recoil";
+import { tokenState } from "#/recoil/user";
 import axios from 'axios';
 import Chart from "react-apexcharts";
 // https://github.com/apexcharts/react-apexcharts/issues/368#issuecomment-1003686683
@@ -10,7 +10,7 @@ import moment from "moment";
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const ExhibitEnterCountBarChart: React.FunctionComponent<{ exhibit_id: string; }> = ({ exhibit_id }) => {
-    const token = useSelector((state: RootState) => state.user).token;
+    const token = useRecoilValue(tokenState);
     const [categories, setCategories] = useState<string[]>([]);
     const [data, setData] = useState<number[]>([]);
     useEffect(() => {

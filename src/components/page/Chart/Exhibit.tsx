@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { userState } from "#/recoil/user";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
 import { setPageInfo } from '#/stores/page';
@@ -14,7 +16,7 @@ export default function ChartExhibit() {
     const dispatch = useDispatch();
     const exhibit_id = useParams<{ exhibit_id: string; }>().exhibit_id || "";
     const navigate = useNavigate();
-    const user = useSelector((state: RootState) => state.user);
+    const user = useRecoilValue(userState);
     const exhibit = useSelector((state: RootState) => state.exhibit);
     const [status, setStatus] = useState<{ status: boolean; message: string; }>({ status: false, message: "読込中..." });
 
@@ -30,10 +32,10 @@ export default function ChartExhibit() {
     }, [exhibit_id]);
 
     useEffect(() => {
-        if (user.info.available) {
+        if (user.profile.available) {
             if (exhibit_id === "") {
                 navigate("/chart/all", { replace: true });
-            } else if (user.info.user_type === "group" && user.info.role.indexOf(exhibit_id) !== -1) {
+            } else if (user.profile.user_type === "group" && user.profile.role.indexOf(exhibit_id) !== -1) {
                 setStatus({ status: false, message: "このアカウントにはこのページを表示する権限がありません。" });
                 navigate("/chart/all", { replace: true });
             } else {

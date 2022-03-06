@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { tokenState, profileState, userState } from "#/recoil/user";
+import { useRecoilState } from "recoil";
+import { tokenState, profileState } from "#/recoil/user";
 import Identicon from "boring-avatars";
 
 import { Button, Box, Typography } from '@mui/material';
