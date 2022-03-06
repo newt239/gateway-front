@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import { RootState } from '#/stores/index';
+import { useRecoilValue } from "recoil";
+import { profileState } from "#/recoil/user";
 
 import { Paper, BottomNavigation, BottomNavigationAction } from '@mui/material/';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
@@ -9,7 +9,7 @@ import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
 
 
 const SimpleBottomNavigation = () => {
-    const user = useSelector((state: RootState) => state.user);
+    const user = useRecoilValue(profileState);
     const path = useLocation().pathname;
     const [value, setValue] = React.useState("other");
     const navigate = useNavigate();
@@ -36,10 +36,10 @@ const SimpleBottomNavigation = () => {
                 onChange={handleChange}
             >
                 <BottomNavigationAction label="ホーム" value="" icon={<HomeRoundedIcon />} />
-                {["admin", "moderator", "exhibit"].indexOf(user.info.user_type, -1) && (
+                {["admin", "moderator", "exhibit"].indexOf(user.user_type, -1) && (
                     <BottomNavigationAction label="入退室処理" value="exhibit" icon={<MeetingRoomRoundedIcon />} />
                 )}
-                {["admin", "moderator", "user"].indexOf(user.info.user_type, -1) && (
+                {["admin", "moderator", "user"].indexOf(user.user_type, -1) && (
                     <BottomNavigationAction label="エントランス" value="entrance" icon={<MeetingRoomRoundedIcon />} />
                 )}
             </BottomNavigation>

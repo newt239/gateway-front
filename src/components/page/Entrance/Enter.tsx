@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from "recoil";
+import { userState } from "#/recoil/user";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
 import { setPageInfo } from '#/stores/page';
@@ -35,7 +37,7 @@ export default function EntranceEnter() {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const dispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.user);
+    const user = useRecoilValue(userState);
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
     const [message, setMessage] = useState<string[]>([]);
@@ -67,7 +69,7 @@ export default function EntranceEnter() {
                         guest_type: reservationInfo.guest_type,
                         part: reservationInfo.part,
                         reservation_id: reservationInfo.reservation_id,
-                        userid: user.info.userid
+                        userid: user.profile.userid
                     }]);
                     setScanStatus("success");
                     setActiveStep(guestInfoList.length);

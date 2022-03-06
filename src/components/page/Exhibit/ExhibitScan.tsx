@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import store, { RootState } from '#/stores/index';
+import { useRecoilValue } from "recoil";
+import { userState } from "#/recoil/user";
+import { useDispatch } from 'react-redux';
+import store from '#/stores/index';
 import { setPageInfo } from '#/stores/page';
 import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
@@ -33,7 +35,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const dispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.user);
+    const user = useRecoilValue(userState);
     const exhibit = store.getState().exhibit;
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
@@ -100,7 +102,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                 guest_id: text,
                 guest_type: guestInfo.guest_type,
                 exhibit_id: exhibit.current.exhibit_id,
-                userid: user.info.userid
+                userid: user.profile.userid
             };
             const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
             if (res.data.status === "success") {

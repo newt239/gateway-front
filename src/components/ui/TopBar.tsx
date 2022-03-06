@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux';
 import { RootState } from '#/stores/index';
 

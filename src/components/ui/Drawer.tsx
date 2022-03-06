@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from 'react-redux';
-import { RootState } from '#/stores/index';
+import { useRecoilValue } from "recoil";
+import { profileState } from "#/recoil/user";
 import { Drawer, Box, Toolbar, List, ListSubheader, Divider, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
 
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
@@ -17,7 +17,7 @@ const drawerWidth = 240;
 const DrawerLeft = () => {
     const path = useLocation().pathname;
     const navigate = useNavigate();
-    const user = useSelector((state: RootState) => state.user);
+    const user = useRecoilValue(profileState);
     return (
         <Drawer
             sx={{
@@ -38,7 +38,7 @@ const DrawerLeft = () => {
             <Box sx={{ p: 2 }}>
                 <UserInfo />
             </Box>
-            {user.info.user_type !== "" && (
+            {user.user_type !== "" && (
                 <>
                     <Divider />
                     <List>
@@ -48,7 +48,7 @@ const DrawerLeft = () => {
                             <ListItemText primary='ホーム' />
                         </ListItemButton>
                     </List>
-                    {["admin", "moderator", "exhibit"].indexOf(user.info.user_type, -1) && (
+                    {["admin", "moderator", "exhibit"].indexOf(user.user_type, -1) && (
                         <>
                             <Divider />
                             <List subheader={<ListSubheader>展示企画</ListSubheader>}>
@@ -70,7 +70,7 @@ const DrawerLeft = () => {
                             </List>
                         </>
                     )}
-                    {["admin", "moderator", "user"].indexOf(user.info.user_type, -1) && (
+                    {["admin", "moderator", "user"].indexOf(user.user_type, -1) && (
                         <>
                             <Divider />
                             <List subheader={<ListSubheader>エントランス</ListSubheader>}>

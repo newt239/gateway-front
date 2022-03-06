@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from "recoil";
+import { tokenState } from "#/recoil/user";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
 import { setReservationInfo, resetReservationInfo } from '#/stores/reservation';
@@ -29,7 +31,7 @@ export default function ReserveCheck() {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const navigate = useNavigate();
-    const token = useSelector((state: RootState) => state.user).token;
+    const token = useRecoilValue(tokenState);
     const reservationInfo = useSelector((state: RootState) => state.reservation);
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
     const [text, setText] = useState("");

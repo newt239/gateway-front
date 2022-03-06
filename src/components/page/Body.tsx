@@ -1,8 +1,8 @@
 import React, { useEffect } from "react"
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '#/stores/index';
-import { setToken } from '#/stores/user';
+import { useRecoilState } from "recoil";
+import { tokenState } from "#/recoil/user";
+import { useDispatch } from 'react-redux';
 import { setExhibitList, updateCurrentExhibit } from '#/stores/exhibit';
 import axios from 'axios';
 
@@ -26,27 +26,27 @@ const Body = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const user = useSelector((state: RootState) => state.user);
+    const [token, setToken] = useRecoilState(tokenState);
 
     // 展示のリストを取得
     useEffect(() => {
-        if (user.token) {
-            axios.get(`${API_BASE_URL}/v1/exhibit/info/`, { headers: { Authorization: "Bearer " + user.token } }).then(res => {
+        if (token) {
+            axios.get(`${API_BASE_URL}/v1/exhibit/info/`, { headers: { Authorization: "Bearer " + token } }).then(res => {
                 if (res.data) {
                     dispatch(setExhibitList(res.data.data));
                     dispatch(updateCurrentExhibit(res.data.data[0]))
                 };
             });
         };
-    }, [user]);
+    }, [token]);
 
     // 未ログイン時ログインページへ遷移
     useEffect(() => {
         if (location.pathname !== "/login") {
-            if (!user.token) {
+            if (!token) {
                 const localStorageToken: string | null = localStorage.getItem('gatewayApiToken');
                 if (localStorageToken) {
-                    dispatch(setToken(localStorageToken));
+                    setToken(localStorageToken);
                 } else {
                     navigate("/login", { replace: true });
                 }
