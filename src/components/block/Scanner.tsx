@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "#/stores/index";
-import { useQrReader, setDeviceList, setCurrentDevice } from '#/stores/scan';
+import { useRecoilState } from "recoil";
+import { deviceState, currentDeviceState, deviceListState } from "#/recoil/scan";
 import QrReader from 'react-qr-reader';
 
 import { Box, Dialog, DialogContent, DialogActions, Button, IconButton, Autocomplete, TextField, DialogTitle } from '@mui/material';
@@ -14,7 +13,9 @@ type ScannerProps = {
 
 const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
     const location = useLocation();
-    const dispatch = useDispatch();
+    const [qrReaderState, setDeviceState] = useRecoilState(deviceState);
+    const [currentDevice, setCurrentDevice] = useRecoilState(currentDeviceState);
+    const [deviceList, setDeviceList] = useRecoilState(deviceListState);
     const [selectCameraModalOpen, setSelectCameraModalOpen] = useState(false);
     useEffect(() => {
         navigator.mediaDevices.enumerateDevices().then((mediaDevices) => mediaDevices
@@ -26,20 +27,17 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
                 };
             })).then((devices) => {
                 console.log(devices);
-                dispatch(setDeviceList(devices));
-                dispatch(setCurrentDevice(devices[0]));
+                setDeviceList(devices);
+                setCurrentDevice(devices[0]);
             });
     }, []);
-    const deviceList = useSelector((state: RootState) => state.scan.deviceList);
-    const currentDevice = useSelector((state: RootState) => state.scan.deviceId);
 
     // location以外のパスに移動したときにカメラを切る
-    const qrReaderState = useSelector((state: RootState) => state.scan);
     useEffect(() => {
         if (location.pathname.match(/entrance|exhibit/)) {
-            dispatch(useQrReader(true));
+            setDeviceState(true);
         } else {
-            dispatch(useQrReader(false));
+            setDeviceState(false);
         }
     }, [location]);
 
@@ -63,12 +61,12 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
     };
 
     const changeCamera = (event: React.SyntheticEvent, value: any, reason: string) => {
-        dispatch(setCurrentDevice(value));
+        setCurrentDevice(value);
         setRefreshQrReader(false);
     };
 
     return (<Box sx={{ margin: 'auto', width: '100%', maxWidth: '70vh', aspectRatio: '1 / 1', backgroundColor: 'black', borderRadius: '1rem' }}>
-        {(qrReaderState.state && refreshQrReader) && (
+        {(qrReaderState && refreshQrReader) && (
             <div style={{ position: 'relative' }}>
                 <QrReader
                     onScan={(text) => handleScan(text)}

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "#/recoil/user";
+import { deviceState } from "#/recoil/scan";
 import { useDispatch } from 'react-redux';
 import store from '#/stores/index';
 import { setPageInfo } from '#/stores/page';
-import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
 import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
@@ -44,6 +44,9 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const [guestInfo, setGuestInfo] = useState<guestInfoProp>(null);
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+
+    const setDeviceState = useSetRecoilState(deviceState);
+
     useEffect(() => {
         setScanStatus("waiting");
         setMessage("");
@@ -60,7 +63,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
             if (scanText.length === 10 && scanText.startsWith('G')) {
-                dispatch(useQrReader(false));
+                setDeviceState(false);
                 setText(scanText);
                 setLoading(true);
                 const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
@@ -106,7 +109,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
             };
             const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
             if (res.data.status === "success") {
-                dispatch(useQrReader(true));
+                setDeviceState(true);
                 setText("");
                 setMessage("");
                 setSnackbar({ status: true, message: "処理が完了しました。", severity: "success" });
@@ -120,13 +123,13 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                     setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
                 }
                 setText("");
-                dispatch(useQrReader(true));
+                setDeviceState(true);
                 setSmDrawerStatus(false);
             };
         };
     };
     const retry = () => {
-        dispatch(useQrReader(true));
+        setDeviceState(true);
         setText("");
         setMessage("");
         setSnackbar({ status: false, message: "", severity: "success" });

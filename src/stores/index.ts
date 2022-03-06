@@ -4,13 +4,11 @@ import { configureStore } from "@reduxjs/toolkit";
 import pageReducer from '#/stores/page';
 import exhibitReducer from '#/stores/exhibit';
 import reservationReducer from '#/stores/reservation';
-import scanReducer from '#/stores/scan';
 
 const reducer = combineReducers({
     page: pageReducer,
     exhibit: exhibitReducer,
-    reservation: reservationReducer,
-    scan: scanReducer
+    reservation: reservationReducer
 });
 
 const store = configureStore({ reducer });

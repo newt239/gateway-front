@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
+import { deviceState } from "#/recoil/scan";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
 import { setReservationInfo, resetReservationInfo } from '#/stores/reservation';
 import { setPageInfo } from '#/stores/page';
-import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
 import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
@@ -39,11 +39,14 @@ export default function ReserveCheck() {
     const [message, setMessage] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+
+    const setDeviceState = useSetRecoilState(deviceState);
+
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
             setText(scanText);
             if (scanText.length === 7 && scanText.startsWith('R')) {
-                dispatch(useQrReader(false));
+                setDeviceState(false);
                 setLoading(true);
                 const res = await axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } })
                 setLoading(false);
@@ -78,7 +81,7 @@ export default function ReserveCheck() {
         setScanStatus("waiting");
         setText("");
         dispatch(resetReservationInfo());
-        dispatch(useQrReader(true));
+        setDeviceState(true);
     }
     const ReservationInfoCard = () => {
         return (

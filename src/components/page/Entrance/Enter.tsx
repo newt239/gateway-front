@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "#/recoil/user";
+import { deviceState } from "#/recoil/scan";
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
 import { setPageInfo } from '#/stores/page';
 import { resetReservationInfo } from '#/stores/reservation';
-import { useQrReader } from '#/stores/scan';
 import axios from 'axios';
 
 import { MobileStepper, Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
@@ -48,6 +48,8 @@ export default function EntranceEnter() {
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
     const [activeStep, setActiveStep] = useState(0);
 
+    const setDeviceState = useSetRecoilState(deviceState);
+
     useEffect(() => {
         dispatch(setPageInfo({ title: "入場処理" }));
     }, []);
@@ -82,7 +84,7 @@ export default function EntranceEnter() {
             axios.post(`${API_BASE_URL}/v1/guests/regist`, guestInfoList, { headers: { Authorization: "Bearer " + user.token } }).then(res => {
                 if (res.data.status === "success") {
                     dispatch(resetReservationInfo());
-                    dispatch(useQrReader(true));
+                    setDeviceState(true);
                     setText("");
                     setMessage([]);
                     setSnackbar({ status: false, message: "", severity: "success" });
@@ -96,7 +98,7 @@ export default function EntranceEnter() {
                         setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
                     }
                     setText("");
-                    dispatch(useQrReader(true));
+                    setDeviceState(true);
                     setSmDrawerStatus(false);
                 };
             });
@@ -180,7 +182,7 @@ export default function EntranceEnter() {
         )
     };
     const retry = (activeStep: number) => {
-        dispatch(useQrReader(true));
+        setDeviceState(true);
         setText("");
         setMessage([]);
         setSnackbar({ status: false, message: "", severity: "success" });
