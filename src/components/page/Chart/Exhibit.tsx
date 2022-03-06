@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "#/recoil/user";
+import { pageStateSelector } from '#/recoil/page';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
-import { setPageInfo } from '#/stores/page';
 
 import { Grid, Card, Button, Typography } from '@mui/material';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
@@ -20,13 +20,14 @@ export default function ChartExhibit() {
     const exhibit = useSelector((state: RootState) => state.exhibit);
     const [status, setStatus] = useState<{ status: boolean; message: string; }>({ status: false, message: "読込中..." });
 
+    const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
         if (exhibit.list.length !== 0) {
             const targetExhibit = exhibit.list.find((v) => v.exhibit_id === exhibit_id);
             if (targetExhibit) {
-                dispatch(setPageInfo({ title: `${targetExhibit.exhibit_name}の滞在状況` }));
+                setPageInfo({ title: `${targetExhibit.exhibit_name}の滞在状況` });
             } else {
-                dispatch(setPageInfo({ title: `現在の滞在状況` }));
+                setPageInfo({ title: `現在の滞在状況` });
             };
         };
     }, [exhibit_id]);

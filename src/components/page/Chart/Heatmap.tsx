@@ -1,15 +1,14 @@
-import React, { useEffect, useReducer } from 'react';
-import { useDispatch } from 'react-redux';
-import { setPageInfo } from '#/stores/page';
+import React, { useEffect } from 'react';
+import { useSetRecoilState } from "recoil";
+import { pageStateSelector } from '#/recoil/page';
 
 import { Grid } from '@mui/material';
 
 
 export default function Heatmap() {
-    const dispatch = useDispatch();
-
+    const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
-        dispatch(setPageInfo({ title: "ヒートマップ" }));
+        setPageInfo({ title: "ヒートマップ" });
     }, []);
 
     return (

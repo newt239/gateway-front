@@ -1,18 +1,19 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSetRecoilState } from "recoil";
+import { pageStateSelector } from '#/recoil/page';
+import { useSelector } from 'react-redux';
 import { RootState } from '#/stores/index';
-import { setPageInfo } from '#/stores/page';
 
 import { Grid, Card, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
 
 export default function ChartAll() {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const exhibitList = useSelector((state: RootState) => state.exhibit).list;
 
+    const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
-        dispatch(setPageInfo({ title: "全体の滞在状況" }));
+        setPageInfo({ title: "全体の滞在状況" });
     }, []);
 
     return (

@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import moment, { Moment } from "moment";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { pageStateSelector } from '#/recoil/page';
 import { useDispatch } from 'react-redux';
-import { setPageInfo } from '#/stores/page';
+import moment, { Moment } from "moment";
 
 import { Grid, Card, Box, Button, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -17,8 +18,9 @@ const Home = () => {
     const sm = useMediaQuery(theme.breakpoints.up('sm'));
     const [datetime, setDatetime] = useState<Moment>(moment());
 
+    const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
-        dispatch(setPageInfo({ title: "ホーム" }));
+        setPageInfo({ title: "ホーム" });
     }, []);
 
     useEffect(() => {

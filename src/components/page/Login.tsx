@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
+import { pageStateSelector } from '#/recoil/page';
 import { useDispatch } from 'react-redux';
-import { setPageInfo } from '#/stores/page';
 import axios from 'axios';
 
 import { Grid, Alert, TextField, Button } from '@mui/material';
@@ -20,8 +20,9 @@ interface messageType {
 const Login = () => {
     const setToken = useSetRecoilState(tokenState);
     const dispatch = useDispatch();
+    const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
-        dispatch(setPageInfo({ title: "ログイン" }));
+        setPageInfo({ title: "ログイン" });
     }, []);
     const navigate = useNavigate();
     const [inputValue, updateValue] = useState({ userid: "", password: "" });

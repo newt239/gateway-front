@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
+import { pageStateSelector } from '#/recoil/page';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
 import { setReservationInfo, resetReservationInfo } from '#/stores/reservation';
-import { setPageInfo } from '#/stores/page';
 import axios from 'axios';
 
 import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
@@ -25,9 +25,6 @@ const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 export default function ReserveCheck() {
     const dispatch = useDispatch();
-    useEffect(() => {
-        dispatch(setPageInfo({ title: "予約確認" }));
-    }, []);
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const navigate = useNavigate();
@@ -41,6 +38,11 @@ export default function ReserveCheck() {
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
     const setDeviceState = useSetRecoilState(deviceState);
+    const setPageInfo = useSetRecoilState(pageStateSelector);
+
+    useEffect(() => {
+        setPageInfo({ title: "入場処理" });
+    }, []);
 
     const handleScan = async (scanText: string | null) => {
         if (scanText) {

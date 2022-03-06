@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
+import { pageStateSelector } from '#/recoil/page';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '#/stores/index';
-import { setPageInfo } from '#/stores/page';
 import { resetReservationInfo } from '#/stores/reservation';
 import axios from 'axios';
 
@@ -49,9 +49,10 @@ export default function EntranceEnter() {
     const [activeStep, setActiveStep] = useState(0);
 
     const setDeviceState = useSetRecoilState(deviceState);
+    const setPageInfo = useSetRecoilState(pageStateSelector);
 
     useEffect(() => {
-        dispatch(setPageInfo({ title: "入場処理" }));
+        setPageInfo({ title: "入場処理" });
     }, []);
 
     useEffect(() => {

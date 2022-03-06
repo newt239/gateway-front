@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useDispatch } from 'react-redux';
-import { setPageInfo } from '#/stores/page';
+import { useSetRecoilState } from "recoil";
+import { pageStateSelector } from '#/recoil/page';
 import ReactMarkdown from 'react-markdown';
 import { } from 'react-markdown/lib/ast-to-react';
 
@@ -19,9 +19,9 @@ const DocsIndex = () => {
             })
     }, []);
 
-    const dispatch = useDispatch();
+    const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
-        dispatch(setPageInfo({ title: "ドキュメント" }));
+        setPageInfo({ title: "ドキュメント" });
     }, []);
 
     const linkBlock = ({ ...props }) => {

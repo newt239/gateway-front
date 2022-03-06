@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
+import { pageStateSelector } from '#/recoil/page';
 import { useDispatch } from 'react-redux';
 import store from '#/stores/index';
-import { setPageInfo } from '#/stores/page';
 import axios from 'axios';
 
 import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
@@ -46,6 +46,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
     const setDeviceState = useSetRecoilState(deviceState);
+    const setPageInfo = useSetRecoilState(pageStateSelector);
 
     useEffect(() => {
         setScanStatus("waiting");
@@ -58,7 +59,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
         } else if (scanType === "pass") {
             pageTitle = "通過スキャン";
         }
-        dispatch(setPageInfo({ title: pageTitle }));
+        setPageInfo({ title: pageTitle });
     }, [scanType]);
     const handleScan = async (scanText: string | null) => {
         if (scanText) {

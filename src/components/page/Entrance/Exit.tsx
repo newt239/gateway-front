@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
+import { pageStateSelector } from '#/recoil/page';
 import { useDispatch, useSelector } from 'react-redux';
 import store, { RootState } from '#/stores/index';
-import { setPageInfo } from '#/stores/page';
 import axios from 'axios';
 
 import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
@@ -44,9 +44,10 @@ const EntranceExit = () => {
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
     const setDeviceState = useSetRecoilState(deviceState);
+    const setPageInfo = useSetRecoilState(pageStateSelector);
 
     useEffect(() => {
-        dispatch(setPageInfo({ title: "退場処理" }));
+        setPageInfo({ title: "退場処理" });
     }, []);
 
     const handleScan = async (scanText: string | null) => {
