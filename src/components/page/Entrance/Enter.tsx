@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 import { userState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from '#/recoil/page';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '#/stores/index';
-import { resetReservationInfo } from '#/stores/reservation';
+import { reservationState } from "#/recoil/reservation";
 import axios from 'axios';
 
 import { MobileStepper, Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
@@ -36,13 +34,13 @@ export default function EntranceEnter() {
     const navigate = useNavigate();
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const dispatch = useDispatch();
     const user = useRecoilValue(userState);
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
     const [message, setMessage] = useState<string[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
-    const reservationInfo = useSelector((state: RootState) => state.reservation);
+    const [reservation, setReservation] = useRecoilState(reservationState);
+    const resetReservation = useResetRecoilState(reservationState);
     const [guestInfoList, setGuestInfo] = useState<guestInfoListProp>([]);
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
     const [smDrawerOpen, setSmDrawerStatus] = useState(false);
@@ -57,10 +55,10 @@ export default function EntranceEnter() {
 
     useEffect(() => {
         // reserve-checkのフローを経ていない場合はreserve-checkのページに遷移させる
-        if (reservationInfo.reservation_id === "") {
+        if (reservation.reservation_id === "") {
             navigate("/entrance/reserve-check", { replace: true });
         }
-    }, [reservationInfo]);
+    }, [reservation]);
 
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
@@ -69,9 +67,9 @@ export default function EntranceEnter() {
                 if (!guestInfoList.some(guest => guest.guest_id === scanText)) {
                     setGuestInfo([...guestInfoList, {
                         guest_id: scanText,
-                        guest_type: reservationInfo.guest_type,
-                        part: reservationInfo.part,
-                        reservation_id: reservationInfo.reservation_id,
+                        guest_type: reservation.guest_type,
+                        part: reservation.part,
+                        reservation_id: reservation.reservation_id,
                         userid: user.profile.userid
                     }]);
                     setScanStatus("success");
@@ -81,10 +79,10 @@ export default function EntranceEnter() {
         };
     };
     const postApi = () => {
-        if (guestInfoList.length === reservationInfo.count) {
+        if (guestInfoList.length === reservation.count) {
             axios.post(`${API_BASE_URL}/v1/guests/regist`, guestInfoList, { headers: { Authorization: "Bearer " + user.token } }).then(res => {
                 if (res.data.status === "success") {
-                    dispatch(resetReservationInfo());
+                    resetReservation();
                     setDeviceState(true);
                     setText("");
                     setMessage([]);
@@ -112,7 +110,7 @@ export default function EntranceEnter() {
                     <>
                         <MobileStepper
                             variant="dots"
-                            steps={reservationInfo.count - reservationInfo.registed}
+                            steps={reservation.count - reservation.registed}
                             position="static"
                             activeStep={activeStep}
                             sx={{ flexGrow: 1 }}
@@ -138,7 +136,7 @@ export default function EntranceEnter() {
                             }
                         />
                         <Card variant="outlined" sx={{ p: 2 }} >
-                            <Typography variant="h4">ゲスト情報 ( {activeStep + 1} / {reservationInfo.count - reservationInfo.registed} )</Typography>
+                            <Typography variant="h4">ゲスト情報 ( {activeStep + 1} / {reservation.count - reservation.registed} )</Typography>
                             <List dense>
                                 <ListItem>
                                     <ListItemIcon>

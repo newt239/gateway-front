@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from '#/recoil/page';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '#/stores/index';
-import { setReservationInfo, resetReservationInfo } from '#/stores/reservation';
+import { reservationState } from "#/recoil/reservation";
 import axios from 'axios';
 
 import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
@@ -24,12 +22,12 @@ import Scanner from '#/components/block/Scanner';
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 export default function ReserveCheck() {
-    const dispatch = useDispatch();
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
     const navigate = useNavigate();
     const token = useRecoilValue(tokenState);
-    const reservationInfo = useSelector((state: RootState) => state.reservation);
+    const [reservation, setReservation] = useRecoilState(reservationState);
+    const resetReservation = useResetRecoilState(reservationState);
     const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
     const [text, setText] = useState("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
@@ -53,7 +51,7 @@ export default function ReserveCheck() {
                 const res = await axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } })
                 setLoading(false);
                 if (res.data.status === "success") {
-                    dispatch(setReservationInfo(res.data.data));
+                    setReservation(res.data.data);
                     if (res.data.data.available === 0) {
                         setScanStatus("error");
                         setMessage(["この予約idは無効です。"]);
@@ -82,7 +80,7 @@ export default function ReserveCheck() {
     const retry = () => {
         setScanStatus("waiting");
         setText("");
-        dispatch(resetReservationInfo());
+        resetReservation();
         setDeviceState(true);
     }
     const ReservationInfoCard = () => {
@@ -95,7 +93,7 @@ export default function ReserveCheck() {
                         {message.map((text, index) => <span key={index}>{text}</span>)}
                     </Alert>
                 )}
-                {reservationInfo && scanStatus === "success" && (
+                {reservation && scanStatus === "success" && (
                     <Card variant="outlined" sx={{ p: 2 }} >
                         <Typography variant="h4">ゲスト情報</Typography>
                         <List dense>
@@ -112,7 +110,7 @@ export default function ReserveCheck() {
                                     <GroupWorkRoundedIcon />
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={generalProps.reservation.guest_type[reservationInfo.guest_type]}
+                                    primary={generalProps.reservation.guest_type[reservation.guest_type]}
                                 />
                             </ListItem>
                             <ListItem>
@@ -120,7 +118,7 @@ export default function ReserveCheck() {
                                     <AccessTimeRoundedIcon />
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={reservationInfo.part === "all" ? "全時間帯" : reservationInfo.part}
+                                    primary={reservation.part === "all" ? "全時間帯" : reservation.part}
                                 />
                             </ListItem>
                             <ListItem>
@@ -128,7 +126,7 @@ export default function ReserveCheck() {
                                     <PeopleRoundedIcon />
                                 </ListItemIcon>
                                 <ListItemText
-                                    primary={`${reservationInfo.count}人`}
+                                    primary={`${reservation.count}人`}
                                 />
                             </ListItem>
                         </List>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { pageStateSelector } from '#/recoil/page';
-import { useDispatch } from 'react-redux';
 import moment, { Moment } from "moment";
 
 import { Grid, Card, Box, Button, Typography } from '@mui/material';
@@ -12,7 +11,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import UserInfo from '#/components/block/UserInfo';
 
 const Home = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
     const theme = useTheme();
     const sm = useMediaQuery(theme.breakpoints.up('sm'));

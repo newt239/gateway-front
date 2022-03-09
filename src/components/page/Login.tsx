@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from '#/recoil/page';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 import { Grid, Alert, TextField, Button } from '@mui/material';
@@ -19,7 +18,6 @@ interface messageType {
 
 const Login = () => {
     const setToken = useSetRecoilState(tokenState);
-    const dispatch = useDispatch();
     const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
         setPageInfo({ title: "ログイン" });
