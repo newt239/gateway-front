@@ -1,9 +1,8 @@
 import React, { useEffect } from "react"
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
-import { useDispatch } from 'react-redux';
-import { setExhibitList, updateCurrentExhibit } from '#/stores/exhibit';
+import { currentExhibitState, exhibitListState } from "#/recoil/exhibit";
 import axios from 'axios';
 
 import Home from '#/components/page/Home';
@@ -25,16 +24,17 @@ const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 const Body = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const [token, setToken] = useRecoilState(tokenState);
 
     // 展示のリストを取得
+    const setCurrentExhibit = useSetRecoilState(currentExhibitState);
+    const setExhibitList = useSetRecoilState(exhibitListState);
     useEffect(() => {
         if (token) {
             axios.get(`${API_BASE_URL}/v1/exhibit/info/`, { headers: { Authorization: "Bearer " + token } }).then(res => {
                 if (res.data) {
-                    dispatch(setExhibitList(res.data.data));
-                    dispatch(updateCurrentExhibit(res.data.data[0]))
+                    setExhibitList(res.data.data);
+                    setCurrentExhibit(res.data.data[0]);
                 };
             });
         };

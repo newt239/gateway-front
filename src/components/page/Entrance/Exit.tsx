@@ -3,8 +3,6 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from '#/recoil/page';
-import { useDispatch, useSelector } from 'react-redux';
-import store, { RootState } from '#/stores/index';
 import axios from 'axios';
 
 import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
@@ -32,9 +30,7 @@ type guestInfoProp = {
 const EntranceExit = () => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const dispatch = useDispatch();
     const user = useRecoilValue(userState);
-    const exhibit = store.getState().exhibit;
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
     const [message, setMessage] = useState<string[]>([]);
@@ -91,7 +87,6 @@ const EntranceExit = () => {
             const payload = {
                 guest_id: text,
                 guest_type: guestInfo.guest_type,
-                exhibit_id: exhibit.current.exhibit_id,
                 userid: user.profile.userid
             };
             const res = await axios.post(`${API_BASE_URL}/v1/guests/revoke`, payload, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });

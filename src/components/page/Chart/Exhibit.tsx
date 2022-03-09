@@ -3,8 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { userState } from "#/recoil/user";
 import { pageStateSelector } from '#/recoil/page';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '#/stores/index';
+import { exhibitListState } from "#/recoil/exhibit";
 
 import { Grid, Card, Button, Typography } from '@mui/material';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
@@ -13,17 +12,16 @@ import ExhibitEnterCountBarChart from '../../block/ExhibitEnterCountBarChart';
 import ExhibitCurrentGuestList from '#/components/block/ExhibitCurrentGuestList';
 
 export default function ChartExhibit() {
-    const dispatch = useDispatch();
     const exhibit_id = useParams<{ exhibit_id: string; }>().exhibit_id || "";
     const navigate = useNavigate();
     const user = useRecoilValue(userState);
-    const exhibit = useSelector((state: RootState) => state.exhibit);
+    const exhibitList = useRecoilValue(exhibitListState);
     const [status, setStatus] = useState<{ status: boolean; message: string; }>({ status: false, message: "読込中..." });
 
     const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
-        if (exhibit.list.length !== 0) {
-            const targetExhibit = exhibit.list.find((v) => v.exhibit_id === exhibit_id);
+        if (exhibitList.length !== 0) {
+            const targetExhibit = exhibitList.find((v) => v.exhibit_id === exhibit_id);
             if (targetExhibit) {
                 setPageInfo({ title: `${targetExhibit.exhibit_name}の滞在状況` });
             } else {

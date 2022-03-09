@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { pageStateSelector } from '#/recoil/page';
-import { useSelector } from 'react-redux';
-import { RootState } from '#/stores/index';
+import { exhibitListState } from "#/recoil/exhibit";
 
 import { Grid, Card, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
 
 export default function ChartAll() {
     const navigate = useNavigate();
-    const exhibitList = useSelector((state: RootState) => state.exhibit).list;
+    const exhibitList = useRecoilValue(exhibitListState);
 
     const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {

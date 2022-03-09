@@ -1,18 +1,17 @@
 import React from "react";
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '#/stores/index';
-import { updateCurrentExhibit } from '#/stores/exhibit';
+import { useRecoilState, useRecoilValue } from "recoil";
+import { currentExhibitState, exhibitListState } from "#/recoil/exhibit";
 
 import { Stack, FormControl, TextField, Autocomplete } from "@mui/material";
 
 const SelectExhibit: React.FunctionComponent<{ disabled?: boolean | false }> = ({ disabled }) => {
-    const dispatch = useDispatch();
-    const exhibit = useSelector((state: RootState) => state.exhibit);
+    const [currentExhibit, setCurrentExhibit] = useRecoilState(currentExhibitState);
+    const exhibitList = useRecoilValue(exhibitListState);
     const handleChange = (event: React.SyntheticEvent, value: any, reason: string) => {
         if (reason === "clear") {
-            dispatch(updateCurrentExhibit({ exhibit_id: "", exhibit_name: "" }));
+            setCurrentExhibit({ exhibit_id: "", exhibit_name: "" });
         } else {
-            dispatch(updateCurrentExhibit(value));
+            setCurrentExhibit(value);
         };
     };
     return (
@@ -22,9 +21,9 @@ const SelectExhibit: React.FunctionComponent<{ disabled?: boolean | false }> = (
                     disableClearable
                     disabled={disabled}
                     size="small"
-                    options={exhibit.list}
+                    options={exhibitList}
                     getOptionLabel={(option) => option.exhibit_name}
-                    value={exhibit.current}
+                    value={currentExhibit}
                     onChange={handleChange}
                     renderInput={(params) => (
                         <TextField {...params} label="展示名" placeholder="展示名" />
