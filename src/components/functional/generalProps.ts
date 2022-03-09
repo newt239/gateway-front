@@ -24,3 +24,12 @@ export type exhibitCurrentGuestProp = {
     guest_type: "general" | "student" | "family" | "special";
     enter_at: string;
 }
+
+export type profileStateProp = {
+    userid: string;
+    display_name: string;
+    user_type: string;
+    role: string;
+    available: boolean;
+    note: string;
+};
