@@ -1,22 +1,20 @@
-import { atom, DefaultValue, selector } from 'recoil';
+import { atom, selector } from 'recoil';
 
 export const tokenState = atom({
     key: "tokenState",
     default: ""
 });
 
-const defaultProfileState = {
-    userid: '',
-    display_name: '',
-    user_type: '',
-    role: '',
-    available: false,
-    note: '',
-};
-
 export const profileState = atom({
     key: "profileState",
-    default: defaultProfileState
+    default: {
+        userid: '',
+        display_name: '',
+        user_type: '',
+        role: '',
+        available: false,
+        note: '',
+    }
 })
 
 export const userState = selector({

@@ -1,7 +1,7 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useLayoutEffect } from "react"
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
-import { tokenState } from "#/recoil/user";
+import { tokenState, profileState } from "#/recoil/user";
 import { currentExhibitState, exhibitListState } from "#/recoil/exhibit";
 import axios from 'axios';
 
@@ -38,22 +38,31 @@ const Body = () => {
                     setCurrentExhibit(res.data.data[0]);
                 };
             });
-        };
-    }, [token]);
+        }
+    }, []);
 
-    // 未ログイン時ログインページへ遷移
+    const [profile, setProfile] = useRecoilState(profileState);
     useEffect(() => {
         if (location.pathname !== "/login") {
             if (!token) {
                 const localStorageToken: string | null = localStorage.getItem('gatewayApiToken');
                 if (localStorageToken) {
-                    setToken(localStorageToken);
+                    // プロフィールの取得
+                    axios.get(API_BASE_URL + "/v1/auth/me", { headers: { Authorization: "Bearer " + localStorageToken } }).then(res => {
+                        setProfile(res.data.profile);
+                        setToken(localStorageToken);
+                    });
                 } else {
+                    // 未ログイン時ログインページへ遷移
                     navigate("/login", { replace: true });
                 }
+            } else {
+                // レンダリング後に呼び出すことでレンダリング後のstateの変化を反映させている
+                console.log(profile);
             }
         }
-    }, [localStorage.getItem('gatewayApiToken'), location]);
+    }, []);
+
     return (
         <Routes>
             <Route path="/">

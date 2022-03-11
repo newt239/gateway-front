@@ -4,7 +4,7 @@ import { pageStateSelector } from '#/recoil/page';
 
 import { Grid, Card } from '@mui/material';
 
-const DocsIndex = () => {
+const AdminIndex = () => {
     const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
         setPageInfo({ title: "管理者用" });
@@ -20,4 +20,4 @@ const DocsIndex = () => {
     )
 }
 
-export default DocsIndex;
+export default AdminIndex;
