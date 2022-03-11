@@ -10,6 +10,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
 import TableChartRoundedIcon from '@mui/icons-material/TableChartRounded';
 import MapRoundedIcon from '@mui/icons-material/MapRounded';
+import AppSettingsAltRoundedIcon from '@mui/icons-material/AppSettingsAltRounded';
 
 import UserInfo from '#/components/block/UserInfo';
 const drawerWidth = 240;
@@ -96,6 +97,18 @@ const DrawerLeft = () => {
                                     onClick={() => navigate('/chart/heatmap')}>
                                     <ListItemIcon><MapRoundedIcon /></ListItemIcon>
                                     <ListItemText primary='ヒートマップ' />
+                                </ListItemButton>
+                            </List>
+                        </>
+                    )}
+                    {["admin", "moderator"].indexOf(user.user_type, -1) && (
+                        <>
+                            <Divider />
+                            <List subheader={<ListSubheader>管理者用</ListSubheader>}>
+                                <ListItemButton selected={/admin\//.test(path)}
+                                    onClick={() => navigate('/admin/')}>
+                                    <ListItemIcon><AppSettingsAltRoundedIcon /></ListItemIcon>
+                                    <ListItemText primary='コンソール' />
                                 </ListItemButton>
                             </List>
                         </>
