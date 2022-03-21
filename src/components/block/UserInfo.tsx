@@ -14,15 +14,15 @@ import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 
 
 const UserInfo = () => {
-    const navigate = useNavigate()
-    const [profile, setProfile] = useRecoilState(profileState)
-    const setToken = useSetRecoilState(tokenState)
+    const navigate = useNavigate();
+    const [profile, setProfile] = useRecoilState(profileState);
+    const setToken = useSetRecoilState(tokenState);
 
     const logout = () => {
-        setToken(null)
-        setProfile(null)
-        localStorage.removeItem('gatewayApiToken')
-        navigate("/login", { replace: true })
+        setToken(null);
+        setProfile(null);
+        localStorage.removeItem('gatewayApiToken');
+        navigate("/login", { replace: true });
     };
 
     const AccountType = () => {
@@ -41,7 +41,7 @@ const UserInfo = () => {
             };
         } else {
             return <NoAccountsIcon />;
-        }
+        };
     };
 
     return (
@@ -74,6 +74,6 @@ const UserInfo = () => {
         }
         </>
     );
-}
+};
 
 export default UserInfo;

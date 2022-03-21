@@ -104,6 +104,7 @@ export default function EntranceEnter() {
             });
         };
     };
+
     const GuestInfoCard = () => {
         return (
             <>
@@ -181,6 +182,7 @@ export default function EntranceEnter() {
             </>
         )
     };
+
     const retry = (activeStep: number) => {
         setDeviceState(true);
         setText("");
@@ -195,6 +197,7 @@ export default function EntranceEnter() {
             setGuestInfo(newGuestList.splice(activeStep - 1, 1));
         }
     };
+
     return (
         <>
             <Grid container spacing={2} sx={{ p: 2 }}>
@@ -255,4 +258,4 @@ export default function EntranceEnter() {
             </Grid>
         </>
     );
-}
+};

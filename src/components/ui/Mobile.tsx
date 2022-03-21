@@ -15,7 +15,7 @@ const Mobile = () => {
             </Container>
             <BottomNav />
         </>
-    )
-}
+    );
+};
 
-export default Mobile
+export default Mobile;

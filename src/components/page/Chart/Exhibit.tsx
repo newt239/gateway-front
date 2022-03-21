@@ -44,6 +44,7 @@ export default function ChartExhibit() {
             setStatus({ status: false, message: "読込中..." });
         };
     }, [profile]);
+
     return (
         <>
             {status.status ? (<Grid container spacing={2} sx={{ p: 2 }}>
@@ -69,4 +70,4 @@ export default function ChartExhibit() {
             }
         </>
     );
-}
+};

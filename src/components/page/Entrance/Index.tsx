@@ -32,7 +32,7 @@ const Entrance = () => {
                 </Grid>
             </Grid>
         </>
-    )
-}
+    );
+};
 
 export default Entrance;

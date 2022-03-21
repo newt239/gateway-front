@@ -166,7 +166,7 @@ const EntranceExit = () => {
                     </Card >
                 )}
             </>
-        )
+        );
     };
 
     return (

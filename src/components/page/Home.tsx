@@ -5,15 +5,11 @@ import { pageStateSelector } from '#/recoil/page';
 import moment, { Moment } from "moment";
 
 import { Grid, Card, Box, Button, Typography } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 import UserInfo from '#/components/block/UserInfo';
 
 const Home = () => {
     const navigate = useNavigate();
-    const theme = useTheme();
-    const sm = useMediaQuery(theme.breakpoints.up('sm'));
     const [datetime, setDatetime] = useState<Moment>(moment());
 
     const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -60,7 +56,7 @@ const Home = () => {
                 </Card>
             </Grid>
         </Grid >
-    )
-}
+    );
+};
 
 export default Home;

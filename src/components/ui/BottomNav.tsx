@@ -13,6 +13,7 @@ const SimpleBottomNavigation = () => {
     const path = useLocation().pathname;
     const [value, setValue] = React.useState("other");
     const navigate = useNavigate();
+
     useEffect(() => {
         if (path === '/') {
             setValue('');
@@ -24,10 +25,12 @@ const SimpleBottomNavigation = () => {
             setValue("other");
         }
     }, [path]);
+
     const handleChange = (event: React.SyntheticEvent, newValue: string) => {
         navigate(`${newValue}`);
         setValue(newValue);
     };
+
     return (
         <>{profile && profile.available ? (
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
@@ -47,6 +50,6 @@ const SimpleBottomNavigation = () => {
             </Paper>
         ) : (<></>)}</>
     );
-}
+};
 
 export default SimpleBottomNavigation;

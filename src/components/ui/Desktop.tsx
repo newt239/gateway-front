@@ -17,7 +17,7 @@ const Desktop = () => {
                 </Container>
             </Box>
         </>
-    )
-}
+    );
+};
 
-export default Desktop
+export default Desktop;

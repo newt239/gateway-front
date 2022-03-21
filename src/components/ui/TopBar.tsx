@@ -9,6 +9,7 @@ import HelpOutlineRoundedIcon from '@mui/icons-material/HelpOutlineRounded';
 const TopBar = () => {
     const navigate = useNavigate();
     const pageProps = useRecoilValue(pageStateSelector);
+
     return (
         <AppBar position="fixed" elevation={0} sx={{ width: { xs: '100%', sm: `calc(100% - 240px)` } }}>
             <Container maxWidth="xl">
@@ -29,4 +30,5 @@ const TopBar = () => {
         </AppBar>
     );
 };
+
 export default TopBar;

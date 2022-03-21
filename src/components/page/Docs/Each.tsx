@@ -47,7 +47,7 @@ const DocsEach = () => {
                 </Card>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
 export default DocsEach;

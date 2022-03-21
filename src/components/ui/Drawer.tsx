@@ -20,6 +20,7 @@ const DrawerLeft = () => {
     const path = useLocation().pathname;
     const navigate = useNavigate();
     const profile = useRecoilValue(profileState);
+
     return (
         <Drawer
             sx={{
@@ -120,6 +121,6 @@ const DrawerLeft = () => {
             )}
         </Drawer >
     );
-}
+};
 
 export default DrawerLeft;

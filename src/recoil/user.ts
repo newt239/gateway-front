@@ -1,9 +1,9 @@
-import { atom } from 'recoil'
+import { atom } from 'recoil';
 
 export const tokenState = atom<null | string>({
   key: "tokenState",
   default: localStorage.getItem('gatewayApiToken')
-})
+});
 
 type profileProp = {
   userid: string;
@@ -12,9 +12,9 @@ type profileProp = {
   role: string;
   available: boolean;
   note: string;
-}
+};
 
 export const profileState = atom<null | profileProp>({
   key: "profileState",
   default: null
-})
+});

@@ -1,4 +1,4 @@
-import React, { ErrorInfo, ReactNode, useEffect } from "react"
+import React, { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
@@ -32,14 +32,14 @@ const Body = () => {
             if (token) {
                 // プロフィールの取得
                 axios.get(API_BASE_URL + "/v1/auth/me", { headers: { Authorization: "Bearer " + token } }).then(res => {
-                    setProfile(res.data.profile)
+                    setProfile(res.data.profile);
                 })
             } else {
                 // 未ログイン時ログインページへ遷移
-                navigate("/login", { replace: true })
-            }
-        }
-    }, [])
+                navigate("/login", { replace: true });
+            };
+        };
+    }, []);
 
     // 展示のリストを取得
     const setCurrentExhibit = useSetRecoilState(currentExhibitState);
@@ -50,11 +50,10 @@ const Body = () => {
                 if (res.data) {
                     setExhibitList(res.data.data);
                     setCurrentExhibit(res.data.data[0]);
-                }
-            })
-        }
-    }, [])
-
+                };
+            });
+        };
+    }, []);
 
     return (
         <Routes>

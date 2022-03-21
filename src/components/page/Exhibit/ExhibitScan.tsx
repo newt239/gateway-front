@@ -21,6 +21,7 @@ const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 type ExhibitScanProps = {
     scanType: string;
 };
+
 type guestInfoProp = {
     guest_id: string;
     guest_type: string;
@@ -99,6 +100,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
             };
         };
     };
+
     const postApi = async () => {
         if (profile && guestInfo) {
             const payload = {
@@ -128,6 +130,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
             };
         };
     };
+
     const retry = () => {
         setDeviceState(true);
         setText("");
@@ -136,6 +139,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
         setScanStatus("waiting");
         setSmDrawerStatus(false);
     };
+
     const GuestInfoCard = () => {
         return (
             <>

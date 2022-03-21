@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { pageStateSelector } from '#/recoil/page';
 import axios from 'axios';
@@ -11,15 +11,15 @@ import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 interface messageType {
-    display: "none" | "block";
+    display: 'none' | 'block';
     severity: 'error' | 'success';
     message: string;
 }
 
 const Login = () => {
-    const setToken = useSetRecoilState(tokenState)
-    const setProfile = useSetRecoilState(profileState)
-    const setPageInfo = useSetRecoilState(pageStateSelector)
+    const setToken = useSetRecoilState(tokenState);
+    const setProfile = useSetRecoilState(profileState);
+    const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
         setPageInfo({ title: "ログイン" });
     }, []);
@@ -72,7 +72,7 @@ const Login = () => {
                 </Grid>
             </Grid>
         </>
-    )
-}
+    );
+};
 
 export default Login;

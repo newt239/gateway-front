@@ -17,7 +17,7 @@ const AdminIndex = () => {
                 </Card>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
 export default AdminIndex;

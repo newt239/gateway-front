@@ -13,10 +13,11 @@ const ScreenWidth = () => {
         } else {
             return <Desktop />
         }
-    }
+    };
+
     return (
         <MediaQuery />
-    )
-}
+    );
+};
 
-export default ScreenWidth
+export default ScreenWidth;

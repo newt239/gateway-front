@@ -12,7 +12,7 @@ const DocsIndex = () => {
     useEffect(() => {
         fetch(require(`./markdown/top.md`))
             .then(response => {
-                return response.text()
+                return response.text();
             })
             .then(text => {
                 setMd(text);
@@ -50,7 +50,7 @@ const DocsIndex = () => {
                 </Card>
             </Grid>
         </Grid>
-    )
-}
+    );
+};
 
 export default DocsIndex;
