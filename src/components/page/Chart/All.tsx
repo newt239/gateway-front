@@ -8,13 +8,24 @@ import { Grid, Card, List, ListItem, ListItemButton, ListItemText, Typography } 
 // TODO: recoil全体でAPI通信を伴うstateはselectorの非同期アクションとSuspenseを使った方式に切り替える
 // https://ics.media/entry/210224/
 export default function ChartAll() {
-    const navigate = useNavigate();
-    const exhibitList = useRecoilValue(exhibitListState);
-
     const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
         setPageInfo({ title: "全体の滞在状況" });
     }, []);
+
+    const ExhibitListCard = () => {
+        const navigate = useNavigate();
+        const exhibitList = useRecoilValue(exhibitListState);
+        return <>{exhibitList.map((exhibit) =>
+        (<ListItem key={exhibit.exhibit_id}>
+            <ListItemButton onClick={(e: any) => navigate(`/chart/exhibit/${exhibit.exhibit_id}`, { replace: true })}>
+                <ListItemText
+                    primary={exhibit.exhibit_name}
+                />
+            </ListItemButton>
+        </ListItem>)
+        )}</>;
+    };
 
     return (
         <Grid container spacing={2} sx={{ p: 2 }}>
@@ -38,15 +49,9 @@ export default function ChartAll() {
                 <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
                     <Typography variant="h3">展示別</Typography>
                     <List dense={true}>
-                        {exhibitList.map((exhibit) =>
-                        (<ListItem key={exhibit.exhibit_id}>
-                            <ListItemButton onClick={(e: any) => navigate(`/chart/exhibit/${exhibit.exhibit_id}`, { replace: true })}>
-                                <ListItemText
-                                    primary={exhibit.exhibit_name}
-                                />
-                            </ListItemButton>
-                        </ListItem>)
-                        )}
+                        <Suspense fallback={<p>読込中...</p>}>
+                            <ExhibitListCard />
+                        </Suspense>
                     </List>
                 </Card>
             </Grid>

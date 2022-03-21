@@ -41,19 +41,6 @@ const Body = () => {
         };
     }, []);
 
-    // 展示のリストを取得
-    const setCurrentExhibit = useSetRecoilState(currentExhibitState);
-    const setExhibitList = useSetRecoilState(exhibitListState);
-    useEffect(() => {
-        if (token) {
-            axios.get(`${API_BASE_URL}/v1/exhibit/info/`, { headers: { Authorization: "Bearer " + token } }).then(res => {
-                if (res.data) {
-                    setExhibitList(res.data.data);
-                    setCurrentExhibit(res.data.data[0]);
-                };
-            });
-        };
-    }, []);
 
     return (
         <Routes>

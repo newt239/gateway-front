@@ -3,7 +3,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { profileState } from "#/recoil/user";
 import { pageStateSelector } from '#/recoil/page';
-import { exhibitListState } from "#/recoil/exhibit";
 
 import { Grid, Card, Button, Typography } from '@mui/material';
 import ArrowBackIosNewRoundedIcon from '@mui/icons-material/ArrowBackIosNewRounded';
@@ -13,22 +12,14 @@ import ExhibitCurrentGuestList from '#/components/block/ExhibitCurrentGuestList'
 
 export default function ChartExhibit() {
     const exhibit_id = useParams<{ exhibit_id: string; }>().exhibit_id || "";
-    const navigate = useNavigate()
-    const profile = useRecoilValue(profileState)
-    const exhibitList = useRecoilValue(exhibitListState);
+    const navigate = useNavigate();
+    const profile = useRecoilValue(profileState);
     const [status, setStatus] = useState<{ status: boolean; message: string; }>({ status: false, message: "読込中..." });
 
     const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
-        if (exhibitList.length !== 0) {
-            const targetExhibit = exhibitList.find((v) => v.exhibit_id === exhibit_id);
-            if (targetExhibit) {
-                setPageInfo({ title: `${targetExhibit.exhibit_name}の滞在状況` });
-            } else {
-                setPageInfo({ title: `現在の滞在状況` });
-            };
-        };
-    }, [exhibit_id]);
+        setPageInfo({ title: `${exhibit_id} - 現在の滞在状況` });
+    }, []);
 
     useEffect(() => {
         if (profile) {
