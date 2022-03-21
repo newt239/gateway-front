@@ -9,7 +9,7 @@ import MeetingRoomRoundedIcon from '@mui/icons-material/MeetingRoomRounded';
 
 
 const SimpleBottomNavigation = () => {
-    const user = useRecoilValue(profileState);
+    const profile = useRecoilValue(profileState);
     const path = useLocation().pathname;
     const [value, setValue] = React.useState("other");
     const navigate = useNavigate();
@@ -29,21 +29,23 @@ const SimpleBottomNavigation = () => {
         setValue(newValue);
     };
     return (
-        <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
-            <BottomNavigation
-                showLabels
-                value={value}
-                onChange={handleChange}
-            >
-                <BottomNavigationAction label="ホーム" value="" icon={<HomeRoundedIcon />} />
-                {["admin", "moderator", "exhibit"].indexOf(user.user_type, -1) && (
-                    <BottomNavigationAction label="入退室処理" value="exhibit" icon={<MeetingRoomRoundedIcon />} />
-                )}
-                {["admin", "moderator", "user"].indexOf(user.user_type, -1) && (
-                    <BottomNavigationAction label="エントランス" value="entrance" icon={<MeetingRoomRoundedIcon />} />
-                )}
-            </BottomNavigation>
-        </Paper>
+        <>{profile && profile.available ? (
+            <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 1 }} elevation={3}>
+                <BottomNavigation
+                    showLabels
+                    value={value}
+                    onChange={handleChange}
+                >
+                    <BottomNavigationAction label="ホーム" value="" icon={<HomeRoundedIcon />} />
+                    {["admin", "moderator", "exhibit"].indexOf(profile.user_type, -1) && (
+                        <BottomNavigationAction label="入退室処理" value="exhibit" icon={<MeetingRoomRoundedIcon />} />
+                    )}
+                    {["admin", "moderator", "user"].indexOf(profile.user_type, -1) && (
+                        <BottomNavigationAction label="エントランス" value="entrance" icon={<MeetingRoomRoundedIcon />} />
+                    )}
+                </BottomNavigation>
+            </Paper>
+        ) : (<></>)}</>
     );
 }
 

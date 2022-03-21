@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
-import { userState } from "#/recoil/user";
+import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from '#/recoil/page';
 import { reservationState } from "#/recoil/reservation";
@@ -33,8 +33,9 @@ type guestInfoListProp = {
 export default function EntranceEnter() {
     const navigate = useNavigate();
     const theme = useTheme();
-    const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const user = useRecoilValue(userState);
+    const matches = useMediaQuery(theme.breakpoints.up('sm'))
+    const token = useRecoilValue(tokenState)
+    const profile = useRecoilValue(profileState)
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
     const [message, setMessage] = useState<string[]>([]);
@@ -61,7 +62,7 @@ export default function EntranceEnter() {
     }, [reservation]);
 
     const handleScan = async (scanText: string | null) => {
-        if (scanText) {
+        if (scanText && profile) {
             setText(scanText);
             if (scanText.length === 10 && scanText.startsWith('G')) {
                 if (!guestInfoList.some(guest => guest.guest_id === scanText)) {
@@ -70,7 +71,7 @@ export default function EntranceEnter() {
                         guest_type: reservation.guest_type,
                         part: reservation.part,
                         reservation_id: reservation.reservation_id,
-                        userid: user.profile.userid
+                        userid: profile.userid
                     }]);
                     setScanStatus("success");
                     setActiveStep(guestInfoList.length);
@@ -80,7 +81,7 @@ export default function EntranceEnter() {
     };
     const postApi = () => {
         if (guestInfoList.length === reservation.count) {
-            axios.post(`${API_BASE_URL}/v1/guests/regist`, guestInfoList, { headers: { Authorization: "Bearer " + user.token } }).then(res => {
+            axios.post(`${API_BASE_URL}/v1/guests/regist`, guestInfoList, { headers: { Authorization: "Bearer " + token } }).then(res => {
                 if (res.data.status === "success") {
                     resetReservation();
                     setDeviceState(true);

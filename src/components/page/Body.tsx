@@ -1,6 +1,6 @@
-import React, { useEffect, useLayoutEffect } from "react"
+import React, { ErrorInfo, ReactNode, useEffect } from "react"
 import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { currentExhibitState, exhibitListState } from "#/recoil/exhibit";
 import axios from 'axios';
@@ -25,7 +25,21 @@ const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 const Body = () => {
     const location = useLocation();
     const navigate = useNavigate();
-    const [token, setToken] = useRecoilState(tokenState);
+    const token = useRecoilValue(tokenState)
+    const setProfile = useSetRecoilState(profileState)
+    useEffect(() => {
+        if (location.pathname !== "/login") {
+            if (token) {
+                // プロフィールの取得
+                axios.get(API_BASE_URL + "/v1/auth/me", { headers: { Authorization: "Bearer " + token } }).then(res => {
+                    setProfile(res.data.profile)
+                })
+            } else {
+                // 未ログイン時ログインページへ遷移
+                navigate("/login", { replace: true })
+            }
+        }
+    }, [])
 
     // 展示のリストを取得
     const setCurrentExhibit = useSetRecoilState(currentExhibitState);
@@ -36,32 +50,11 @@ const Body = () => {
                 if (res.data) {
                     setExhibitList(res.data.data);
                     setCurrentExhibit(res.data.data[0]);
-                };
-            });
-        }
-    }, []);
-
-    const [profile, setProfile] = useRecoilState(profileState);
-    useEffect(() => {
-        if (location.pathname !== "/login") {
-            if (!token) {
-                const localStorageToken: string | null = localStorage.getItem('gatewayApiToken');
-                if (localStorageToken) {
-                    // プロフィールの取得
-                    axios.get(API_BASE_URL + "/v1/auth/me", { headers: { Authorization: "Bearer " + localStorageToken } }).then(res => {
-                        setProfile(res.data.profile);
-                        setToken(localStorageToken);
-                    });
-                } else {
-                    // 未ログイン時ログインページへ遷移
-                    navigate("/login", { replace: true });
                 }
-            } else {
-                // レンダリング後に呼び出すことでレンダリング後のstateの変化を反映させている
-                console.log(profile);
-            }
+            })
         }
-    }, []);
+    }, [])
+
 
     return (
         <Routes>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { profileState } from "#/recoil/user";
@@ -13,12 +13,13 @@ import MapRoundedIcon from '@mui/icons-material/MapRounded';
 import AppSettingsAltRoundedIcon from '@mui/icons-material/AppSettingsAltRounded';
 
 import UserInfo from '#/components/block/UserInfo';
+
 const drawerWidth = 240;
 
 const DrawerLeft = () => {
     const path = useLocation().pathname;
     const navigate = useNavigate();
-    const user = useRecoilValue(profileState);
+    const profile = useRecoilValue(profileState);
     return (
         <Drawer
             sx={{
@@ -37,9 +38,11 @@ const DrawerLeft = () => {
             </Toolbar>
             <Divider />
             <Box sx={{ p: 2 }}>
-                <UserInfo />
+                <Suspense fallback={<p>hey</p>}>
+                    <UserInfo />
+                </Suspense>
             </Box>
-            {user.user_type !== "" && (
+            {profile && profile.available && (
                 <>
                     <Divider />
                     <List>
@@ -49,7 +52,7 @@ const DrawerLeft = () => {
                             <ListItemText primary='ホーム' />
                         </ListItemButton>
                     </List>
-                    {["admin", "moderator", "exhibit"].indexOf(user.user_type, -1) && (
+                    {["admin", "moderator", "exhibit"].indexOf(profile.user_type, -1) && (
                         <>
                             <Divider />
                             <List subheader={<ListSubheader>展示企画</ListSubheader>}>
@@ -71,7 +74,7 @@ const DrawerLeft = () => {
                             </List>
                         </>
                     )}
-                    {["admin", "moderator", "user"].indexOf(user.user_type, -1) && (
+                    {["admin", "moderator", "user"].indexOf(profile.user_type, -1) && (
                         <>
                             <Divider />
                             <List subheader={<ListSubheader>エントランス</ListSubheader>}>
@@ -101,7 +104,7 @@ const DrawerLeft = () => {
                             </List>
                         </>
                     )}
-                    {["admin", "moderator"].indexOf(user.user_type, -1) && (
+                    {["admin", "moderator"].indexOf(profile.user_type, -1) && (
                         <>
                             <Divider />
                             <List subheader={<ListSubheader>管理者用</ListSubheader>}>

@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
-import axios from 'axios';
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useResetRecoilState, useRecoilRefresher_UNSTABLE } from "recoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import Identicon from "boring-avatars";
 
@@ -13,20 +12,21 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import GroupIcon from '@mui/icons-material/Group';
 import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
+
 const UserInfo = () => {
-    const navigate = useNavigate();
-    const [profile, setProfile] = useRecoilState(profileState);
-    const resetProfile = useResetRecoilState(profileState);
-    const [token, setToken] = useRecoilState(tokenState);
+    const navigate = useNavigate()
+    const [profile, setProfile] = useRecoilState(profileState)
+    const setToken = useSetRecoilState(tokenState)
+
     const logout = () => {
-        setToken("");
-        resetProfile();
-        localStorage.removeItem('gatewayApiToken');
-        navigate("/login", { replace: true });
+        setToken(null)
+        setProfile(null)
+        localStorage.removeItem('gatewayApiToken')
+        navigate("/login", { replace: true })
     };
+
     const AccountType = () => {
-        if (profile) {
+        if (profile && profile.available) {
             switch (profile.user_type) {
                 case "admin":
                     return <AdminPanelSettingsIcon />;
@@ -43,9 +43,10 @@ const UserInfo = () => {
             return <NoAccountsIcon />;
         }
     };
+
     return (
         <>{
-            profile.available ? (
+            profile && profile.available ? (
                 <>
                     <Box sx={{ width: '100%', textAlign: 'right' }}>
                         <AccountType />

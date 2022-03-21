@@ -1,26 +1,20 @@
-import { atom, selector } from 'recoil';
+import { atom } from 'recoil'
 
-export const tokenState = atom({
-    key: "tokenState",
-    default: ""
-});
-
-export const profileState = atom({
-    key: "profileState",
-    default: {
-        userid: '',
-        display_name: '',
-        user_type: '',
-        role: '',
-        available: false,
-        note: '',
-    }
+export const tokenState = atom<null | string>({
+  key: "tokenState",
+  default: localStorage.getItem('gatewayApiToken')
 })
 
-export const userState = selector({
-    key: "roughCounterState",
-    get: ({ get }) => ({
-        token: get(tokenState),
-        profile: get(profileState)
-    })
-});
+type profileProp = {
+  userid: string;
+  display_name: string;
+  user_type: string;
+  role: string;
+  available: boolean;
+  note: string;
+}
+
+export const profileState = atom<null | profileProp>({
+  key: "profileState",
+  default: null
+})

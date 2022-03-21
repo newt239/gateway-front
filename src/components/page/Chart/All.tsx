@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { pageStateSelector } from '#/recoil/page';
 import { exhibitListState } from "#/recoil/exhibit";
 
 import { Grid, Card, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
-
+// TODO: recoil全体でAPI通信を伴うstateはselectorの非同期アクションとSuspenseを使った方式に切り替える
+// https://ics.media/entry/210224/
 export default function ChartAll() {
     const navigate = useNavigate();
     const exhibitList = useRecoilValue(exhibitListState);

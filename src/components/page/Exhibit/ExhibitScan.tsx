@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { userState } from "#/recoil/user";
+import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from '#/recoil/page';
 import { currentExhibitState } from '#/recoil/exhibit';
@@ -33,7 +33,8 @@ type guestInfoProp = {
 const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const user = useRecoilValue(userState);
+    const profile = useRecoilValue(profileState)
+    const token = useRecoilValue(tokenState)
     const currentExhibit = useRecoilValue(currentExhibitState);
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
@@ -65,7 +66,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                 setDeviceState(false);
                 setText(scanText);
                 setLoading(true);
-                const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
+                const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
                 setLoading(false);
                 if (res.data.status === "success") {
                     setGuestInfo(res.data.data);
@@ -99,14 +100,14 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
         };
     };
     const postApi = async () => {
-        if (guestInfo) {
+        if (profile && guestInfo) {
             const payload = {
                 guest_id: text,
                 guest_type: guestInfo.guest_type,
                 exhibit_id: currentExhibit.exhibit_id,
-                userid: user.profile.userid
+                userid: profile.userid
             };
-            const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
+            const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
             if (res.data.status === "success") {
                 setDeviceState(true);
                 setText("");

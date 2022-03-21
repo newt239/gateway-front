@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { userState } from "#/recoil/user";
+import { profileState } from "#/recoil/user";
 import { pageStateSelector } from '#/recoil/page';
 import { exhibitListState } from "#/recoil/exhibit";
 
@@ -13,8 +13,8 @@ import ExhibitCurrentGuestList from '#/components/block/ExhibitCurrentGuestList'
 
 export default function ChartExhibit() {
     const exhibit_id = useParams<{ exhibit_id: string; }>().exhibit_id || "";
-    const navigate = useNavigate();
-    const user = useRecoilValue(userState);
+    const navigate = useNavigate()
+    const profile = useRecoilValue(profileState)
     const exhibitList = useRecoilValue(exhibitListState);
     const [status, setStatus] = useState<{ status: boolean; message: string; }>({ status: false, message: "読込中..." });
 
@@ -31,10 +31,10 @@ export default function ChartExhibit() {
     }, [exhibit_id]);
 
     useEffect(() => {
-        if (user.profile.available) {
+        if (profile) {
             if (exhibit_id === "") {
                 navigate("/chart/all", { replace: true });
-            } else if (user.profile.user_type === "group" && user.profile.role.indexOf(exhibit_id) !== -1) {
+            } else if (profile.user_type === "group" && profile.role.indexOf(exhibit_id) !== -1) {
                 setStatus({ status: false, message: "このアカウントにはこのページを表示する権限がありません。" });
                 navigate("/chart/all", { replace: true });
             } else {
@@ -43,7 +43,7 @@ export default function ChartExhibit() {
         } else {
             setStatus({ status: false, message: "読込中..." });
         };
-    }, [user]);
+    }, [profile]);
     return (
         <>
             {status.status ? (<Grid container spacing={2} sx={{ p: 2 }}>

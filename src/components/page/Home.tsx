@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { pageStateSelector } from '#/recoil/page';
@@ -33,7 +33,9 @@ const Home = () => {
         <Grid container spacing={2} sx={{ p: 2 }}>
             <Grid item xs={12} md={6} lg={4}>
                 <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-                    <UserInfo />
+                    <Suspense fallback={<p>hey</p>}>
+                        <UserInfo />
+                    </Suspense>
                 </Card>
             </Grid>
             <Grid item xs={12} md={6} lg={4}>

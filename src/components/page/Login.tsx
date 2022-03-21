@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { pageStateSelector } from '#/recoil/page';
 import axios from 'axios';
@@ -17,9 +17,9 @@ interface messageType {
 }
 
 const Login = () => {
-    const setToken = useSetRecoilState(tokenState);
-    const setProfile = useSetRecoilState(profileState);
-    const setPageInfo = useSetRecoilState(pageStateSelector);
+    const setToken = useSetRecoilState(tokenState)
+    const setProfile = useSetRecoilState(profileState)
+    const setPageInfo = useSetRecoilState(pageStateSelector)
     useEffect(() => {
         setPageInfo({ title: "ログイン" });
     }, []);
@@ -32,9 +32,9 @@ const Login = () => {
                 if (res.data.status === "success") {
                     updateMessage({ display: "block", severity: "success", message: "ログインに成功しました。" });
                     localStorage.setItem('gatewayApiToken', res.data.token);
-                    setToken(res.data.token);
-                    setProfile(res.data.profile);
-                    navigate("/", { replace: true });
+                    setToken(res.data.token)
+                    setProfile(res.data.profile)
+                    navigate("/", { replace: true })
                 } else {
                     updateMessage({ display: "block", severity: "error", message: "ユーザーidまたはパスワードが間違っています。" });
                 };

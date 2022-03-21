@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { userState } from "#/recoil/user";
+import { profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from '#/recoil/page';
 import axios from 'axios';
@@ -30,7 +30,8 @@ type guestInfoProp = {
 const EntranceExit = () => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const user = useRecoilValue(userState);
+    const token = useRecoilValue(profileState)
+    const profile = useRecoilValue(profileState);
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
     const [message, setMessage] = useState<string[]>([]);
@@ -52,7 +53,7 @@ const EntranceExit = () => {
             if (scanText.length === 10 && scanText.startsWith('G')) {
                 setDeviceState(false);
                 setLoading(true);
-                const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
+                const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
                 setLoading(false);
                 if (res.data.status === "success") {
                     setGuestInfo(res.data.data);
@@ -83,13 +84,13 @@ const EntranceExit = () => {
     };
 
     const postApi = async () => {
-        if (guestInfo) {
+        if (profile && guestInfo) {
             const payload = {
                 guest_id: text,
                 guest_type: guestInfo.guest_type,
-                userid: user.profile.userid
+                userid: profile.userid
             };
-            const res = await axios.post(`${API_BASE_URL}/v1/guests/revoke`, payload, { headers: { Authorization: "Bearer " + user.token } }).then(res => { return res });
+            const res = await axios.post(`${API_BASE_URL}/v1/guests/revoke`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
             if (res.data.status === "success") {
                 setDeviceState(true);
                 setText("");
