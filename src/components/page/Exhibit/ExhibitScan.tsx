@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
@@ -34,9 +34,8 @@ type guestInfoProp = {
 const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) => {
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'));
-    const profile = useRecoilValue(profileState)
-    const token = useRecoilValue(tokenState)
-    const currentExhibit = useRecoilValue(currentExhibitState);
+    const profile = useRecoilValue(profileState);
+    const token = useRecoilValue(tokenState);
     const [text, setText] = useState<string>("");
     const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
     const [message, setMessage] = useState<string>("");
@@ -61,6 +60,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
         }
         setPageInfo({ title: pageTitle });
     }, [scanType]);
+
     const handleScan = async (scanText: string | null) => {
         if (scanText) {
             if (scanText.length === 10 && scanText.startsWith('G')) {
@@ -101,34 +101,10 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
         };
     };
 
-    const postApi = async () => {
-        if (profile && guestInfo) {
-            const payload = {
-                guest_id: text,
-                guest_type: guestInfo.guest_type,
-                exhibit_id: currentExhibit.exhibit_id,
-                userid: profile.userid
-            };
-            const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-            if (res.data.status === "success") {
-                setDeviceState(true);
-                setText("");
-                setMessage("");
-                setSnackbar({ status: true, message: "処理が完了しました。", severity: "success" });
-                setScanStatus("waiting");
-                setSmDrawerStatus(false);
-            } else {
-                console.log(res.data);
-                if (res.data.message) {
-                    setSnackbar({ status: true, message: res.data.message, severity: "error" });
-                } else {
-                    setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
-                }
-                setText("");
-                setDeviceState(true);
-                setSmDrawerStatus(false);
-            };
-        };
+    const ExhibitName = () => {
+        const currentExhibit = useRecoilValue(currentExhibitState);
+
+        return <Typography variant='h3'>{currentExhibit.exhibit_name}</Typography>;
     };
 
     const retry = () => {
@@ -141,6 +117,38 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     };
 
     const GuestInfoCard = () => {
+        const currentExhibit = useRecoilValue(currentExhibitState);
+
+        const postApi = async () => {
+            if (profile && guestInfo) {
+                const payload = {
+                    guest_id: text,
+                    guest_type: guestInfo.guest_type,
+                    exhibit_id: currentExhibit.exhibit_id,
+                    userid: profile.userid
+                };
+                const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
+                if (res.data.status === "success") {
+                    setDeviceState(true);
+                    setText("");
+                    setMessage("");
+                    setSnackbar({ status: true, message: "処理が完了しました。", severity: "success" });
+                    setScanStatus("waiting");
+                    setSmDrawerStatus(false);
+                } else {
+                    console.log(res.data);
+                    if (res.data.message) {
+                        setSnackbar({ status: true, message: res.data.message, severity: "error" });
+                    } else {
+                        setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
+                    }
+                    setText("");
+                    setDeviceState(true);
+                    setSmDrawerStatus(false);
+                };
+            };
+        };
+
         return (
             <>
                 {scanStatus === "error" && (
@@ -192,7 +200,9 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
     return (
         <Grid container spacing={2} sx={{ p: 2 }}>
             <Grid item xs={12}>
-                <Typography variant='h3'>{currentExhibit.exhibit_name}</Typography>
+                <Suspense fallback={<p>読込中...</p>}>
+                    <ExhibitName />
+                </Suspense>
             </Grid>
             <Grid item xs={12} md={6}>
                 <Scanner handleScan={handleScan} />
@@ -220,23 +230,25 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                         />
                     </FormControl>
                 </Box>
-                {loading && (<Box sx={{ width: '100%' }}>
-                    <LinearProgress />
-                </Box>)}
-                {scanStatus !== "waiting" && (
-                    matches ? (
-                        <GuestInfoCard />
-                    ) : (
-                        <SwipeableDrawer
-                            anchor="bottom"
-                            open={smDrawerOpen}
-                            onClose={() => retry()}
-                            onOpen={() => setSmDrawerStatus(true)}
-                        >
+                <Suspense fallback={<p>読込中...</p>}>
+                    {loading && (<Box sx={{ width: '100%' }}>
+                        <LinearProgress />
+                    </Box>)}
+                    {scanStatus !== "waiting" && (
+                        matches ? (
                             <GuestInfoCard />
-                        </SwipeableDrawer>
-                    )
-                )}
+                        ) : (
+                            <SwipeableDrawer
+                                anchor="bottom"
+                                open={smDrawerOpen}
+                                onClose={() => retry()}
+                                onOpen={() => setSmDrawerStatus(true)}
+                            >
+                                <GuestInfoCard />
+                            </SwipeableDrawer>
+                        )
+                    )}
+                </Suspense>
             </Grid >
             <Snackbar
                 open={snackbar.status}

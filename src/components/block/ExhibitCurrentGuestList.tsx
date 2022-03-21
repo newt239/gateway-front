@@ -24,7 +24,6 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{ exhibit_id: string; }> 
     useEffect(() => {
         if (exhibit_id !== "") {
             axios.get(`${API_BASE_URL}/v1/exhibit/current/${exhibit_id}`, { headers: { Authorization: "Bearer " + token } }).then(res => {
-                console.log(res);
                 const tableData = res.data.data.map((e: exhibitCurrentGuestProp) => ({
                     id: e.id,
                     guest_type: generalProps.guest.guest_type[e.guest_type],

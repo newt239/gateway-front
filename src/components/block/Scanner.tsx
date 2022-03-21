@@ -26,7 +26,6 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
                     deviceId: device.deviceId,
                 };
             })).then((devices) => {
-                console.log(devices);
                 setDeviceList(devices);
                 setCurrentDevice(devices[0]);
             });
