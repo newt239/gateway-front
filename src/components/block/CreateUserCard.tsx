@@ -4,7 +4,7 @@ import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from '#/recoil/page';
 import axios from "axios";
 
-import { Typography, TextField, MenuItem, Box, Button, CircularProgress, List, ListItem, ListItemText } from '@mui/material';
+import { Typography, TextField, MenuItem, Box, Button, CircularProgress, List, ListItem, ListItemText, IconButton } from '@mui/material';
 
 import { userTypeProp } from "#/components/functional/generalProps";
 
@@ -25,10 +25,12 @@ const CreateUserCard = () => {
   const [passwordValue, setPassword] = useState("");
   const [displayNameValue, setDisplayName] = useState("");
   const [userTypeValue, setUserType] = useState<userTypeProp>("exhibit");
+  const [deleteUserIdValue, setDeleteUserIdValue] = useState("");
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
   const [showErrorDialog, setShowErrorDialog] = useState(false);
   const [errorDialogMessage, setErrorDialogMessage] = useState<string[]>([]);
-  const [createHistory, setCreateHistory] = useState<string[]>([]);
+  const [createHistory, setCreateHistory] = useState<{ user_id: string; display_name: string; user_type: string; }[]>([]);
 
   const userTypeList: { value: userTypeProp; label: string }[] = [
     { value: "moderator", label: "管理者" },
@@ -36,6 +38,15 @@ const CreateUserCard = () => {
     { value: "exhibit", label: "展示担当者" },
     { value: "analysis", label: "データ分析" }
   ];
+
+  // 過去に自分が作成したユーザーのリスト
+  useEffect(() => {
+    axios.get(`${API_BASE_URL}/v1/admin/created-by-me`, { headers: { Authorization: "Bearer " + token } }).then(res => {
+      if (res.data.status === "success" && res.data.data.length !== 0) {
+        setCreateHistory([...createHistory, res.data.data]);
+      }
+    });
+  }, [token]);
 
   const createUser = async () => {
     if (!loading) {
@@ -60,13 +71,27 @@ const CreateUserCard = () => {
       const res = await axios.post(`${API_BASE_URL}/v1/admin/create`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
       console.log(res);
       if (res.data.status == "success") {
-        setCreateHistory([...createHistory, userIdValue]);
+        setCreateHistory([...createHistory, { user_id: userIdValue, display_name: displayNameValue, user_type: userTypeValue }]);
         console.log("operation of create user was succeed.");
       } else {
         setErrorDialogMessage([res.data.message]);
         setShowErrorDialog(true);
       }
       setLoading(false);
+    }
+  };
+
+  const deleteUser = async () => {
+    if (!deleteLoading && deleteUserIdValue !== "") {
+      setDeleteLoading(true);
+      const payload = {
+        user_id: deleteUserIdValue
+      }
+      const res = await axios.post(`${API_BASE_URL}/v1/admin/delete-user`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
+      if (res.data.status === "success") {
+        setDeleteUserIdValue("");
+        setCreateHistory(createHistory.filter(history => history.user_id !== res.data.userId));
+      }
     }
   };
 
@@ -77,7 +102,7 @@ const CreateUserCard = () => {
 
   return (
     <>
-      <Typography variant="h3">ユーザーの作成</Typography>
+      <Typography variant="h4">ユーザーの作成</Typography>
       <TextField
         id="userId"
         label="ユーザーid"
@@ -141,16 +166,36 @@ const CreateUserCard = () => {
       <Typography variant="h4">作成履歴</Typography>
       <List dense={true}>
         {createHistory.map(history => (
-          <ListItem key={history}>
+          <ListItem key={history.user_id}>
             <ListItemText
-              primary={history}
+              primary={history.display_name + " ( ユーザーid: " + history.user_id + " )"}
             />
           </ListItem>
         ))}
         {createHistory.length === 0 && <Typography>まだユーザーを作成していません。</Typography>}
       </List>
+      <Typography variant="h4">ユーザーの削除</Typography>
+      <Typography>自分が作成したユーザーのみ削除可能です。</Typography>
+      <TextField
+        id="deleteUser"
+        label="削除するユーザーid"
+        value={deleteUserIdValue}
+        disabled={createHistory.length === 0}
+        onChange={e => setDeleteUserIdValue(e.target.value)}
+        margin="normal"
+        fullWidth />
+      <Box sx={{ width: '100%', textAlign: 'right' }}>
+        <Button
+          onClick={deleteUser}
+          disabled={deleteLoading || createHistory.length === 0}
+          variant="contained"
+          startIcon={deleteLoading && <CircularProgress size={24} />}
+        >
+          削除
+        </Button>
+      </Box>
     </>
   );
 };
 
-export default CreateUserCard; 
+export default CreateUserCard;
