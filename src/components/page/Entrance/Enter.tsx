@@ -81,7 +81,7 @@ export default function EntranceEnter() {
     };
     const postApi = () => {
         if (guestInfoList.length === reservation.count) {
-            axios.post(`${API_BASE_URL}/v1/guests/regist`, guestInfoList, { headers: { Authorization: "Bearer " + token } }).then(res => {
+            axios.post(`${API_BASE_URL}/v1/guests/register`, guestInfoList, { headers: { Authorization: "Bearer " + token } }).then(res => {
                 if (res.data.status === "success") {
                     resetReservation();
                     setDeviceState(true);
@@ -112,7 +112,7 @@ export default function EntranceEnter() {
                     <>
                         <MobileStepper
                             variant="dots"
-                            steps={reservation.count - reservation.registed}
+                            steps={reservation.count - reservation.registered}
                             position="static"
                             activeStep={activeStep}
                             sx={{ flexGrow: 1 }}
@@ -138,7 +138,7 @@ export default function EntranceEnter() {
                             }
                         />
                         <Card variant="outlined" sx={{ p: 2 }} >
-                            <Typography variant="h4">ゲスト情報 ( {activeStep + 1} / {reservation.count - reservation.registed} )</Typography>
+                            <Typography variant="h4">ゲスト情報 ( {activeStep + 1} / {reservation.count - reservation.registered} )</Typography>
                             <List dense>
                                 <ListItem>
                                     <ListItemIcon>

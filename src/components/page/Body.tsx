@@ -32,6 +32,7 @@ const Body = () => {
             if (token) {
                 // プロフィールの取得
                 axios.get(API_BASE_URL + "/v1/auth/me", { headers: { Authorization: "Bearer " + token } }).then(res => {
+                    console.log(res.data);
                     setProfile(res.data.profile);
                 })
             } else {

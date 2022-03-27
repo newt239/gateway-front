@@ -6,7 +6,7 @@ type reservationProp = {
     part: string;
     available: 0 | 1;
     count: number;
-    registed: number;
+    registered: number;
     note: string;
 };
 
@@ -18,7 +18,7 @@ export const reservationState = atom<reservationProp>({
         part: "all",
         available: 0,
         count: 0,
-        registed: 0,
+        registered: 0,
         note: ""
     }
 });

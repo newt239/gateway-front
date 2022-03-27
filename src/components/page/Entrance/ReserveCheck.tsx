@@ -56,7 +56,7 @@ export default function ReserveCheck() {
                         setScanStatus("error");
                         setMessage(["この予約idは無効です。"]);
                         setSmDrawerStatus(true);
-                    } else if (res.data.data.count === res.data.data.registed) {
+                    } else if (res.data.data.count === res.data.data.registered) {
                         setScanStatus("error");
                         setMessage(["この予約idは既に利用済みです。"]);
                         setSmDrawerStatus(true);
