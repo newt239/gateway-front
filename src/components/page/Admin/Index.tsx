@@ -18,7 +18,7 @@ const AdminIndex = () => {
 
     const token = useRecoilValue(tokenState);
 
-    const [useridValue, setUserid] = useState("");
+    const [userIdValue, setUserId] = useState("");
     const [passwordValue, setPassword] = useState("");
     const [displayNameValue, setDisplayName] = useState("");
     const [userTypeValue, setUserType] = useState<userTypeProp>("temporary");
@@ -33,7 +33,7 @@ const AdminIndex = () => {
 
     const createUser = async () => {
         const payload = {
-            userid: useridValue,
+            userId: userIdValue,
             password: passwordValue,
             displayName: displayNameValue,
             userType: userTypeValue
@@ -49,15 +49,15 @@ const AdminIndex = () => {
 
     return (
         <Grid container spacing={2} sx={{ p: 2 }}>
-            <Grid item xs={6}>
+            <Grid item xs={12} md={6}>
                 <Card variant="outlined" sx={{ p: 2 }}>
                     <Typography variant="h3">ユーザーの作成</Typography>
                     <TextField
-                        id="userid"
+                        id="userId"
                         label="ユーザーid"
                         type="text"
-                        defaultValue={useridValue}
-                        onChange={e => setUserid(e.target.value)}
+                        defaultValue={userIdValue}
+                        onChange={e => setUserId(e.target.value)}
                         margin="normal"
                         fullWidth
                     />

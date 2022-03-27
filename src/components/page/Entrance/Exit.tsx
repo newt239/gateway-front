@@ -88,7 +88,7 @@ const EntranceExit = () => {
             const payload = {
                 guest_id: text,
                 guest_type: guestInfo.guest_type,
-                userid: profile.userid
+                userId: profile.userId
             };
             const res = await axios.post(`${API_BASE_URL}/v1/guests/revoke`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
             if (res.data.status === "success") {

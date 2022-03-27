@@ -6,7 +6,7 @@ export const tokenState = atom<null | string>({
 });
 
 type profileProp = {
-  userid: string;
+  userId: string;
   display_name: string;
   user_type: string;
   role: string;

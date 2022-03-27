@@ -125,7 +125,7 @@ const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) =>
                     guest_id: text,
                     guest_type: guestInfo.guest_type,
                     exhibit_id: currentExhibit.exhibit_id,
-                    userid: profile.userid
+                    userId: profile.userId
                 };
                 const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
                 if (res.data.status === "success") {

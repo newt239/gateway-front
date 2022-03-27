@@ -27,7 +27,7 @@ type guestInfoListProp = {
     guest_type: "general" | "student" | "special";
     part: string;
     reservation_id: string;
-    userid: string;
+    userId: string;
 }[];
 
 export default function EntranceEnter() {
@@ -71,7 +71,7 @@ export default function EntranceEnter() {
                         guest_type: reservation.guest_type,
                         part: reservation.part,
                         reservation_id: reservation.reservation_id,
-                        userid: profile.userid
+                        userId: profile.userId
                     }]);
                     setScanStatus("success");
                     setActiveStep(guestInfoList.length);

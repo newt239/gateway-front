@@ -53,12 +53,12 @@ const UserInfo = () => {
                     </Box>
                     <Identicon
                         size={40}
-                        name={profile.userid}
+                        name={profile.userId}
                         variant="beam"
                         colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
                     />
                     <Typography variant='h3'>{profile.display_name}</Typography>
-                    <Typography sx={{ fontSize: 10 }}>@{profile.userid}</Typography>
+                    <Typography sx={{ fontSize: 10 }}>@{profile.userId}</Typography>
                     <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
                         ログアウト
                     </Button>

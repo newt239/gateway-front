@@ -24,10 +24,10 @@ const Login = () => {
         setPageInfo({ title: "ログイン" });
     }, []);
     const navigate = useNavigate();
-    const [inputValue, updateValue] = useState({ userid: "", password: "" });
+    const [inputValue, updateValue] = useState({ userId: "", password: "" });
     const [message, updateMessage] = useState<messageType>({ display: "none", severity: "error", message: "" });
     const login = () => {
-        if (inputValue.userid !== "") {
+        if (inputValue.userId !== "") {
             axios.post(API_BASE_URL + "/v1/auth/login", inputValue).then(res => {
                 if (res.data.status === "success") {
                     updateMessage({ display: "block", severity: "success", message: "ログインに成功しました。" });
@@ -49,10 +49,10 @@ const Login = () => {
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <TextField
-                        id="userid"
+                        id="userId"
                         label="ユーザーid"
                         type="text"
-                        onChange={(event) => updateValue({ "userid": event.target.value, "password": inputValue.password })}
+                        onChange={(event) => updateValue({ "userId": event.target.value, "password": inputValue.password })}
                         fullWidth
                     />
                 </Grid>
@@ -61,7 +61,7 @@ const Login = () => {
                         id="password"
                         label="パスワード"
                         type="password"
-                        onChange={(event) => updateValue({ "userid": inputValue.userid, "password": event.target.value })}
+                        onChange={(event) => updateValue({ "userId": inputValue.userId, "password": event.target.value })}
                         fullWidth
                     />
                 </Grid>
