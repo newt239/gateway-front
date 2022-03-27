@@ -59,16 +59,20 @@ const UserInfo = () => {
                     />
                     <Typography variant='h3'>{profile.display_name}</Typography>
                     <Typography sx={{ fontSize: 10 }}>@{profile.userId}</Typography>
-                    <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
-                        ログアウト
-                    </Button>
+                    <Box sx={{ width: '100%', textAlign: 'right' }}>
+                        <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
+                            ログアウト
+                        </Button>
+                    </Box>
                 </>)
                 : (
                     <>
                         <Typography>ログインしていません</Typography>
-                        <Button variant="outlined" color="success" onClick={e => navigate("/login", { replace: true })} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
-                            ログイン
-                        </Button>
+                        <Box sx={{ width: '100%', textAlign: 'right' }}>
+                            <Button variant="outlined" color="success" onClick={e => navigate("/login", { replace: true })} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
+                                ログイン
+                            </Button>
+                        </Box>
                     </>
                 )
         }
