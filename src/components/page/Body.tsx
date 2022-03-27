@@ -38,8 +38,8 @@ const Body = () => {
       } else {
         // 未ログイン時ログインページへ遷移
         navigate("/login", { replace: true });
-      };
-    };
+      }
+    }
   }, []);
 
   const NotFound = () => {
@@ -47,7 +47,8 @@ const Body = () => {
       <>
         <p>お探しのページは見つかりませんでした。</p>
         <span onClick={e => navigate("/", { replace: true })}>トップに戻る</span>
-      </>)
+      </>
+    );
   }
 
   return (

@@ -5,9 +5,8 @@ import { pageStateSelector } from '#/recoil/page';
 import { exhibitListState } from "#/recoil/exhibit";
 
 import { Grid, Card, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material';
-// TODO: recoil全体でAPI通信を伴うstateはselectorの非同期アクションとSuspenseを使った方式に切り替える
-// https://ics.media/entry/210224/
-export default function ChartAll() {
+
+const ChartAll = () => {
     const setPageInfo = useSetRecoilState(pageStateSelector);
     useEffect(() => {
         setPageInfo({ title: "全体の滞在状況" });
@@ -58,3 +57,5 @@ export default function ChartAll() {
         </Grid>
     );
 };
+
+export default ChartAll;

@@ -30,7 +30,7 @@ type guestInfoListProp = {
     userId: string;
 }[];
 
-export default function EntranceEnter() {
+const EntranceEnter = () => {
     const navigate = useNavigate();
     const theme = useTheme();
     const matches = useMediaQuery(theme.breakpoints.up('sm'))
@@ -259,3 +259,5 @@ export default function EntranceEnter() {
         </>
     );
 };
+
+export default EntranceEnter;

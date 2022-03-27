@@ -31,7 +31,7 @@ type guestInfoProp = {
   note: string;
 } | null;
 
-const ExhibitScan: React.FunctionComponent<ExhibitScanProps> = ({ scanType }) => {
+const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
   const profile = useRecoilValue(profileState);

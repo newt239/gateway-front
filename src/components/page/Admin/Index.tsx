@@ -7,20 +7,20 @@ import { Grid, Card } from '@mui/material';
 import CreateUserCard from '#/components/block/CreateUserCard';
 
 const AdminIndex = () => {
-    const setPageInfo = useSetRecoilState(pageStateSelector);
-    useEffect(() => {
-        setPageInfo({ title: "管理者用" });
-    }, []);
+  const setPageInfo = useSetRecoilState(pageStateSelector);
+  useEffect(() => {
+    setPageInfo({ title: "管理者用" });
+  }, []);
 
-    return (
-        <Grid container spacing={2} sx={{ p: 2 }}>
-            <Grid item xs={12} md={6}>
-                <Card variant="outlined" sx={{ p: 2 }}>
-                    <CreateUserCard />
-                </Card>
-            </Grid>
-        </Grid>
-    );
+  return (
+    <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid item xs={12} md={6}>
+        <Card variant="outlined" sx={{ p: 2 }}>
+          <CreateUserCard />
+        </Card>
+      </Grid>
+    </Grid>
+  );
 };
 
 export default AdminIndex;

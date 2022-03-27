@@ -14,70 +14,70 @@ import NoAccountsIcon from '@mui/icons-material/NoAccounts';
 
 
 const UserInfo = () => {
-    const navigate = useNavigate();
-    const [profile, setProfile] = useRecoilState(profileState);
-    const setToken = useSetRecoilState(tokenState);
+  const navigate = useNavigate();
+  const [profile, setProfile] = useRecoilState(profileState);
+  const setToken = useSetRecoilState(tokenState);
 
-    const logout = () => {
-        setToken(null);
-        setProfile(null);
-        localStorage.removeItem('gatewayApiToken');
-        navigate("/login", { replace: true });
-    };
+  const logout = () => {
+    setToken(null);
+    setProfile(null);
+    localStorage.removeItem('gatewayApiToken');
+    navigate("/login", { replace: true });
+  };
 
-    const AccountType = () => {
-        if (profile && profile.available) {
-            switch (profile.user_type) {
-                case "admin":
-                    return <AdminPanelSettingsIcon />;
-                case "moderator":
-                    return <ManageAccountsIcon />;
-                case "user":
-                    return <AccountCircleIcon />;
-                case "group":
-                    return <GroupIcon />;
-                default:
-                    return <NoAccountsIcon />;
-            };
-        } else {
-            return <NoAccountsIcon />;
-        };
-    };
+  const AccountType = () => {
+    if (profile && profile.available) {
+      switch (profile.user_type) {
+        case "admin":
+          return <AdminPanelSettingsIcon />;
+        case "moderator":
+          return <ManageAccountsIcon />;
+        case "user":
+          return <AccountCircleIcon />;
+        case "group":
+          return <GroupIcon />;
+        default:
+          return <NoAccountsIcon />;
+      };
+    } else {
+      return <NoAccountsIcon />;
+    }
+  };
 
-    return (
-        <>{
-            profile && profile.available ? (
-                <>
-                    <Box sx={{ width: '100%', textAlign: 'right' }}>
-                        <AccountType />
-                    </Box>
-                    <Identicon
-                        size={40}
-                        name={profile.userId}
-                        variant="beam"
-                        colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
-                    />
-                    <Typography variant='h3'>{profile.display_name}</Typography>
-                    <Typography sx={{ fontSize: 10 }}>@{profile.userId}</Typography>
-                    <Box sx={{ width: '100%', textAlign: 'right' }}>
-                        <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
-                            ログアウト
-                        </Button>
-                    </Box>
-                </>)
-                : (
-                    <>
-                        <Typography>ログインしていません</Typography>
-                        <Box sx={{ width: '100%', textAlign: 'right' }}>
-                            <Button variant="outlined" color="success" onClick={e => navigate("/login", { replace: true })} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
-                                ログイン
-                            </Button>
-                        </Box>
-                    </>
-                )
-        }
-        </>
-    );
+  return (
+    <>{
+      profile && profile.available ? (
+        <>
+          <Box sx={{ width: '100%', textAlign: 'right' }}>
+            <AccountType />
+          </Box>
+          <Identicon
+            size={40}
+            name={profile.userId}
+            variant="beam"
+            colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+          />
+          <Typography variant='h3'>{profile.display_name}</Typography>
+          <Typography sx={{ fontSize: 10 }}>@{profile.userId}</Typography>
+          <Box sx={{ width: '100%', textAlign: 'right' }}>
+            <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
+              ログアウト
+            </Button>
+          </Box>
+        </>)
+        : (
+          <>
+            <Typography>ログインしていません</Typography>
+            <Box sx={{ width: '100%', textAlign: 'right' }}>
+              <Button variant="outlined" color="success" onClick={e => navigate("/login", { replace: true })} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
+                ログイン
+              </Button>
+            </Box>
+          </>
+        )
+    }
+    </>
+  );
 };
 
 export default UserInfo;
