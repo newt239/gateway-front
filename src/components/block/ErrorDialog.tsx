@@ -12,17 +12,17 @@ type errorDialogProps = {
 const ErrorDialog = (props: errorDialogProps) => {
     return (
         <Dialog open={props.open} onClose={props.onClose}>
-            <DialogTitle>
+            <DialogTitle sx={{ display: "inline-flex", alignItems: "center", color: "red" }}>
                 <ErrorOutline />
                 {props.title || "エラーが発生しました"}
             </DialogTitle>
             <DialogContent>
-                {props.message.map((message, index) => (
+                {props.message.filter(message => message != "").map((message, index) => (
                     <DialogContentText key={index}>{message}</DialogContentText>
                 ))}
             </DialogContent>
             <DialogActions>
-                <Button onClick={props.onClose} color="secondary">
+                <Button onClick={props.onClose}>
                     閉じる
                 </Button>
             </DialogActions>
