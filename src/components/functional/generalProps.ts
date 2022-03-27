@@ -33,3 +33,5 @@ export type profileStateProp = {
     available: boolean;
     note: string;
 };
+
+export type userTypeProp = "admin" | "moderator" | "executive" | "exhibit" | "analysis" | "temporary"
