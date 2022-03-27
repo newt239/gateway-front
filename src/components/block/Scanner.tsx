@@ -8,17 +8,22 @@ import { Box, Dialog, DialogContent, DialogActions, Button, IconButton, Autocomp
 import CameraswitchRoundedIcon from '@mui/icons-material/CameraswitchRounded';
 import CircularProgress from '@mui/material/CircularProgress';
 
+import ErrorDialog from "#/components/block/ErrorDialog";
+
 type ScannerProps = {
   handleScan: (text: string | null) => void;
 }
 
-const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
+const Scanner = ({ handleScan }: ScannerProps) => {
   const location = useLocation();
-  const [qrReaderState, setDeviceState] = useRecoilState(deviceState);
+  const [qrReaderIsShow, setQrReaderIsShow] = useRecoilState(deviceState);
   const [scannerStatus, setScannerStatus] = useState<"loading" | "waiting" | "error">("loading");
   const [currentDevice, setCurrentDevice] = useRecoilState(currentDeviceState);
   const [deviceList, setDeviceList] = useRecoilState(deviceListState);
   const [selectCameraModalOpen, setSelectCameraModalOpen] = useState(false);
+  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
+  const [errorDialogTitle, setErrorDialogTitle] = useState("");
+  const [errorDialogMessage, setErrorDialogMessage] = useState<string[]>([]);
   useEffect(() => {
     navigator.mediaDevices.enumerateDevices().then((mediaDevices) => mediaDevices
       .filter((device) => device.kind === 'videoinput')
@@ -36,9 +41,9 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
   // location以外のパスに移動したときにカメラを切る
   useEffect(() => {
     if (location.pathname.match(/entrance|exhibit/)) {
-      setDeviceState(true);
+      setQrReaderIsShow(true);
     } else {
-      setDeviceState(false);
+      setQrReaderIsShow(false);
     }
   }, [location]);
 
@@ -58,13 +63,42 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
     if (!refreshQrReader) setRefreshQrReader(true);
   }, [refreshQrReader]);
 
-  const handleError = (err: any) => {
-    console.log(err);
-  };
-
   const changeCamera = (event: React.SyntheticEvent, value: any, reason: string) => {
     setCurrentDevice(value);
     setRefreshQrReader(false);
+  };
+
+  // https://github.com/afes-website/cappuccino-app/blob/824cf2295cebae85b762b6c7a21cbbe94bf1d0ee/src/components/QRScanner.tsx#L201
+  const handleError = (err: unknown) => {
+    console.error(err);
+    setScannerStatus("error");
+    setErrorDialogTitle("カメラ起動失敗");
+    let reason: string[];
+    if (isDOMException(err)) {
+      console.error(err.name, err.message);
+      switch (err.name) {
+        case "NotReadableError":
+          reason = [
+            "カメラが他のアプリケーションで使用されています。",
+            "カメラアプリやビデオ通話を開いていたり、フラッシュライトが点灯していたりしませんか？",
+          ];
+          break;
+        case "NotAllowedError":
+          reason = [
+            "カメラを使用する権限がありません。",
+            "お使いのブラウザの設定を確認してください。",
+          ];
+          break;
+        default:
+          reason = ["原因不明のエラーです。"];
+          break;
+      }
+      reason = [...reason, `[${err.name}]`, err.message];
+      setErrorDialogMessage(reason);
+    } else {
+      setErrorDialogMessage(["原因不明のエラーです。"]);
+    }
+    setErrorDialogOpen(true);
   };
 
   const Loading = () => {
@@ -82,65 +116,84 @@ const Scanner: React.FunctionComponent<ScannerProps> = ({ handleScan }) => {
   }
 
   return (
-    <Box sx={{
-      position: "relative",
-      margin: 'auto',
-      width: '100%',
-      maxWidth: '70vh',
-      aspectRatio: '1 / 1',
-      backgroundColor: 'black',
-      borderRadius: '1rem'
-    }}>
-      {(qrReaderState && refreshQrReader) ? (
-        <div style={{ position: 'relative' }}>
-          <QrReader
-            onScan={(text) => handleScan(text)}
-            onLoad={() => { setScannerStatus("waiting"); }}
-            onError={handleError}
-            delay={1}
-            showViewFinder={false}
-            facingMode="environment"
-            // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-qr-reader/index.d.ts
-            // @types/react-qr-readerがv2.1.0用でv2.1.1に追加されたconstraints propの型定義に対応していなかったため追記
-            constraints={{ deviceId: currentDevice.deviceId, facingMode: "environment" }}
-            className="qrcode"
-          />
-          <IconButton onClick={() => setSelectCameraModalOpen(true)} sx={{ position: 'absolute', color: "white", top: 0, left: 0 }}>
-            <CameraswitchRoundedIcon />
-          </IconButton>
-          <Dialog open={selectCameraModalOpen} onClose={() => setSelectCameraModalOpen(false)}>
-            <DialogTitle>カメラ切り替え</DialogTitle>
-            <DialogContent>
-              <Autocomplete
-                disablePortal
-                disableClearable
-                onChange={changeCamera}
-                options={deviceList}
-                getOptionLabel={(option) => option.label}
-                value={currentDevice}
-                renderInput={(params) => <TextField {...params} />}
-                size="small"
-                sx={{ width: 300, p: 1 }}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setSelectCameraModalOpen(false)}>閉じる</Button>
-            </DialogActions>
-          </Dialog>
-        </div>
-      ) : (
-        <Loading />
-      )
-      }
-      {["loading", "error"].includes(scannerStatus) && (
-        <>
-          {scannerStatus === "loading" && (
-            <Loading />
-          )}
-        </>
-      )}
-    </Box >
+    <>
+      <Box sx={{
+        position: "relative",
+        margin: 'auto',
+        width: '100%',
+        maxWidth: '70vh',
+        aspectRatio: '1 / 1',
+        backgroundColor: 'black',
+        borderRadius: '1rem'
+      }}>
+        {(qrReaderIsShow && refreshQrReader) ? (
+          <div style={{ position: 'relative' }}>
+            <QrReader
+              onScan={(text) => handleScan(text)}
+              onLoad={() => { setScannerStatus("waiting"); }}
+              onError={handleError}
+              delay={1}
+              showViewFinder={false}
+              facingMode="environment"
+              // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-qr-reader/index.d.ts
+              // @types/react-qr-readerがv2.1.0用でv2.1.1に追加されたconstraints propの型定義に対応していなかったため追記
+              constraints={{ deviceId: currentDevice.deviceId, facingMode: "environment" }}
+              className="qrcode"
+            />
+            <IconButton onClick={() => setSelectCameraModalOpen(true)} sx={{ position: 'absolute', color: "white", top: 0, left: 0 }}>
+              <CameraswitchRoundedIcon />
+            </IconButton>
+            <Dialog open={selectCameraModalOpen} onClose={() => setSelectCameraModalOpen(false)}>
+              <DialogTitle>カメラ切り替え</DialogTitle>
+              <DialogContent>
+                <Autocomplete
+                  disablePortal
+                  disableClearable
+                  onChange={changeCamera}
+                  options={deviceList}
+                  getOptionLabel={(option) => option.label}
+                  value={currentDevice}
+                  renderInput={(params) => <TextField {...params} />}
+                  size="small"
+                  sx={{ width: 300, p: 1 }}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={() => setSelectCameraModalOpen(false)}>閉じる</Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        ) : (
+          <Loading />
+        )
+        }
+        {["loading", "error"].includes(scannerStatus) && (
+          <>
+            {scannerStatus === "loading" && (
+              <Loading />
+            )}
+          </>
+        )}
+      </Box >
+      <ErrorDialog
+        open={errorDialogOpen}
+        title={errorDialogTitle}
+        message={errorDialogMessage}
+        onClose={() => {
+          setErrorDialogOpen(false);
+        }}
+      />
+    </>
   )
-}
+};
+
+const isDOMException = (val: any): val is DOMException => {
+  if (!val) return false;
+  return (
+    typeof val === "object" &&
+    typeof val.name === "string" &&
+    typeof val.message === "string"
+  );
+};
 
 export default Scanner;
