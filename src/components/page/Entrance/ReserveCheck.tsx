@@ -154,7 +154,7 @@ export default function ReserveCheck() {
             <Grid item xs={12} md={6}>
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <Typography variant='h4'>id:</Typography>
-                    <FormControl sx={{ m: 1 }} variant="outlined">
+                    <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
                         <OutlinedInput
                             type='text'
                             size="small"
