@@ -35,7 +35,13 @@ const DrawerLeft = () => {
             anchor="left"
         >
             <Toolbar>
-                <Typography variant="h1">Gateway</Typography>
+                <Typography
+                    variant="h1"
+                    sx={{ cursor: "pointer" }}
+                    onClick={() => navigate("/", { replace: true })}
+                >
+                    Gateway
+                </Typography>
             </Toolbar>
             <Divider />
             <Box sx={{ p: 2 }}>
