@@ -6,7 +6,7 @@ import axios from "axios";
 
 import { Typography, TextField, MenuItem, Box, Button, CircularProgress, List, ListItem, ListItemText, IconButton } from '@mui/material';
 
-import ErrorDialog from "./ErrorDialog";
+import MessageDialog from "./MessageDialog";
 import { userTypeProp } from "#/components/functional/generalProps";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
@@ -24,8 +24,8 @@ const CreateUserCard = () => {
   const [displayNameValue, setDisplayName] = useState("");
   const [userTypeValue, setUserType] = useState<userTypeProp>("exhibit");
   const [loading, setLoading] = useState(false);
-  const [showErrorDialog, setShowErrorDialog] = useState(false);
-  const [errorDialogMessage, setErrorDialogMessage] = useState<string[]>([]);
+  const [showMessageDialog, setShowMessageDialog] = useState(false);
+  const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
   const [createHistory, setCreateHistory] = useState<{ user_id: string; display_name: string; user_type: string; }[]>([]);
 
   const userTypeList: { value: userTypeProp; label: string }[] = [
@@ -48,14 +48,14 @@ const CreateUserCard = () => {
     if (!loading) {
       setLoading(true);
       if (userIdValue === "" || displayNameValue === "" || userIdValue.length > 10 || displayNameValue.length > 20) {
-        setErrorDialogMessage([
+        setMessageDialogMessage([
           userIdValue === "" ? "ユーザーidを入力してください。" : "",
           displayNameValue === "" ? "表示名を入力してください。" : "",
           userIdValue.length > 10 ? "ユーザーidは10字以内で設定してください。" : "",
           displayNameValue.length > 20 ? "表示名は10字以内で設定してください。" : "",
         ]);
         setLoading(false);
-        setShowErrorDialog(true);
+        setShowMessageDialog(true);
         return;
       }
       const payload = {
@@ -70,16 +70,16 @@ const CreateUserCard = () => {
         setCreateHistory([...createHistory, { user_id: userIdValue, display_name: displayNameValue, user_type: userTypeValue }]);
         console.log("operation of create user was succeed.");
       } else {
-        setErrorDialogMessage([res.data.message]);
-        setShowErrorDialog(true);
+        setMessageDialogMessage([res.data.message]);
+        setShowMessageDialog(true);
       }
       setLoading(false);
     }
   };
 
   const handleClose = () => {
-    setShowErrorDialog(false);
-    setErrorDialogMessage([]);
+    setShowMessageDialog(false);
+    setMessageDialogMessage([]);
   };
 
   return (
@@ -140,8 +140,9 @@ const CreateUserCard = () => {
           作成
         </Button>
       </Box>
-      <ErrorDialog
-        open={showErrorDialog}
+      <MessageDialog
+        open={showMessageDialog}
+        type="error"
         message={errorDialogMessage}
         onClose={handleClose}
       />

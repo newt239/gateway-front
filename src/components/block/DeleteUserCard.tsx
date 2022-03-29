@@ -5,7 +5,7 @@ import axios from "axios";
 
 import { Typography, TextField, Box, Button, CircularProgress } from '@mui/material';
 
-import ErrorDialog from "./ErrorDialog";
+import MessageDialog from "./MessageDialog";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -14,8 +14,9 @@ const DeleteUserCard = () => {
 
   const [deleteUserIdValue, setDeleteUserIdValue] = useState("");
   const [loading, setLoading] = useState(false);
-  const [showErrorDialog, setShowErrorDialog] = useState(false);
-  const [errorDialogMessage, setErrorDialogMessage] = useState<string[]>([]);
+  const [showMessageDialog, setShowMessageDialog] = useState(false);
+  const [messageDialogType, setMessageDialogType] = useState<"success" | "error">("success");
+  const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
 
   const deleteUser = async () => {
     if (!loading && deleteUserIdValue !== "") {
@@ -25,16 +26,22 @@ const DeleteUserCard = () => {
       };
       const res = await axios.post(`${API_BASE_URL}/v1/admin/delete-user`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
       if (res.data.status === "success") {
-        setShowErrorDialog(true);
-        setErrorDialogMessage([`ユーザー( ${payload.user_id} )を削除しました。`]);
+        setShowMessageDialog(true);
+        setMessageDialogType("success");
+        setMessageDialogMessage([`ユーザー( ${payload.user_id} )を削除しました。`]);
         setDeleteUserIdValue("");
+      } else {
+        setShowMessageDialog(true);
+        setMessageDialogType("error");
+        setMessageDialogMessage([`${payload.user_id}というユーザーは存在しません。`]);
       }
+      setLoading(false);
     }
   };
 
   const handleClose = () => {
-    setShowErrorDialog(false);
-    setErrorDialogMessage([]);
+    setShowMessageDialog(false);
+    setMessageDialogMessage([]);
   };
 
   return (
@@ -58,8 +65,9 @@ const DeleteUserCard = () => {
           削除
         </Button>
       </Box>
-      <ErrorDialog
-        open={showErrorDialog}
+      <MessageDialog
+        open={showMessageDialog}
+        type={messageDialogType}
         message={errorDialogMessage}
         onClose={handleClose}
       />

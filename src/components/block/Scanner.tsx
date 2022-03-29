@@ -8,7 +8,7 @@ import { Box, Dialog, DialogContent, DialogActions, Button, IconButton, Autocomp
 import CameraswitchRoundedIcon from '@mui/icons-material/CameraswitchRounded';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import ErrorDialog from "#/components/block/ErrorDialog";
+import MessageDialog from "#/components/block/MessageDialog";
 
 type ScannerProps = {
   handleScan: (text: string | null) => void;
@@ -21,9 +21,9 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const [currentDevice, setCurrentDevice] = useRecoilState(currentDeviceState);
   const [deviceList, setDeviceList] = useRecoilState(deviceListState);
   const [selectCameraModalOpen, setSelectCameraModalOpen] = useState(false);
-  const [errorDialogOpen, setErrorDialogOpen] = useState(false);
-  const [errorDialogTitle, setErrorDialogTitle] = useState("");
-  const [errorDialogMessage, setErrorDialogMessage] = useState<string[]>([]);
+  const [errorDialogOpen, setMessageDialogOpen] = useState(false);
+  const [errorDialogTitle, setMessageDialogTitle] = useState("");
+  const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
   useEffect(() => {
     navigator.mediaDevices.enumerateDevices().then((mediaDevices) => mediaDevices
       .filter((device) => device.kind === 'videoinput')
@@ -72,7 +72,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const handleError = (err: unknown) => {
     console.error(err);
     setScannerStatus("error");
-    setErrorDialogTitle("カメラ起動失敗");
+    setMessageDialogTitle("カメラ起動失敗");
     let reason: string[];
     if (isDOMException(err)) {
       console.error(err.name, err.message);
@@ -94,11 +94,11 @@ const Scanner = ({ handleScan }: ScannerProps) => {
           break;
       }
       reason = [...reason, `[${err.name}]`, err.message];
-      setErrorDialogMessage(reason);
+      setMessageDialogMessage(reason);
     } else {
-      setErrorDialogMessage(["原因不明のエラーです。"]);
+      setMessageDialogMessage(["原因不明のエラーです。"]);
     }
-    setErrorDialogOpen(true);
+    setMessageDialogOpen(true);
   };
 
   const Loading = () => {
@@ -175,12 +175,13 @@ const Scanner = ({ handleScan }: ScannerProps) => {
           </>
         )}
       </Box >
-      <ErrorDialog
+      <MessageDialog
         open={errorDialogOpen}
+        type="error"
         title={errorDialogTitle}
         message={errorDialogMessage}
         onClose={() => {
-          setErrorDialogOpen(false);
+          setMessageDialogOpen(false);
         }}
       />
     </>
