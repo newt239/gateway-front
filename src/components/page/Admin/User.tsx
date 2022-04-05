@@ -8,10 +8,10 @@ import CreateUserCard from '#/components/block/CreateUserCard';
 import DeleteUserCard from '#/components/block/DeleteUserCard';
 import UserListCard from '#/components/block/UserListCard';
 
-const AdminIndex = () => {
+const AdminUser = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {
-    setPageInfo({ title: "管理者用" });
+    setPageInfo({ title: "ユーザー管理" });
   }, []);
 
   return (
@@ -33,4 +33,4 @@ const AdminIndex = () => {
   );
 };
 
-export default AdminIndex;
+export default AdminUser;

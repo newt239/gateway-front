@@ -10,7 +10,7 @@ import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
 import TableChartRoundedIcon from '@mui/icons-material/TableChartRounded';
 import MapRoundedIcon from '@mui/icons-material/MapRounded';
-import AppSettingsAltRoundedIcon from '@mui/icons-material/AppSettingsAltRounded';
+import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
 
 import UserInfo from '#/components/block/UserInfo';
 
@@ -114,11 +114,11 @@ const DrawerLeft = () => {
           {["admin", "moderator"].indexOf(profile.user_type, -1) && (
             <>
               <Divider />
-              <List subheader={<ListSubheader>管理者用</ListSubheader>}>
-                <ListItemButton selected={/admin\//.test(path)}
-                  onClick={() => navigate('/admin/')}>
-                  <ListItemIcon><AppSettingsAltRoundedIcon /></ListItemIcon>
-                  <ListItemText primary='コンソール' />
+              <List subheader={<ListSubheader>管理用操作</ListSubheader>}>
+                <ListItemButton selected={/admin\/user/.test(path)}
+                  onClick={() => navigate('/admin/user')}>
+                  <ListItemIcon><ManageAccountsRoundedIcon /></ListItemIcon>
+                  <ListItemText primary='ユーザー管理' />
                 </ListItemButton>
               </List>
             </>

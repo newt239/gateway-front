@@ -18,7 +18,7 @@ import EntranceEnter from '#/components/page/Entrance/Enter';
 import EntranceExit from '#/components/page/Entrance/Exit';
 import DocsIndex from '#/components/page/Docs/Index';
 import DocsEach from '#/components/page/Docs/Each';
-import AdminIndex from '#/components/page/Admin/Index';
+import AdminIndex from '#/components/page/Admin/User';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -93,7 +93,7 @@ const Body = () => {
             </Route>
             {["admin", "moderator"].includes(profile.user_type) ? (
               <Route path="admin">
-                <Route index element={<AdminIndex />} />
+                <Route path="user" element={<AdminIndex />} />
               </Route>
             ) : (
               <Navigate to="/" />
