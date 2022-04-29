@@ -124,7 +124,7 @@ const DrawerLeft = () => {
                 <ListItemButton selected={/admin\/guest/.test(path)}
                   onClick={() => navigate('/admin/guest')}>
                   <ListItemIcon><PlaylistAddCheckRoundedIcon /></ListItemIcon>
-                  <ListItemText primary='ユーザー照会' />
+                  <ListItemText primary='ゲスト照会' />
                 </ListItemButton>
               </List>
             </>
