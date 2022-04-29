@@ -11,6 +11,7 @@ import ArrowRightAltRoundedIcon from '@mui/icons-material/ArrowRightAltRounded';
 import TableChartRoundedIcon from '@mui/icons-material/TableChartRounded';
 import MapRoundedIcon from '@mui/icons-material/MapRounded';
 import ManageAccountsRoundedIcon from '@mui/icons-material/ManageAccountsRounded';
+import PlaylistAddCheckRoundedIcon from '@mui/icons-material/PlaylistAddCheckRounded';
 
 import UserInfo from '#/components/block/UserInfo';
 
@@ -119,6 +120,11 @@ const DrawerLeft = () => {
                   onClick={() => navigate('/admin/user')}>
                   <ListItemIcon><ManageAccountsRoundedIcon /></ListItemIcon>
                   <ListItemText primary='ユーザー管理' />
+                </ListItemButton>
+                <ListItemButton selected={/admin\/guest/.test(path)}
+                  onClick={() => navigate('/admin/guest')}>
+                  <ListItemIcon><PlaylistAddCheckRoundedIcon /></ListItemIcon>
+                  <ListItemText primary='ユーザー照会' />
                 </ListItemButton>
               </List>
             </>

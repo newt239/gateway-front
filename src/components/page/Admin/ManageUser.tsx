@@ -8,7 +8,7 @@ import CreateUserCard from '#/components/block/CreateUserCard';
 import DeleteUserCard from '#/components/block/DeleteUserCard';
 import UserListCard from '#/components/block/UserListCard';
 
-const AdminUser = () => {
+const AdminManageUser = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {
     setPageInfo({ title: "ユーザー管理" });
@@ -33,4 +33,4 @@ const AdminUser = () => {
   );
 };
 
-export default AdminUser;
+export default AdminManageUser;
