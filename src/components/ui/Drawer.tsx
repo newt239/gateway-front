@@ -126,6 +126,11 @@ const DrawerLeft = () => {
                   <ListItemIcon><PlaylistAddCheckRoundedIcon /></ListItemIcon>
                   <ListItemText primary='ゲスト照会' />
                 </ListItemButton>
+                <ListItemButton selected={/admin\/exhibit/.test(path)}
+                  onClick={() => navigate('/admin/exhibit')}>
+                  <ListItemIcon><PlaylistAddCheckRoundedIcon /></ListItemIcon>
+                  <ListItemText primary='展示管理' />
+                </ListItemButton>
               </List>
             </>
           )}

@@ -20,6 +20,7 @@ import DocsIndex from '#/components/page/Docs/Index';
 import DocsEach from '#/components/page/Docs/Each';
 import AdminManageUser from '#/components/page/Admin/ManageUser';
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
+import AdminManageExhibit from "#/components/page/Admin/ManageExhibit";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -96,6 +97,7 @@ const Body = () => {
               <Route path="admin">
                 <Route path="user" element={<AdminManageUser />} />
                 <Route path="guest" element={<AdminCheckGuest />} />
+                <Route path="exhibit" element={<AdminManageExhibit />} />
               </Route>
             ) : (
               <Navigate to="/" />
