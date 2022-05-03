@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
-import { currentExhibitState, exhibitListState } from "#/recoil/exhibit";
 import axios from 'axios';
 
 import Home from '#/components/page/Home';
@@ -55,8 +54,8 @@ const Body = () => {
 
   return (
     <>
-      {profile ? (
-        <Routes>
+      <Routes>
+        {profile ? (
           <Route path="/">
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
@@ -104,8 +103,8 @@ const Body = () => {
             )}
             <Route element={<NotFound />} />
           </Route>
-        </Routes>
-      ) : (<>Loading...</>)}
+        ) : (<Route path="login" element={<Login />} />)}
+      </Routes>
     </>
   );
 };
