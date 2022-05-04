@@ -129,14 +129,14 @@ const Scanner = ({ handleScan }: ScannerProps) => {
         {(qrReaderIsShow && refreshQrReader) ? (
           <div style={{ position: 'relative' }}>
             <QrReader
-              onScan={(text) => handleScan(text)}
+              onScan={(text: string | null) => handleScan(text)}
               onLoad={() => { setScannerStatus("waiting"); }}
               onError={handleError}
               delay={1}
               showViewFinder={false}
               facingMode="environment"
               // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-qr-reader/index.d.ts
-              // @types/react-qr-readerがv2.1.0用でv2.1.1に追加されたconstraints propの型定義に対応していなかったため追記
+              // @types/react-qr-readerがv2.1.0用でv2.1.1に追加されたconstraints propの型定義に対応していなかったためsrc直下にオリジナルの型定義ファイルを配置
               constraints={{ deviceId: currentDevice.deviceId, facingMode: "environment" }}
               className="qrcode"
             />
