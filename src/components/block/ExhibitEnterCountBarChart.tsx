@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import axios from 'axios';
+// @ts-ignore
 import Chart from "react-apexcharts";
 // https://github.com/apexcharts/react-apexcharts/issues/368#issuecomment-1003686683
 import { ApexOptions } from "apexcharts";
@@ -21,8 +22,8 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{ exhibit_id: string; }
       const res = await axios.get(`${API_BASE_URL}/v1/exhibit/enter-chart/${exhibit_id}?day=${day}`, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
       if (res.data.status === "success" && res.data.data.length !== 0) {
         const rawData: { time: string; count: number; }[] = res.data.data;
-        let timeList: string[] = [];
-        let countList: number[] = [];
+        const timeList: string[] = [];
+        const countList: number[] = [];
         let ctime = moment(rawData[0].time);
         for (const eachData of rawData) {
           const eachTime = moment(eachData.time);
@@ -33,7 +34,7 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{ exhibit_id: string; }
           }
           timeList.push(eachTime.format("MM/DD HH:MM:SS"));
           countList.push(eachData.count);
-        };
+        }
         setCategories(timeList);
         setData(countList);
       }

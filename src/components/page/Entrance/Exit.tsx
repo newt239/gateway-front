@@ -74,13 +74,13 @@ const EntranceExit = () => {
           setScanStatus("error");
           setMessage([res.data.message]);
           setSmDrawerStatus(true);
-        };
+        }
       } else {
         setScanStatus("error");
         setMessage(["ゲストidの形式が正しくありません。"]);
         setSmDrawerStatus(true);
-      };
-    };
+      }
+    }
   };
 
   const postApi = async () => {
@@ -109,8 +109,8 @@ const EntranceExit = () => {
         setText("");
         setDeviceState(true);
         setSmDrawerStatus(false);
-      };
-    };
+      }
+    }
   };
 
   const retry = () => {

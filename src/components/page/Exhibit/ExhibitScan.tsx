@@ -92,13 +92,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           setScanStatus("error");
           setMessage(res.data.message);
           setSmDrawerStatus(true);
-        };
+        }
       } else {
         setScanStatus("error");
         setMessage("ゲストidの形式が正しくありません。");
         setSmDrawerStatus(true);
-      };
-    };
+      }
+    }
   };
 
   const ExhibitName = () => {
@@ -145,8 +145,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           setText("");
           setDeviceState(true);
           setSmDrawerStatus(false);
-        };
-      };
+        }
+      }
     };
 
     return (

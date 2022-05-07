@@ -63,18 +63,18 @@ const ReserveCheck = () => {
           } else {
             setScanStatus("success");
             setSmDrawerStatus(true);
-          };
+          }
         } else {
           setScanStatus("error");
           setMessage([res.data.message]);
           setSmDrawerStatus(true);
-        };
+        }
       } else {
         setScanStatus("error");
         setMessage(["予約idの形式が正しくありません。"]);
         setSmDrawerStatus(true);
-      };
-    };
+      }
+    }
   };
 
   const retry = () => {

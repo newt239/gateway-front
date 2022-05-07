@@ -30,7 +30,7 @@ const ChartExhibit = () => {
         navigate("/chart/all", { replace: true });
       } else {
         setStatus({ status: true, message: "" });
-      };
+      }
     } else {
       setStatus({ status: false, message: "読込中..." });
     }

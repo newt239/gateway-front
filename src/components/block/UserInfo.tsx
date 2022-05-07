@@ -2,8 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
+// @ts-ignore
 import Identicon from "boring-avatars";
-
 import { Button, Box, Typography } from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
@@ -38,7 +38,7 @@ const UserInfo = () => {
           return <GroupIcon />;
         default:
           return <NoAccountsIcon />;
-      };
+      }
     } else {
       return <NoAccountsIcon />;
     }

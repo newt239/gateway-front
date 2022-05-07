@@ -75,9 +75,9 @@ const EntranceEnter = () => {
                     }]);
                     setScanStatus("success");
                     setActiveStep(guestInfoList.length);
-                };
-            };
-        };
+                }
+            }
+        }
     };
     const postApi = () => {
         if (guestInfoList.length === reservation.count) {
@@ -100,9 +100,9 @@ const EntranceEnter = () => {
                     setText("");
                     setDeviceState(true);
                     setSmDrawerStatus(false);
-                };
+                }
             });
-        };
+        }
     };
 
     const GuestInfoCard = () => {
@@ -193,7 +193,7 @@ const EntranceEnter = () => {
         if (activeStep === 0) {
             setGuestInfo([]);
         } else {
-            let newGuestList = guestInfoList;
+            const newGuestList = guestInfoList;
             setGuestInfo(newGuestList.splice(activeStep - 1, 1));
         }
     };

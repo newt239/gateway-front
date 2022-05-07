@@ -8,6 +8,7 @@
     "@mui/icons-material": "^5.2.4",
     "@mui/material": "^5.6.4",
     "@mui/x-data-grid": "^5.10.0",
+    "@types/axios": "^0.14.0",
     "apexcharts": "^3.32.1",
     "axios": "^0.24.0",
     "boring-avatars": "^1.6.1",
@@ -28,8 +29,7 @@
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
     "eslint:check": "eslint src",
-    "eslint": "eslint src --fix",
-    "lint": "npm-run-all eslint check-types"
+    "eslint": "eslint src --fix"
   },
   "eslintConfig": {
     "extends": [
@@ -55,6 +55,7 @@
     "@types/react": "^17.0.45",
     "@types/react-dom": "^18.0.3",
     "@types/react-redux": "^7.1.20",
+    "@types/react-router-dom": "^5.3.3",
     "@types/recoil": "^0.0.9",
     "@types/redux-thunk": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^5.22.0",
