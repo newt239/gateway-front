@@ -1,8 +1,8 @@
 export interface createdByMeSuccessProp {
-  status: "success",
+  status: "success";
   data: {
-    user_id: string,
-    display_name: string,
+    user_id: string;
+    display_name: string;
     user_type: string;
-  }[]
+  }[];
 }

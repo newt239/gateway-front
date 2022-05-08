@@ -2,19 +2,19 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
-import { pageStateSelector } from '#/recoil/page';
-import axios, { AxiosResponse } from 'axios';
+import { pageStateSelector } from "#/recoil/page";
+import axios, { AxiosResponse } from "axios";
 
-import { Grid, Alert, TextField, Button } from '@mui/material';
-import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
+import { Grid, Alert, TextField, Button } from "@mui/material";
+import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 
 import { loginSuccessProp } from "#/types/auth";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 interface messageType {
-  display: 'none' | 'block';
-  severity: 'error' | 'success';
+  display: "none" | "block";
+  severity: "error" | "success";
   message: string;
 }
 
@@ -27,18 +27,33 @@ const Login = () => {
   }, []);
   const navigate = useNavigate();
   const [inputValue, updateValue] = useState({ userId: "", password: "" });
-  const [message, updateMessage] = useState<messageType>({ display: "none", severity: "error", message: "" });
+  const [message, updateMessage] = useState<messageType>({
+    display: "none",
+    severity: "error",
+    message: "",
+  });
   const login = async () => {
     if (inputValue.userId !== "") {
-      const res: AxiosResponse<loginSuccessProp> = await axios.post(API_BASE_URL + "/v1/auth/login", inputValue);
+      const res: AxiosResponse<loginSuccessProp> = await axios.post(
+        API_BASE_URL + "/v1/auth/login",
+        inputValue
+      );
       if (res.data.status === "success") {
-        updateMessage({ display: "block", severity: "success", message: "ログインに成功しました。" });
-        localStorage.setItem('gatewayApiToken', res.data.token);
-        setToken(res.data.token)
-        setProfile(res.data.profile)
-        navigate("/", { replace: true })
+        updateMessage({
+          display: "block",
+          severity: "success",
+          message: "ログインに成功しました。",
+        });
+        localStorage.setItem("gatewayApiToken", res.data.token);
+        setToken(res.data.token);
+        setProfile(res.data.profile);
+        navigate("/", { replace: true });
       } else {
-        updateMessage({ display: "block", severity: "error", message: "ユーザーidまたはパスワードが間違っています。" });
+        updateMessage({
+          display: "block",
+          severity: "error",
+          message: "ユーザーidまたはパスワードが間違っています。",
+        });
       }
     }
   };
@@ -53,7 +68,12 @@ const Login = () => {
             id="userId"
             label="ユーザーid"
             type="text"
-            onChange={(event) => updateValue({ "userId": event.target.value, "password": inputValue.password })}
+            onChange={(event) =>
+              updateValue({
+                userId: event.target.value,
+                password: inputValue.password,
+              })
+            }
             fullWidth
           />
         </Grid>
@@ -62,12 +82,22 @@ const Login = () => {
             id="password"
             label="パスワード"
             type="password"
-            onChange={(event) => updateValue({ "userId": inputValue.userId, "password": event.target.value })}
+            onChange={(event) =>
+              updateValue({
+                userId: inputValue.userId,
+                password: event.target.value,
+              })
+            }
             fullWidth
           />
         </Grid>
         <Grid item xs={12}>
-          <Button onClick={login} variant="outlined" size="large" startIcon={<LoginRoundedIcon />}>
+          <Button
+            onClick={login}
+            variant="outlined"
+            size="large"
+            startIcon={<LoginRoundedIcon />}
+          >
             ログイン
           </Button>
         </Grid>

@@ -1,9 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import { pageStateSelector } from '#/recoil/page';
+import { pageStateSelector } from "#/recoil/page";
 
-import { Grid } from '@mui/material';
-
+import { Grid } from "@mui/material";
 
 const Heatmap = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -13,8 +12,7 @@ const Heatmap = () => {
 
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12} md={6}>
-      </Grid>
+      <Grid item xs={12} md={6}></Grid>
     </Grid>
   );
 };

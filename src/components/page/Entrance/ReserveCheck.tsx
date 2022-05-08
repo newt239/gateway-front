@@ -1,38 +1,68 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useRecoilState, useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import {
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+  useResetRecoilState,
+} from "recoil";
 import { tokenState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
-import { pageStateSelector } from '#/recoil/page';
+import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosResponse, AxiosError } from "axios";
 
-import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import { useTheme } from '@mui/material/styles';
-import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
-import GroupWorkRoundedIcon from '@mui/icons-material/GroupWorkRounded';
-import PeopleRoundedIcon from '@mui/icons-material/PeopleRounded';
-import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
-import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
+import {
+  Alert,
+  SwipeableDrawer,
+  Grid,
+  Typography,
+  Button,
+  FormControl,
+  IconButton,
+  InputAdornment,
+  OutlinedInput,
+  Box,
+  LinearProgress,
+  Card,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Snackbar,
+  AlertTitle,
+} from "@mui/material";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
+import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
+import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
+import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import generalProps from "#/components/functional/generalProps";
-import Scanner from '#/components/block/Scanner';
-import { generalFailedProp } from '#/types/global';
-import { reservationSuccessProp } from '#/types/reservation';
+import Scanner from "#/components/block/Scanner";
+import { generalFailedProp } from "#/types/global";
+import { reservationSuccessProp } from "#/types/reservation";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const ReserveCheck = () => {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up('sm'));
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
   const [reservation, setReservation] = useRecoilState(reservationState);
   const resetReservation = useResetRecoilState(reservationState);
-  const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
+  const [snackbar, setSnackbar] = useState<{
+    status: boolean;
+    message: string;
+    severity: "success" | "error";
+  }>({ status: false, message: "", severity: "success" });
   const [text, setText] = useState("");
-  const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
+  const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
+    "waiting"
+  );
   const [message, setMessage] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
@@ -47,10 +77,13 @@ const ReserveCheck = () => {
   const handleScan = (scanText: string | null) => {
     if (scanText) {
       setText(scanText);
-      if (token && scanText.length === 7 && scanText.startsWith('R')) {
+      if (token && scanText.length === 7 && scanText.startsWith("R")) {
         setDeviceState(false);
         setLoading(true);
-        axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } })
+        axios
+          .get(`${API_BASE_URL}/v1/reservation/${scanText}`, {
+            headers: { Authorization: "Bearer " + token },
+          })
           .then((res: AxiosResponse<reservationSuccessProp>) => {
             setLoading(false);
             setReservation(res.data.data);
@@ -66,13 +99,13 @@ const ReserveCheck = () => {
               setScanStatus("success");
               setSmDrawerStatus(true);
             }
-          }).catch((err: AxiosError<generalFailedProp>) => {
+          })
+          .catch((err: AxiosError<generalFailedProp>) => {
             setLoading(false);
             setScanStatus("error");
             setMessage([err.message]);
             setSmDrawerStatus(true);
-          })
-
+          });
       } else {
         setScanStatus("error");
         setMessage(["予約idの形式が正しくありません。"]);
@@ -92,30 +125,37 @@ const ReserveCheck = () => {
     return (
       <>
         {scanStatus === "error" && (
-          <Alert severity="error" action={
-            <Button color="error" onClick={retry}>スキャンし直す</Button>
-          }>
-            {message.map((text, index) => <span key={index}>{text}</span>)}
+          <Alert
+            severity="error"
+            action={
+              <Button color="error" onClick={retry}>
+                スキャンし直す
+              </Button>
+            }
+          >
+            {message.map((text, index) => (
+              <span key={index}>{text}</span>
+            ))}
           </Alert>
         )}
         {reservation && scanStatus === "success" && (
-          <Card variant="outlined" sx={{ p: 2 }} >
+          <Card variant="outlined" sx={{ p: 2 }}>
             <Typography variant="h4">ゲスト情報</Typography>
             <List dense>
               <ListItem>
                 <ListItemIcon>
                   <AssignmentIndRoundedIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={text}
-                />
+                <ListItemText primary={text} />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={generalProps.reservation.guest_type[reservation.guest_type]}
+                  primary={
+                    generalProps.reservation.guest_type[reservation.guest_type]
+                  }
                 />
               </ListItem>
               <ListItem>
@@ -123,52 +163,82 @@ const ReserveCheck = () => {
                   <AccessTimeRoundedIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={reservation.part === "all" ? "全時間帯" : reservation.part}
+                  primary={
+                    reservation.part === "all" ? "全時間帯" : reservation.part
+                  }
                 />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
                   <PeopleRoundedIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={`${reservation.count}人`}
-                />
+                <ListItemText primary={`${reservation.count}人`} />
               </ListItem>
             </List>
             <Box
               m={1}
-              sx={{ display: 'flex', justifyContent: "flex-end", alignItems: "flex-end", gap: "1rem" }}>
-              <Button variant="outlined" onClick={retry}>スキャンし直す</Button>
-              <Button variant="contained" onClick={() => navigate("/entrance/enter", { replace: true })}>リストバンドの登録</Button>
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+                gap: "1rem",
+              }}
+            >
+              <Button variant="outlined" onClick={retry}>
+                スキャンし直す
+              </Button>
+              <Button
+                variant="contained"
+                onClick={() => navigate("/entrance/enter", { replace: true })}
+              >
+                リストバンドの登録
+              </Button>
             </Box>
           </Card>
         )}
       </>
-    )
+    );
   };
 
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
-        <Typography variant='h3'>Step1: 予約用QRコードスキャン</Typography>
+        <Typography variant="h3">Step1: 予約用QRコードスキャン</Typography>
       </Grid>
       <Grid item xs={12} md={6}>
         <Scanner handleScan={handleScan} />
       </Grid>
       <Grid item xs={12} md={6}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <Typography variant='h4'>id:</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="h4">id:</Typography>
           <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
             <OutlinedInput
-              type='text'
+              type="text"
               size="small"
               value={text}
               onChange={(e) => setText(e.target.value)}
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton aria-label="copy id to clipboard" onClick={() => {
-                    if (text !== "") { navigator.clipboard.writeText(text); setSnackbar({ status: true, message: "コピーしました", severity: "success" }); }
-                  }} edge="end">
+                  <IconButton
+                    aria-label="copy id to clipboard"
+                    onClick={() => {
+                      if (text !== "") {
+                        navigator.clipboard.writeText(text);
+                        setSnackbar({
+                          status: true,
+                          message: "コピーしました",
+                          severity: "success",
+                        });
+                      }
+                    }}
+                    edge="end"
+                  >
                     <ContentCopyRoundedIcon />
                   </IconButton>
                 </InputAdornment>
@@ -178,11 +248,13 @@ const ReserveCheck = () => {
             />
           </FormControl>
         </Box>
-        {loading && (<Box sx={{ width: '100%' }}>
-          <LinearProgress />
-        </Box>)}
-        {scanStatus !== "waiting" && (
-          matches ? (
+        {loading && (
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress />
+          </Box>
+        )}
+        {scanStatus !== "waiting" &&
+          (matches ? (
             <ReservationInfoCard />
           ) : (
             <SwipeableDrawer
@@ -193,13 +265,14 @@ const ReserveCheck = () => {
             >
               <ReservationInfoCard />
             </SwipeableDrawer>
-          )
-        )}
+          ))}
       </Grid>
       <Snackbar
         open={snackbar.status}
         autoHideDuration={6000}
-        onClose={() => setSnackbar({ status: false, message: "", severity: "success" })}
+        onClose={() =>
+          setSnackbar({ status: false, message: "", severity: "success" })
+        }
       >
         <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
       </Snackbar>

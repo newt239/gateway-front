@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
-import { pageStateSelector } from '#/recoil/page';
+import { pageStateSelector } from "#/recoil/page";
 
-import { Grid, Card } from '@mui/material';
+import { Grid, Card } from "@mui/material";
 
-import CreateUserCard from '#/components/block/CreateUserCard';
-import DeleteUserCard from '#/components/block/DeleteUserCard';
-import UserListCard from '#/components/block/UserListCard';
+import CreateUserCard from "#/components/block/CreateUserCard";
+import DeleteUserCard from "#/components/block/DeleteUserCard";
+import UserListCard from "#/components/block/UserListCard";
 
 const AdminManageUser = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);

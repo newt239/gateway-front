@@ -1,13 +1,13 @@
-import { atom } from 'recoil';
+import { atom } from "recoil";
 
 export const deviceState = atom({
   key: "deviceState",
-  default: false
+  default: false,
 });
 
 export const currentDeviceState = atom({
   key: "currentDeviceState",
-  default: { deviceId: "", label: "" }
+  default: { deviceId: "", label: "" },
 });
 
 type deviceListProp = {
@@ -17,5 +17,5 @@ type deviceListProp = {
 
 export const deviceListState = atom<deviceListProp>({
   key: "deviceListState",
-  default: []
+  default: [],
 });

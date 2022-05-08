@@ -10,5 +10,5 @@ export interface reservationInfoProp {
 
 export interface reservationSuccessProp {
   status: "success";
-  data: reservationInfoProp
+  data: reservationInfoProp;
 }

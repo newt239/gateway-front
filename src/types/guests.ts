@@ -13,5 +13,5 @@ export interface guestInfoProp {
 
 export interface guestsInfoSuccessProp {
   status: "success";
-  data: guestInfoProp
+  data: guestInfoProp;
 }
