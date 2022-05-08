@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import Home from '#/components/page/Home';
 import Login from '#/components/page/Login';
@@ -20,6 +20,8 @@ import DocsEach from '#/components/page/Docs/Each';
 import AdminManageUser from '#/components/page/Admin/ManageUser';
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminManageExhibit from "#/components/page/Admin/ManageExhibit";
+import { generalFailedProp } from "#/types/global";
+import { loginSuccessProp } from "#/types/auth";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -32,10 +34,13 @@ const Body = () => {
     if (location.pathname !== "/login") {
       if (token) {
         // プロフィールの取得
-        axios.get(API_BASE_URL + "/v1/auth/me", { headers: { Authorization: "Bearer " + token } }).then(res => {
-          console.log(res.data);
-          setProfile(res.data.profile);
-        })
+        axios.get(API_BASE_URL + "/v1/auth/me", { headers: { Authorization: "Bearer " + token } })
+          .then((res: AxiosResponse<loginSuccessProp>) => {
+            console.log(res.data);
+            setProfile(res.data.profile);
+          }).catch((err: AxiosError<generalFailedProp>) => {
+            console.log(err.message)
+          })
       } else {
         // 未ログイン時ログインページへ遷移
         navigate("/login", { replace: true });

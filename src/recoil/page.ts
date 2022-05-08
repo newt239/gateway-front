@@ -23,3 +23,8 @@ export const pageStateSelector = selector<pageStateProp>({
     set(pageState, value);
   }
 });
+
+export const apiBaseUrlState = atom<string>({
+  key: "apiBaseUrlState",
+  default: "http://localhost:3000"
+})

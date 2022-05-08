@@ -35,6 +35,8 @@ const Scanner = ({ handleScan }: ScannerProps) => {
       })).then((devices) => {
         setDeviceList(devices);
         setCurrentDevice(devices[0]);
+      }).catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -188,11 +190,14 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   )
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isDOMException = (val: any): val is DOMException => {
   if (!val) return false;
   return (
     typeof val === "object" &&
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
     typeof val.name === "string" &&
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
     typeof val.message === "string"
   );
 };

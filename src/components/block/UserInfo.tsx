@@ -32,9 +32,9 @@ const UserInfo = () => {
           return <AdminPanelSettingsIcon />;
         case "moderator":
           return <ManageAccountsIcon />;
-        case "user":
+        case "executive":
           return <AccountCircleIcon />;
-        case "group":
+        case "exhibit":
           return <GroupIcon />;
         default:
           return <NoAccountsIcon />;

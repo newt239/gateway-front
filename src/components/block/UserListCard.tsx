@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import axios from "axios";
+import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import { Typography, List, ListItem, ListItemText } from '@mui/material';
+
+import { createdByMeSuccessProp } from "#/types/admin";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -14,12 +16,19 @@ const UserListCard = () => {
 
   // 過去に自分が作成したユーザーのリスト
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/v1/admin/created-by-me`, { headers: { Authorization: "Bearer " + token } }).then(res => {
-      console.log(res);
-      if (res.data.status === "success" && res.data.data.length !== 0) {
-        setCreateHistory([...createHistory, res.data.data]);
+    const getData = () => {
+      if (token) {
+        axios.get(`${API_BASE_URL}/v1/admin/created-by-me`, { headers: { Authorization: "Bearer " + token } })
+          .then((res: AxiosResponse<createdByMeSuccessProp>) => {
+            if (res.data.data.length !== 0) {
+              setCreateHistory([...createHistory, ...res.data.data]);
+            }
+          }).catch((err) => {
+            console.log(err);
+          })
       }
-    });
+      getData()
+    }
   }, []);
 
   return (

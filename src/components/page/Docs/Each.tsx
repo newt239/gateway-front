@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { pageStateSelector } from '#/recoil/page';
+// @ts-ignore
 import ReactMarkdown from 'react-markdown';
 
 import { Grid, Card } from '@mui/material';
@@ -10,20 +11,24 @@ const DocsEach = () => {
   const { doc_id } = useParams<{ doc_id: string; }>() || "top";
   const [md, setMd] = useState<string>("");
   useEffect(() => {
-    fetch(require(`./markdown/${doc_id}.md`))
-      .then(response => {
-        return response.text()
-      })
-      .then(text => {
-        setMd(text);
-      })
+    if (doc_id) {
+      fetch(require(`./markdown/${doc_id}.md`))
+        .then(res => {
+          return res.text();
+        })
+        .then(text => {
+          setMd(text);
+        }).catch((err) => {
+          console.log(err)
+        })
+    }
   }, []);
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {
     setPageInfo({ title: "ドキュメント" });
   }, []);
 
-  const linkBlock = ({ ...props }) => {
+  const linkBlock = ({ ...props }: { href: string; children: string; }) => {
     const { href, children } = props;
     if (href.match('http')) {
       return (

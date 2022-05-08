@@ -5,7 +5,7 @@ import { tokenState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from '#/recoil/page';
 import { reservationState } from "#/recoil/reservation";
-import axios from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -18,6 +18,8 @@ import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 
 import generalProps from "#/components/functional/generalProps";
 import Scanner from '#/components/block/Scanner';
+import { generalFailedProp } from '#/types/global';
+import { reservationSuccessProp } from '#/types/reservation';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -42,33 +44,35 @@ const ReserveCheck = () => {
     setPageInfo({ title: "入場処理" });
   }, []);
 
-  const handleScan = async (scanText: string | null) => {
+  const handleScan = (scanText: string | null) => {
     if (scanText) {
       setText(scanText);
-      if (scanText.length === 7 && scanText.startsWith('R')) {
+      if (token && scanText.length === 7 && scanText.startsWith('R')) {
         setDeviceState(false);
         setLoading(true);
-        const res = await axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } })
-        setLoading(false);
-        if (res.data.status === "success") {
-          setReservation(res.data.data);
-          if (res.data.data.available === 0) {
+        axios.get(`${API_BASE_URL}/v1/reservation/${scanText}`, { headers: { Authorization: "Bearer " + token } })
+          .then((res: AxiosResponse<reservationSuccessProp>) => {
+            setLoading(false);
+            setReservation(res.data.data);
+            if (res.data.data.available) {
+              setScanStatus("error");
+              setMessage(["この予約idは無効です。"]);
+              setSmDrawerStatus(true);
+            } else if (res.data.data.count === res.data.data.registered) {
+              setScanStatus("error");
+              setMessage(["この予約idは既に利用済みです。"]);
+              setSmDrawerStatus(true);
+            } else {
+              setScanStatus("success");
+              setSmDrawerStatus(true);
+            }
+          }).catch((err: AxiosError<generalFailedProp>) => {
+            setLoading(false);
             setScanStatus("error");
-            setMessage(["この予約idは無効です。"]);
+            setMessage([err.message]);
             setSmDrawerStatus(true);
-          } else if (res.data.data.count === res.data.data.registered) {
-            setScanStatus("error");
-            setMessage(["この予約idは既に利用済みです。"]);
-            setSmDrawerStatus(true);
-          } else {
-            setScanStatus("success");
-            setSmDrawerStatus(true);
-          }
-        } else {
-          setScanStatus("error");
-          setMessage([res.data.message]);
-          setSmDrawerStatus(true);
-        }
+          })
+
       } else {
         setScanStatus("error");
         setMessage(["予約idの形式が正しくありません。"]);

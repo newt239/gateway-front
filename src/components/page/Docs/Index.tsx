@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { pageStateSelector } from '#/recoil/page';
+// @ts-ignore
 import ReactMarkdown from 'react-markdown';
 import { } from 'react-markdown/lib/ast-to-react';
 
@@ -11,12 +12,12 @@ const DocsIndex = () => {
   const [md, setMd] = useState<string>("");
   useEffect(() => {
     fetch(require(`./markdown/top.md`))
-      .then(response => {
-        return response.text();
+      .then(res => {
+        return res.text();
       })
       .then(text => {
         setMd(text);
-      });
+      }).catch((err) => { console.log(err) });
   }, []);
 
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -24,7 +25,7 @@ const DocsIndex = () => {
     setPageInfo({ title: "ドキュメント" });
   }, []);
 
-  const linkBlock = ({ ...props }) => {
+  const linkBlock = ({ ...props }: { href: string; children: string; }) => {
     const { href, children } = props;
     if (href.match('http')) {
       return (

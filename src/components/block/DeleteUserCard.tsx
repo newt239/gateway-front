@@ -6,10 +6,11 @@ import axios from "axios";
 import { Typography, TextField, Box, Button, CircularProgress } from '@mui/material';
 
 import MessageDialog from "./MessageDialog";
+import { apiBaseUrlState } from "#/recoil/page";
 
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const DeleteUserCard = () => {
+  const apiBaseUrl = useRecoilValue(apiBaseUrlState);
   const token = useRecoilValue(tokenState);
 
   const [deleteUserIdValue, setDeleteUserIdValue] = useState("");
@@ -19,22 +20,22 @@ const DeleteUserCard = () => {
   const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
 
   const deleteUser = async () => {
-    if (!loading && deleteUserIdValue !== "") {
+    if (token && !loading && deleteUserIdValue !== "") {
       setLoading(true);
       const payload = {
         user_id: deleteUserIdValue
       };
-      const res = await axios.post(`${API_BASE_URL}/v1/admin/delete-user`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-      if (res.data.status === "success") {
-        setShowMessageDialog(true);
-        setMessageDialogType("success");
-        setMessageDialogMessage([`ユーザー( ${payload.user_id} )を削除しました。`]);
-        setDeleteUserIdValue("");
-      } else {
-        setShowMessageDialog(true);
-        setMessageDialogType("error");
-        setMessageDialogMessage([`${payload.user_id}というユーザーは存在しません。`]);
-      }
+      await axios.post(`${apiBaseUrl}/v1/admin/delete-user`, payload, { headers: { Authorization: `"Bearer ${token}` } })
+        .then(() => {
+          setShowMessageDialog(true);
+          setMessageDialogType("success");
+          setMessageDialogMessage([`ユーザー( ${payload.user_id} )を削除しました。`]);
+          setDeleteUserIdValue("");
+        }).catch(() => {
+          setShowMessageDialog(true);
+          setMessageDialogType("error");
+          setMessageDialogMessage([`${payload.user_id}というユーザーは存在しません。`]);
+        });
       setLoading(false);
     }
   };

@@ -7,8 +7,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from '#/components/functional/theme';
 import ScreenWidth from '#/components/ui/ScreenWidth';
 
-require('dotenv').config();
-
 const App = () => {
   return (
     <ThemeProvider theme={theme}>

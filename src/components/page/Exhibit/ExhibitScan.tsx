@@ -4,7 +4,7 @@ import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from '#/recoil/page';
 import { currentExhibitState } from '#/recoil/exhibit';
-import axios from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -15,21 +15,14 @@ import AccessTimeRoundedIcon from '@mui/icons-material/AccessTimeRounded';
 import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 
 import Scanner from '#/components/block/Scanner';
+import { guestInfoProp, guestsInfoSuccessProp } from '#/types/guests';
+import { generalFailedProp } from "#/types/global";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 type ExhibitScanProps = {
   scanType: string;
 };
-
-type guestInfoProp = {
-  guest_id: string;
-  guest_type: string;
-  exhibit_id: string;
-  part: string;
-  available: false;
-  note: string;
-} | null;
 
 const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const theme = useTheme();
@@ -40,7 +33,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [guestInfo, setGuestInfo] = useState<guestInfoProp>(null);
+  const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
@@ -61,38 +54,38 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setPageInfo({ title: pageTitle });
   }, [scanType]);
 
-  const handleScan = async (scanText: string | null) => {
+  const handleScan = (scanText: string | null) => {
     if (scanText) {
-      if (scanText.length === 10 && scanText.startsWith('G')) {
+      if (scanText.length === 10 && scanText.startsWith('G') && token) {
         setDeviceState(false);
         setText(scanText);
         setLoading(true);
-        const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
+        axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + token } })
+          .then((res: AxiosResponse<guestsInfoSuccessProp>) => {
+            setGuestInfo(res.data.data);
+            const guestData = res.data.data;
+            if (guestData.available) {
+              setScanStatus("error");
+              setMessage("このゲストは無効です。");
+            } else if (guestData.revoke_at !== null || guestData.revoke_at === "") {
+              setScanStatus("error");
+              setMessage("このゲストは既に退場処理が行われています。");
+            } else if (scanType === "enter" && (guestData.exhibit_id && guestData.exhibit_id !== "")) {
+              setScanStatus("error");
+              setMessage(`このゲストはすでに${guestData.exhibit_id}に入室しています。退室処理と間違えていませんか？`);
+            } else if (scanType === "exit" && (guestData.exhibit_id || guestData.exhibit_id === "")) {
+              setScanStatus("error");
+              setMessage("このゲストはどこの展示にも入室中ではありません。入室処理と間違えていませんか？");
+            } else {
+              setScanStatus("success");
+            }
+            setSmDrawerStatus(true);
+          }).catch((err: AxiosError<generalFailedProp>) => {
+            setScanStatus("error");
+            setMessage(err.message);
+            setSmDrawerStatus(true);
+          });
         setLoading(false);
-        if (res.data.status === "success") {
-          setGuestInfo(res.data.data);
-          const guestData = res.data.data;
-          if (guestData.available === 0) {
-            setScanStatus("error");
-            setMessage("このゲストは無効です。");
-          } else if (guestData.revoke_at !== null || guestData.revoke_at === "") {
-            setScanStatus("error");
-            setMessage("このゲストは既に退場処理が行われています。");
-          } else if (scanType === "enter" && (guestData.exhibit_id !== null && guestData.exhibit_id !== "")) {
-            setScanStatus("error");
-            setMessage(`このゲストはすでに${guestData.exhibit_id}に入室しています。退室処理と間違えていませんか？`);
-          } else if (scanType === "exit" && (guestData.exhibit_id === null || guestData.exhibit_id === "")) {
-            setScanStatus("error");
-            setMessage("このゲストはどこの展示にも入室中ではありません。入室処理と間違えていませんか？");
-          } else {
-            setScanStatus("success");
-          }
-          setSmDrawerStatus(true);
-        } else {
-          setScanStatus("error");
-          setMessage(res.data.message);
-          setSmDrawerStatus(true);
-        }
       } else {
         setScanStatus("error");
         setMessage("ゲストidの形式が正しくありません。");
@@ -119,33 +112,32 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const GuestInfoCard = () => {
     const currentExhibit = useRecoilValue(currentExhibitState);
 
-    const postApi = async () => {
-      if (profile && guestInfo) {
+    const postApi = () => {
+      if (profile && guestInfo && token) {
         const payload = {
           guest_id: text,
           guest_type: guestInfo.guest_type,
           exhibit_id: currentExhibit.exhibit_id,
           userId: profile.userId
         };
-        const res = await axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-        if (res.data.status === "success") {
-          setDeviceState(true);
-          setText("");
-          setMessage("");
-          setSnackbar({ status: true, message: "処理が完了しました。", severity: "success" });
-          setScanStatus("waiting");
-          setSmDrawerStatus(false);
-        } else {
-          console.log(res.data);
-          if (res.data.message) {
-            setSnackbar({ status: true, message: res.data.message, severity: "error" });
-          } else {
-            setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
-          }
-          setText("");
-          setDeviceState(true);
-          setSmDrawerStatus(false);
-        }
+        axios.post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, { headers: { Authorization: "Bearer " + token } })
+          .then((res) => {
+            setDeviceState(true);
+            setText("");
+            setMessage("");
+            setSnackbar({ status: true, message: "処理が完了しました。", severity: "success" });
+            setScanStatus("waiting");
+            setSmDrawerStatus(false);
+          }).catch((err: AxiosError<generalFailedProp>) => {
+            if (err.message) {
+              setSnackbar({ status: true, message: err.message, severity: "error" });
+            } else {
+              setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
+            }
+            setText("");
+            setDeviceState(true);
+            setSmDrawerStatus(false);
+          });
       }
     };
 

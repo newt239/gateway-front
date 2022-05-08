@@ -8,7 +8,7 @@ const SelectExhibit: React.FunctionComponent<{ disabled?: boolean | false }> = (
   const [currentExhibit, setCurrentExhibit] = useRecoilState(currentExhibitState);
   const exhibitList = useRecoilValue(exhibitListState);
 
-  const handleChange = (event: React.SyntheticEvent, value: any, reason: string) => {
+  const handleChange = (event: React.SyntheticEvent, value: { exhibit_id: string, exhibit_name: string }, reason: string) => {
     if (reason === "clear") {
       setCurrentExhibit({ exhibit_id: "", exhibit_name: "" });
     } else {

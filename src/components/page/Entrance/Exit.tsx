@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { profileState } from "#/recoil/user";
+import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from '#/recoil/page';
-import axios from 'axios';
+import axios, { AxiosResponse, AxiosError } from 'axios';
 
 import { Alert, SwipeableDrawer, Grid, Typography, Button, FormControl, IconButton, InputAdornment, OutlinedInput, Box, LinearProgress, Card, List, ListItem, ListItemIcon, ListItemText, Snackbar, AlertTitle } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -15,28 +15,22 @@ import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
 
 import generalProps from "#/components/functional/generalProps";
 import Scanner from '#/components/block/Scanner';
+import { generalFailedProp } from '#/types/global';
+import { guestInfoProp, guestsInfoSuccessProp } from '#/types/guests';
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
-type guestInfoProp = {
-  guest_id: string;
-  guest_type: "general" | "student" | "special";
-  exhibit_id: string;
-  part: string;
-  available: false;
-  note: string;
-} | null;
 
 const EntranceExit = () => {
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up('sm'));
-  const token = useRecoilValue(profileState)
+  const token = useRecoilValue(tokenState)
   const profile = useRecoilValue(profileState);
   const [text, setText] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">("waiting");
   const [message, setMessage] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [guestInfo, setGuestInfo] = useState<guestInfoProp>(null);
+  const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [snackbar, setSnackbar] = useState<{ status: boolean; message: string; severity: "success" | "error"; }>({ status: false, message: "", severity: "success" });
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
@@ -47,34 +41,35 @@ const EntranceExit = () => {
     setPageInfo({ title: "退場処理" });
   }, []);
 
-  const handleScan = async (scanText: string | null) => {
-    if (scanText) {
+  const handleScan = (scanText: string | null) => {
+    if (token && scanText) {
       setText(scanText);
       if (scanText.length === 10 && scanText.startsWith('G')) {
         setDeviceState(false);
         setLoading(true);
-        const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-        setLoading(false);
-        if (res.data.status === "success") {
-          setGuestInfo(res.data.data);
-          const guestData = res.data.data;
-          if (guestData.available === 0) {
+        axios.get(`${API_BASE_URL}/v1/guests/info/${scanText}`, { headers: { Authorization: `Bearer ${token}` } })
+          .then((res: AxiosResponse<guestsInfoSuccessProp>) => {
+            setLoading(false);
+            setGuestInfo(res.data.data);
+            const guestData = res.data.data;
+            if (guestData.available) {
+              setScanStatus("error");
+              setMessage(["このゲストは無効です。"]);
+              setSmDrawerStatus(true);
+            } else if (guestData.revoke_at !== null || guestData.revoke_at === "") {
+              setScanStatus("error");
+              setMessage(["このゲストは既に退場処理が行われています。"]);
+              setSmDrawerStatus(true);
+            } else {
+              setScanStatus("success");
+              setSmDrawerStatus(true);
+            }
+          }).catch((err: AxiosError<generalFailedProp>) => {
+            setLoading(false);
             setScanStatus("error");
-            setMessage(["このゲストは無効です。"]);
+            setMessage([err.message]);
             setSmDrawerStatus(true);
-          } else if (guestData.revoke_at !== null || guestData.revoke_at === "") {
-            setScanStatus("error");
-            setMessage(["このゲストは既に退場処理が行われています。"]);
-            setSmDrawerStatus(true);
-          } else {
-            setScanStatus("success");
-            setSmDrawerStatus(true);
-          }
-        } else {
-          setScanStatus("error");
-          setMessage([res.data.message]);
-          setSmDrawerStatus(true);
-        }
+          });
       } else {
         setScanStatus("error");
         setMessage(["ゲストidの形式が正しくありません。"]);
@@ -83,33 +78,32 @@ const EntranceExit = () => {
     }
   };
 
-  const postApi = async () => {
-    if (profile && guestInfo) {
+  const postApi = () => {
+    if (token && profile && guestInfo) {
       const payload = {
         guest_id: text,
         guest_type: guestInfo.guest_type,
         userId: profile.userId
       };
-      const res = await axios.post(`${API_BASE_URL}/v1/guests/revoke`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-      if (res.data.status === "success") {
-        setDeviceState(true);
-        setText("");
-        setMessage([]);
-        setSnackbar({ status: false, message: "", severity: "success" });
-        setScanStatus("waiting");
-        setSmDrawerStatus(false);
-        setSnackbar({ status: true, message: `${payload.guest_id}の退場処理に成功しました。`, severity: "success" });
-      } else {
-        console.log(res.data);
-        if (res.data.message) {
-          setSnackbar({ status: true, message: res.data.message, severity: "error" });
-        } else {
-          setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
-        }
-        setText("");
-        setDeviceState(true);
-        setSmDrawerStatus(false);
-      }
+      axios.post(`${API_BASE_URL}/v1/guests/revoke`, payload, { headers: { Authorization: `Bearer ${token}` } })
+        .then((res: AxiosResponse<{ status: "success" }>) => {
+          setDeviceState(true);
+          setText("");
+          setMessage([]);
+          setSnackbar({ status: false, message: "", severity: "success" });
+          setScanStatus("waiting");
+          setSmDrawerStatus(false);
+          setSnackbar({ status: true, message: `${payload.guest_id}の退場処理に成功しました。`, severity: "success" });
+        }).catch((err: AxiosError<generalFailedProp>) => {
+          if (err.message) {
+            setSnackbar({ status: true, message: err.message, severity: "error" });
+          } else {
+            setSnackbar({ status: true, message: "何らかのエラーが発生しました。", severity: "error" });
+          }
+          setText("");
+          setDeviceState(true);
+          setSmDrawerStatus(false);
+        });
     }
   };
 

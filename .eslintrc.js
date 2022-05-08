@@ -20,5 +20,10 @@ module.exports = {
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
   ],
   rules: {
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-floating-promises": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-unsafe-argument": "off", // 後で戻す
+    "@typescript-eslint/ban-ts-comment": "off"
   },
 };

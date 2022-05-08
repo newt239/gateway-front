@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from '#/recoil/page';
-import axios from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
 import { Typography, TextField, MenuItem, Box, Button, CircularProgress, List, ListItem, ListItemText, IconButton } from '@mui/material';
 
 import MessageDialog from "./MessageDialog";
 import { userTypeProp } from "#/components/functional/generalProps";
+import { createdByMeSuccessProp } from "#/types/admin";
+import { generalFailedProp } from "#/types/global";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -37,15 +39,20 @@ const CreateUserCard = () => {
 
   // 過去に自分が作成したユーザーのリスト
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/v1/admin/created-by-me`, { headers: { Authorization: "Bearer " + token } }).then(res => {
-      if (res.data.status === "success" && res.data.data.length !== 0) {
-        setCreateHistory([...createHistory, res.data.data]);
-      }
-    });
+    if (token) {
+      axios.get(`${API_BASE_URL}/v1/admin/created-by-me`, { headers: { Authorization: `Bearer ${token}` } })
+        .then((res: AxiosResponse<createdByMeSuccessProp>) => {
+          if (res.data.status === "success" && res.data.data.length !== 0) {
+            setCreateHistory([...createHistory, ...res.data.data]);
+          }
+        }).catch((err) => {
+          console.log(err);
+        });
+    }
   }, [token]);
 
-  const createUser = async () => {
-    if (!loading) {
+  const createUser = () => {
+    if (token && !loading) {
       setLoading(true);
       if (userIdValue === "" || displayNameValue === "" || userIdValue.length > 10 || displayNameValue.length > 20) {
         setMessageDialogMessage([
@@ -64,18 +71,17 @@ const CreateUserCard = () => {
         displayName: displayNameValue,
         userType: userTypeValue
       };
-      const res = await axios.post(`${API_BASE_URL}/v1/admin/create`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-      console.log(res);
-      if (res.data.status == "success") {
-        setCreateHistory([...createHistory, { user_id: userIdValue, display_name: displayNameValue, user_type: userTypeValue }]);
-        console.log("operation of create user was succeed.");
-      } else {
-        setMessageDialogMessage([res.data.message]);
-        setShowMessageDialog(true);
-      }
-      setLoading(false);
+      axios.post(`${API_BASE_URL}/v1/admin/create`, payload, { headers: { Authorization: `"Bearer ${token}` } })
+        .then(() => {
+          setCreateHistory([...createHistory, { user_id: userIdValue, display_name: displayNameValue, user_type: userTypeValue }]);
+          console.log("operation of create user was succeed.");
+        }).catch((err: AxiosError<generalFailedProp>) => {
+          setMessageDialogMessage([err.message]);
+          setShowMessageDialog(true);
+        })
     }
-  };
+    setLoading(false);
+  }
 
   const handleClose = () => {
     setShowMessageDialog(false);
