@@ -3,38 +3,54 @@ import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import axios from "axios";
 
-import { Typography, TextField, Box, Button, CircularProgress } from '@mui/material';
+import {
+  Typography,
+  TextField,
+  Box,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 
 import MessageDialog from "./MessageDialog";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
+import { apiBaseUrlState } from "#/recoil/page";
 
 const DeleteUserCard = () => {
+  const apiBaseUrl = useRecoilValue(apiBaseUrlState);
   const token = useRecoilValue(tokenState);
 
   const [deleteUserIdValue, setDeleteUserIdValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
-  const [messageDialogType, setMessageDialogType] = useState<"success" | "error">("success");
+  const [messageDialogType, setMessageDialogType] = useState<
+    "success" | "error"
+  >("success");
   const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
 
   const deleteUser = async () => {
-    if (!loading && deleteUserIdValue !== "") {
+    if (token && !loading && deleteUserIdValue !== "") {
       setLoading(true);
       const payload = {
-        user_id: deleteUserIdValue
+        user_id: deleteUserIdValue,
       };
-      const res = await axios.post(`${API_BASE_URL}/v1/admin/delete-user`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-      if (res.data.status === "success") {
-        setShowMessageDialog(true);
-        setMessageDialogType("success");
-        setMessageDialogMessage([`ユーザー( ${payload.user_id} )を削除しました。`]);
-        setDeleteUserIdValue("");
-      } else {
-        setShowMessageDialog(true);
-        setMessageDialogType("error");
-        setMessageDialogMessage([`${payload.user_id}というユーザーは存在しません。`]);
-      }
+      await axios
+        .post(`${apiBaseUrl}/v1/admin/delete-user`, payload, {
+          headers: { Authorization: `"Bearer ${token}` },
+        })
+        .then(() => {
+          setShowMessageDialog(true);
+          setMessageDialogType("success");
+          setMessageDialogMessage([
+            `ユーザー( ${payload.user_id} )を削除しました。`,
+          ]);
+          setDeleteUserIdValue("");
+        })
+        .catch(() => {
+          setShowMessageDialog(true);
+          setMessageDialogType("error");
+          setMessageDialogMessage([
+            `${payload.user_id}というユーザーは存在しません。`,
+          ]);
+        });
       setLoading(false);
     }
   };
@@ -52,10 +68,11 @@ const DeleteUserCard = () => {
         id="deleteUser"
         label="削除するユーザーid"
         value={deleteUserIdValue}
-        onChange={e => setDeleteUserIdValue(e.target.value)}
+        onChange={(e) => setDeleteUserIdValue(e.target.value)}
         margin="normal"
-        fullWidth />
-      <Box sx={{ width: '100%', textAlign: 'right' }}>
+        fullWidth
+      />
+      <Box sx={{ width: "100%", textAlign: "right" }}>
         <Button
           onClick={deleteUser}
           disabled={loading || deleteUserIdValue === ""}

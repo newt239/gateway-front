@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
-import { pageStateSelector } from '#/recoil/page';
-import axios from "axios";
+import { pageStateSelector } from "#/recoil/page";
+import axios, { AxiosResponse, AxiosError } from "axios";
 
-import { Grid, Card, Typography, TextField, Box, Button, CircularProgress } from '@mui/material';
+import {
+  Grid,
+  Card,
+  Typography,
+  TextField,
+  Box,
+  Button,
+  CircularProgress,
+} from "@mui/material";
+import { generalFailedProp } from "#/types/global";
+import { guestInfoProp, guestsInfoSuccessProp } from "#/types/guests";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
-
-type guestInfoProp = {
-  guest_id: string;
-  guest_type: "general" | "student" | "special";
-  part: string;
-  reservation_id: string;
-  userId: string;
-} | null;
 
 const AdminCheckGuest = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -25,19 +27,22 @@ const AdminCheckGuest = () => {
   const token = useRecoilValue(tokenState);
 
   const [guestId, setGuestId] = useState("");
-  const [guestInfo, setGuestInfo] = useState<guestInfoProp>(null);
+  const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const searchGuest = async () => {
-    if (!loading && guestId !== "") {
+  const searchGuest = () => {
+    if (token && !loading && guestId !== "") {
       setLoading(true);
-      const res = await axios.get(`${API_BASE_URL}/v1/guests/info/${guestId}`, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-      console.log(res);
-      if (res.data.status === "success") {
-        setGuestInfo(res.data.data);
-      } else {
-        console.log(res);
-      }
+      axios
+        .get(`${API_BASE_URL}/v1/guests/info/${guestId}`, {
+          headers: { Authorization: "Bearer " + token },
+        })
+        .then((res: AxiosResponse<guestsInfoSuccessProp>) => {
+          setGuestInfo(res.data.data);
+        })
+        .catch((err: AxiosError<generalFailedProp>) => {
+          console.log(err);
+        });
       setLoading(false);
     }
   };
@@ -51,10 +56,11 @@ const AdminCheckGuest = () => {
             id="guestId"
             label="ゲストid"
             value={guestId}
-            onChange={e => setGuestId(e.target.value)}
+            onChange={(e) => setGuestId(e.target.value)}
             margin="normal"
-            fullWidth />
-          <Box sx={{ width: '100%', textAlign: 'right' }}>
+            fullWidth
+          />
+          <Box sx={{ width: "100%", textAlign: "right" }}>
             <Button
               onClick={searchGuest}
               disabled={loading || guestId === ""}

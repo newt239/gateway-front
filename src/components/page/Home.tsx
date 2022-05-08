@@ -1,12 +1,12 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
-import { pageStateSelector } from '#/recoil/page';
+import { pageStateSelector } from "#/recoil/page";
 import moment, { Moment } from "moment";
 
-import { Grid, Card, Box, Button, Typography } from '@mui/material';
+import { Grid, Card, Box, Button, Typography } from "@mui/material";
 
-import UserInfo from '#/components/block/UserInfo';
+import UserInfo from "#/components/block/UserInfo";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -38,25 +38,23 @@ const Home = () => {
       <Grid item xs={12} md={6} lg={4}>
         <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
           <Typography variant="h3">
-            {datetime.format('M月D日 H時m分')}
+            {datetime.format("M月D日 H時m分")}
           </Typography>
-          <Typography variant="body2">次の時間枠まであと{ }分</Typography>
+          <Typography variant="body2">次の時間枠まであと{}分</Typography>
         </Card>
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-          <Typography variant="h3">
-            校内滞在者数
-          </Typography>
+          <Typography variant="h3">校内滞在者数</Typography>
           <Typography variant="body2">ここに人数とか棒グラフとか</Typography>
-          <Box sx={{ width: '100%', textAlign: 'right' }}>
+          <Box sx={{ width: "100%", textAlign: "right" }}>
             <Button onClick={() => navigate("crowd")} variant="outlined">
               詳細
             </Button>
           </Box>
         </Card>
       </Grid>
-    </Grid >
+    </Grid>
   );
 };
 

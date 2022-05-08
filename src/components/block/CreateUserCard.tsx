@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import { pageStateSelector } from '#/recoil/page';
-import axios from "axios";
+import { pageStateSelector } from "#/recoil/page";
+import axios, { AxiosError, AxiosResponse } from "axios";
 
-import { Typography, TextField, MenuItem, Box, Button, CircularProgress, List, ListItem, ListItemText, IconButton } from '@mui/material';
+import {
+  Typography,
+  TextField,
+  MenuItem,
+  Box,
+  Button,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+} from "@mui/material";
 
 import MessageDialog from "./MessageDialog";
 import { userTypeProp } from "#/components/functional/generalProps";
+import { createdByMeSuccessProp } from "#/types/admin";
+import { generalFailedProp } from "#/types/global";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
@@ -26,33 +39,53 @@ const CreateUserCard = () => {
   const [loading, setLoading] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
-  const [createHistory, setCreateHistory] = useState<{ user_id: string; display_name: string; user_type: string; }[]>([]);
+  const [createHistory, setCreateHistory] = useState<
+    { user_id: string; display_name: string; user_type: string }[]
+  >([]);
 
   const userTypeList: { value: userTypeProp; label: string }[] = [
     { value: "moderator", label: "管理者" },
     { value: "executive", label: "文化祭実行委員" },
     { value: "exhibit", label: "展示担当者" },
-    { value: "analysis", label: "データ分析" }
+    { value: "analysis", label: "データ分析" },
   ];
 
   // 過去に自分が作成したユーザーのリスト
   useEffect(() => {
-    axios.get(`${API_BASE_URL}/v1/admin/created-by-me`, { headers: { Authorization: "Bearer " + token } }).then(res => {
-      if (res.data.status === "success" && res.data.data.length !== 0) {
-        setCreateHistory([...createHistory, res.data.data]);
-      }
-    });
+    if (token) {
+      axios
+        .get(`${API_BASE_URL}/v1/admin/created-by-me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then((res: AxiosResponse<createdByMeSuccessProp>) => {
+          if (res.data.status === "success" && res.data.data.length !== 0) {
+            setCreateHistory([...createHistory, ...res.data.data]);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, [token]);
 
-  const createUser = async () => {
-    if (!loading) {
+  const createUser = () => {
+    if (token && !loading) {
       setLoading(true);
-      if (userIdValue === "" || displayNameValue === "" || userIdValue.length > 10 || displayNameValue.length > 20) {
+      if (
+        userIdValue === "" ||
+        displayNameValue === "" ||
+        userIdValue.length > 10 ||
+        displayNameValue.length > 20
+      ) {
         setMessageDialogMessage([
           userIdValue === "" ? "ユーザーidを入力してください。" : "",
           displayNameValue === "" ? "表示名を入力してください。" : "",
-          userIdValue.length > 10 ? "ユーザーidは10字以内で設定してください。" : "",
-          displayNameValue.length > 20 ? "表示名は10字以内で設定してください。" : "",
+          userIdValue.length > 10
+            ? "ユーザーidは10字以内で設定してください。"
+            : "",
+          displayNameValue.length > 20
+            ? "表示名は10字以内で設定してください。"
+            : "",
         ]);
         setLoading(false);
         setShowMessageDialog(true);
@@ -62,19 +95,29 @@ const CreateUserCard = () => {
         userId: userIdValue,
         password: passwordValue,
         displayName: displayNameValue,
-        userType: userTypeValue
+        userType: userTypeValue,
       };
-      const res = await axios.post(`${API_BASE_URL}/v1/admin/create`, payload, { headers: { Authorization: "Bearer " + token } }).then(res => { return res });
-      console.log(res);
-      if (res.data.status == "success") {
-        setCreateHistory([...createHistory, { user_id: userIdValue, display_name: displayNameValue, user_type: userTypeValue }]);
-        console.log("operation of create user was succeed.");
-      } else {
-        setMessageDialogMessage([res.data.message]);
-        setShowMessageDialog(true);
-      }
-      setLoading(false);
+      axios
+        .post(`${API_BASE_URL}/v1/admin/create`, payload, {
+          headers: { Authorization: `"Bearer ${token}` },
+        })
+        .then(() => {
+          setCreateHistory([
+            ...createHistory,
+            {
+              user_id: userIdValue,
+              display_name: displayNameValue,
+              user_type: userTypeValue,
+            },
+          ]);
+          console.log("operation of create user was succeed.");
+        })
+        .catch((err: AxiosError<generalFailedProp>) => {
+          setMessageDialogMessage([err.message]);
+          setShowMessageDialog(true);
+        });
     }
+    setLoading(false);
   };
 
   const handleClose = () => {
@@ -91,8 +134,10 @@ const CreateUserCard = () => {
         type="text"
         value={userIdValue}
         error={userIdValue.length > 10}
-        helperText={userIdValue.length > 10 && 'ユーザーidは10字以内で設定してください。'}
-        onChange={e => setUserId(e.target.value)}
+        helperText={
+          userIdValue.length > 10 && "ユーザーidは10字以内で設定してください。"
+        }
+        onChange={(e) => setUserId(e.target.value)}
         margin="normal"
         fullWidth
       />
@@ -101,7 +146,7 @@ const CreateUserCard = () => {
         label="パスワード"
         type="text"
         value={passwordValue}
-        onChange={e => setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
         margin="normal"
         fullWidth
       />
@@ -111,8 +156,10 @@ const CreateUserCard = () => {
         type="text"
         value={displayNameValue}
         error={displayNameValue.length > 20}
-        helperText={displayNameValue.length > 20 && '表示名は10字以内で設定してください。'}
-        onChange={e => setDisplayName(e.target.value)}
+        helperText={
+          displayNameValue.length > 20 && "表示名は10字以内で設定してください。"
+        }
+        onChange={(e) => setDisplayName(e.target.value)}
         margin="normal"
         fullWidth
       />
@@ -121,16 +168,17 @@ const CreateUserCard = () => {
         label="種別"
         select
         value={userTypeValue}
-        onChange={e => setUserType(e.target.value as userTypeProp)}
+        onChange={(e) => setUserType(e.target.value as userTypeProp)}
         margin="normal"
-        fullWidth>
+        fullWidth
+      >
         {userTypeList.map((option) => (
           <MenuItem key={option.value} value={option.value}>
             {option.label}
           </MenuItem>
         ))}
       </TextField>
-      <Box sx={{ width: '100%', textAlign: 'right' }}>
+      <Box sx={{ width: "100%", textAlign: "right" }}>
         <Button
           onClick={createUser}
           disabled={loading}

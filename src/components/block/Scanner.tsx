@@ -1,23 +1,39 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
-import { deviceState, currentDeviceState, deviceListState } from "#/recoil/scan";
-import QrReader from 'react-qr-reader';
+import {
+  deviceState,
+  currentDeviceState,
+  deviceListState,
+} from "#/recoil/scan";
+import QrReader from "react-qr-reader";
 
-import { Box, Dialog, DialogContent, DialogActions, Button, IconButton, Autocomplete, TextField, DialogTitle } from '@mui/material';
-import CameraswitchRoundedIcon from '@mui/icons-material/CameraswitchRounded';
-import CircularProgress from '@mui/material/CircularProgress';
+import {
+  Box,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  Button,
+  IconButton,
+  Autocomplete,
+  TextField,
+  DialogTitle,
+} from "@mui/material";
+import CameraswitchRoundedIcon from "@mui/icons-material/CameraswitchRounded";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import MessageDialog from "#/components/block/MessageDialog";
 
 type ScannerProps = {
   handleScan: (text: string | null) => void;
-}
+};
 
 const Scanner = ({ handleScan }: ScannerProps) => {
   const location = useLocation();
   const [qrReaderIsShow, setQrReaderIsShow] = useRecoilState(deviceState);
-  const [scannerStatus, setScannerStatus] = useState<"loading" | "waiting" | "error">("loading");
+  const [scannerStatus, setScannerStatus] = useState<
+    "loading" | "waiting" | "error"
+  >("loading");
   const [currentDevice, setCurrentDevice] = useRecoilState(currentDeviceState);
   const [deviceList, setDeviceList] = useRecoilState(deviceListState);
   const [selectCameraModalOpen, setSelectCameraModalOpen] = useState(false);
@@ -25,16 +41,24 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const [errorDialogTitle, setMessageDialogTitle] = useState("");
   const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
   useEffect(() => {
-    navigator.mediaDevices.enumerateDevices().then((mediaDevices) => mediaDevices
-      .filter((device) => device.kind === 'videoinput')
-      .map((device) => {
-        return {
-          label: device.label,
-          deviceId: device.deviceId,
-        };
-      })).then((devices) => {
+    navigator.mediaDevices
+      .enumerateDevices()
+      .then((mediaDevices) =>
+        mediaDevices
+          .filter((device) => device.kind === "videoinput")
+          .map((device) => {
+            return {
+              label: device.label,
+              deviceId: device.deviceId,
+            };
+          })
+      )
+      .then((devices) => {
         setDeviceList(devices);
         setCurrentDevice(devices[0]);
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }, []);
 
@@ -63,7 +87,11 @@ const Scanner = ({ handleScan }: ScannerProps) => {
     if (!refreshQrReader) setRefreshQrReader(true);
   }, [refreshQrReader]);
 
-  const changeCamera = (event: React.SyntheticEvent, value: any, reason: string) => {
+  const changeCamera = (
+    event: React.SyntheticEvent,
+    value: any,
+    reason: string
+  ) => {
     setCurrentDevice(value);
     setRefreshQrReader(false);
   };
@@ -103,47 +131,62 @@ const Scanner = ({ handleScan }: ScannerProps) => {
 
   const Loading = () => {
     return (
-      <div style={{
-        color: "white",
-        position: "absolute",
-        top: "50%",
-        left: "50%",
-        transform: "translateY(-50%) translateX(-50%)"
-      }}>
+      <div
+        style={{
+          color: "white",
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translateY(-50%) translateX(-50%)",
+        }}
+      >
         <CircularProgress color="inherit" size={64} />
       </div>
-    )
-  }
+    );
+  };
 
   return (
     <>
-      <Box sx={{
-        position: "relative",
-        margin: 'auto',
-        width: '100%',
-        maxWidth: '70vh',
-        aspectRatio: '1 / 1',
-        backgroundColor: 'black',
-        borderRadius: '1rem'
-      }}>
-        {(qrReaderIsShow && refreshQrReader) ? (
-          <div style={{ position: 'relative' }}>
+      <Box
+        sx={{
+          position: "relative",
+          margin: "auto",
+          width: "100%",
+          maxWidth: "70vh",
+          aspectRatio: "1 / 1",
+          backgroundColor: "black",
+          borderRadius: "1rem",
+        }}
+      >
+        {qrReaderIsShow && refreshQrReader ? (
+          <div style={{ position: "relative" }}>
             <QrReader
               onScan={(text: string | null) => handleScan(text)}
-              onLoad={() => { setScannerStatus("waiting"); }}
+              onLoad={() => {
+                setScannerStatus("waiting");
+              }}
               onError={handleError}
               delay={1}
               showViewFinder={false}
               facingMode="environment"
               // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-qr-reader/index.d.ts
               // @types/react-qr-readerがv2.1.0用でv2.1.1に追加されたconstraints propの型定義に対応していなかったためsrc直下にオリジナルの型定義ファイルを配置
-              constraints={{ deviceId: currentDevice.deviceId, facingMode: "environment" }}
+              constraints={{
+                deviceId: currentDevice.deviceId,
+                facingMode: "environment",
+              }}
               className="qrcode"
             />
-            <IconButton onClick={() => setSelectCameraModalOpen(true)} sx={{ position: 'absolute', color: "white", top: 0, left: 0 }}>
+            <IconButton
+              onClick={() => setSelectCameraModalOpen(true)}
+              sx={{ position: "absolute", color: "white", top: 0, left: 0 }}
+            >
               <CameraswitchRoundedIcon />
             </IconButton>
-            <Dialog open={selectCameraModalOpen} onClose={() => setSelectCameraModalOpen(false)}>
+            <Dialog
+              open={selectCameraModalOpen}
+              onClose={() => setSelectCameraModalOpen(false)}
+            >
               <DialogTitle>カメラ切り替え</DialogTitle>
               <DialogContent>
                 <Autocomplete
@@ -159,22 +202,19 @@ const Scanner = ({ handleScan }: ScannerProps) => {
                 />
               </DialogContent>
               <DialogActions>
-                <Button onClick={() => setSelectCameraModalOpen(false)}>閉じる</Button>
+                <Button onClick={() => setSelectCameraModalOpen(false)}>
+                  閉じる
+                </Button>
               </DialogActions>
             </Dialog>
           </div>
         ) : (
           <Loading />
-        )
-        }
-        {["loading", "error"].includes(scannerStatus) && (
-          <>
-            {scannerStatus === "loading" && (
-              <Loading />
-            )}
-          </>
         )}
-      </Box >
+        {["loading", "error"].includes(scannerStatus) && (
+          <>{scannerStatus === "loading" && <Loading />}</>
+        )}
+      </Box>
       <MessageDialog
         open={errorDialogOpen}
         type="error"
@@ -185,14 +225,17 @@ const Scanner = ({ handleScan }: ScannerProps) => {
         }}
       />
     </>
-  )
+  );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const isDOMException = (val: any): val is DOMException => {
   if (!val) return false;
   return (
     typeof val === "object" &&
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
     typeof val.name === "string" &&
+    /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
     typeof val.message === "string"
   );
 };

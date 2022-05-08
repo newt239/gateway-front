@@ -2,16 +2,15 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
+// @ts-ignore
 import Identicon from "boring-avatars";
-
-import { Button, Box, Typography } from '@mui/material';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import GroupIcon from '@mui/icons-material/Group';
-import NoAccountsIcon from '@mui/icons-material/NoAccounts';
-
+import { Button, Box, Typography } from "@mui/material";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import GroupIcon from "@mui/icons-material/Group";
+import NoAccountsIcon from "@mui/icons-material/NoAccounts";
 
 const UserInfo = () => {
   const navigate = useNavigate();
@@ -21,7 +20,7 @@ const UserInfo = () => {
   const logout = () => {
     setToken(null);
     setProfile(null);
-    localStorage.removeItem('gatewayApiToken');
+    localStorage.removeItem("gatewayApiToken");
     navigate("/login", { replace: true });
   };
 
@@ -32,23 +31,23 @@ const UserInfo = () => {
           return <AdminPanelSettingsIcon />;
         case "moderator":
           return <ManageAccountsIcon />;
-        case "user":
+        case "executive":
           return <AccountCircleIcon />;
-        case "group":
+        case "exhibit":
           return <GroupIcon />;
         default:
           return <NoAccountsIcon />;
-      };
+      }
     } else {
       return <NoAccountsIcon />;
     }
   };
 
   return (
-    <>{
-      profile && profile.available ? (
+    <>
+      {profile && profile.available ? (
         <>
-          <Box sx={{ width: '100%', textAlign: 'right' }}>
+          <Box sx={{ width: "100%", textAlign: "right" }}>
             <AccountType />
           </Box>
           <Identicon
@@ -57,25 +56,36 @@ const UserInfo = () => {
             variant="beam"
             colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
           />
-          <Typography variant='h3'>{profile.display_name}</Typography>
+          <Typography variant="h3">{profile.display_name}</Typography>
           <Typography sx={{ fontSize: 10 }}>@{profile.userId}</Typography>
-          <Box sx={{ width: '100%', textAlign: 'right' }}>
-            <Button variant="outlined" color="error" onClick={logout} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
+          <Box sx={{ width: "100%", textAlign: "right" }}>
+            <Button
+              variant="outlined"
+              color="error"
+              onClick={logout}
+              sx={{ mt: 2 }}
+              startIcon={<LogoutRoundedIcon />}
+            >
               ログアウト
             </Button>
           </Box>
-        </>)
-        : (
-          <>
-            <Typography>ログインしていません</Typography>
-            <Box sx={{ width: '100%', textAlign: 'right' }}>
-              <Button variant="outlined" color="success" onClick={e => navigate("/login", { replace: true })} sx={{ mt: 2 }} startIcon={<LogoutRoundedIcon />}>
-                ログイン
-              </Button>
-            </Box>
-          </>
-        )
-    }
+        </>
+      ) : (
+        <>
+          <Typography>ログインしていません</Typography>
+          <Box sx={{ width: "100%", textAlign: "right" }}>
+            <Button
+              variant="outlined"
+              color="success"
+              onClick={(e) => navigate("/login", { replace: true })}
+              sx={{ mt: 2 }}
+              startIcon={<LogoutRoundedIcon />}
+            >
+              ログイン
+            </Button>
+          </Box>
+        </>
+      )}
     </>
   );
 };

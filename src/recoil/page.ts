@@ -1,18 +1,18 @@
-import { atom, DefaultValue, selector } from 'recoil';
+import { atom, DefaultValue, selector } from "recoil";
 
 type pageStateProp = {
   title: string;
-}
+};
 
 export const pageState = atom<pageStateProp>({
   key: "pageState",
   default: {
-    "title": "ホーム"
-  }
-})
+    title: "ホーム",
+  },
+});
 
 export const pageStateSelector = selector<pageStateProp>({
-  key: 'pageStateSelector',
+  key: "pageStateSelector",
   get: ({ get }) => get(pageState),
   set: ({ set, get }, value) => {
     if (value instanceof DefaultValue) {
@@ -21,5 +21,10 @@ export const pageStateSelector = selector<pageStateProp>({
       document.title = `${value.title} | Gateway`;
     }
     set(pageState, value);
-  }
+  },
+});
+
+export const apiBaseUrlState = atom<string>({
+  key: "apiBaseUrlState",
+  default: "http://localhost:3000",
 });

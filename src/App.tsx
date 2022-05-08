@@ -1,13 +1,11 @@
-import React from 'react';
+import React from "react";
 import { BrowserRouter } from "react-router-dom";
 
-import { ThemeProvider } from '@mui/material';
-import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from "@mui/material";
+import CssBaseline from "@mui/material/CssBaseline";
 
-import theme from '#/components/functional/theme';
-import ScreenWidth from '#/components/ui/ScreenWidth';
-
-require('dotenv').config();
+import theme from "#/components/functional/theme";
+import ScreenWidth from "#/components/ui/ScreenWidth";
 
 const App = () => {
   return (

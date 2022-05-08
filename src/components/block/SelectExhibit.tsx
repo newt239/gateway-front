@@ -4,11 +4,18 @@ import { currentExhibitState, exhibitListState } from "#/recoil/exhibit";
 
 import { Stack, FormControl, TextField, Autocomplete } from "@mui/material";
 
-const SelectExhibit: React.FunctionComponent<{ disabled?: boolean | false }> = ({ disabled }) => {
-  const [currentExhibit, setCurrentExhibit] = useRecoilState(currentExhibitState);
+const SelectExhibit: React.FunctionComponent<{
+  disabled?: boolean | false;
+}> = ({ disabled }) => {
+  const [currentExhibit, setCurrentExhibit] =
+    useRecoilState(currentExhibitState);
   const exhibitList = useRecoilValue(exhibitListState);
 
-  const handleChange = (event: React.SyntheticEvent, value: any, reason: string) => {
+  const handleChange = (
+    event: React.SyntheticEvent,
+    value: { exhibit_id: string; exhibit_name: string },
+    reason: string
+  ) => {
     if (reason === "clear") {
       setCurrentExhibit({ exhibit_id: "", exhibit_name: "" });
     } else {
@@ -34,6 +41,6 @@ const SelectExhibit: React.FunctionComponent<{ disabled?: boolean | false }> = (
       </Stack>
     </FormControl>
   );
-}
+};
 
 export default SelectExhibit;
