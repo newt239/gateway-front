@@ -25,7 +25,7 @@ const ChartExhibit = () => {
     if (profile) {
       if (exhibit_id === "") {
         navigate("/chart/all", { replace: true });
-      } else if (profile.user_type === "group" && profile.role.indexOf(exhibit_id) !== -1) {
+      } else if (profile.user_type === "exhibit" && profile.role.indexOf(exhibit_id) !== -1) {
         setStatus({ status: false, message: "このアカウントにはこのページを表示する権限がありません。" });
         navigate("/chart/all", { replace: true });
       } else {

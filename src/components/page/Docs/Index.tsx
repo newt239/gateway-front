@@ -25,29 +25,11 @@ const DocsIndex = () => {
     setPageInfo({ title: "ドキュメント" });
   }, []);
 
-  const linkBlock = ({ ...props }: { href: string; children: string; }) => {
-    const { href, children } = props;
-    if (href.match('http')) {
-      return (
-        <a href={href} target="_blank" rel="noopener noreferrer">
-          {children}
-        </a>
-      );
-    } else if (href.slice(0, 1) == '#') {
-      // ページ内リンク
-      return <a href={href}>{children}</a>;
-    } else {
-      return <Link to={href}>{children}</Link>;
-    }
-  };
-
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
         <Card variant="outlined" sx={{ p: 2 }}>
-          <ReactMarkdown children={md} components={{
-            a: linkBlock,
-          }} />
+          <ReactMarkdown children={md} />
         </Card>
       </Grid>
     </Grid>
