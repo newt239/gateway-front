@@ -3,6 +3,8 @@ import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import {
   Typography,
@@ -19,7 +21,6 @@ import {
 
 import MessageDialog from "./MessageDialog";
 import { userTypeProp } from "#/components/functional/generalProps";
-import { createdByMeSuccessProp } from "#/types/admin";
 import { generalFailedProp } from "#/types/global";
 
 const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
@@ -53,18 +54,14 @@ const CreateUserCard = () => {
   // 過去に自分が作成したユーザーのリスト
   useEffect(() => {
     if (token) {
-      axios
-        .get(`${API_BASE_URL}/v1/admin/created-by-me`, {
+      async (token: string) => {
+        const user = await api(aspidaClient()).admin.user.created_by_me.$get({
           headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res: AxiosResponse<createdByMeSuccessProp>) => {
-          if (res.data.status === "success" && res.data.data.length !== 0) {
-            setCreateHistory([...createHistory, ...res.data.data]);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
         });
+        if (user.length !== 0) {
+          setCreateHistory([...createHistory, ...user]);
+        }
+      }
     }
   }, [token]);
 
