@@ -18,7 +18,7 @@ const DeleteUserCard = () => {
   const apiBaseUrl = useRecoilValue(apiBaseUrlState);
   const token = useRecoilValue(tokenState);
 
-  const [deleteUserIdValue, setDeleteUserIdValue] = useState("");
+  const [deleteuser_idValue, setDeleteuser_idValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [messageDialogType, setMessageDialogType] = useState<
@@ -27,10 +27,10 @@ const DeleteUserCard = () => {
   const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
 
   const deleteUser = async () => {
-    if (token && !loading && deleteUserIdValue !== "") {
+    if (token && !loading && deleteuser_idValue !== "") {
       setLoading(true);
       const payload = {
-        user_id: deleteUserIdValue,
+        user_id: deleteuser_idValue,
       };
       await axios
         .post(`${apiBaseUrl}/v1/admin/delete-user`, payload, {
@@ -42,7 +42,7 @@ const DeleteUserCard = () => {
           setMessageDialogMessage([
             `ユーザー( ${payload.user_id} )を削除しました。`,
           ]);
-          setDeleteUserIdValue("");
+          setDeleteuser_idValue("");
         })
         .catch(() => {
           setShowMessageDialog(true);
@@ -67,15 +67,15 @@ const DeleteUserCard = () => {
       <TextField
         id="deleteUser"
         label="削除するユーザーid"
-        value={deleteUserIdValue}
-        onChange={(e) => setDeleteUserIdValue(e.target.value)}
+        value={deleteuser_idValue}
+        onChange={(e) => setDeleteuser_idValue(e.target.value)}
         margin="normal"
         fullWidth
       />
       <Box sx={{ width: "100%", textAlign: "right" }}>
         <Button
           onClick={deleteUser}
-          disabled={loading || deleteUserIdValue === ""}
+          disabled={loading || deleteuser_idValue === ""}
           variant="contained"
           startIcon={loading && <CircularProgress size={24} />}
         >

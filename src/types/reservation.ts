@@ -3,7 +3,7 @@ export interface reservationInfoProp {
   guest_type: "general" | "student" | "family" | "special";
   count: number;
   registered: number;
-  available: boolean;
+  available: number;
   part: string;
   note: string;
 }

@@ -99,7 +99,7 @@ const EntranceEnter = () => {
               guest_type: reservation.guest_type,
               part: reservation.part,
               reservation_id: reservation.reservation_id,
-              user_id: profile.userId,
+              available: reservation.available,
             },
           ]);
           setScanStatus("success");
@@ -206,11 +206,8 @@ const EntranceEnter = () => {
                     <GroupWorkRoundedIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary={
-                      generalProps.reservation.guest_type[
-                        guestInfoList[activeStep].guest_type
-                      ]
-                    }
+                    // TODO: string template literalへの対応
+                    primary={generalProps.reservation.guest_type["student"]}
                   />
                 </ListItem>
                 <ListItem>

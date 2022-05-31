@@ -5,6 +5,8 @@ import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { currentExhibitState } from "#/recoil/exhibit";
 import axios, { AxiosError, AxiosResponse } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import {
   Alert,
@@ -85,49 +87,21 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
         setDeviceState(false);
         setText(scanText);
         setLoading(true);
-        axios
-          .get(`${API_BASE_URL}/v1/guests/info/${scanText}`, {
-            headers: { Authorization: "Bearer " + token },
-          })
-          .then((res: AxiosResponse<guestsInfoSuccessProp>) => {
-            setGuestInfo(res.data.data);
-            const guestData = res.data.data;
-            if (guestData.available) {
-              setScanStatus("error");
-              setMessage("このゲストは無効です。");
-            } else if (
-              guestData.revoke_at !== null ||
-              guestData.revoke_at === ""
-            ) {
-              setScanStatus("error");
-              setMessage("このゲストは既に退場処理が行われています。");
-            } else if (
-              scanType === "enter" &&
-              guestData.exhibit_id &&
-              guestData.exhibit_id !== ""
-            ) {
-              setScanStatus("error");
-              setMessage(
-                `このゲストはすでに${guestData.exhibit_id}に入室しています。退室処理と間違えていませんか？`
-              );
-            } else if (
-              scanType === "exit" &&
-              (guestData.exhibit_id || guestData.exhibit_id === "")
-            ) {
-              setScanStatus("error");
-              setMessage(
-                "このゲストはどこの展示にも入室中ではありません。入室処理と間違えていませんか？"
-              );
-            } else {
-              setScanStatus("success");
-            }
-            setSmDrawerStatus(true);
-          })
-          .catch((err: AxiosError<generalFailedProp>) => {
+        api(aspidaClient()).guest.info._guest_id(scanText).$get({
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then((res) => {
+          setGuestInfo(res);
+          const guestData = res;
+          if (guestData.available) {
             setScanStatus("error");
-            setMessage(err.message);
-            setSmDrawerStatus(true);
-          });
+            setMessage("このゲストは無効です。");
+          } else {
+            setScanStatus("success");
+          }
+          setSmDrawerStatus(true);
+        });
         setLoading(false);
       } else {
         setScanStatus("error");
@@ -161,7 +135,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           guest_id: text,
           guest_type: guestInfo.guest_type,
           exhibit_id: currentExhibit.exhibit_id,
-          userId: profile.userId,
+          user_id: profile.user_id,
         };
         axios
           .post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, {

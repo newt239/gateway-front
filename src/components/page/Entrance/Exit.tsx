@@ -83,13 +83,6 @@ const EntranceExit = () => {
               setScanStatus("error");
               setMessage(["このゲストは無効です。"]);
               setSmDrawerStatus(true);
-            } else if (
-              guestData.revoke_at !== null ||
-              guestData.revoke_at === ""
-            ) {
-              setScanStatus("error");
-              setMessage(["このゲストは既に退場処理が行われています。"]);
-              setSmDrawerStatus(true);
             } else {
               setScanStatus("success");
               setSmDrawerStatus(true);
@@ -114,7 +107,7 @@ const EntranceExit = () => {
       const payload = {
         guest_id: text,
         guest_type: guestInfo.guest_type,
-        userId: profile.userId,
+        user_id: profile.user_id,
       };
       axios
         .post(`${API_BASE_URL}/v1/guests/revoke`, payload, {
@@ -194,7 +187,8 @@ const EntranceExit = () => {
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    generalProps.reservation.guest_type[guestInfo.guest_type]
+                    // TODO: string template literalへの対応
+                    generalProps.reservation.guest_type["student"]
                   }
                 />
               </ListItem>
