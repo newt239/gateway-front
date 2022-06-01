@@ -1,6 +1,6 @@
 export interface reservationInfoProp {
   reservation_id: string;
-  guest_type: "general" | "student" | "family" | "special";
+  guest_type: string; // "general" | "student" | "family" | "special";
   count: number;
   registered: number;
   available: number;

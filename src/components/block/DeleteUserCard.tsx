@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import axios from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import {
   Typography,
@@ -12,13 +13,11 @@ import {
 } from "@mui/material";
 
 import MessageDialog from "./MessageDialog";
-import { apiBaseUrlState } from "#/recoil/page";
 
 const DeleteUserCard = () => {
-  const apiBaseUrl = useRecoilValue(apiBaseUrlState);
   const token = useRecoilValue(tokenState);
 
-  const [deleteuser_idValue, setDeleteuser_idValue] = useState("");
+  const [deleteUserIdValue, setDeleteuser_idValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [messageDialogType, setMessageDialogType] = useState<
@@ -27,23 +26,21 @@ const DeleteUserCard = () => {
   const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
 
   const deleteUser = async () => {
-    if (token && !loading && deleteuser_idValue !== "") {
+    if (token && !loading && deleteUserIdValue !== "") {
       setLoading(true);
       const payload = {
-        user_id: deleteuser_idValue,
+        user_id: deleteUserIdValue,
       };
-      await axios
-        .post(`${apiBaseUrl}/v1/admin/delete-user`, payload, {
-          headers: { Authorization: `"Bearer ${token}` },
-        })
-        .then(() => {
-          setShowMessageDialog(true);
-          setMessageDialogType("success");
-          setMessageDialogMessage([
-            `ユーザー( ${payload.user_id} )を削除しました。`,
-          ]);
-          setDeleteuser_idValue("");
-        })
+      await api(aspidaClient()).admin.user.delete._user_id(deleteUserIdValue).$delete({
+        headers: { Authorization: `"Bearer ${token}` },
+      }).then(() => {
+        setShowMessageDialog(true);
+        setMessageDialogType("success");
+        setMessageDialogMessage([
+          `ユーザー( ${payload.user_id} )を削除しました。`,
+        ]);
+        setDeleteuser_idValue("");
+      })
         .catch(() => {
           setShowMessageDialog(true);
           setMessageDialogType("error");
@@ -67,7 +64,7 @@ const DeleteUserCard = () => {
       <TextField
         id="deleteUser"
         label="削除するユーザーid"
-        value={deleteuser_idValue}
+        value={deleteUserIdValue}
         onChange={(e) => setDeleteuser_idValue(e.target.value)}
         margin="normal"
         fullWidth
@@ -75,7 +72,7 @@ const DeleteUserCard = () => {
       <Box sx={{ width: "100%", textAlign: "right" }}>
         <Button
           onClick={deleteUser}
-          disabled={loading || deleteuser_idValue === ""}
+          disabled={loading || deleteUserIdValue === ""}
           variant="contained"
           startIcon={loading && <CircularProgress size={24} />}
         >

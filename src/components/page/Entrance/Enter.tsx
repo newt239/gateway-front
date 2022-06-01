@@ -8,9 +8,11 @@ import {
 } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
-import { apiBaseUrlState, pageStateSelector } from "#/recoil/page";
+import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
-import axios, { AxiosResponse, AxiosError } from "axios";
+import { AxiosError } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import {
   MobileStepper,
@@ -45,16 +47,12 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 import generalProps from "#/components/functional/generalProps";
 import Scanner from "#/components/block/Scanner";
 import { generalFailedProp } from "#/types/global";
-import { guestInfoProp } from "#/types/guests";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const EntranceEnter = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const token = useRecoilValue(tokenState);
-  const apiBaseUrl = useRecoilValue(apiBaseUrlState);
   const profile = useRecoilValue(profileState);
   const [text, setText] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
@@ -64,7 +62,7 @@ const EntranceEnter = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [reservation, setReservation] = useRecoilState(reservationState);
   const resetReservation = useResetRecoilState(reservationState);
-  const [guestInfoList, setGuestInfo] = useState<guestInfoProp[]>([]);
+  const [guestList, setGuest] = useState<string[]>([]);
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
     message: string;
@@ -91,30 +89,26 @@ const EntranceEnter = () => {
     if (reservation && scanText && profile) {
       setText(scanText);
       if (scanText.length === 10 && scanText.startsWith("G")) {
-        if (!guestInfoList.some((guest) => guest.guest_id === scanText)) {
-          setGuestInfo([
-            ...guestInfoList,
-            {
-              guest_id: scanText,
-              guest_type: reservation.guest_type,
-              part: reservation.part,
-              reservation_id: reservation.reservation_id,
-              available: reservation.available,
-            },
-          ]);
+        if (!guestList.some((guest) => guest === scanText)) {
+          setGuest([...guestList, scanText]);
           setScanStatus("success");
-          setActiveStep(guestInfoList.length);
+          setActiveStep(guestList.length);
         }
       }
     }
   };
   const postApi = () => {
-    if (token && reservation && guestInfoList.length === reservation.count) {
-      axios
-        .post(`${apiBaseUrl}/v1/guests/register`, guestInfoList, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res: AxiosResponse<{ status: "success" }>) => {
+    if (token && reservation && guestList.length === reservation.count) {
+      api(aspidaClient()).guest.register.$post({
+        body: {
+          reservation_id: reservation.reservation_id,
+          guest_type: reservation.guest_type,
+          guest_id: guestList,
+          part: reservation.part
+        },
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(() => {
           resetReservation();
           setDeviceState(true);
           setText("");
@@ -148,7 +142,7 @@ const EntranceEnter = () => {
   const GuestInfoCard = () => {
     return (
       <>
-        {reservation && guestInfoList.length !== 0 && (
+        {reservation && guestList.length !== 0 && (
           <>
             <MobileStepper
               variant="dots"
@@ -162,7 +156,7 @@ const EntranceEnter = () => {
                   onClick={() =>
                     setActiveStep((prevActiveStep) => prevActiveStep + 1)
                   }
-                  disabled={activeStep === guestInfoList.length - 1}
+                  disabled={activeStep === guestList.length - 1}
                 >
                   Next
                   {theme.direction === "rtl" ? (
@@ -199,7 +193,7 @@ const EntranceEnter = () => {
                   <ListItemIcon>
                     <AssignmentIndRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary={guestInfoList[activeStep].guest_id} />
+                  <ListItemText primary={guestList[activeStep]} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
@@ -216,9 +210,9 @@ const EntranceEnter = () => {
                   </ListItemIcon>
                   <ListItemText
                     primary={
-                      guestInfoList[activeStep].part === "all"
+                      reservation.part === "all"
                         ? "全時間帯"
-                        : guestInfoList[activeStep].part
+                        : reservation.part
                     }
                   />
                 </ListItem>
@@ -267,10 +261,10 @@ const EntranceEnter = () => {
     setScanStatus("waiting");
     setSmDrawerStatus(false);
     if (activeStep === 0) {
-      setGuestInfo([]);
+      setGuest([]);
     } else {
-      const newGuestList = guestInfoList;
-      setGuestInfo(newGuestList.splice(activeStep - 1, 1));
+      const newGuestList = guestList;
+      setGuest(newGuestList.splice(activeStep - 1, 1));
     }
   };
 

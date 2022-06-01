@@ -3,16 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-import axios, { AxiosResponse } from "axios";
 import aspidaClient from "@aspida/axios";
 import api from "#/api/$api";
 
 import { Grid, Alert, TextField, Button } from "@mui/material";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
-
-import { loginSuccessProp } from "#/types/auth";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 interface messageType {
   display: "none" | "block";

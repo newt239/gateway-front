@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-import axios, { AxiosError, AxiosResponse } from "axios";
 import aspidaClient from "@aspida/axios";
 import api from "#/api/$api";
 
@@ -21,9 +20,6 @@ import {
 
 import MessageDialog from "./MessageDialog";
 import { userTypeProp } from "#/components/functional/generalProps";
-import { generalFailedProp } from "#/types/global";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const CreateUserCard = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -91,29 +87,27 @@ const CreateUserCard = () => {
       const payload = {
         user_id: user_idValue,
         password: passwordValue,
-        displayName: displayNameValue,
-        userType: userTypeValue,
+        display_name: displayNameValue,
+        user_type: userTypeValue,
       };
-      axios
-        .post(`${API_BASE_URL}/v1/admin/create`, payload, {
-          headers: { Authorization: `"Bearer ${token}` },
-        })
-        .then(() => {
-          setCreateHistory([
-            ...createHistory,
-            {
-              user_id: user_idValue,
-              display_name: displayNameValue,
-              user_type: userTypeValue,
-            },
-          ]);
-          console.log("operation of create user was succeed.");
-        })
-        .catch((err: AxiosError<generalFailedProp>) => {
-          setMessageDialogMessage([err.message]);
-          setShowMessageDialog(true);
-        });
-    }
+      api(aspidaClient()).admin.user.create.$post({
+        headers: { Authorization: `Bearer ${token}` },
+        body: payload
+      });
+
+      setCreateHistory([
+        ...createHistory,
+        {
+          user_id: user_idValue,
+          display_name: displayNameValue,
+          user_type: userTypeValue,
+        },
+      ]);
+      console.log("operation of create user was succeed.");
+      // エラーハンドリング
+      //  setMessageDialogMessage([err.message]);
+      //  setShowMessageDialog(true);
+    };
     setLoading(false);
   };
 

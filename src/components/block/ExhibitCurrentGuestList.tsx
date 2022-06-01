@@ -1,18 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import axios, { AxiosResponse } from "axios";
 import moment from "moment";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import { Grid, Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-
-import generalProps, {
-  exhibitCurrentGuestProp,
-} from "#/components/functional/generalProps";
-import { currentEachExhibitSuccessProp } from "#/types/exhibit";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ゲストID" },
@@ -34,20 +28,11 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
 
   useEffect(() => {
     if (token && exhibit_id !== "") {
-      axios
-        .get(`${API_BASE_URL}/v1/exhibit/current/${exhibit_id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res: AxiosResponse<currentEachExhibitSuccessProp>) => {
-          const tableData = res.data.data.map((e: exhibitCurrentGuestProp) => ({
-            id: e.id,
-            guest_type: generalProps.guest.guest_type[e.guest_type],
-            enter_at: moment(e.enter_at).format("MM/DD HH:MM:SS"),
-          }));
-          if (res.data) {
-            setRows(tableData);
-          }
-        });
+      api(aspidaClient()).exhibit.current._exhibit_id(exhibit_id).$get({
+        headers: { Authorization: `Bearer ${token}` },
+      }).then((res) => {
+        console.log(res);
+      });
     }
   }, [exhibit_id]);
 

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-import axios, { AxiosResponse, AxiosError } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import {
   Grid,
@@ -13,10 +14,8 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
-import { generalFailedProp } from "#/types/global";
-import { guestInfoProp, guestsInfoSuccessProp } from "#/types/guests";
+import { guestInfoProp } from "#/types/guests";
 
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const AdminCheckGuest = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -33,14 +32,13 @@ const AdminCheckGuest = () => {
   const searchGuest = () => {
     if (token && !loading && guestId !== "") {
       setLoading(true);
-      axios
-        .get(`${API_BASE_URL}/v1/guests/info/${guestId}`, {
-          headers: { Authorization: "Bearer " + token },
+      api(aspidaClient()).guest.info._guest_id(guestId).$get({
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then((res) => {
+          setGuestInfo(res);
         })
-        .then((res: AxiosResponse<guestsInfoSuccessProp>) => {
-          setGuestInfo(res.data.data);
-        })
-        .catch((err: AxiosError<generalFailedProp>) => {
+        .catch((err) => {
           console.log(err);
         });
       setLoading(false);

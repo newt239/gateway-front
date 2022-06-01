@@ -11,6 +11,8 @@ import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
 import axios, { AxiosResponse, AxiosError } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import {
   Alert,
@@ -80,18 +82,17 @@ const ReserveCheck = () => {
       if (token && scanText.length === 7 && scanText.startsWith("R")) {
         setDeviceState(false);
         setLoading(true);
-        axios
-          .get(`${API_BASE_URL}/v1/reservation/${scanText}`, {
-            headers: { Authorization: "Bearer " + token },
-          })
-          .then((res: AxiosResponse<reservationSuccessProp>) => {
+        api(aspidaClient()).reservation.info._reservation_id(scanText).$get({
+          headers: { Authorization: "Bearer " + token },
+        })
+          .then((res) => {
             setLoading(false);
-            setReservation(res.data.data);
-            if (res.data.data.available) {
+            setReservation(res);
+            if (res.available) {
               setScanStatus("error");
               setMessage(["この予約idは無効です。"]);
               setSmDrawerStatus(true);
-            } else if (res.data.data.count === res.data.data.registered) {
+            } else if (res.count === res.registered) {
               setScanStatus("error");
               setMessage(["この予約idは既に利用済みです。"]);
               setSmDrawerStatus(true);
