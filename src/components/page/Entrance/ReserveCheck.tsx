@@ -10,7 +10,7 @@ import { tokenState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
-import axios, { AxiosResponse, AxiosError } from "axios";
+import { AxiosError } from "axios";
 import aspidaClient from "@aspida/axios";
 import api from "#/api/$api";
 
@@ -42,12 +42,8 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
-import generalProps from "#/components/functional/generalProps";
 import Scanner from "#/components/block/Scanner";
 import { generalFailedProp } from "#/types/global";
-import { reservationSuccessProp } from "#/types/reservation";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const ReserveCheck = () => {
   const theme = useTheme();
@@ -154,9 +150,7 @@ const ReserveCheck = () => {
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={
-                    generalProps.reservation.guest_type[reservation.guest_type]
-                  }
+                  primary={reservation.guest_type}
                 />
               </ListItem>
               <ListItem>
