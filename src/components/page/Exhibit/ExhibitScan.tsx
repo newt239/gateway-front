@@ -4,7 +4,7 @@ import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { currentExhibitState } from "#/recoil/exhibit";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { AxiosError } from "axios";
 import aspidaClient from "@aspida/axios";
 import api from "#/api/$api";
 
@@ -36,13 +36,11 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp, guestsInfoSuccessProp } from "#/types/guests";
+import { guestInfoProp } from "#/types/guests";
 import { generalFailedProp } from "#/types/global";
 
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
-
 type ExhibitScanProps = {
-  scanType: string;
+  scanType: "enter" | "exit";
 };
 
 const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
@@ -93,12 +91,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           }
         }).then((res) => {
           setGuestInfo(res);
-          const guestData = res;
-          if (guestData.available) {
+          if (res.available) {
+            setScanStatus("success");
+          } else {
             setScanStatus("error");
             setMessage("このゲストは無効です。");
-          } else {
-            setScanStatus("success");
           }
           setSmDrawerStatus(true);
         });
@@ -137,11 +134,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           exhibit_id: currentExhibit.exhibit_id,
           user_id: profile.user_id,
         };
-        axios
-          .post(`${API_BASE_URL}/v1/activity/${scanType}`, payload, {
-            headers: { Authorization: "Bearer " + token },
-          })
-          .then((res) => {
+        api(aspidaClient()).activity[scanType].$post({
+          headers: { Authorization: "Bearer " + token },
+          body: payload
+        })
+          .then(() => {
             setDeviceState(true);
             setText("");
             setMessage("");

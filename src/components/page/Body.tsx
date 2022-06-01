@@ -78,7 +78,7 @@ const Body = () => {
                   element={<ExhibitScan scanType="enter" />}
                 />
                 <Route path="exit" element={<ExhibitScan scanType="exit" />} />
-                <Route path="pass" element={<ExhibitScan scanType="pass" />} />
+                <Route path="pass" element={<ExhibitScan scanType="exit" />} />
               </Route>
             ) : (
               <Navigate to="/" />
