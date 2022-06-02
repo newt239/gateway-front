@@ -52,7 +52,7 @@ const ChartExhibit = () => {
             <Button
               variant="text"
               startIcon={<ArrowBackIosNewRoundedIcon />}
-              onClick={(e) => navigate("/chart/all", { replace: true })}
+              onClick={() => navigate("/chart/all", { replace: true })}
             >
               一覧に戻る
             </Button>

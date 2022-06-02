@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import moment from "moment";
 import aspidaClient from "@aspida/axios";
 import api from "#/api/$api";
 

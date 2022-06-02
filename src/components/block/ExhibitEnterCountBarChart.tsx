@@ -24,11 +24,13 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
       if (token) {
         api(aspidaClient()).exhibit.history._exhibit_id(exhibit_id)._day(day).$get({ headers: { Authorization: `Bearer ${token}` } })
           .then((res) => {
+            console.log(res);
             if (res.length !== 0) {
               const rawData: { time: string; count: number }[] = res;
               const timeList: string[] = [];
               const countList: number[] = [];
               let ctime = moment(rawData[0].time);
+              // TODO: ツールチップに表示される時刻がUTC
               for (const eachData of rawData) {
                 const eachTime = moment(eachData.time);
                 while (ctime < eachTime) {

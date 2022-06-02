@@ -15,22 +15,19 @@ const UserListCard = () => {
 
   // 過去に自分が作成したユーザーのリスト
   useEffect(() => {
-    const getData = () => {
-      if (token) {
-        api(aspidaClient()).admin.user.created_by_me.$get({
-          headers: { Authorization: "Bearer " + token },
+    if (token) {
+      api(aspidaClient()).admin.user.created_by_me.$get({
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then((res) => {
+          if (res.length !== 0) {
+            setCreateHistory([...createHistory, ...res]);
+          }
         })
-          .then((res) => {
-            if (res.length !== 0) {
-              setCreateHistory([...createHistory, ...res]);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-      getData();
-    };
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (
