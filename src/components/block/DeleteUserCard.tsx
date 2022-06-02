@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import axios from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import {
   Typography,
@@ -12,13 +13,11 @@ import {
 } from "@mui/material";
 
 import MessageDialog from "./MessageDialog";
-import { apiBaseUrlState } from "#/recoil/page";
 
 const DeleteUserCard = () => {
-  const apiBaseUrl = useRecoilValue(apiBaseUrlState);
   const token = useRecoilValue(tokenState);
 
-  const [deleteUserIdValue, setDeleteUserIdValue] = useState("");
+  const [deleteUserIdValue, setDeleteuser_idValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [messageDialogType, setMessageDialogType] = useState<
@@ -32,18 +31,16 @@ const DeleteUserCard = () => {
       const payload = {
         user_id: deleteUserIdValue,
       };
-      await axios
-        .post(`${apiBaseUrl}/v1/admin/delete-user`, payload, {
-          headers: { Authorization: `"Bearer ${token}` },
-        })
-        .then(() => {
-          setShowMessageDialog(true);
-          setMessageDialogType("success");
-          setMessageDialogMessage([
-            `ユーザー( ${payload.user_id} )を削除しました。`,
-          ]);
-          setDeleteUserIdValue("");
-        })
+      await api(aspidaClient()).admin.user.delete._user_id(deleteUserIdValue).$delete({
+        headers: { Authorization: `"Bearer ${token}` },
+      }).then(() => {
+        setShowMessageDialog(true);
+        setMessageDialogType("success");
+        setMessageDialogMessage([
+          `ユーザー( ${payload.user_id} )を削除しました。`,
+        ]);
+        setDeleteuser_idValue("");
+      })
         .catch(() => {
           setShowMessageDialog(true);
           setMessageDialogType("error");
@@ -68,7 +65,7 @@ const DeleteUserCard = () => {
         id="deleteUser"
         label="削除するユーザーid"
         value={deleteUserIdValue}
-        onChange={(e) => setDeleteUserIdValue(e.target.value)}
+        onChange={(e) => setDeleteuser_idValue(e.target.value)}
         margin="normal"
         fullWidth
       />

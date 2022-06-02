@@ -3,7 +3,9 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
-import axios, { AxiosResponse, AxiosError } from "axios";
+import { AxiosError } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import {
   Alert,
@@ -23,7 +25,6 @@ import {
   ListItemIcon,
   ListItemText,
   Snackbar,
-  AlertTitle,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -35,9 +36,7 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import generalProps from "#/components/functional/generalProps";
 import Scanner from "#/components/block/Scanner";
 import { generalFailedProp } from "#/types/global";
-import { guestInfoProp, guestsInfoSuccessProp } from "#/types/guests";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
+import { guestInfoProp } from "#/types/guests";
 
 const EntranceExit = () => {
   const theme = useTheme();
@@ -71,24 +70,15 @@ const EntranceExit = () => {
       if (scanText.length === 10 && scanText.startsWith("G")) {
         setDeviceState(false);
         setLoading(true);
-        axios
-          .get(`${API_BASE_URL}/v1/guests/info/${scanText}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .then((res: AxiosResponse<guestsInfoSuccessProp>) => {
+        api(aspidaClient()).guest.info._guest_id(scanText).$get({
+          headers: { Authorization: `Bearer ${token}` },
+        })
+          .then((res) => {
             setLoading(false);
-            setGuestInfo(res.data.data);
-            const guestData = res.data.data;
-            if (guestData.available) {
+            setGuestInfo(res);
+            if (res.available) {
               setScanStatus("error");
               setMessage(["このゲストは無効です。"]);
-              setSmDrawerStatus(true);
-            } else if (
-              guestData.revoke_at !== null ||
-              guestData.revoke_at === ""
-            ) {
-              setScanStatus("error");
-              setMessage(["このゲストは既に退場処理が行われています。"]);
               setSmDrawerStatus(true);
             } else {
               setScanStatus("success");
@@ -111,16 +101,15 @@ const EntranceExit = () => {
 
   const postApi = () => {
     if (token && profile && guestInfo) {
-      const payload = {
-        guest_id: text,
-        guest_type: guestInfo.guest_type,
-        userId: profile.userId,
-      };
-      axios
-        .post(`${API_BASE_URL}/v1/guests/revoke`, payload, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res: AxiosResponse<{ status: "success" }>) => {
+      // TODO: エンドポイントを別個に用意するか検討
+      api(aspidaClient()).activity.exit.$post({
+        body: {
+          guest_id: text,
+          exhibit_id: "entrance"
+        },
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then(() => {
           setDeviceState(true);
           setText("");
           setMessage([]);
@@ -129,7 +118,7 @@ const EntranceExit = () => {
           setSmDrawerStatus(false);
           setSnackbar({
             status: true,
-            message: `${payload.guest_id}の退場処理に成功しました。`,
+            message: `${text}の退場処理に成功しました。`,
             severity: "success",
           });
         })
@@ -194,7 +183,8 @@ const EntranceExit = () => {
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    generalProps.reservation.guest_type[guestInfo.guest_type]
+                    // TODO: string template literalへの対応
+                    generalProps.reservation.guest_type["student"]
                   }
                 />
               </ListItem>

@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import axios, { AxiosError, AxiosResponse } from "axios";
 // @ts-ignore
 import Chart from "react-apexcharts";
 // https://github.com/apexcharts/react-apexcharts/issues/368#issuecomment-1003686683
 import { ApexOptions } from "apexcharts";
 import moment from "moment";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import { TextField } from "@mui/material";
 import { generalFailedProp } from "#/types/global";
-import { enterChartSuccessProp } from "#/types/exhibit";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const ExhibitEnterCountBarChart: React.FunctionComponent<{
   exhibit_id: string;
@@ -24,17 +22,15 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
   useEffect(() => {
     const getApi = () => {
       if (token) {
-        axios
-          .get(
-            `${API_BASE_URL}/v1/exhibit/enter-chart/${exhibit_id}?day=${day}`,
-            { headers: { Authorization: `Bearer ${token}` } }
-          )
-          .then((res: AxiosResponse<enterChartSuccessProp>) => {
-            if (res.data.data.length !== 0) {
-              const rawData: { time: string; count: number }[] = res.data.data;
+        api(aspidaClient()).exhibit.history._exhibit_id(exhibit_id)._day(day).$get({ headers: { Authorization: `Bearer ${token}` } })
+          .then((res) => {
+            console.log(res);
+            if (res.length !== 0) {
+              const rawData: { time: string; count: number }[] = res;
               const timeList: string[] = [];
               const countList: number[] = [];
               let ctime = moment(rawData[0].time);
+              // TODO: ツールチップに表示される時刻がUTC
               for (const eachData of rawData) {
                 const eachTime = moment(eachData.time);
                 while (ctime < eachTime) {
@@ -49,7 +45,7 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
               setData(countList);
             }
           })
-          .catch((err: AxiosError<generalFailedProp>) => {
+          .catch((err) => {
             console.log(err);
           });
       }

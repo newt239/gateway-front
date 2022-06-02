@@ -8,7 +8,8 @@ import {
 } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import Home from "#/components/page/Home";
 import Login from "#/components/page/Login";
@@ -26,10 +27,6 @@ import DocsEach from "#/components/page/Docs/Each";
 import AdminManageUser from "#/components/page/Admin/ManageUser";
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminManageExhibit from "#/components/page/Admin/ManageExhibit";
-import { generalFailedProp } from "#/types/global";
-import { loginSuccessProp } from "#/types/auth";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const Body = () => {
   const location = useLocation();
@@ -40,17 +37,14 @@ const Body = () => {
     if (location.pathname !== "/login") {
       if (token) {
         // プロフィールの取得
-        axios
-          .get(API_BASE_URL + "/v1/auth/me", {
-            headers: { Authorization: "Bearer " + token },
-          })
-          .then((res: AxiosResponse<loginSuccessProp>) => {
-            console.log(res.data);
-            setProfile(res.data.profile);
-          })
-          .catch((err: AxiosError<generalFailedProp>) => {
-            console.log(err.message);
-          });
+        api(aspidaClient()).auth.me.$get({
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }).then((meRes) => {
+          console.log(meRes);
+          setProfile(meRes);
+        });
       } else {
         // 未ログイン時ログインページへ遷移
         navigate("/login", { replace: true });
@@ -62,7 +56,7 @@ const Body = () => {
     return (
       <>
         <p>お探しのページは見つかりませんでした。</p>
-        <span onClick={(e) => navigate("/", { replace: true })}>
+        <span onClick={() => navigate("/", { replace: true })}>
           トップに戻る
         </span>
       </>
@@ -84,7 +78,7 @@ const Body = () => {
                   element={<ExhibitScan scanType="enter" />}
                 />
                 <Route path="exit" element={<ExhibitScan scanType="exit" />} />
-                <Route path="pass" element={<ExhibitScan scanType="pass" />} />
+                <Route path="pass" element={<ExhibitScan scanType="exit" />} />
               </Route>
             ) : (
               <Navigate to="/" />

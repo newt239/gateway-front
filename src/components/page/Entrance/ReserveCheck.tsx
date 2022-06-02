@@ -10,7 +10,9 @@ import { tokenState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
-import axios, { AxiosResponse, AxiosError } from "axios";
+import { AxiosError } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import {
   Alert,
@@ -30,7 +32,6 @@ import {
   ListItemIcon,
   ListItemText,
   Snackbar,
-  AlertTitle,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -40,12 +41,8 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
-import generalProps from "#/components/functional/generalProps";
 import Scanner from "#/components/block/Scanner";
 import { generalFailedProp } from "#/types/global";
-import { reservationSuccessProp } from "#/types/reservation";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const ReserveCheck = () => {
   const theme = useTheme();
@@ -80,18 +77,17 @@ const ReserveCheck = () => {
       if (token && scanText.length === 7 && scanText.startsWith("R")) {
         setDeviceState(false);
         setLoading(true);
-        axios
-          .get(`${API_BASE_URL}/v1/reservation/${scanText}`, {
-            headers: { Authorization: "Bearer " + token },
-          })
-          .then((res: AxiosResponse<reservationSuccessProp>) => {
+        api(aspidaClient()).reservation.info._reservation_id(scanText).$get({
+          headers: { Authorization: "Bearer " + token },
+        })
+          .then((res) => {
             setLoading(false);
-            setReservation(res.data.data);
-            if (res.data.data.available) {
+            setReservation(res);
+            if (res.available) {
               setScanStatus("error");
               setMessage(["この予約idは無効です。"]);
               setSmDrawerStatus(true);
-            } else if (res.data.data.count === res.data.data.registered) {
+            } else if (res.count === res.registered) {
               setScanStatus("error");
               setMessage(["この予約idは既に利用済みです。"]);
               setSmDrawerStatus(true);
@@ -153,9 +149,7 @@ const ReserveCheck = () => {
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={
-                    generalProps.reservation.guest_type[reservation.guest_type]
-                  }
+                  primary={reservation.guest_type}
                 />
               </ListItem>
               <ListItem>

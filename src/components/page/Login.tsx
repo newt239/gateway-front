@@ -3,14 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-import axios, { AxiosResponse } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import { Grid, Alert, TextField, Button } from "@mui/material";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
-
-import { loginSuccessProp } from "#/types/auth";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 interface messageType {
   display: "none" | "block";
@@ -26,35 +23,33 @@ const Login = () => {
     setPageInfo({ title: "ログイン" });
   }, []);
   const navigate = useNavigate();
-  const [inputValue, updateValue] = useState({ userId: "", password: "" });
+  const [inputValue, updateValue] = useState({ user_id: "", password: "" });
   const [message, updateMessage] = useState<messageType>({
     display: "none",
     severity: "error",
     message: "",
   });
-  const login = async () => {
-    if (inputValue.userId !== "") {
-      const res: AxiosResponse<loginSuccessProp> = await axios.post(
-        API_BASE_URL + "/v1/auth/login",
-        inputValue
-      );
-      if (res.data.status === "success") {
-        updateMessage({
-          display: "block",
-          severity: "success",
-          message: "ログインに成功しました。",
+  const login = () => {
+    if (inputValue.user_id !== "") {
+      api(aspidaClient()).auth.login.$post({
+        body: inputValue
+      }).then((loginRes) => {
+        localStorage.setItem("gatewayApiToken", loginRes.token);
+        setToken(loginRes.token);
+        api(aspidaClient()).auth.me.$get({
+          headers: {
+            Authorization: `Bearer ${loginRes.token}`
+          }
+        }).then((meRes) => {
+          updateMessage({
+            display: "block",
+            severity: "success",
+            message: "ログインに成功しました。",
+          });
+          setProfile(meRes);
+          navigate("/", { replace: true });
         });
-        localStorage.setItem("gatewayApiToken", res.data.token);
-        setToken(res.data.token);
-        setProfile(res.data.profile);
-        navigate("/", { replace: true });
-      } else {
-        updateMessage({
-          display: "block",
-          severity: "error",
-          message: "ユーザーidまたはパスワードが間違っています。",
-        });
-      }
+      });
     }
   };
   return (
@@ -65,12 +60,12 @@ const Login = () => {
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
-            id="userId"
+            id="user_id"
             label="ユーザーid"
             type="text"
             onChange={(event) =>
               updateValue({
-                userId: event.target.value,
+                user_id: event.target.value,
                 password: inputValue.password,
               })
             }
@@ -84,7 +79,7 @@ const Login = () => {
             type="password"
             onChange={(event) =>
               updateValue({
-                userId: inputValue.userId,
+                user_id: inputValue.user_id,
                 password: event.target.value,
               })
             }

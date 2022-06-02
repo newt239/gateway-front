@@ -7,12 +7,12 @@ export type userTypeProp =
   | "temporary";
 
 export interface profileProp {
-  userId: string;
+  user_id: string;
   display_name: string;
-  user_type: userTypeProp;
-  role: string;
-  available: boolean;
-  note: string;
+  user_type: string;
+  available: number;
+  role?: string;
+  note?: string;
 }
 
 export interface exhibitProp {

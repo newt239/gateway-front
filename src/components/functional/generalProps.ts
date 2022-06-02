@@ -26,7 +26,7 @@ export type exhibitCurrentGuestProp = {
 };
 
 export type profileStateProp = {
-  userId: string;
+  user_id: string;
   display_name: string;
   user_type: string;
   role: string;

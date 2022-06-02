@@ -52,12 +52,12 @@ const UserInfo = () => {
           </Box>
           <Identicon
             size={40}
-            name={profile.userId}
+            name={profile.user_id}
             variant="beam"
             colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
           />
           <Typography variant="h3">{profile.display_name}</Typography>
-          <Typography sx={{ fontSize: 10 }}>@{profile.userId}</Typography>
+          <Typography sx={{ fontSize: 10 }}>@{profile.user_id}</Typography>
           <Box sx={{ width: "100%", textAlign: "right" }}>
             <Button
               variant="outlined"
@@ -77,7 +77,7 @@ const UserInfo = () => {
             <Button
               variant="outlined"
               color="success"
-              onClick={(e) => navigate("/login", { replace: true })}
+              onClick={() => navigate("/login", { replace: true })}
               sx={{ mt: 2 }}
               startIcon={<LogoutRoundedIcon />}
             >

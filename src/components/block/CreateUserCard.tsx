@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import {
   Typography,
@@ -11,18 +12,10 @@ import {
   Box,
   Button,
   CircularProgress,
-  List,
-  ListItem,
-  ListItemText,
-  IconButton,
 } from "@mui/material";
 
 import MessageDialog from "./MessageDialog";
 import { userTypeProp } from "#/components/functional/generalProps";
-import { createdByMeSuccessProp } from "#/types/admin";
-import { generalFailedProp } from "#/types/global";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const CreateUserCard = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -32,7 +25,7 @@ const CreateUserCard = () => {
 
   const token = useRecoilValue(tokenState);
 
-  const [userIdValue, setUserId] = useState("");
+  const [user_idValue, setuser_id] = useState("");
   const [passwordValue, setPassword] = useState("");
   const [displayNameValue, setDisplayName] = useState("");
   const [userTypeValue, setUserType] = useState<userTypeProp>("exhibit");
@@ -53,18 +46,14 @@ const CreateUserCard = () => {
   // 過去に自分が作成したユーザーのリスト
   useEffect(() => {
     if (token) {
-      axios
-        .get(`${API_BASE_URL}/v1/admin/created-by-me`, {
+      async (token: string) => {
+        const user = await api(aspidaClient()).admin.user.created_by_me.$get({
           headers: { Authorization: `Bearer ${token}` },
-        })
-        .then((res: AxiosResponse<createdByMeSuccessProp>) => {
-          if (res.data.status === "success" && res.data.data.length !== 0) {
-            setCreateHistory([...createHistory, ...res.data.data]);
-          }
-        })
-        .catch((err) => {
-          console.log(err);
         });
+        if (user.length !== 0) {
+          setCreateHistory([...createHistory, ...user]);
+        }
+      }
     }
   }, [token]);
 
@@ -72,15 +61,15 @@ const CreateUserCard = () => {
     if (token && !loading) {
       setLoading(true);
       if (
-        userIdValue === "" ||
+        user_idValue === "" ||
         displayNameValue === "" ||
-        userIdValue.length > 10 ||
+        user_idValue.length > 10 ||
         displayNameValue.length > 20
       ) {
         setMessageDialogMessage([
-          userIdValue === "" ? "ユーザーidを入力してください。" : "",
+          user_idValue === "" ? "ユーザーidを入力してください。" : "",
           displayNameValue === "" ? "表示名を入力してください。" : "",
-          userIdValue.length > 10
+          user_idValue.length > 10
             ? "ユーザーidは10字以内で設定してください。"
             : "",
           displayNameValue.length > 20
@@ -92,31 +81,29 @@ const CreateUserCard = () => {
         return;
       }
       const payload = {
-        userId: userIdValue,
+        user_id: user_idValue,
         password: passwordValue,
-        displayName: displayNameValue,
-        userType: userTypeValue,
+        display_name: displayNameValue,
+        user_type: userTypeValue,
       };
-      axios
-        .post(`${API_BASE_URL}/v1/admin/create`, payload, {
-          headers: { Authorization: `"Bearer ${token}` },
-        })
-        .then(() => {
-          setCreateHistory([
-            ...createHistory,
-            {
-              user_id: userIdValue,
-              display_name: displayNameValue,
-              user_type: userTypeValue,
-            },
-          ]);
-          console.log("operation of create user was succeed.");
-        })
-        .catch((err: AxiosError<generalFailedProp>) => {
-          setMessageDialogMessage([err.message]);
-          setShowMessageDialog(true);
-        });
-    }
+      api(aspidaClient()).admin.user.create.$post({
+        headers: { Authorization: `Bearer ${token}` },
+        body: payload
+      });
+
+      setCreateHistory([
+        ...createHistory,
+        {
+          user_id: user_idValue,
+          display_name: displayNameValue,
+          user_type: userTypeValue,
+        },
+      ]);
+      console.log("operation of create user was succeed.");
+      // エラーハンドリング
+      //  setMessageDialogMessage([err.message]);
+      //  setShowMessageDialog(true);
+    };
     setLoading(false);
   };
 
@@ -129,15 +116,15 @@ const CreateUserCard = () => {
     <>
       <Typography variant="h3">ユーザーの作成</Typography>
       <TextField
-        id="userId"
+        id="user_id"
         label="ユーザーid"
         type="text"
-        value={userIdValue}
-        error={userIdValue.length > 10}
+        value={user_idValue}
+        error={user_idValue.length > 10}
         helperText={
-          userIdValue.length > 10 && "ユーザーidは10字以内で設定してください。"
+          user_idValue.length > 10 && "ユーザーidは10字以内で設定してください。"
         }
-        onChange={(e) => setUserId(e.target.value)}
+        onChange={(e) => setuser_id(e.target.value)}
         margin="normal"
         fullWidth
       />

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import axios, { AxiosResponse, AxiosError } from "axios";
+import aspidaClient from "@aspida/axios";
+import api from "#/api/$api";
 
 import { Typography, List, ListItem, ListItemText } from "@mui/material";
-
-import { createdByMeSuccessProp } from "#/types/admin";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 const UserListCard = () => {
   const token = useRecoilValue(tokenState);
@@ -18,23 +15,19 @@ const UserListCard = () => {
 
   // 過去に自分が作成したユーザーのリスト
   useEffect(() => {
-    const getData = () => {
-      if (token) {
-        axios
-          .get(`${API_BASE_URL}/v1/admin/created-by-me`, {
-            headers: { Authorization: "Bearer " + token },
-          })
-          .then((res: AxiosResponse<createdByMeSuccessProp>) => {
-            if (res.data.data.length !== 0) {
-              setCreateHistory([...createHistory, ...res.data.data]);
-            }
-          })
-          .catch((err) => {
-            console.log(err);
-          });
-      }
-      getData();
-    };
+    if (token) {
+      api(aspidaClient()).admin.user.created_by_me.$get({
+        headers: { Authorization: "Bearer " + token },
+      })
+        .then((res) => {
+          if (res.length !== 0) {
+            setCreateHistory([...createHistory, ...res]);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }, []);
 
   return (

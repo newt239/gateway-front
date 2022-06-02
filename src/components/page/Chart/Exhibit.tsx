@@ -29,8 +29,7 @@ const ChartExhibit = () => {
       if (exhibit_id === "") {
         navigate("/chart/all", { replace: true });
       } else if (
-        profile.user_type === "exhibit" &&
-        profile.role.indexOf(exhibit_id) !== -1
+        profile.user_type === "exhibit"
       ) {
         setStatus({
           status: false,
@@ -53,7 +52,7 @@ const ChartExhibit = () => {
             <Button
               variant="text"
               startIcon={<ArrowBackIosNewRoundedIcon />}
-              onClick={(e) => navigate("/chart/all", { replace: true })}
+              onClick={() => navigate("/chart/all", { replace: true })}
             >
               一覧に戻る
             </Button>
