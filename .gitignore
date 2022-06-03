@@ -26,4 +26,3 @@ yarn-error.log*
 sql/
 
 openapi.yaml
-api/

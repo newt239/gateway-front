@@ -47,3 +47,5 @@ Your app is ready to be deployed!
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
 ### `npx openapi2aspida -i=./openapi.yaml -o=src`
+
+make aspida type definition files ( before run, delete this directory )
