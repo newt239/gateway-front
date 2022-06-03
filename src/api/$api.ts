@@ -15,7 +15,7 @@ import type { Methods as Methods12 } from './guest/register'
 import type { Methods as Methods13 } from './reservation/info/_reservation_id@string'
 
 const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
-  const prefix = (baseURL === undefined ? 'http://localhost:3000/v1' : baseURL).replace(/\/$/, '')
+  const prefix = (baseURL === undefined ? 'https://api.sh-fes.com/v1' : baseURL).replace(/\/$/, '')
   const PATH0 = '/activity/enter'
   const PATH1 = '/activity/exit'
   const PATH2 = '/admin/user/create'
