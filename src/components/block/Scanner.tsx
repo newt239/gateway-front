@@ -98,7 +98,6 @@ const Scanner = ({ handleScan }: ScannerProps) => {
 
   // https://github.com/afes-website/cappuccino-app/blob/824cf2295cebae85b762b6c7a21cbbe94bf1d0ee/src/components/QRScanner.tsx#L201
   const handleError = (err: unknown) => {
-    console.error(err);
     setScannerStatus("error");
     setMessageDialogTitle("カメラ起動失敗");
     let reason: string[];

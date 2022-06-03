@@ -32,8 +32,8 @@ const Home = () => {
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
         <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-          <Box sx={{ width: "100%", textAlign: "center" }}>
-            <img src={GatewayThumbnail} />
+          <Box sx={{ textAlign: "center" }}>
+            <img src={GatewayThumbnail} style={{ width: "100%", maxWidth: "750px" }} />
           </Box>
         </Card>
       </Grid>

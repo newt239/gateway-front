@@ -84,15 +84,17 @@ const ReserveCheck = () => {
             setLoading(false);
             setReservation(res);
             if (res.available) {
+              if (res.count === res.registered) {
+                setScanStatus("error");
+                setMessage(["この予約idは既に利用済みです。"]);
+                setSmDrawerStatus(true);
+              } else {
+                setScanStatus("success");
+                setSmDrawerStatus(true);
+              }
+            } else {
               setScanStatus("error");
               setMessage(["この予約idは無効です。"]);
-              setSmDrawerStatus(true);
-            } else if (res.count === res.registered) {
-              setScanStatus("error");
-              setMessage(["この予約idは既に利用済みです。"]);
-              setSmDrawerStatus(true);
-            } else {
-              setScanStatus("success");
               setSmDrawerStatus(true);
             }
           })

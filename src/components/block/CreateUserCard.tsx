@@ -99,7 +99,6 @@ const CreateUserCard = () => {
           user_type: userTypeValue,
         },
       ]);
-      console.log("operation of create user was succeed.");
       // エラーハンドリング
       //  setMessageDialogMessage([err.message]);
       //  setShowMessageDialog(true);
