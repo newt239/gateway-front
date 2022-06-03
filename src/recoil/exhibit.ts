@@ -1,12 +1,7 @@
 import { atom, selector } from "recoil";
 import { tokenState } from "#/recoil/user";
-import axios, { AxiosError, AxiosResponse } from "axios";
-import { generalFailedProp } from "#/types/global";
-import { infoSuccessProp } from "#/types/exhibit";
 import aspidaClient from "@aspida/axios";
 import api from "#/api/$api";
-
-const API_BASE_URL: string = process.env.REACT_APP_API_BASE_URL!;
 
 type exhibitProp = {
   exhibit_id: string;
@@ -18,11 +13,11 @@ export const exhibitListState = atom<exhibitProp[]>({
   default: selector<exhibitProp[]>({
     key: "exhibitListSelector",
     get: ({ get }) => {
-      const toenStateValue = get(tokenState);
-      if (toenStateValue) {
+      const tokenStateValue = get(tokenState);
+      if (tokenStateValue) {
         const x = api(aspidaClient()).exhibit.list.$get({
           headers: {
-            Authorization: `Bearer ${toenStateValue}`
+            Authorization: `Bearer ${tokenStateValue}`
           }
         });
         return x;

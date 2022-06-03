@@ -14,7 +14,7 @@ export const pageState = atom<pageStateProp>({
 export const pageStateSelector = selector<pageStateProp>({
   key: "pageStateSelector",
   get: ({ get }) => get(pageState),
-  set: ({ set, get }, value) => {
+  set: ({ set }, value) => {
     if (value instanceof DefaultValue) {
       document.title = `Gateway`;
     } else {

@@ -63,20 +63,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   const setDeviceState = useSetRecoilState(deviceState);
   const setPageInfo = useSetRecoilState(pageStateSelector);
-  const currentExhibit = useRecoilValue(currentExhibitState);
 
   useEffect(() => {
     setScanStatus("waiting");
     setMessage("");
-    let pageTitle = "展示処理";
-    if (scanType === "enter") {
-      pageTitle = "入室スキャン";
-    } else if (scanType === "exit") {
-      pageTitle = "退室スキャン";
-    } else if (scanType === "pass") {
-      pageTitle = "通過スキャン";
-    }
-    setPageInfo({ title: pageTitle });
+    setPageInfo({ title: scanType === "enter" ? "入室スキャン" : "退室スキャン" });
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
@@ -90,12 +81,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             Authorization: `Bearer ${token}`
           }
         }).then((res) => {
-          console.log(res);
           setGuestInfo(res);
           if (!res.available) {
             setScanStatus("error");
             setMessage("このゲストは無効です。");
           } else {
+            const currentExhibit = useRecoilValue(currentExhibitState);
             if (scanType === "enter") {
               if (res.exhibit_id === "") {
                 setScanStatus("success");
@@ -147,6 +138,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const GuestInfoCard = () => {
     const postApi = () => {
       if (profile && guestInfo && token) {
+        const currentExhibit = useRecoilValue(currentExhibitState);
         const payload = {
           guest_id: text,
           guest_type: guestInfo.guest_type,
