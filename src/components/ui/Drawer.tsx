@@ -18,7 +18,6 @@ import {
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import ArrowRightAltRoundedIcon from "@mui/icons-material/ArrowRightAltRounded";
 import TableChartRoundedIcon from "@mui/icons-material/TableChartRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
@@ -96,15 +95,6 @@ const DrawerLeft = () => {
                     <LogoutRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="退室スキャン" />
-                </ListItemButton>
-                <ListItemButton
-                  selected={/exhibit\/pass/.test(path)}
-                  onClick={() => navigate("/exhibit/pass")}
-                >
-                  <ListItemIcon>
-                    <ArrowRightAltRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="通過スキャン" />
                 </ListItemButton>
               </List>
             </>

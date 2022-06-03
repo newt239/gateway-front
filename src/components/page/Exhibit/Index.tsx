@@ -30,17 +30,6 @@ const ExhibitIndex = () => {
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6} lg={4}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h3">通過処理</Typography>
-            <Typography>展示の通過を記録します。</Typography>
-            <Box sx={{ width: "100%", textAlign: "right" }}>
-              <Button onClick={() => navigate("pass")} variant="outlined">
-                開く
-              </Button>
-            </Box>
-          </Card>
-        </Grid>
       </Grid>
     </>
   );
