@@ -120,10 +120,10 @@ const Body = () => {
             ) : (
               <Navigate to="/" />
             )}
-            <Route path="*" element={<Extra kind="not-found" />} />
+            <Route path="*" element={<Extra />} />
           </>
         ) : (
-          <Route path="*" element={<Extra kind="unauthenticated" />} />
+          <Route path="*" element={<Login />} />
         )}
       </Routes>
       <MessageDialog

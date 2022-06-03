@@ -5,11 +5,7 @@ import { pageStateSelector } from "#/recoil/page";
 
 import { Grid, Typography, Button } from "@mui/material";
 
-type extraProps = {
-  kind: string;
-}
-
-const NotFound = (props: extraProps) => {
+const NotFound = () => {
   const navigate = useNavigate();
 
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -18,23 +14,13 @@ const NotFound = (props: extraProps) => {
   }, []);
 
   return (
-    <>
-      {props.kind === "not-found" ? (
-        <Grid container spacing={2} sx={{ p: 2 }}>
-          <Typography>お探しのページは見つかりませんでした。</Typography>
-          <Button onClick={() => navigate("/", { replace: true })}>
-            トップに戻る
-          </Button>
-        </Grid>
-      ) : (
-        <Grid container spacing={2} sx={{ p: 2 }}>
-          <Typography>ログインしていません。</Typography>
-          <Button onClick={() => navigate("/login", { replace: true })}>
-            ログインページへ
-          </Button>
-        </Grid>
-      )
-      }</>);
+    <Grid container spacing={2} sx={{ p: 2 }}>
+      <Typography>お探しのページは見つかりませんでした。</Typography>
+      <Button onClick={() => navigate("/", { replace: true })}>
+        トップに戻る
+      </Button>
+    </Grid>
+  );
 };
 
 export default NotFound;
