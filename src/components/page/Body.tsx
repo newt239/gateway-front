@@ -3,7 +3,6 @@ import {
   Routes,
   Route,
   useNavigate,
-  Navigate,
 } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
@@ -85,7 +84,7 @@ const Body = () => {
                 <Route path="exit" element={<ExhibitScan scanType="exit" />} />
               </Route>
             ) : (
-              <Navigate to="/" />
+              <Route path="*" element={<Extra type="401" />} />
             )}
             {["admin", "moderator", "executive"].includes(profile.user_type) ? (
               <Route path="entrance">
@@ -95,7 +94,7 @@ const Body = () => {
                 <Route path="exit" element={<EntranceExit />} />
               </Route>
             ) : (
-              <Navigate to="/" />
+              <Route path="*" element={<Extra type="401" />} />
             )}
             {["admin", "moderator", "analysis"].includes(profile.user_type) ? (
               <Route path="chart">
@@ -104,7 +103,7 @@ const Body = () => {
                 <Route path="heatmap" element={<Heatmap />} />
               </Route>
             ) : (
-              <Navigate to="/" />
+              <Route path="*" element={<Extra type="401" />} />
             )}
             <Route path="docs">
               <Route index element={<DocsIndex />} />
@@ -117,9 +116,9 @@ const Body = () => {
                 <Route path="exhibit" element={<AdminManageExhibit />} />
               </Route>
             ) : (
-              <Navigate to="/" />
+              <Route path="*" element={<Extra type="401" />} />
             )}
-            <Route path="*" element={<Extra />} />
+            <Route path="*" element={<Extra type="404" />} />
           </>
         ) : (
           <Route path="*" element={<Login />} />
