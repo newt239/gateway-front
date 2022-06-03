@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import { Typography, List, ListItem, ListItemText } from "@mui/material";
 
@@ -16,7 +15,7 @@ const UserListCard = () => {
   // 過去に自分が作成したユーザーのリスト
   useEffect(() => {
     if (token) {
-      api(aspidaClient()).admin.user.created_by_me.$get({
+      apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.created_by_me.$get({
         headers: { Authorization: "Bearer " + token },
       })
         .then((res) => {

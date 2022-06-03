@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import { Grid, Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
@@ -27,7 +26,7 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
 
   useEffect(() => {
     if (token && exhibit_id !== "") {
-      api(aspidaClient()).exhibit.current._exhibit_id(exhibit_id).$get({
+      apiClient(process.env.REACT_APP_API_BASE_URL).exhibit.current._exhibit_id(exhibit_id).$get({
         headers: { Authorization: `Bearer ${token}` },
       }).then((res) => {
         setRows(res);

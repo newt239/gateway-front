@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import {
   Typography,
@@ -47,7 +46,7 @@ const CreateUserCard = () => {
   useEffect(() => {
     if (token) {
       async (token: string) => {
-        const user = await api(aspidaClient()).admin.user.created_by_me.$get({
+        const user = await apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.created_by_me.$get({
           headers: { Authorization: `Bearer ${token}` },
         });
         if (user.length !== 0) {
@@ -86,7 +85,7 @@ const CreateUserCard = () => {
         display_name: displayNameValue,
         user_type: userTypeValue,
       };
-      api(aspidaClient()).admin.user.create.$post({
+      apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.create.$post({
         headers: { Authorization: `Bearer ${token}` },
         body: payload
       });

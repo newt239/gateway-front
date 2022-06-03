@@ -8,8 +8,7 @@ import {
 import { useRecoilState, useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { AxiosError } from "axios";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import MessageDialog from "#/components/block/MessageDialog";
 import Home from "#/components/page/Home";
@@ -43,7 +42,7 @@ const Body = () => {
   useEffect(() => {
     if (token) {
       // プロフィールの取得
-      api(aspidaClient()).auth.me.$get({
+      apiClient(process.env.REACT_APP_API_BASE_URL).auth.me.$get({
         headers: {
           Authorization: `Bearer ${token}`
         }

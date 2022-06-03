@@ -4,8 +4,7 @@ import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { AxiosError } from "axios";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import {
   Alert,
@@ -70,7 +69,7 @@ const EntranceExit = () => {
       if (scanText.length === 10 && scanText.startsWith("G")) {
         setDeviceState(false);
         setLoading(true);
-        api(aspidaClient()).guest.info._guest_id(scanText).$get({
+        apiClient(process.env.REACT_APP_API_BASE_URL).guest.info._guest_id(scanText).$get({
           headers: { Authorization: `Bearer ${token}` },
         })
           .then((res) => {
@@ -102,7 +101,7 @@ const EntranceExit = () => {
   const postApi = () => {
     if (token && profile && guestInfo) {
       // TODO: エンドポイントを別個に用意するか検討
-      api(aspidaClient()).activity.exit.$post({
+      apiClient(process.env.REACT_APP_API_BASE_URL).activity.exit.$post({
         body: {
           guest_id: text,
           exhibit_id: "entrance"

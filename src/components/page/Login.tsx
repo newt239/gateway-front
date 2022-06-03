@@ -3,8 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import { Grid, Alert, TextField, Button } from "@mui/material";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
@@ -31,12 +30,12 @@ const Login = () => {
   });
   const login = () => {
     if (inputValue.user_id !== "") {
-      api(aspidaClient()).auth.login.$post({
+      apiClient(process.env.REACT_APP_API_BASE_URL).auth.login.$post({
         body: inputValue
       }).then((loginRes) => {
         localStorage.setItem("gatewayApiToken", loginRes.token);
         setToken(loginRes.token);
-        api(aspidaClient()).auth.me.$get({
+        apiClient(process.env.REACT_APP_API_BASE_URL).auth.me.$get({
           headers: {
             Authorization: `Bearer ${loginRes.token}`
           }

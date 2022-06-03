@@ -11,8 +11,7 @@ import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
 import { AxiosError } from "axios";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import {
   MobileStepper,
@@ -98,7 +97,7 @@ const EntranceEnter = () => {
   };
   const postApi = () => {
     if (token && reservation && guestList.length === reservation.count) {
-      api(aspidaClient()).guest.register.$post({
+      apiClient(process.env.REACT_APP_API_BASE_URL).guest.register.$post({
         body: {
           reservation_id: reservation.reservation_id,
           guest_type: reservation.guest_type,

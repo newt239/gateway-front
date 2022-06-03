@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import {
   Typography,
@@ -31,7 +30,7 @@ const DeleteUserCard = () => {
       const payload = {
         user_id: deleteUserIdValue,
       };
-      await api(aspidaClient()).admin.user.delete._user_id(deleteUserIdValue).$delete({
+      await apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.delete._user_id(deleteUserIdValue).$delete({
         headers: { Authorization: `"Bearer ${token}` },
       }).then(() => {
         setShowMessageDialog(true);

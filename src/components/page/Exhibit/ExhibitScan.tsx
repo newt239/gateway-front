@@ -5,8 +5,7 @@ import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { currentExhibitState } from "#/recoil/exhibit";
 import { AxiosError } from "axios";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import {
   Alert,
@@ -76,7 +75,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
         setDeviceState(false);
         setText(scanText);
         setLoading(true);
-        api(aspidaClient()).guest.info._guest_id(scanText).$get({
+        apiClient(process.env.REACT_APP_API_BASE_URL).guest.info._guest_id(scanText).$get({
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -145,7 +144,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           exhibit_id: currentExhibit.exhibit_id,
           user_id: profile.user_id,
         };
-        api(aspidaClient()).activity[scanType].$post({
+        apiClient(process.env.REACT_APP_API_BASE_URL).activity[scanType].$post({
           headers: { Authorization: "Bearer " + token },
           body: payload
         })

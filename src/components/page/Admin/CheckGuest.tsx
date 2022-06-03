@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import {
   Grid,
@@ -32,7 +31,7 @@ const AdminCheckGuest = () => {
   const searchGuest = () => {
     if (token && !loading && guestId !== "") {
       setLoading(true);
-      api(aspidaClient()).guest.info._guest_id(guestId).$get({
+      apiClient(process.env.REACT_APP_API_BASE_URL).guest.info._guest_id(guestId).$get({
         headers: { Authorization: "Bearer " + token },
       })
         .then((res) => {

@@ -11,8 +11,7 @@ import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
 import { AxiosError } from "axios";
-import aspidaClient from "@aspida/axios";
-import api from "#/api/$api";
+import apiClient from '#/axios-config';
 
 import {
   Alert,
@@ -77,7 +76,7 @@ const ReserveCheck = () => {
       if (token && scanText.length === 7 && scanText.startsWith("R")) {
         setDeviceState(false);
         setLoading(true);
-        api(aspidaClient()).reservation.info._reservation_id(scanText).$get({
+        apiClient(process.env.REACT_APP_API_BASE_URL).reservation.info._reservation_id(scanText).$get({
           headers: { Authorization: "Bearer " + token },
         })
           .then((res) => {
