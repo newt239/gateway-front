@@ -25,7 +25,7 @@ const CreateUserCard = () => {
 
   const token = useRecoilValue(tokenState);
 
-  const [user_idValue, setuser_id] = useState("");
+  const [userIdValue, setUserId] = useState("");
   const [passwordValue, setPassword] = useState("");
   const [displayNameValue, setDisplayName] = useState("");
   const [userTypeValue, setUserType] = useState<userTypeProp>("exhibit");
@@ -61,15 +61,15 @@ const CreateUserCard = () => {
     if (token && !loading) {
       setLoading(true);
       if (
-        user_idValue === "" ||
+        userIdValue === "" ||
         displayNameValue === "" ||
-        user_idValue.length > 10 ||
+        userIdValue.length > 10 ||
         displayNameValue.length > 20
       ) {
         setMessageDialogMessage([
-          user_idValue === "" ? "ユーザーidを入力してください。" : "",
+          userIdValue === "" ? "ユーザーidを入力してください。" : "",
           displayNameValue === "" ? "表示名を入力してください。" : "",
-          user_idValue.length > 10
+          userIdValue.length > 10
             ? "ユーザーidは10字以内で設定してください。"
             : "",
           displayNameValue.length > 20
@@ -81,7 +81,7 @@ const CreateUserCard = () => {
         return;
       }
       const payload = {
-        user_id: user_idValue,
+        user_id: userIdValue,
         password: passwordValue,
         display_name: displayNameValue,
         user_type: userTypeValue,
@@ -94,7 +94,7 @@ const CreateUserCard = () => {
       setCreateHistory([
         ...createHistory,
         {
-          user_id: user_idValue,
+          user_id: userIdValue,
           display_name: displayNameValue,
           user_type: userTypeValue,
         },
@@ -119,12 +119,12 @@ const CreateUserCard = () => {
         id="user_id"
         label="ユーザーid"
         type="text"
-        value={user_idValue}
-        error={user_idValue.length > 10}
+        value={userIdValue}
+        error={userIdValue.length > 10}
         helperText={
-          user_idValue.length > 10 && "ユーザーidは10字以内で設定してください。"
+          userIdValue.length > 10 && "ユーザーidは10字以内で設定してください。"
         }
-        onChange={(e) => setuser_id(e.target.value)}
+        onChange={(e) => setUserId(e.target.value)}
         margin="normal"
         fullWidth
       />

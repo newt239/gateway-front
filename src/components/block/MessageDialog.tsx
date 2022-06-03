@@ -46,11 +46,7 @@ const MessageDialog = (props: errorDialogProps) => {
         </DialogTitle>
       )}
       <DialogContent>
-        {props.message
-          .filter((message) => message != "")
-          .map((message, index) => (
-            <DialogContentText key={index}>{message}</DialogContentText>
-          ))}
+        <DialogContentText>{props.message}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onClose}>閉じる</Button>
