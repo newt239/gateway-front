@@ -30,7 +30,7 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
       api(aspidaClient()).exhibit.current._exhibit_id(exhibit_id).$get({
         headers: { Authorization: `Bearer ${token}` },
       }).then((res) => {
-        console.log(res);
+        setRows(res);
       });
     }
   }, [exhibit_id]);

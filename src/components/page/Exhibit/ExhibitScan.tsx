@@ -63,6 +63,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   const setDeviceState = useSetRecoilState(deviceState);
   const setPageInfo = useSetRecoilState(pageStateSelector);
+  const currentExhibit = useRecoilValue(currentExhibitState);
 
   useEffect(() => {
     setScanStatus("waiting");
@@ -89,12 +90,33 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             Authorization: `Bearer ${token}`
           }
         }).then((res) => {
+          console.log(res);
           setGuestInfo(res);
-          if (res.available) {
-            setScanStatus("success");
-          } else {
+          if (!res.available) {
             setScanStatus("error");
             setMessage("このゲストは無効です。");
+          } else {
+            if (scanType === "enter") {
+              if (res.exhibit_id === "") {
+                setScanStatus("success");
+              } else if (res.exhibit_id === currentExhibit.exhibit_id) {
+                setScanStatus("error");
+                setMessage("このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？");
+              } else {
+                setScanStatus("error");
+                setMessage("このゲストはすでに他の展示に入室中です。");
+              }
+            } else if (scanType === "exit") {
+              if (res.exhibit_id === currentExhibit.exhibit_id) {
+                setScanStatus("success");
+              } else if (res.exhibit_id === "") {
+                setScanStatus("error");
+                setMessage("このゲストは現在この展示に入室していません。入室スキャンと間違えていませんか？");
+              } else {
+                setScanStatus("error");
+                setMessage("このゲストは他の展示に入室中です。");
+              }
+            }
           }
           setSmDrawerStatus(true);
         });
@@ -123,8 +145,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   };
 
   const GuestInfoCard = () => {
-    const currentExhibit = useRecoilValue(currentExhibitState);
-
     const postApi = () => {
       if (profile && guestInfo && token) {
         const payload = {
