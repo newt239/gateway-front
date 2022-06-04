@@ -74,14 +74,30 @@ const Body = () => {
           <>
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
-            {["admin", "moderator", "exhibit"].includes(profile.user_type) ? (
+            {["admin", "moderator"].includes(profile.user_type) ? (
               <Route path="exhibit">
                 <Route index element={<ExhibitIndex />} />
-                <Route
-                  path="enter"
-                  element={<ExhibitScan scanType="enter" />}
-                />
-                <Route path="exit" element={<ExhibitScan scanType="exit" />} />
+                <Route path=":exhibit_id">
+                  <Route
+                    path="enter"
+                    element={<ExhibitScan scanType="enter" />}
+                  />
+                  <Route path="exit" element={<ExhibitScan scanType="exit" />} />
+                </Route>
+              </Route>
+            ) : (
+              <Route path="*" element={<Extra type="401" />} />
+            )}
+            {["exhibit"].includes(profile.user_type) ? (
+              <Route path="exhibit">
+                <Route index element={<ExhibitIndex />} />
+                <Route path={profile.role}>
+                  <Route
+                    path="enter"
+                    element={<ExhibitScan scanType="enter" />}
+                  />
+                  <Route path="exit" element={<ExhibitScan scanType="exit" />} />
+                </Route>
               </Route>
             ) : (
               <Route path="*" element={<Extra type="401" />} />

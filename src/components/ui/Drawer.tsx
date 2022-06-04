@@ -80,7 +80,7 @@ const DrawerLeft = () => {
               <List subheader={<ListSubheader>展示企画</ListSubheader>}>
                 <ListItemButton
                   selected={/exhibit\/enter/.test(path)}
-                  onClick={() => navigate("/exhibit/enter")}
+                  onClick={() => navigate(`/exhibit/${profile.role || "unknown"}/enter`)}
                 >
                   <ListItemIcon>
                     <LoginRoundedIcon />
@@ -89,7 +89,7 @@ const DrawerLeft = () => {
                 </ListItemButton>
                 <ListItemButton
                   selected={/exhibit\/exit/.test(path)}
-                  onClick={() => navigate("/exhibit/exit")}
+                  onClick={() => navigate(`/exhibit/${profile.role || "unknown"}/exit`)}
                 >
                   <ListItemIcon>
                     <LogoutRoundedIcon />
@@ -99,7 +99,7 @@ const DrawerLeft = () => {
               </List>
             </>
           )}
-          {["admin", "moderator", "user"].indexOf(profile.user_type, -1) && (
+          {["admin", "moderator", "executive"].indexOf(profile.user_type, -1) && (
             <>
               <Divider />
               <List subheader={<ListSubheader>エントランス</ListSubheader>}>

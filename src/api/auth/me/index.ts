@@ -12,6 +12,7 @@ export type Methods = {
       user_id: string
       display_name: string
       user_type: string
+      role: string
       available: number
     }
   }

@@ -1,9 +1,9 @@
 import React, { useState, useEffect, Suspense } from "react";
+import { useParams } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
-import { currentExhibitState } from "#/recoil/exhibit";
 import { AxiosError } from "axios";
 import apiClient from '#/axios-config';
 
@@ -42,6 +42,8 @@ type ExhibitScanProps = {
 };
 
 const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
+  const { exhibit_id } = useParams<{ exhibit_id: string }>() || "unknown";
+
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const profile = useRecoilValue(profileState);
@@ -80,31 +82,33 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             Authorization: `Bearer ${token}`
           }
         }).then((res) => {
+          console.log(res);
           setGuestInfo(res);
           if (!res.available) {
             setScanStatus("error");
             setMessage("このゲストは無効です。");
           } else {
-            const currentExhibit = useRecoilValue(currentExhibitState);
-            if (scanType === "enter") {
-              if (res.exhibit_id === "") {
-                setScanStatus("success");
-              } else if (res.exhibit_id === currentExhibit.exhibit_id) {
-                setScanStatus("error");
-                setMessage("このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？");
-              } else {
-                setScanStatus("error");
-                setMessage("このゲストはすでに他の展示に入室中です。");
-              }
-            } else if (scanType === "exit") {
-              if (res.exhibit_id === currentExhibit.exhibit_id) {
-                setScanStatus("success");
-              } else if (res.exhibit_id === "") {
-                setScanStatus("error");
-                setMessage("このゲストは現在この展示に入室していません。入室スキャンと間違えていませんか？");
-              } else {
-                setScanStatus("error");
-                setMessage("このゲストは他の展示に入室中です。");
+            if (profile) {
+              if (scanType === "enter") {
+                if (res.exhibit_id === "") {
+                  setScanStatus("success");
+                } else if (res.exhibit_id === exhibit_id) {
+                  setScanStatus("error");
+                  setMessage("このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？");
+                } else {
+                  setScanStatus("error");
+                  setMessage("このゲストはすでに他の展示に入室中です。");
+                }
+              } else if (scanType === "exit") {
+                if (res.exhibit_id === exhibit_id) {
+                  setScanStatus("success");
+                } else if (res.exhibit_id === "") {
+                  setScanStatus("error");
+                  setMessage("このゲストは現在この展示に入室していません。入室スキャンと間違えていませんか？");
+                } else {
+                  setScanStatus("error");
+                  setMessage("このゲストは他の展示に入室中です。");
+                }
               }
             }
           }
@@ -119,12 +123,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     }
   };
 
-  const ExhibitName = () => {
-    const currentExhibit = useRecoilValue(currentExhibitState);
-
-    return <Typography variant="h3">{currentExhibit.exhibit_name}</Typography>;
-  };
-
   const retry = () => {
     setDeviceState(true);
     setText("");
@@ -136,12 +134,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   const GuestInfoCard = () => {
     const postApi = () => {
-      if (profile && guestInfo && token) {
-        const currentExhibit = useRecoilValue(currentExhibitState);
+      if (profile && guestInfo && token && exhibit_id) {
         const payload = {
           guest_id: text,
           guest_type: guestInfo.guest_type,
-          exhibit_id: currentExhibit.exhibit_id,
+          exhibit_id: exhibit_id,
           user_id: profile.user_id,
         };
         apiClient(process.env.REACT_APP_API_BASE_URL).activity[scanType].$post({
@@ -253,9 +250,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
-        <Suspense fallback={<p>読込中...</p>}>
-          <ExhibitName />
-        </Suspense>
+        {exhibit_id}
       </Grid>
       <Grid item xs={12} md={6}>
         <Scanner handleScan={handleScan} />

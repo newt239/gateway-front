@@ -11,7 +11,7 @@ export interface profileProp {
   display_name: string;
   user_type: string;
   available: number;
-  role?: string;
+  role: string;
   note?: string;
 }
 
