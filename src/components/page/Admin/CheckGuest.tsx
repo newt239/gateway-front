@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-import apiClient from '#/axios-config';
+import apiClient from "#/axios-config";
 
 import {
   Grid,
@@ -14,7 +14,6 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { guestInfoProp } from "#/types/guests";
-
 
 const AdminCheckGuest = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -31,9 +30,11 @@ const AdminCheckGuest = () => {
   const searchGuest = () => {
     if (token && !loading && guestId !== "") {
       setLoading(true);
-      apiClient(process.env.REACT_APP_API_BASE_URL).guest.info._guest_id(guestId).$get({
-        headers: { Authorization: "Bearer " + token },
-      })
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .guest.info._guest_id(guestId)
+        .$get({
+          headers: { Authorization: "Bearer " + token },
+        })
         .then((res) => {
           setGuestInfo(res);
         })

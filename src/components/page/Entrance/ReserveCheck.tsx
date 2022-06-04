@@ -11,7 +11,7 @@ import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
 import { AxiosError } from "axios";
-import apiClient from '#/axios-config';
+import apiClient from "#/axios-config";
 
 import {
   Alert,
@@ -76,9 +76,11 @@ const ReserveCheck = () => {
       if (token && scanText.length === 7 && scanText.startsWith("R")) {
         setDeviceState(false);
         setLoading(true);
-        apiClient(process.env.REACT_APP_API_BASE_URL).reservation.info._reservation_id(scanText).$get({
-          headers: { Authorization: "Bearer " + token },
-        })
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .reservation.info._reservation_id(scanText)
+          .$get({
+            headers: { Authorization: "Bearer " + token },
+          })
           .then((res) => {
             setLoading(false);
             setReservation(res);
@@ -149,9 +151,7 @@ const ReserveCheck = () => {
                 <ListItemIcon>
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={reservation.guest_type}
-                />
+                <ListItemText primary={reservation.guest_type} />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
@@ -224,7 +224,9 @@ const ReserveCheck = () => {
                     aria-label="copy id to clipboard"
                     onClick={() => {
                       if (text !== "") {
-                        navigator.clipboard.writeText(text).catch(e => console.log(e));
+                        navigator.clipboard
+                          .writeText(text)
+                          .catch((e) => console.log(e));
                         setSnackbar({
                           status: true,
                           message: "コピーしました",

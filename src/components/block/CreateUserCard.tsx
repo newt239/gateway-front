@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-import apiClient from '#/axios-config';
+import apiClient from "#/axios-config";
 
 import {
   Typography,
@@ -48,13 +48,15 @@ const CreateUserCard = () => {
   useEffect(() => {
     if (token) {
       async (token: string) => {
-        const user = await apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.created_by_me.$get({
+        const user = await apiClient(
+          process.env.REACT_APP_API_BASE_URL
+        ).admin.user.created_by_me.$get({
           headers: { Authorization: `Bearer ${token}` },
         });
         if (user.length !== 0) {
           setCreateHistory([...createHistory, ...user]);
         }
-      }
+      };
     }
   }, [token]);
 
@@ -88,28 +90,33 @@ const CreateUserCard = () => {
         display_name: displayNameValue,
         user_type: userTypeValue,
       };
-      apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.create.$post({
-        headers: { Authorization: `Bearer ${token}` },
-        body: payload
-      }).then(() => {
-        setCreateHistory([
-          ...createHistory,
-          {
-            user_id: userIdValue,
-            display_name: displayNameValue,
-            user_type: userTypeValue,
-          },
-        ]);
-        setDialogType("success");
-        setMessageDialogMessage([`ユーザーアカウント( ${userIdValue} ) の作成が完了しました。`]);
-        setShowMessageDialog(true);
-      }).catch((err: AxiosError) => {
-        console.log(err);
-        setDialogType("error");
-        setMessageDialogMessage([err.message]);
-        setShowMessageDialog(true);
-      });
-    };
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .admin.user.create.$post({
+          headers: { Authorization: `Bearer ${token}` },
+          body: payload,
+        })
+        .then(() => {
+          setCreateHistory([
+            ...createHistory,
+            {
+              user_id: userIdValue,
+              display_name: displayNameValue,
+              user_type: userTypeValue,
+            },
+          ]);
+          setDialogType("success");
+          setMessageDialogMessage([
+            `ユーザーアカウント( ${userIdValue} ) の作成が完了しました。`,
+          ]);
+          setShowMessageDialog(true);
+        })
+        .catch((err: AxiosError) => {
+          console.log(err);
+          setDialogType("error");
+          setMessageDialogMessage([err.message]);
+          setShowMessageDialog(true);
+        });
+    }
     setLoading(false);
   };
 

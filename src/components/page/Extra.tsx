@@ -6,8 +6,8 @@ import { pageStateSelector } from "#/recoil/page";
 import { Grid, Typography, Button } from "@mui/material";
 
 type extraProp = {
-  type: "404" | "401"
-}
+  type: "404" | "401";
+};
 const NotFound = (props: extraProp) => {
   const navigate = useNavigate();
 
@@ -16,17 +16,19 @@ const NotFound = (props: extraProp) => {
     setPageInfo({ title: "ホーム" });
   }, []);
 
-  return (<>
-    <Grid container spacing={2} sx={{ p: 2 }}>
-      {props.type === "404" ? (
-        <Typography>お探しのページは見つかりませんでした。</Typography>) : (
-        <Typography>このページを表示する権限がありません。</Typography>)}
-      <Button onClick={() => navigate("/", { replace: true })}>
-        トップに戻る
-      </Button>
-    </Grid>
-
-  </>
+  return (
+    <>
+      <Grid container spacing={2} sx={{ p: 2 }}>
+        {props.type === "404" ? (
+          <Typography>お探しのページは見つかりませんでした。</Typography>
+        ) : (
+          <Typography>このページを表示する権限がありません。</Typography>
+        )}
+        <Button onClick={() => navigate("/", { replace: true })}>
+          トップに戻る
+        </Button>
+      </Grid>
+    </>
   );
 };
 

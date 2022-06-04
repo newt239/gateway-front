@@ -14,7 +14,10 @@ const ChartExhibit = () => {
   const navigate = useNavigate();
   const profile = useRecoilValue(profileState);
   if (profile) {
-    const exhibit_id = useParams<{ exhibit_id: string }>().exhibit_id || profile.user_id || "unknown";
+    const exhibit_id =
+      useParams<{ exhibit_id: string }>().exhibit_id ||
+      profile.user_id ||
+      "unknown";
     const [status, setStatus] = useState<{ status: boolean; message: string }>({
       status: false,
       message: "読込中...",

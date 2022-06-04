@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
-import {
-  Routes,
-  Route,
-  useNavigate,
-} from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { AxiosError } from "axios";
-import apiClient from '#/axios-config';
+import apiClient from "#/axios-config";
 
 import MessageDialog from "#/components/block/MessageDialog";
 import Home from "#/components/page/Home";
@@ -27,7 +23,6 @@ import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminManageExhibit from "#/components/page/Admin/ManageExhibit";
 import Extra from "#/components/page/Extra";
 
-
 const Body = () => {
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
@@ -40,21 +35,26 @@ const Body = () => {
   useEffect(() => {
     if (token) {
       // プロフィールの取得
-      apiClient(process.env.REACT_APP_API_BASE_URL).auth.me.$get({
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      }).then((meRes) => {
-        setProfile(meRes);
-      }).catch((err: AxiosError) => {
-        if (err.message === "Network Error") {
-          setErrorDialogTitle("サーバーが起動していません");
-          setMessageDialogMessage(["コストカットのため必要時以外はサーバーを停止させています。"]);
-        } else {
-          setMessageDialogMessage([err.message]);
-        }
-        setShowMessageDialog(true);
-      });
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .auth.me.$get({
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((meRes) => {
+          setProfile(meRes);
+        })
+        .catch((err: AxiosError) => {
+          if (err.message === "Network Error") {
+            setErrorDialogTitle("サーバーが起動していません");
+            setMessageDialogMessage([
+              "コストカットのため必要時以外はサーバーを停止させています。",
+            ]);
+          } else {
+            setMessageDialogMessage([err.message]);
+          }
+          setShowMessageDialog(true);
+        });
     } else {
       // 未ログイン時ログインページへ遷移
       navigate("/login", { replace: true });
@@ -76,17 +76,22 @@ const Body = () => {
             <Route path="docs/:doc_id" element={<DocsMarkdown />} />
             <Route path="exhibit">
               // すべてのページにアクセス可能
-              {["admin", "moderator"].includes(profile.user_type) ? (<>
-                <Route index element={<ExhibitIndex />} />
-                <Route path=":exhibit_id">
-                  <Route
-                    path="enter"
-                    element={<ExhibitScan scanType="enter" />}
-                  />
-                  <Route path="exit" element={<ExhibitScan scanType="exit" />} />
-                </Route>
-              // 自分の展示のページのみアクセス可能
-              </>) : ["exhibit"].includes(profile.user_type) ? (
+              {["admin", "moderator"].includes(profile.user_type) ? (
+                <>
+                  <Route index element={<ExhibitIndex />} />
+                  <Route path=":exhibit_id">
+                    <Route
+                      path="enter"
+                      element={<ExhibitScan scanType="enter" />}
+                    />
+                    <Route
+                      path="exit"
+                      element={<ExhibitScan scanType="exit" />}
+                    />
+                  </Route>
+                  // 自分の展示のページのみアクセス可能
+                </>
+              ) : ["exhibit"].includes(profile.user_type) ? (
                 <>
                   <Route index element={<ExhibitIndex />} />
                   <Route path={profile.user_id}>
@@ -94,16 +99,20 @@ const Body = () => {
                       path="enter"
                       element={<ExhibitScan scanType="enter" />}
                     />
-                    <Route path="exit" element={<ExhibitScan scanType="exit" />} />
+                    <Route
+                      path="exit"
+                      element={<ExhibitScan scanType="exit" />}
+                    />
                   </Route>
                 </>
               ) : (
                 <Route path="*" element={<Extra type="401" />} />
-              )
-              }
+              )}
             </Route>
             <Route path="entrance">
-              {["admin", "moderator", "executive"].includes(profile.user_type) ? (
+              {["admin", "moderator", "executive"].includes(
+                profile.user_type
+              ) ? (
                 <>
                   <Route index element={<Entrance />} />
                   <Route path="reserve-check" element={<ReserveCheck />} />
@@ -115,15 +124,25 @@ const Body = () => {
               )}
             </Route>
             <Route path="chart">
-              {["admin", "moderator", "analysis"].includes(profile.user_type) ? (
+              {["admin", "moderator", "analysis"].includes(
+                profile.user_type
+              ) ? (
                 <>
                   <Route path="all" element={<ChartAll />} />
-                  <Route path="exhibit/:exhibit_id" element={<ChartExhibit />} />
+                  <Route
+                    path="exhibit/:exhibit_id"
+                    element={<ChartExhibit />}
+                  />
                   <Route path="heatmap" element={<Heatmap />} />
                 </>
-              ) : ["exhibit"].includes(profile.user_type) ? (<>
-                <Route path={`exhibit/${profile.user_id}`} element={<ChartExhibit />} />
-              </>) : (
+              ) : ["exhibit"].includes(profile.user_type) ? (
+                <>
+                  <Route
+                    path={`exhibit/${profile.user_id}`}
+                    element={<ChartExhibit />}
+                  />
+                </>
+              ) : (
                 <Route path="*" element={<Extra type="401" />} />
               )}
             </Route>

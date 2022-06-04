@@ -5,7 +5,7 @@ import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { AxiosError } from "axios";
-import apiClient from '#/axios-config';
+import apiClient from "#/axios-config";
 
 import {
   Alert,
@@ -68,7 +68,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   useEffect(() => {
     setScanStatus("waiting");
     setMessage("");
-    setPageInfo({ title: scanType === "enter" ? "入室スキャン" : "退室スキャン" });
+    setPageInfo({
+      title: scanType === "enter" ? "入室スキャン" : "退室スキャン",
+    });
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
@@ -77,47 +79,55 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
         setDeviceState(false);
         setText(scanText);
         setLoading(true);
-        apiClient(process.env.REACT_APP_API_BASE_URL).guest.info._guest_id(scanText).$get({
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }).then((res) => {
-          console.log(res);
-          setGuestInfo(res);
-          if (!res.available) {
-            setScanStatus("error");
-            setMessage("このゲストは無効です。");
-          } else {
-            if (profile) {
-              if (scanType === "enter") {
-                if (res.exhibit_id === "") {
-                  setScanStatus("success");
-                } else if (res.exhibit_id === exhibit_id) {
-                  setScanStatus("error");
-                  setMessage("このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？");
-                } else {
-                  setScanStatus("error");
-                  setMessage("このゲストはすでに他の展示に入室中です。");
-                }
-              } else if (scanType === "exit") {
-                if (res.exhibit_id === exhibit_id) {
-                  setScanStatus("success");
-                } else if (res.exhibit_id === "") {
-                  setScanStatus("error");
-                  setMessage("このゲストは現在この展示に入室していません。入室スキャンと間違えていませんか？");
-                } else {
-                  setScanStatus("error");
-                  setMessage("このゲストは他の展示に入室中です。");
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .guest.info._guest_id(scanText)
+          .$get({
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            console.log(res);
+            setGuestInfo(res);
+            if (!res.available) {
+              setScanStatus("error");
+              setMessage("このゲストは無効です。");
+            } else {
+              if (profile) {
+                if (scanType === "enter") {
+                  if (res.exhibit_id === "") {
+                    setScanStatus("success");
+                  } else if (res.exhibit_id === exhibit_id) {
+                    setScanStatus("error");
+                    setMessage(
+                      "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
+                    );
+                  } else {
+                    setScanStatus("error");
+                    setMessage("このゲストはすでに他の展示に入室中です。");
+                  }
+                } else if (scanType === "exit") {
+                  if (res.exhibit_id === exhibit_id) {
+                    setScanStatus("success");
+                  } else if (res.exhibit_id === "") {
+                    setScanStatus("error");
+                    setMessage(
+                      "このゲストは現在この展示に入室していません。入室スキャンと間違えていませんか？"
+                    );
+                  } else {
+                    setScanStatus("error");
+                    setMessage("このゲストは他の展示に入室中です。");
+                  }
                 }
               }
             }
-          }
-          setSmDrawerStatus(true);
-        }).catch((err: AxiosError) => {
-          console.log(err);
-          setScanStatus("error");
-          setMessage("予期せぬエラーが発生しました。");
-        });
+            setSmDrawerStatus(true);
+          })
+          .catch((err: AxiosError) => {
+            console.log(err);
+            setScanStatus("error");
+            setMessage("予期せぬエラーが発生しました。");
+          });
         setLoading(false);
       } else {
         setScanStatus("error");
@@ -145,10 +155,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           exhibit_id: exhibit_id,
           user_id: profile.user_id,
         };
-        apiClient(process.env.REACT_APP_API_BASE_URL).activity[scanType].$post({
-          headers: { Authorization: "Bearer " + token },
-          body: payload
-        })
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .activity[scanType].$post({
+            headers: { Authorization: "Bearer " + token },
+            body: payload,
+          })
           .then(() => {
             setDeviceState(true);
             setText("");
@@ -280,7 +291,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     aria-label="copy id to clipboard"
                     onClick={() => {
                       if (text !== "") {
-                        navigator.clipboard.writeText(text).catch(e => console.log(e));
+                        navigator.clipboard
+                          .writeText(text)
+                          .catch((e) => console.log(e));
                         setSnackbar({
                           status: true,
                           message: "コピーしました",

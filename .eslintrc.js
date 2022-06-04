@@ -21,8 +21,8 @@ module.exports = {
     'prettier'
   ],
   rules: {
-    "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/no-unsafe-argument": "off", // 後で戻す
+    "@typescript-eslint/no-var-requires": "off", // インポートするファイル名に変数を利用するため関数内に記述する必要がある
+    "@typescript-eslint/no-unsafe-argument": "off", // markdown処理コンポーネントで必要
     "@typescript-eslint/ban-ts-comment": "off"
   },
 };

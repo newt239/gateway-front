@@ -87,7 +87,10 @@ const Scanner = ({ handleScan }: ScannerProps) => {
     if (!refreshQrReader) setRefreshQrReader(true);
   }, [refreshQrReader]);
 
-  const changeCamera = (_event: React.SyntheticEvent<Element, Event>, value: { deviceId: string, label: string }) => {
+  const changeCamera = (
+    _event: React.SyntheticEvent<Element, Event>,
+    value: { deviceId: string; label: string }
+  ) => {
     setCurrentDevice(value);
     setRefreshQrReader(false);
   };

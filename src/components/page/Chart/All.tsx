@@ -27,7 +27,7 @@ const ChartAll = () => {
         <List>
           <ListItem>
             <ListItemButton>
-              <ListItemText>構内滞在者数 { }人</ListItemText>
+              <ListItemText>構内滞在者数 {}人</ListItemText>
             </ListItemButton>
           </ListItem>
         </List>

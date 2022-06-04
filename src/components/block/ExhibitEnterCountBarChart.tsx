@@ -6,7 +6,7 @@ import Chart from "react-apexcharts";
 // https://github.com/apexcharts/react-apexcharts/issues/368#issuecomment-1003686683
 import { ApexOptions } from "apexcharts";
 import moment from "moment";
-import apiClient from '#/axios-config';
+import apiClient from "#/axios-config";
 
 import { TextField } from "@mui/material";
 
@@ -20,7 +20,10 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
   useEffect(() => {
     const getApi = () => {
       if (token) {
-        apiClient(process.env.REACT_APP_API_BASE_URL).exhibit.history._exhibit_id(exhibit_id)._day(day).$get({ headers: { Authorization: `Bearer ${token}` } })
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .exhibit.history._exhibit_id(exhibit_id)
+          ._day(day)
+          .$get({ headers: { Authorization: `Bearer ${token}` } })
           .then((res) => {
             console.log(res);
             if (res.length !== 0) {

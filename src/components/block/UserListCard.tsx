@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import apiClient from '#/axios-config';
+import apiClient from "#/axios-config";
 
 import { Typography, List, ListItem, ListItemText } from "@mui/material";
 
@@ -15,9 +15,10 @@ const UserListCard = () => {
   // 過去に自分が作成したユーザーのリスト
   useEffect(() => {
     if (token) {
-      apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.created_by_me.$get({
-        headers: { Authorization: "Bearer " + token },
-      })
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .admin.user.created_by_me.$get({
+          headers: { Authorization: "Bearer " + token },
+        })
         .then((res) => {
           if (res.length !== 0) {
             setCreateHistory([...createHistory, ...res]);

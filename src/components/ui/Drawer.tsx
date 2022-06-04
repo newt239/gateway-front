@@ -79,8 +79,12 @@ const DrawerLeft = () => {
               <Divider />
               <List subheader={<ListSubheader>展示企画</ListSubheader>}>
                 <ListItemButton
-                  selected={path === `/exhibit/${profile.user_id || "unknown"}/enter`}
-                  onClick={() => navigate(`/exhibit/${profile.user_id || "unknown"}/enter`)}
+                  selected={
+                    path === `/exhibit/${profile.user_id || "unknown"}/enter`
+                  }
+                  onClick={() =>
+                    navigate(`/exhibit/${profile.user_id || "unknown"}/enter`)
+                  }
                 >
                   <ListItemIcon>
                     <LoginRoundedIcon />
@@ -88,8 +92,12 @@ const DrawerLeft = () => {
                   <ListItemText primary="入室スキャン" />
                 </ListItemButton>
                 <ListItemButton
-                  selected={path === `/exhibit/${profile.user_id || "unknown"}/exit`}
-                  onClick={() => navigate(`/exhibit/${profile.user_id || "unknown"}/exit`)}
+                  selected={
+                    path === `/exhibit/${profile.user_id || "unknown"}/exit`
+                  }
+                  onClick={() =>
+                    navigate(`/exhibit/${profile.user_id || "unknown"}/exit`)
+                  }
                 >
                   <ListItemIcon>
                     <LogoutRoundedIcon />
@@ -97,8 +105,12 @@ const DrawerLeft = () => {
                   <ListItemText primary="退室スキャン" />
                 </ListItemButton>
                 <ListItemButton
-                  selected={path === `/chart/exhibit/${profile.user_id || "unknown"}`}
-                  onClick={() => navigate(`/chart/exhibit/${profile.user_id || "unknown"}`)}
+                  selected={
+                    path === `/chart/exhibit/${profile.user_id || "unknown"}`
+                  }
+                  onClick={() =>
+                    navigate(`/chart/exhibit/${profile.user_id || "unknown"}`)
+                  }
                 >
                   <ListItemIcon>
                     <LogoutRoundedIcon />

@@ -8,7 +8,7 @@ import { Grid, Card, Box, Button, Typography } from "@mui/material";
 
 import UserInfo from "#/components/block/UserInfo";
 
-import GatewayThumbnail from '#/images/gateway-home-thumbnail.png';
+import GatewayThumbnail from "#/images/gateway-home-thumbnail.png";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -33,7 +33,10 @@ const Home = () => {
       <Grid item xs={12}>
         <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
           <Box sx={{ textAlign: "center" }}>
-            <img src={GatewayThumbnail} style={{ width: "100%", maxWidth: "750px" }} />
+            <img
+              src={GatewayThumbnail}
+              style={{ width: "100%", maxWidth: "750px" }}
+            />
           </Box>
         </Card>
       </Grid>
@@ -49,7 +52,7 @@ const Home = () => {
           <Typography variant="h3">
             {datetime.format("M月D日 H時m分")}
           </Typography>
-          <Typography variant="body2">次の時間枠まであと{ }分</Typography>
+          <Typography variant="body2">次の時間枠まであと{}分</Typography>
         </Card>
       </Grid>
       <Grid item xs={12} md={6} lg={4}>

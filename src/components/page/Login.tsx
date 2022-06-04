@@ -4,7 +4,7 @@ import { useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
 import { AxiosError } from "axios";
-import apiClient from '#/axios-config';
+import apiClient from "#/axios-config";
 
 import { Grid, Alert, TextField, Button } from "@mui/material";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
@@ -31,39 +31,46 @@ const Login = () => {
   });
   const login = () => {
     if (inputValue.user_id !== "") {
-      apiClient(process.env.REACT_APP_API_BASE_URL).auth.login.$post({
-        body: inputValue
-      }).then((loginRes) => {
-        localStorage.setItem("gatewayApiToken", loginRes.token);
-        setToken(loginRes.token);
-        apiClient(process.env.REACT_APP_API_BASE_URL).auth.me.$get({
-          headers: {
-            Authorization: `Bearer ${loginRes.token}`
-          }
-        }).then((meRes) => {
-          updateMessage({
-            display: "block",
-            severity: "success",
-            message: "ログインに成功しました。",
-          });
-          setProfile(meRes);
-          navigate("/", { replace: true });
-        }).catch((err: AxiosError) => {
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .auth.login.$post({
+          body: inputValue,
+        })
+        .then((loginRes) => {
+          localStorage.setItem("gatewayApiToken", loginRes.token);
+          setToken(loginRes.token);
+          apiClient(process.env.REACT_APP_API_BASE_URL)
+            .auth.me.$get({
+              headers: {
+                Authorization: `Bearer ${loginRes.token}`,
+              },
+            })
+            .then((meRes) => {
+              updateMessage({
+                display: "block",
+                severity: "success",
+                message: "ログインに成功しました。",
+              });
+              setProfile(meRes);
+              navigate("/", { replace: true });
+            })
+            .catch((err: AxiosError) => {
+              console.log(err);
+              updateMessage({
+                display: "block",
+                severity: "error",
+                message: "ユーザー情報の取得に際しエラーが発生しました。",
+              });
+            });
+        })
+        .catch((err: AxiosError) => {
           console.log(err);
           updateMessage({
             display: "block",
             severity: "error",
-            message: "ユーザー情報の取得に際しエラーが発生しました。"
-          })
+            message:
+              "エラーが発生しました。ユーザーidまたはパスワードが間違っている可能性があります。",
+          });
         });
-      }).catch((err: AxiosError) => {
-        console.log(err);
-        updateMessage({
-          display: "block",
-          severity: "error",
-          message: "エラーが発生しました。ユーザーidまたはパスワードが間違っている可能性があります。"
-        })
-      });
     }
   };
   return (

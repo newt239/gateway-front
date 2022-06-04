@@ -1,16 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  useRecoilValue,
-  useSetRecoilState,
-  useResetRecoilState,
-} from "recoil";
+import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
 import { AxiosError } from "axios";
-import apiClient from '#/axios-config';
+import apiClient from "#/axios-config";
 
 import {
   MobileStepper,
@@ -96,15 +92,16 @@ const EntranceEnter = () => {
   const postApi = () => {
     setLoading(true);
     if (token && reservation && guestList.length === reservation.count) {
-      apiClient(process.env.REACT_APP_API_BASE_URL).guest.register.$post({
-        body: {
-          reservation_id: reservation.reservation_id,
-          guest_type: reservation.guest_type,
-          guest_id: guestList,
-          part: reservation.part
-        },
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .guest.register.$post({
+          body: {
+            reservation_id: reservation.reservation_id,
+            guest_type: reservation.guest_type,
+            guest_id: guestList,
+            part: reservation.part,
+          },
+          headers: { Authorization: `Bearer ${token}` },
+        })
         .then(() => {
           resetReservation();
           setDeviceState(true);
@@ -207,9 +204,7 @@ const EntranceEnter = () => {
                   </ListItemIcon>
                   <ListItemText
                     primary={
-                      reservation.part === "all"
-                        ? "全時間帯"
-                        : reservation.part
+                      reservation.part === "all" ? "全時間帯" : reservation.part
                     }
                   />
                 </ListItem>
@@ -296,7 +291,9 @@ const EntranceEnter = () => {
                       aria-label="copy id to clipboard"
                       onClick={() => {
                         if (text !== "") {
-                          navigator.clipboard.writeText(text).catch(e => console.log(e));
+                          navigator.clipboard
+                            .writeText(text)
+                            .catch((e) => console.log(e));
                           setSnackbar({
                             status: true,
                             message: "コピーしました",

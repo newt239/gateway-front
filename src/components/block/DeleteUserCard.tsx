@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-import apiClient from '#/axios-config';
+import apiClient from "#/axios-config";
 
 import {
   Typography,
@@ -30,16 +30,19 @@ const DeleteUserCard = () => {
       const payload = {
         user_id: deleteUserIdValue,
       };
-      apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.delete._user_id(deleteUserIdValue).$delete({
-        headers: { Authorization: `Bearer ${token}` },
-      }).then(() => {
-        setShowMessageDialog(true);
-        setMessageDialogType("success");
-        setMessageDialogMessage([
-          `ユーザー( ${payload.user_id} )を削除しました。`,
-        ]);
-        setDeleteUserIdValue("");
-      })
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .admin.user.delete._user_id(deleteUserIdValue)
+        .$delete({
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .then(() => {
+          setShowMessageDialog(true);
+          setMessageDialogType("success");
+          setMessageDialogMessage([
+            `ユーザー( ${payload.user_id} )を削除しました。`,
+          ]);
+          setDeleteUserIdValue("");
+        })
         .catch(() => {
           setShowMessageDialog(true);
           setMessageDialogType("error");
