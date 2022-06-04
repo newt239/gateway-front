@@ -30,7 +30,8 @@ const CreateUserCard = () => {
   const [userTypeValue, setUserType] = useState<userTypeProp>("exhibit");
   const [loading, setLoading] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
-  const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
+  const [dialogType, setDialogType] = useState<"success" | "error">("success");
+  const [dialogMessage, setMessageDialogMessage] = useState<string[]>([]);
   const [createHistory, setCreateHistory] = useState<
     { user_id: string; display_name: string; user_type: string }[]
   >([]);
@@ -65,6 +66,7 @@ const CreateUserCard = () => {
         userIdValue.length > 10 ||
         displayNameValue.length > 20
       ) {
+        setDialogType("error");
         setMessageDialogMessage([
           userIdValue === "" ? "ユーザーidを入力してください。" : "",
           displayNameValue === "" ? "表示名を入力してください。" : "",
@@ -88,19 +90,19 @@ const CreateUserCard = () => {
       apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.create.$post({
         headers: { Authorization: `Bearer ${token}` },
         body: payload
+      }).then(() => {
+        setCreateHistory([
+          ...createHistory,
+          {
+            user_id: userIdValue,
+            display_name: displayNameValue,
+            user_type: userTypeValue,
+          },
+        ]);
+        setDialogType("success");
+        setMessageDialogMessage([`ユーザーアカウント( ${userIdValue} ) の作成が完了しました。`]);
+        setShowMessageDialog(true);
       });
-
-      setCreateHistory([
-        ...createHistory,
-        {
-          user_id: userIdValue,
-          display_name: displayNameValue,
-          user_type: userTypeValue,
-        },
-      ]);
-      // エラーハンドリング
-      //  setMessageDialogMessage([err.message]);
-      //  setShowMessageDialog(true);
     };
     setLoading(false);
   };
@@ -175,8 +177,8 @@ const CreateUserCard = () => {
       </Box>
       <MessageDialog
         open={showMessageDialog}
-        type="error"
-        message={errorDialogMessage}
+        type={dialogType}
+        message={dialogMessage}
         onClose={handleClose}
       />
     </>

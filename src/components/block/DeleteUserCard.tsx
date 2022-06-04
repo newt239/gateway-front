@@ -16,7 +16,7 @@ import MessageDialog from "./MessageDialog";
 const DeleteUserCard = () => {
   const token = useRecoilValue(tokenState);
 
-  const [deleteUserIdValue, setDeleteuser_idValue] = useState("");
+  const [deleteUserIdValue, setDeleteUserIdValue] = useState("");
   const [loading, setLoading] = useState(false);
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [messageDialogType, setMessageDialogType] = useState<
@@ -31,14 +31,14 @@ const DeleteUserCard = () => {
         user_id: deleteUserIdValue,
       };
       await apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.delete._user_id(deleteUserIdValue).$delete({
-        headers: { Authorization: `"Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       }).then(() => {
         setShowMessageDialog(true);
         setMessageDialogType("success");
         setMessageDialogMessage([
           `ユーザー( ${payload.user_id} )を削除しました。`,
         ]);
-        setDeleteuser_idValue("");
+        setDeleteUserIdValue("");
       })
         .catch(() => {
           setShowMessageDialog(true);
@@ -64,7 +64,7 @@ const DeleteUserCard = () => {
         id="deleteUser"
         label="削除するユーザーid"
         value={deleteUserIdValue}
-        onChange={(e) => setDeleteuser_idValue(e.target.value)}
+        onChange={(e) => setDeleteUserIdValue(e.target.value)}
         margin="normal"
         fullWidth
       />
