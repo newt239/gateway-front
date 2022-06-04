@@ -21,8 +21,7 @@ import Entrance from "#/components/page/Entrance/Index";
 import ReserveCheck from "#/components/page/Entrance/ReserveCheck";
 import EntranceEnter from "#/components/page/Entrance/Enter";
 import EntranceExit from "#/components/page/Entrance/Exit";
-import DocsIndex from "#/components/page/Docs/Index";
-import DocsEach from "#/components/page/Docs/Each";
+import DocsMarkdown from "#/components/page/Docs/Markdown";
 import AdminManageUser from "#/components/page/Admin/ManageUser";
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminManageExhibit from "#/components/page/Admin/ManageExhibit";
@@ -74,10 +73,7 @@ const Body = () => {
           <>
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
-            <Route path="docs">
-              <Route index element={<DocsIndex />} />
-              <Route path=":doc_id" element={<DocsEach />} />
-            </Route>
+            <Route path="docs/:doc_id" element={<DocsMarkdown />} />
             <Route path="exhibit">
               // すべてのページにアクセス可能
               {["admin", "moderator"].includes(profile.user_type) ? (<>

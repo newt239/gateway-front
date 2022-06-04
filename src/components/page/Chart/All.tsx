@@ -20,6 +20,21 @@ const ChartAll = () => {
     setPageInfo({ title: "全体の滞在状況" });
   }, []);
 
+  const AllAreaSummaryCard = () => {
+    return (
+      <>
+        <Typography variant="h3">アウトライン</Typography>
+        <List>
+          <ListItem>
+            <ListItemButton>
+              <ListItemText>構内滞在者数 { }人</ListItemText>
+            </ListItemButton>
+          </ListItem>
+        </List>
+      </>
+    );
+  };
+
   const ExhibitListCard = () => {
     const navigate = useNavigate();
     const exhibitList = useRecoilValue(exhibitListState);
@@ -45,20 +60,9 @@ const ChartAll = () => {
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12} md={6}>
-        <Grid container>
-          <Grid item xs={12}>
-            <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-              <Typography variant="h3">アウトライン</Typography>
-              <List>
-                <ListItem>
-                  <ListItemButton>
-                    <ListItemText>構内滞在者数 { }人</ListItemText>
-                  </ListItemButton>
-                </ListItem>
-              </List>
-            </Card>
-          </Grid>
-        </Grid>
+        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+          <AllAreaSummaryCard />
+        </Card>
       </Grid>
       <Grid item xs={12} md={6}>
         <Card variant="outlined" sx={{ p: 2, height: "100%" }}>

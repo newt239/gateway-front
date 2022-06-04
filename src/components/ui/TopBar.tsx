@@ -33,7 +33,7 @@ const TopBar = () => {
           </Typography>
           <Box sx={{ display: "flex" }}>
             <IconButton
-              onClick={() => navigate("/docs/", { replace: true })}
+              onClick={() => navigate("/docs/index", { replace: true })}
               size="large"
               color="inherit"
             >
