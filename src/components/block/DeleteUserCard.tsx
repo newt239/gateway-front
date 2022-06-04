@@ -24,13 +24,13 @@ const DeleteUserCard = () => {
   >("success");
   const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
 
-  const deleteUser = async () => {
+  const deleteUser = () => {
     if (token && !loading && deleteUserIdValue !== "") {
       setLoading(true);
       const payload = {
         user_id: deleteUserIdValue,
       };
-      await apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.delete._user_id(deleteUserIdValue).$delete({
+      apiClient(process.env.REACT_APP_API_BASE_URL).admin.user.delete._user_id(deleteUserIdValue).$delete({
         headers: { Authorization: `Bearer ${token}` },
       }).then(() => {
         setShowMessageDialog(true);

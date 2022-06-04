@@ -15,6 +15,7 @@ import {
 
 import MessageDialog from "./MessageDialog";
 import { userTypeProp } from "#/components/functional/generalProps";
+import { AxiosError } from "axios";
 
 const CreateUserCard = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -101,6 +102,11 @@ const CreateUserCard = () => {
         ]);
         setDialogType("success");
         setMessageDialogMessage([`ユーザーアカウント( ${userIdValue} ) の作成が完了しました。`]);
+        setShowMessageDialog(true);
+      }).catch((err: AxiosError) => {
+        console.log(err);
+        setDialogType("error");
+        setMessageDialogMessage([err.message]);
         setShowMessageDialog(true);
       });
     };

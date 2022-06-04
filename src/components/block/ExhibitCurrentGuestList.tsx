@@ -5,6 +5,7 @@ import apiClient from '#/axios-config';
 
 import { Grid, Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { AxiosError } from "axios";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ゲストID" },
@@ -30,6 +31,8 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
         headers: { Authorization: `Bearer ${token}` },
       }).then((res) => {
         setRows(res);
+      }).catch((err: AxiosError) => {
+        console.log(err);
       });
     }
   }, [exhibit_id]);

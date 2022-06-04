@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  useRecoilState,
   useRecoilValue,
   useSetRecoilState,
   useResetRecoilState,
@@ -56,9 +55,8 @@ const EntranceEnter = () => {
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
-  const [message, setMessage] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [reservation, setReservation] = useRecoilState(reservationState);
+  const reservation = useRecoilValue(reservationState);
   const resetReservation = useResetRecoilState(reservationState);
   const [guestList, setGuest] = useState<string[]>([]);
   const [snackbar, setSnackbar] = useState<{
@@ -96,6 +94,7 @@ const EntranceEnter = () => {
     }
   };
   const postApi = () => {
+    setLoading(true);
     if (token && reservation && guestList.length === reservation.count) {
       apiClient(process.env.REACT_APP_API_BASE_URL).guest.register.$post({
         body: {
@@ -110,7 +109,6 @@ const EntranceEnter = () => {
           resetReservation();
           setDeviceState(true);
           setText("");
-          setMessage([]);
           setSnackbar({ status: false, message: "", severity: "success" });
           setScanStatus("waiting");
           setSmDrawerStatus(false);
@@ -134,6 +132,7 @@ const EntranceEnter = () => {
           setDeviceState(true);
           setSmDrawerStatus(false);
         });
+      setLoading(false);
     }
   };
 
@@ -254,7 +253,6 @@ const EntranceEnter = () => {
   const retry = (activeStep: number) => {
     setDeviceState(true);
     setText("");
-    setMessage([]);
     setSnackbar({ status: false, message: "", severity: "success" });
     setScanStatus("waiting");
     setSmDrawerStatus(false);
@@ -298,7 +296,7 @@ const EntranceEnter = () => {
                       aria-label="copy id to clipboard"
                       onClick={() => {
                         if (text !== "") {
-                          navigator.clipboard.writeText(text);
+                          navigator.clipboard.writeText(text).catch(e => console.log(e));
                           setSnackbar({
                             status: true,
                             message: "コピーしました",

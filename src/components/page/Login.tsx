@@ -48,6 +48,13 @@ const Login = () => {
           });
           setProfile(meRes);
           navigate("/", { replace: true });
+        }).catch((err: AxiosError) => {
+          console.log(err);
+          updateMessage({
+            display: "block",
+            severity: "error",
+            message: "ユーザー情報の取得に際しエラーが発生しました。"
+          })
         });
       }).catch((err: AxiosError) => {
         console.log(err);

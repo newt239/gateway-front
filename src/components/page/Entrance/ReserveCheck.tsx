@@ -224,7 +224,7 @@ const ReserveCheck = () => {
                     aria-label="copy id to clipboard"
                     onClick={() => {
                       if (text !== "") {
-                        navigator.clipboard.writeText(text);
+                        navigator.clipboard.writeText(text).catch(e => console.log(e));
                         setSnackbar({
                           status: true,
                           message: "コピーしました",

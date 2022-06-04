@@ -113,6 +113,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             }
           }
           setSmDrawerStatus(true);
+        }).catch((err: AxiosError) => {
+          console.log(err);
+          setScanStatus("error");
+          setMessage("予期せぬエラーが発生しました。");
         });
         setLoading(false);
       } else {
@@ -276,7 +280,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     aria-label="copy id to clipboard"
                     onClick={() => {
                       if (text !== "") {
-                        navigator.clipboard.writeText(text);
+                        navigator.clipboard.writeText(text).catch(e => console.log(e));
                         setSnackbar({
                           status: true,
                           message: "コピーしました",

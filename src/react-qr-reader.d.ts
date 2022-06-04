@@ -1,19 +1,19 @@
 import * as React from "react";
-
+import type SxProps from "@mui/material/styles";
 declare namespace QrReader {
   export interface props {
     onScan: (data: string | null) => void;
-    onError: (err: any) => void;
+    onError: (err: unknown) => void;
     onLoad?: (() => void) | undefined;
     onImageLoad?:
-      | ((event: React.SyntheticEvent<HTMLImageElement>) => void)
-      | undefined;
+    | ((event: React.SyntheticEvent<HTMLImageElement>) => void)
+    | undefined;
     delay?: number | false | undefined;
     facingMode?: "user" | "environment" | undefined;
     legacyMode?: boolean | undefined;
     resolution?: number | undefined;
     showViewFinder?: boolean | undefined;
-    style?: any;
+    style?: SxProps;
     className?: string | undefined;
     constraints?: MediaTrackConstraints;
   }
