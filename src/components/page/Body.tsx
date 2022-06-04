@@ -74,8 +74,13 @@ const Body = () => {
           <>
             <Route index element={<Home />} />
             <Route path="login" element={<Login />} />
-            {["admin", "moderator"].includes(profile.user_type) ? (
-              <Route path="exhibit">
+            <Route path="docs">
+              <Route index element={<DocsIndex />} />
+              <Route path=":doc_id" element={<DocsEach />} />
+            </Route>
+            <Route path="exhibit">
+              // すべてのページにアクセス可能
+              {["admin", "moderator"].includes(profile.user_type) ? (<>
                 <Route index element={<ExhibitIndex />} />
                 <Route path=":exhibit_id">
                   <Route
@@ -84,56 +89,59 @@ const Body = () => {
                   />
                   <Route path="exit" element={<ExhibitScan scanType="exit" />} />
                 </Route>
-              </Route>
-            ) : (
-              <Route path="*" element={<Extra type="401" />} />
-            )}
-            {["exhibit"].includes(profile.user_type) ? (
-              <Route path="exhibit">
-                <Route index element={<ExhibitIndex />} />
-                <Route path={profile.role}>
-                  <Route
-                    path="enter"
-                    element={<ExhibitScan scanType="enter" />}
-                  />
-                  <Route path="exit" element={<ExhibitScan scanType="exit" />} />
-                </Route>
-              </Route>
-            ) : (
-              <Route path="*" element={<Extra type="401" />} />
-            )}
-            {["admin", "moderator", "executive"].includes(profile.user_type) ? (
-              <Route path="entrance">
-                <Route index element={<Entrance />} />
-                <Route path="reserve-check" element={<ReserveCheck />} />
-                <Route path="enter" element={<EntranceEnter />} />
-                <Route path="exit" element={<EntranceExit />} />
-              </Route>
-            ) : (
-              <Route path="*" element={<Extra type="401" />} />
-            )}
-            {["admin", "moderator", "analysis"].includes(profile.user_type) ? (
-              <Route path="chart">
-                <Route path="all" element={<ChartAll />} />
-                <Route path="exhibit/:exhibit_id" element={<ChartExhibit />} />
-                <Route path="heatmap" element={<Heatmap />} />
-              </Route>
-            ) : (
-              <Route path="*" element={<Extra type="401" />} />
-            )}
-            <Route path="docs">
-              <Route index element={<DocsIndex />} />
-              <Route path=":doc_id" element={<DocsEach />} />
+              // 自分の展示のページのみアクセス可能
+              </>) : ["exhibit"].includes(profile.user_type) ? (
+                <>
+                  <Route index element={<ExhibitIndex />} />
+                  <Route path={profile.user_id}>
+                    <Route
+                      path="enter"
+                      element={<ExhibitScan scanType="enter" />}
+                    />
+                    <Route path="exit" element={<ExhibitScan scanType="exit" />} />
+                  </Route>
+                </>
+              ) : (
+                <Route path="*" element={<Extra type="401" />} />
+              )
+              }
             </Route>
-            {["admin", "moderator"].includes(profile.user_type) ? (
-              <Route path="admin">
-                <Route path="user" element={<AdminManageUser />} />
-                <Route path="guest" element={<AdminCheckGuest />} />
-                <Route path="exhibit" element={<AdminManageExhibit />} />
-              </Route>
-            ) : (
-              <Route path="*" element={<Extra type="401" />} />
-            )}
+            <Route path="entrance">
+              {["admin", "moderator", "executive"].includes(profile.user_type) ? (
+                <>
+                  <Route index element={<Entrance />} />
+                  <Route path="reserve-check" element={<ReserveCheck />} />
+                  <Route path="enter" element={<EntranceEnter />} />
+                  <Route path="exit" element={<EntranceExit />} />
+                </>
+              ) : (
+                <Route path="*" element={<Extra type="401" />} />
+              )}
+            </Route>
+            <Route path="chart">
+              {["admin", "moderator", "analysis"].includes(profile.user_type) ? (
+                <>
+                  <Route path="all" element={<ChartAll />} />
+                  <Route path="exhibit/:exhibit_id" element={<ChartExhibit />} />
+                  <Route path="heatmap" element={<Heatmap />} />
+                </>
+              ) : ["exhibit"].includes(profile.user_type) ? (<>
+                <Route path={`exhibit/${profile.user_id}`} element={<ChartExhibit />} />
+              </>) : (
+                <Route path="*" element={<Extra type="401" />} />
+              )}
+            </Route>
+            <Route path="admin">
+              {["admin", "moderator"].includes(profile.user_type) ? (
+                <>
+                  <Route path="user" element={<AdminManageUser />} />
+                  <Route path="guest" element={<AdminCheckGuest />} />
+                  <Route path="exhibit" element={<AdminManageExhibit />} />
+                </>
+              ) : (
+                <Route path="*" element={<Extra type="401" />} />
+              )}
+            </Route>
             <Route path="*" element={<Extra type="404" />} />
           </>
         ) : (

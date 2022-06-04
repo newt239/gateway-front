@@ -74,13 +74,13 @@ const DrawerLeft = () => {
               <ListItemText primary="ホーム" />
             </ListItemButton>
           </List>
-          {["admin", "moderator", "exhibit"].indexOf(profile.user_type, -1) && (
+          {["exhibit"].includes(profile.user_type) && (
             <>
               <Divider />
               <List subheader={<ListSubheader>展示企画</ListSubheader>}>
                 <ListItemButton
-                  selected={/exhibit\/enter/.test(path)}
-                  onClick={() => navigate(`/exhibit/${profile.role || "unknown"}/enter`)}
+                  selected={path === `/exhibit/${profile.user_id || "unknown"}/enter`}
+                  onClick={() => navigate(`/exhibit/${profile.user_id || "unknown"}/enter`)}
                 >
                   <ListItemIcon>
                     <LoginRoundedIcon />
@@ -88,23 +88,48 @@ const DrawerLeft = () => {
                   <ListItemText primary="入室スキャン" />
                 </ListItemButton>
                 <ListItemButton
-                  selected={/exhibit\/exit/.test(path)}
-                  onClick={() => navigate(`/exhibit/${profile.role || "unknown"}/exit`)}
+                  selected={path === `/exhibit/${profile.user_id || "unknown"}/exit`}
+                  onClick={() => navigate(`/exhibit/${profile.user_id || "unknown"}/exit`)}
                 >
                   <ListItemIcon>
                     <LogoutRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="退室スキャン" />
                 </ListItemButton>
+                <ListItemButton
+                  selected={path === `/chart/exhibit/${profile.user_id || "unknown"}`}
+                  onClick={() => navigate(`/chart/exhibit/${profile.user_id || "unknown"}`)}
+                >
+                  <ListItemIcon>
+                    <LogoutRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="滞在状況" />
+                </ListItemButton>
               </List>
             </>
           )}
-          {["admin", "moderator", "executive"].indexOf(profile.user_type, -1) && (
+          {["admin", "moderator"].includes(profile.user_type) && (
+            <>
+              <Divider />
+              <List subheader={<ListSubheader>展示企画</ListSubheader>}>
+                <ListItemButton
+                  selected={path === `/exhibit/`}
+                  onClick={() => navigate(`/exhibit/`)}
+                >
+                  <ListItemIcon>
+                    <LoginRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="展示一覧" />
+                </ListItemButton>
+              </List>
+            </>
+          )}
+          {["admin", "moderator", "executive"].includes(profile.user_type) && (
             <>
               <Divider />
               <List subheader={<ListSubheader>エントランス</ListSubheader>}>
                 <ListItemButton
-                  selected={/entrance\/reserve-check/.test(path)}
+                  selected={path === `/entrance/reserve-check`}
                   onClick={() => navigate("/entrance/reserve-check")}
                 >
                   <ListItemIcon>
@@ -113,7 +138,7 @@ const DrawerLeft = () => {
                   <ListItemText primary="入場スキャン" />
                 </ListItemButton>
                 <ListItemButton
-                  selected={/entrance\/exit/.test(path)}
+                  selected={path === `/entrance/exit`}
                   onClick={() => navigate("/entrance/exit")}
                 >
                   <ListItemIcon>
@@ -122,10 +147,14 @@ const DrawerLeft = () => {
                   <ListItemText primary="退場スキャン" />
                 </ListItemButton>
               </List>
+            </>
+          )}
+          {["admin", "moderator", "analysis"].includes(profile.user_type) && (
+            <>
               <Divider />
               <List subheader={<ListSubheader>混雑状況</ListSubheader>}>
                 <ListItemButton
-                  selected={/chart\/all/.test(path)}
+                  selected={path === `/chart/all`}
                   onClick={() => navigate("/chart/all")}
                 >
                   <ListItemIcon>
@@ -134,7 +163,7 @@ const DrawerLeft = () => {
                   <ListItemText primary="全体の滞在状況" />
                 </ListItemButton>
                 <ListItemButton
-                  selected={/chart\/heatmap/.test(path)}
+                  selected={path === `/chart/heatmap`}
                   onClick={() => navigate("/chart/heatmap")}
                 >
                   <ListItemIcon>
@@ -145,12 +174,12 @@ const DrawerLeft = () => {
               </List>
             </>
           )}
-          {["admin", "moderator"].indexOf(profile.user_type, -1) && (
+          {["admin", "moderator"].includes(profile.user_type) && (
             <>
               <Divider />
               <List subheader={<ListSubheader>管理用操作</ListSubheader>}>
                 <ListItemButton
-                  selected={/admin\/user/.test(path)}
+                  selected={path === `/admin/user`}
                   onClick={() => navigate("/admin/user")}
                 >
                   <ListItemIcon>
@@ -159,7 +188,7 @@ const DrawerLeft = () => {
                   <ListItemText primary="ユーザー管理" />
                 </ListItemButton>
                 <ListItemButton
-                  selected={/admin\/guest/.test(path)}
+                  selected={path === `/admin/guest`}
                   onClick={() => navigate("/admin/guest")}
                 >
                   <ListItemIcon>
@@ -168,7 +197,7 @@ const DrawerLeft = () => {
                   <ListItemText primary="ゲスト照会" />
                 </ListItemButton>
                 <ListItemButton
-                  selected={/admin\/exhibit/.test(path)}
+                  selected={path === `/admin/exhibit`}
                   onClick={() => navigate("/admin/exhibit")}
                 >
                   <ListItemIcon>
