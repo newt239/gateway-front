@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
+import { AxiosError } from "axios";
 import apiClient from '#/axios-config';
 
 import { Grid, Alert, TextField, Button } from "@mui/material";
@@ -48,6 +49,13 @@ const Login = () => {
           setProfile(meRes);
           navigate("/", { replace: true });
         });
+      }).catch((err: AxiosError) => {
+        console.log(err);
+        updateMessage({
+          display: "block",
+          severity: "error",
+          message: "エラーが発生しました。ユーザーidまたはパスワードが間違っている可能性があります。"
+        })
       });
     }
   };
