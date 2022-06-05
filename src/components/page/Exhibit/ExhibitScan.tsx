@@ -35,6 +35,7 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
+import { exhibitListState } from "#/recoil/exhibit";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -144,6 +145,17 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setScanStatus("waiting");
     setSmDrawerStatus(false);
   };
+
+  const ExhibitName = () => {
+    const exhibitList = useRecoilValue(exhibitListState);
+    if (exhibitList) {
+      const currentExhibit = exhibitList.find(v => v.exhibit_id === exhibit_id);
+      if (currentExhibit) {
+        return <Typography variant="h2">{currentExhibit.exhibit_name}</Typography>
+      }
+    }
+    return <Typography variant="h2">読み込み中...</Typography>
+  }
 
   const GuestInfoCard = () => {
     const postApi = () => {
@@ -264,7 +276,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
-        {exhibit_id}
+        <Suspense fallback={<div>読み込み中</div>}>
+          <ExhibitName />
+        </Suspense>
       </Grid>
       <Grid item xs={12} md={6}>
         <Scanner handleScan={handleScan} />
