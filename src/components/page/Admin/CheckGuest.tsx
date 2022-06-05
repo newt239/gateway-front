@@ -13,7 +13,7 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
-import { guestInfoProp } from "#/types/guests";
+import { guestInfoProp } from "#/types/global";
 
 const AdminCheckGuest = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);

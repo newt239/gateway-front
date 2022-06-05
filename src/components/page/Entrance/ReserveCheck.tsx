@@ -41,7 +41,6 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import Scanner from "#/components/block/Scanner";
-import { generalFailedProp } from "#/types/global";
 
 const ReserveCheck = () => {
   const theme = useTheme();
@@ -99,7 +98,7 @@ const ReserveCheck = () => {
               setSmDrawerStatus(true);
             }
           })
-          .catch((err: AxiosError<generalFailedProp>) => {
+          .catch((err: AxiosError) => {
             setLoading(false);
             setScanStatus("error");
             setMessage([err.message]);

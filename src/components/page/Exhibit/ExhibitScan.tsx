@@ -34,8 +34,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp } from "#/types/guests";
-import { generalFailedProp } from "#/types/global";
+import { guestInfoProp } from "#/types/global";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -172,7 +171,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setScanStatus("waiting");
             setSmDrawerStatus(false);
           })
-          .catch((err: AxiosError<generalFailedProp>) => {
+          .catch((err: AxiosError) => {
             if (err.message) {
               setSnackbar({
                 status: true,

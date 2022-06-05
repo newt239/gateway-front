@@ -34,8 +34,7 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import generalProps from "#/components/functional/generalProps";
 import Scanner from "#/components/block/Scanner";
-import { generalFailedProp } from "#/types/global";
-import { guestInfoProp } from "#/types/guests";
+import { guestInfoProp } from "#/types/global";
 
 const EntranceExit = () => {
   const theme = useTheme();
@@ -86,7 +85,7 @@ const EntranceExit = () => {
               setSmDrawerStatus(true);
             }
           })
-          .catch((err: AxiosError<generalFailedProp>) => {
+          .catch((err: AxiosError) => {
             setLoading(false);
             setScanStatus("error");
             setMessage([err.message]);
@@ -124,7 +123,7 @@ const EntranceExit = () => {
             severity: "success",
           });
         })
-        .catch((err: AxiosError<generalFailedProp>) => {
+        .catch((err: AxiosError) => {
           if (err.message) {
             setSnackbar({
               status: true,

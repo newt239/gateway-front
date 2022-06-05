@@ -39,7 +39,6 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
 import generalProps from "#/components/functional/generalProps";
 import Scanner from "#/components/block/Scanner";
-import { generalFailedProp } from "#/types/global";
 
 const EntranceEnter = () => {
   const navigate = useNavigate();
@@ -111,7 +110,7 @@ const EntranceEnter = () => {
           setSmDrawerStatus(false);
           navigate("/entrance/reserve-check", { replace: true });
         })
-        .catch((err: AxiosError<generalFailedProp>) => {
+        .catch((err: AxiosError) => {
           if (err.message) {
             setSnackbar({
               status: true,
