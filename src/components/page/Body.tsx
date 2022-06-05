@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -43,6 +44,11 @@ const Body = () => {
         })
         .then((meRes) => {
           setProfile(meRes);
+          ReactGA.event({
+            category: "login",
+            action: "auto_success",
+            label: meRes.user_id,
+          })
         })
         .catch((err: AxiosError) => {
           if (err.message === "Network Error") {

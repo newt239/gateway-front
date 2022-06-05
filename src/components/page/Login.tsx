@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
+import ReactGA from "react-ga4";
 import { tokenState, profileState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
 import { AxiosError } from "axios";
@@ -52,6 +53,11 @@ const Login = () => {
               });
               setProfile(meRes);
               navigate("/", { replace: true });
+              ReactGA.event({
+                category: "login",
+                action: "success",
+                label: inputValue.user_id,
+              })
             })
             .catch((err: AxiosError) => {
               console.log(err);
@@ -70,6 +76,11 @@ const Login = () => {
             message:
               "エラーが発生しました。ユーザーidまたはパスワードが間違っている可能性があります。",
           });
+          ReactGA.event({
+            category: "login",
+            action: "error",
+            label: inputValue.user_id,
+          })
         });
     }
   };
