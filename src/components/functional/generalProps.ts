@@ -41,3 +41,9 @@ export type userTypeProp =
   | "exhibit"
   | "analysis"
   | "temporary";
+
+export type exhibitTypeProp =
+  | "class"
+  | "club"
+  | "stage"
+  | "other";

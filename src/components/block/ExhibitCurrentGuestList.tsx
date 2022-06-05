@@ -6,11 +6,12 @@ import apiClient from "#/axios-config";
 import { Grid, Box } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { AxiosError } from "axios";
+import moment from "moment";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ゲストID" },
   { field: "guest_type", headerName: "属性" },
-  { field: "enter_at", headerName: "入室時刻", width: 200 },
+  { field: "enter_at", headerName: "入室時刻", width: 150 },
 ];
 
 type exhibitCurrentGuestTableListProp = {
@@ -33,7 +34,14 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setRows(res);
+          const currentGuestList = res.map((v) => {
+            return {
+              ...v,
+              guest_type: v.guest_type === "student" ? "生徒" : v.guest_type === "family" ? "保護者" : "その他",
+              enter_at: moment(v.enter_at).format("MM/DD HH:MM:SS")
+            }
+          });
+          setRows(currentGuestList);
         })
         .catch((err: AxiosError) => {
           console.log(err);
@@ -50,6 +58,11 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
             columns={columns}
             pageSize={10}
             checkboxSelection
+            rowHeight={50}
+            localeText={{
+              noRowsLabel: '入室中のゲストはいません',
+              footerRowSelected: (count) => `${count.toLocaleString()} 人を選択中`
+            }}
           />
         </Box>
       </Grid>

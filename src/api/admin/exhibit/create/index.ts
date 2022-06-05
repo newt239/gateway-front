@@ -8,10 +8,11 @@ export type Methods = {
     status: 200
 
     reqBody: {
-      user_id: string
-      password: string
-      display_name: string
-      user_type: string
+      exhibit_id: string
+      exhibit_name: string
+      room_name: string
+      exhibit_type: string
+      capacity: number
     }
   }
 }
