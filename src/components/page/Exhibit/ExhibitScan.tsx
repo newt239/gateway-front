@@ -162,9 +162,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       if (profile && guestInfo && token && exhibit_id) {
         const payload = {
           guest_id: text,
-          guest_type: guestInfo.guest_type,
           exhibit_id: exhibit_id,
-          user_id: profile.user_id,
         };
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .activity[scanType].$post({
@@ -208,10 +206,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       <>
         {scanStatus === "error" && (
           <Alert
+            variant="filled"
             severity="error"
             action={
-              <Button variant="text" color="error" onClick={retry}>
-                スキャンし直す
+              <Button color="inherit" sx={{
+                whiteSpace: "nowrap"
+              }} onClick={retry}>
+                再スキャン
               </Button>
             }
           >
@@ -264,7 +265,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 スキャンし直す
               </Button>
               <Button variant="contained" onClick={postApi}>
-                登録
+                {scanType === "enter" ? "入室記録" : "退室記録"}
               </Button>
             </Box>
           </Card>
@@ -348,12 +349,15 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       </Grid>
       <Snackbar
         open={snackbar.status}
+        anchorOrigin={{
+          vertical: "top", horizontal: "right"
+        }}
         autoHideDuration={6000}
         onClose={() =>
           setSnackbar({ status: false, message: "", severity: "success" })
         }
       >
-        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+        <Alert variant="filled" severity={snackbar.severity}>{snackbar.message}</Alert>
       </Snackbar>
     </Grid>
   );
