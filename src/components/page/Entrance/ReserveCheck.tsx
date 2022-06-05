@@ -72,42 +72,48 @@ const ReserveCheck = () => {
   const handleScan = (scanText: string | null) => {
     if (scanText) {
       setText(scanText);
-      if (token && scanText.length === 7 && scanText.startsWith("R")) {
-        setDeviceState(false);
-        setLoading(true);
-        apiClient(process.env.REACT_APP_API_BASE_URL)
-          .reservation.info._reservation_id(scanText)
-          .$get({
-            headers: { Authorization: "Bearer " + token },
-          })
-          .then((res) => {
-            setLoading(false);
-            setReservation(res);
-            if (res.available) {
-              if (res.count === res.registered) {
-                setScanStatus("error");
-                setMessage(["この予約idは既に利用済みです。"]);
-                setSmDrawerStatus(true);
+      if (token) {
+        if (scanText.length === 7 && scanText.startsWith("R")) {
+          setDeviceState(false);
+          setLoading(true);
+          apiClient(process.env.REACT_APP_API_BASE_URL)
+            .reservation.info._reservation_id(scanText)
+            .$get({
+              headers: { Authorization: "Bearer " + token },
+            })
+            .then((res) => {
+              setLoading(false);
+              setReservation(res);
+              if (res.available) {
+                if (res.count === res.registered) {
+                  setScanStatus("error");
+                  setMessage(["この予約idは既に利用済みです。"]);
+                  setSmDrawerStatus(true);
+                } else {
+                  setScanStatus("success");
+                  setSmDrawerStatus(true);
+                }
               } else {
-                setScanStatus("success");
+                setScanStatus("error");
+                setMessage(["この予約idは無効です。"]);
                 setSmDrawerStatus(true);
               }
-            } else {
+            })
+            .catch((err: AxiosError) => {
+              setLoading(false);
               setScanStatus("error");
-              setMessage(["この予約idは無効です。"]);
+              setMessage([err.message]);
               setSmDrawerStatus(true);
-            }
-          })
-          .catch((err: AxiosError) => {
-            setLoading(false);
-            setScanStatus("error");
-            setMessage([err.message]);
-            setSmDrawerStatus(true);
-          });
-      } else {
-        setScanStatus("error");
-        setMessage(["予約idの形式が正しくありません。"]);
-        setSmDrawerStatus(true);
+            });
+        } else if (scanText.startsWith("G")) {
+          setScanStatus("error");
+          setMessage(["このidはゲストidです。予約idをスキャンしてください。"]);
+          setSmDrawerStatus(true);
+        } else {
+          setScanStatus("error");
+          setMessage(["予約idの形式が正しくありません。"]);
+          setSmDrawerStatus(true);
+        }
       }
     }
   };
@@ -125,8 +131,9 @@ const ReserveCheck = () => {
         {scanStatus === "error" && (
           <Alert
             severity="error"
+            variant="filled"
             action={
-              <Button color="error" onClick={retry}>
+              <Button color="inherit" onClick={retry}>
                 スキャンし直す
               </Button>
             }
