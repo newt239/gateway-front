@@ -72,11 +72,14 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
     xaxis: {
       type: "datetime",
       categories: categories,
+      labels: {
+        datetimeUTC: false
+      }
     },
     yaxis: {
       labels: {
         formatter: (value) => {
-          return value.toFixed(1);
+          return value.toFixed(0);
         },
       },
     },
