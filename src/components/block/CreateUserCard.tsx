@@ -37,8 +37,7 @@ const CreateUserCard = () => {
     { user_id: string; display_name: string; user_type: string }[]
   >([]);
 
-  const userTypeList: { value: userTypeProp; label: string }[] = [
-    { value: "moderator", label: "管理者" },
+  const userTypeList: { value: userTypeProp; label: string; }[] = [
     { value: "executive", label: "文化祭実行委員" },
     { value: "exhibit", label: "展示担当者" },
     { value: "analysis", label: "データ分析" },
@@ -90,6 +89,7 @@ const CreateUserCard = () => {
         display_name: displayNameValue,
         user_type: userTypeValue,
       };
+      console.log(payload);
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .admin.user.create.$post({
           headers: { Authorization: `Bearer ${token}` },

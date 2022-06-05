@@ -39,8 +39,7 @@ export type userTypeProp =
   | "moderator"
   | "executive"
   | "exhibit"
-  | "analysis"
-  | "temporary";
+  | "analysis";
 
 export type exhibitTypeProp =
   | "class"
