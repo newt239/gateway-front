@@ -66,7 +66,7 @@ const ChartAll = () => {
             console.log(err);
           });
       }
-    }, []);
+    }, [token]);
     return (
       <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
         <Typography variant="h3">全体の滞在状況</Typography>
@@ -110,7 +110,7 @@ const ChartAll = () => {
             console.log(err);
           });
       }
-    }, []);
+    }, [token]);
 
     return (<Card variant="outlined" sx={{ p: 2 }}>
       <Typography variant="h3">展示別の滞在状況</Typography>
@@ -121,8 +121,7 @@ const ChartAll = () => {
           rowHeight={50}
           hideFooter
           localeText={{
-            noRowsLabel: '入室中のゲストはいません',
-            footerRowSelected: (count) => `${count.toLocaleString()} 人を選択中`
+            noRowsLabel: '現在有効な展示がありません'
           }}
         />
       </Box>

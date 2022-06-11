@@ -56,12 +56,8 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
           <DataGrid
             rows={rows}
             columns={columns}
-            checkboxSelection
             rowHeight={50}
-            localeText={{
-              noRowsLabel: '入室中のゲストはいません',
-              footerRowSelected: (count) => `${count.toLocaleString()} 人を選択中`
-            }}
+            hideFooter
           />
         </Box>
       </Grid>
