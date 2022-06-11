@@ -213,6 +213,12 @@ const DrawerLeft = () => {
           )}
         </>
       )}
+      <Divider />
+      <Box sx={{ p: 2 }}>
+        <Typography variant="caption">ver. {`${process.env.REACT_APP_VERSION || ""}`}</Typography>
+        <br />
+        <Typography variant="caption">© 栄東祭実行委員会 技術部</Typography>
+      </Box>
     </Drawer>
   );
 };
