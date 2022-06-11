@@ -8,11 +8,12 @@ import type { Methods as Methods5 } from './auth/me'
 import type { Methods as Methods6 } from './exhibit/current'
 import type { Methods as Methods7 } from './exhibit/current/_exhibit_id@string'
 import type { Methods as Methods8 } from './exhibit/history/_exhibit_id@string/_day@string'
-import type { Methods as Methods9 } from './exhibit/info/_exhibit_id@string'
-import type { Methods as Methods10 } from './exhibit/list'
-import type { Methods as Methods11 } from './guest/info/_guest_id@string'
-import type { Methods as Methods12 } from './guest/register'
-import type { Methods as Methods13 } from './reservation/info/_reservation_id@string'
+import type { Methods as Methods9 } from './exhibit/info'
+import type { Methods as Methods10 } from './exhibit/info/_exhibit_id@string'
+import type { Methods as Methods11 } from './exhibit/list'
+import type { Methods as Methods12 } from './guest/info/_guest_id@string'
+import type { Methods as Methods13 } from './guest/register'
+import type { Methods as Methods14 } from './reservation/info/_reservation_id@string'
 
 const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
   const prefix = (baseURL === undefined ? 'https://api.sh-fes.com/v1' : baseURL).replace(/\/$/, '')
@@ -178,28 +179,39 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
             /**
              * @returns 正常レスポンス
              */
-            get: (option?: { headers?: Methods9['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-              fetch<Methods9['get']['resBody'], BasicHeaders, Methods9['get']['status']>(prefix, prefix2, GET, option).json(),
+            get: (option?: { headers?: Methods10['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods10['get']['resBody'], BasicHeaders, Methods10['get']['status']>(prefix, prefix2, GET, option).json(),
             /**
              * @returns 正常レスポンス
              */
-            $get: (option?: { headers?: Methods9['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-              fetch<Methods9['get']['resBody'], BasicHeaders, Methods9['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
+            $get: (option?: { headers?: Methods10['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods10['get']['resBody'], BasicHeaders, Methods10['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
             $path: () => `${prefix}${prefix2}`
           }
-        }
+        },
+        /**
+         * @returns 正常レスポンス
+         */
+        get: (option?: { headers?: Methods9['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods9['get']['resBody'], BasicHeaders, Methods9['get']['status']>(prefix, PATH8, GET, option).json(),
+        /**
+         * @returns 正常レスポンス
+         */
+        $get: (option?: { headers?: Methods9['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods9['get']['resBody'], BasicHeaders, Methods9['get']['status']>(prefix, PATH8, GET, option).json().then(r => r.body),
+        $path: () => `${prefix}${PATH8}`
       },
       list: {
         /**
          * @returns 正常レスポンス
          */
-        get: (option?: { headers?: Methods10['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-          fetch<Methods10['get']['resBody'], BasicHeaders, Methods10['get']['status']>(prefix, PATH9, GET, option).json(),
+        get: (option?: { headers?: Methods11['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods11['get']['resBody'], BasicHeaders, Methods11['get']['status']>(prefix, PATH9, GET, option).json(),
         /**
          * @returns 正常レスポンス
          */
-        $get: (option?: { headers?: Methods10['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-          fetch<Methods10['get']['resBody'], BasicHeaders, Methods10['get']['status']>(prefix, PATH9, GET, option).json().then(r => r.body),
+        $get: (option?: { headers?: Methods11['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods11['get']['resBody'], BasicHeaders, Methods11['get']['status']>(prefix, PATH9, GET, option).json().then(r => r.body),
         $path: () => `${prefix}${PATH9}`
       }
     },
@@ -212,13 +224,13 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
             /**
              * @returns 正常レスポンス
              */
-            get: (option?: { headers?: Methods11['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-              fetch<Methods11['get']['resBody'], BasicHeaders, Methods11['get']['status']>(prefix, prefix2, GET, option).json(),
+            get: (option?: { headers?: Methods12['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods12['get']['resBody'], BasicHeaders, Methods12['get']['status']>(prefix, prefix2, GET, option).json(),
             /**
              * @returns 正常レスポンス
              */
-            $get: (option?: { headers?: Methods11['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-              fetch<Methods11['get']['resBody'], BasicHeaders, Methods11['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
+            $get: (option?: { headers?: Methods12['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods12['get']['resBody'], BasicHeaders, Methods12['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
             $path: () => `${prefix}${prefix2}`
           }
         }
@@ -227,13 +239,13 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
         /**
          * 同一の予約からの登録はひとつにまとめる。人数が超過したら(する前にフロントで警告が出るはずだが)エラーを返す
          */
-        post: (option: { body: Methods12['post']['reqBody'], headers?: Methods12['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods12['post']['status']>(prefix, PATH11, POST, option).send(),
+        post: (option: { body: Methods13['post']['reqBody'], headers?: Methods13['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods13['post']['status']>(prefix, PATH11, POST, option).send(),
         /**
          * 同一の予約からの登録はひとつにまとめる。人数が超過したら(する前にフロントで警告が出るはずだが)エラーを返す
          */
-        $post: (option: { body: Methods12['post']['reqBody'], headers?: Methods12['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods12['post']['status']>(prefix, PATH11, POST, option).send().then(r => r.body),
+        $post: (option: { body: Methods13['post']['reqBody'], headers?: Methods13['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods13['post']['status']>(prefix, PATH11, POST, option).send().then(r => r.body),
         $path: () => `${prefix}${PATH11}`
       }
     },
@@ -246,13 +258,13 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
             /**
              * @returns 正常レスポンス
              */
-            get: (option?: { headers?: Methods13['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-              fetch<Methods13['get']['resBody'], BasicHeaders, Methods13['get']['status']>(prefix, prefix2, GET, option).json(),
+            get: (option?: { headers?: Methods14['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods14['get']['resBody'], BasicHeaders, Methods14['get']['status']>(prefix, prefix2, GET, option).json(),
             /**
              * @returns 正常レスポンス
              */
-            $get: (option?: { headers?: Methods13['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-              fetch<Methods13['get']['resBody'], BasicHeaders, Methods13['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
+            $get: (option?: { headers?: Methods14['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods14['get']['resBody'], BasicHeaders, Methods14['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
             $path: () => `${prefix}${prefix2}`
           }
         }
