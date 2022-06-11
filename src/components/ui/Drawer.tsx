@@ -120,7 +120,7 @@ const DrawerLeft = () => {
               </List>
             </>
           )}
-          {["admin", "moderator"].includes(profile.user_type) && (
+          {["admin", "moderator", "executive"].includes(profile.user_type) && (
             <>
               <Divider />
               <List subheader={<ListSubheader>展示企画</ListSubheader>}>
