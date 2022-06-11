@@ -20,7 +20,8 @@ import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import TableChartRoundedIcon from "@mui/icons-material/TableChartRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
-import PlaylistAddCheckRoundedIcon from "@mui/icons-material/PlaylistAddCheckRounded";
+import PermDataSettingRoundedIcon from '@mui/icons-material/PermDataSettingRounded';
+import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 
 import UserInfo from "#/components/block/UserInfo";
 
@@ -194,7 +195,7 @@ const DrawerLeft = () => {
                   onClick={() => navigate("/admin/guest")}
                 >
                   <ListItemIcon>
-                    <PlaylistAddCheckRoundedIcon />
+                    <BadgeRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="ゲスト照会" />
                 </ListItemButton>
@@ -203,7 +204,7 @@ const DrawerLeft = () => {
                   onClick={() => navigate("/admin/exhibit")}
                 >
                   <ListItemIcon>
-                    <PlaylistAddCheckRoundedIcon />
+                    <PermDataSettingRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="展示管理" />
                 </ListItemButton>

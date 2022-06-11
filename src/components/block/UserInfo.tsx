@@ -76,7 +76,6 @@ const UserInfo = () => {
           <Box sx={{ width: "100%", textAlign: "right" }}>
             <Button
               variant="outlined"
-              color="success"
               onClick={() => navigate("/login", { replace: true })}
               sx={{ mt: 2 }}
               startIcon={<LogoutRoundedIcon />}
