@@ -19,8 +19,8 @@
       "type": "image/png"
     }
   ],
-  "start_url": "http://localhost:8000",
-  "scope": "http://localhost:8000",
+  "start_url": "./?utm_source=pwa",
+  "scope": "/",
   "display": "standalone",
   "theme_color": "#2196F3",
   "background_color": "#2196F3"
