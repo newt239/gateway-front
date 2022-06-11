@@ -26,7 +26,9 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
-    ".eslintrc.js"
+    ".eslintrc.js",
+    "src/serviceWorkerRegistration.ts",
+    "src/service-worker.ts"
   ],
   "exclude": [
     "node_modules",
