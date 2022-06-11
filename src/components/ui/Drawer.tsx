@@ -20,7 +20,6 @@ import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import TableChartRoundedIcon from "@mui/icons-material/TableChartRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
-import ManageAccountsRoundedIcon from "@mui/icons-material/ManageAccountsRounded";
 import PlaylistAddCheckRoundedIcon from "@mui/icons-material/PlaylistAddCheckRounded";
 
 import UserInfo from "#/components/block/UserInfo";
@@ -120,7 +119,7 @@ const DrawerLeft = () => {
               </List>
             </>
           )}
-          {["admin", "moderator"].includes(profile.user_type) && (
+          {["admin", "moderator", "executive"].includes(profile.user_type) && (
             <>
               <Divider />
               <List subheader={<ListSubheader>展示企画</ListSubheader>}>
@@ -190,15 +189,6 @@ const DrawerLeft = () => {
             <>
               <Divider />
               <List subheader={<ListSubheader>管理用操作</ListSubheader>}>
-                <ListItemButton
-                  selected={path === `/admin/user`}
-                  onClick={() => navigate("/admin/user")}
-                >
-                  <ListItemIcon>
-                    <ManageAccountsRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="ユーザー管理" />
-                </ListItemButton>
                 <ListItemButton
                   selected={path === `/admin/guest`}
                   onClick={() => navigate("/admin/guest")}
