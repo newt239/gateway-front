@@ -3,18 +3,16 @@ import type { Methods as Methods0 } from './activity/enter'
 import type { Methods as Methods1 } from './activity/exit'
 import type { Methods as Methods2 } from './admin/exhibit/create'
 import type { Methods as Methods3 } from './admin/exhibit/delete/_exhibit_id@string'
-import type { Methods as Methods4 } from './admin/user/create'
-import type { Methods as Methods5 } from './admin/user/created-by-me'
-import type { Methods as Methods6 } from './admin/user/delete/_user_id@string'
-import type { Methods as Methods7 } from './auth/login'
-import type { Methods as Methods8 } from './auth/me'
-import type { Methods as Methods9 } from './exhibit/current/_exhibit_id@string'
-import type { Methods as Methods10 } from './exhibit/history/_exhibit_id@string/_day@string'
-import type { Methods as Methods11 } from './exhibit/info/_exhibit_id@string'
-import type { Methods as Methods12 } from './exhibit/list'
-import type { Methods as Methods13 } from './guest/info/_guest_id@string'
-import type { Methods as Methods14 } from './guest/register'
-import type { Methods as Methods15 } from './reservation/info/_reservation_id@string'
+import type { Methods as Methods4 } from './auth/login'
+import type { Methods as Methods5 } from './auth/me'
+import type { Methods as Methods6 } from './exhibit/current'
+import type { Methods as Methods7 } from './exhibit/current/_exhibit_id@string'
+import type { Methods as Methods8 } from './exhibit/history/_exhibit_id@string/_day@string'
+import type { Methods as Methods9 } from './exhibit/info/_exhibit_id@string'
+import type { Methods as Methods10 } from './exhibit/list'
+import type { Methods as Methods11 } from './guest/info/_guest_id@string'
+import type { Methods as Methods12 } from './guest/register'
+import type { Methods as Methods13 } from './reservation/info/_reservation_id@string'
 
 const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
   const prefix = (baseURL === undefined ? 'https://api.sh-fes.com/v1' : baseURL).replace(/\/$/, '')
@@ -22,18 +20,15 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
   const PATH1 = '/activity/exit'
   const PATH2 = '/admin/exhibit/create'
   const PATH3 = '/admin/exhibit/delete'
-  const PATH4 = '/admin/user/create'
-  const PATH5 = '/admin/user/created-by-me'
-  const PATH6 = '/admin/user/delete'
-  const PATH7 = '/auth/login'
-  const PATH8 = '/auth/me'
-  const PATH9 = '/exhibit/current'
-  const PATH10 = '/exhibit/history'
-  const PATH11 = '/exhibit/info'
-  const PATH12 = '/exhibit/list'
-  const PATH13 = '/guest/info'
-  const PATH14 = '/guest/register'
-  const PATH15 = '/reservation/info'
+  const PATH4 = '/auth/login'
+  const PATH5 = '/auth/me'
+  const PATH6 = '/exhibit/current'
+  const PATH7 = '/exhibit/history'
+  const PATH8 = '/exhibit/info'
+  const PATH9 = '/exhibit/list'
+  const PATH10 = '/guest/info'
+  const PATH11 = '/guest/register'
+  const PATH12 = '/reservation/info'
   const GET = 'GET'
   const POST = 'POST'
   const DELETE = 'DELETE'
@@ -89,41 +84,6 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
             }
           }
         }
-      },
-      user: {
-        create: {
-          post: (option: { body: Methods4['post']['reqBody'], headers?: Methods4['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
-            fetch<void, BasicHeaders, Methods4['post']['status']>(prefix, PATH4, POST, option).send(),
-          $post: (option: { body: Methods4['post']['reqBody'], headers?: Methods4['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
-            fetch<void, BasicHeaders, Methods4['post']['status']>(prefix, PATH4, POST, option).send().then(r => r.body),
-          $path: () => `${prefix}${PATH4}`
-        },
-        created_by_me: {
-          /**
-           * @returns 正常レスポンス
-           */
-          get: (option?: { headers?: Methods5['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-            fetch<Methods5['get']['resBody'], BasicHeaders, Methods5['get']['status']>(prefix, PATH5, GET, option).json(),
-          /**
-           * @returns 正常レスポンス
-           */
-          $get: (option?: { headers?: Methods5['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-            fetch<Methods5['get']['resBody'], BasicHeaders, Methods5['get']['status']>(prefix, PATH5, GET, option).json().then(r => r.body),
-          $path: () => `${prefix}${PATH5}`
-        },
-        delete: {
-          _user_id: (val3: string) => {
-            const prefix3 = `${PATH6}/${val3}`
-
-            return {
-              delete: (option?: { headers?: Methods6['delete']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-                fetch<void, BasicHeaders, Methods6['delete']['status']>(prefix, prefix3, DELETE, option).send(),
-              $delete: (option?: { headers?: Methods6['delete']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-                fetch<void, BasicHeaders, Methods6['delete']['status']>(prefix, prefix3, DELETE, option).send().then(r => r.body),
-              $path: () => `${prefix}${prefix3}`
-            }
-          }
-        }
       }
     },
     auth: {
@@ -131,33 +91,88 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
         /**
          * @returns 正常レスポンス
          */
-        post: (option: { body: Methods7['post']['reqBody'], config?: T | undefined }) =>
-          fetch<Methods7['post']['resBody'], BasicHeaders, Methods7['post']['status']>(prefix, PATH7, POST, option).json(),
+        post: (option: { body: Methods4['post']['reqBody'], config?: T | undefined }) =>
+          fetch<Methods4['post']['resBody'], BasicHeaders, Methods4['post']['status']>(prefix, PATH4, POST, option).json(),
         /**
          * @returns 正常レスポンス
          */
-        $post: (option: { body: Methods7['post']['reqBody'], config?: T | undefined }) =>
-          fetch<Methods7['post']['resBody'], BasicHeaders, Methods7['post']['status']>(prefix, PATH7, POST, option).json().then(r => r.body),
-        $path: () => `${prefix}${PATH7}`
+        $post: (option: { body: Methods4['post']['reqBody'], config?: T | undefined }) =>
+          fetch<Methods4['post']['resBody'], BasicHeaders, Methods4['post']['status']>(prefix, PATH4, POST, option).json().then(r => r.body),
+        $path: () => `${prefix}${PATH4}`
       },
       me: {
         /**
          * @returns 正常レスポンス
          */
-        get: (option?: { headers?: Methods8['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-          fetch<Methods8['get']['resBody'], BasicHeaders, Methods8['get']['status']>(prefix, PATH8, GET, option).json(),
+        get: (option?: { headers?: Methods5['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods5['get']['resBody'], BasicHeaders, Methods5['get']['status']>(prefix, PATH5, GET, option).json(),
         /**
          * @returns 正常レスポンス
          */
-        $get: (option?: { headers?: Methods8['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-          fetch<Methods8['get']['resBody'], BasicHeaders, Methods8['get']['status']>(prefix, PATH8, GET, option).json().then(r => r.body),
-        $path: () => `${prefix}${PATH8}`
+        $get: (option?: { headers?: Methods5['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods5['get']['resBody'], BasicHeaders, Methods5['get']['status']>(prefix, PATH5, GET, option).json().then(r => r.body),
+        $path: () => `${prefix}${PATH5}`
       }
     },
     exhibit: {
       current: {
         _exhibit_id: (val2: string) => {
-          const prefix2 = `${PATH9}/${val2}`
+          const prefix2 = `${PATH6}/${val2}`
+
+          return {
+            /**
+             * @returns 正常レスポンス
+             */
+            get: (option?: { headers?: Methods7['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods7['get']['resBody'], BasicHeaders, Methods7['get']['status']>(prefix, prefix2, GET, option).json(),
+            /**
+             * @returns 正常レスポンス
+             */
+            $get: (option?: { headers?: Methods7['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods7['get']['resBody'], BasicHeaders, Methods7['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
+            $path: () => `${prefix}${prefix2}`
+          }
+        },
+        /**
+         * @returns 正常レスポンス
+         */
+        get: (option?: { headers?: Methods6['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods6['get']['resBody'], BasicHeaders, Methods6['get']['status']>(prefix, PATH6, GET, option).json(),
+        /**
+         * @returns 正常レスポンス
+         */
+        $get: (option?: { headers?: Methods6['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods6['get']['resBody'], BasicHeaders, Methods6['get']['status']>(prefix, PATH6, GET, option).json().then(r => r.body),
+        $path: () => `${prefix}${PATH6}`
+      },
+      history: {
+        _exhibit_id: (val2: string) => {
+          const prefix2 = `${PATH7}/${val2}`
+
+          return {
+            _day: (val3: string) => {
+              const prefix3 = `${prefix2}/${val3}`
+
+              return {
+                /**
+                 * @returns 正常レスポンス
+                 */
+                get: (option?: { headers?: Methods8['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+                  fetch<Methods8['get']['resBody'], BasicHeaders, Methods8['get']['status']>(prefix, prefix3, GET, option).json(),
+                /**
+                 * @returns 正常レスポンス
+                 */
+                $get: (option?: { headers?: Methods8['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+                  fetch<Methods8['get']['resBody'], BasicHeaders, Methods8['get']['status']>(prefix, prefix3, GET, option).json().then(r => r.body),
+                $path: () => `${prefix}${prefix3}`
+              }
+            }
+          }
+        }
+      },
+      info: {
+        _exhibit_id: (val2: string) => {
+          const prefix2 = `${PATH8}/${val2}`
 
           return {
             /**
@@ -174,34 +189,24 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
           }
         }
       },
-      history: {
-        _exhibit_id: (val2: string) => {
-          const prefix2 = `${PATH10}/${val2}`
-
-          return {
-            _day: (val3: string) => {
-              const prefix3 = `${prefix2}/${val3}`
-
-              return {
-                /**
-                 * @returns 正常レスポンス
-                 */
-                get: (option?: { headers?: Methods10['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-                  fetch<Methods10['get']['resBody'], BasicHeaders, Methods10['get']['status']>(prefix, prefix3, GET, option).json(),
-                /**
-                 * @returns 正常レスポンス
-                 */
-                $get: (option?: { headers?: Methods10['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-                  fetch<Methods10['get']['resBody'], BasicHeaders, Methods10['get']['status']>(prefix, prefix3, GET, option).json().then(r => r.body),
-                $path: () => `${prefix}${prefix3}`
-              }
-            }
-          }
-        }
-      },
+      list: {
+        /**
+         * @returns 正常レスポンス
+         */
+        get: (option?: { headers?: Methods10['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods10['get']['resBody'], BasicHeaders, Methods10['get']['status']>(prefix, PATH9, GET, option).json(),
+        /**
+         * @returns 正常レスポンス
+         */
+        $get: (option?: { headers?: Methods10['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+          fetch<Methods10['get']['resBody'], BasicHeaders, Methods10['get']['status']>(prefix, PATH9, GET, option).json().then(r => r.body),
+        $path: () => `${prefix}${PATH9}`
+      }
+    },
+    guest: {
       info: {
-        _exhibit_id: (val2: string) => {
-          const prefix2 = `${PATH11}/${val2}`
+        _guest_id: (val2: string) => {
+          const prefix2 = `${PATH10}/${val2}`
 
           return {
             /**
@@ -218,24 +223,24 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
           }
         }
       },
-      list: {
+      register: {
         /**
-         * @returns 正常レスポンス
+         * 同一の予約からの登録はひとつにまとめる。人数が超過したら(する前にフロントで警告が出るはずだが)エラーを返す
          */
-        get: (option?: { headers?: Methods12['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-          fetch<Methods12['get']['resBody'], BasicHeaders, Methods12['get']['status']>(prefix, PATH12, GET, option).json(),
+        post: (option: { body: Methods12['post']['reqBody'], headers?: Methods12['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods12['post']['status']>(prefix, PATH11, POST, option).send(),
         /**
-         * @returns 正常レスポンス
+         * 同一の予約からの登録はひとつにまとめる。人数が超過したら(する前にフロントで警告が出るはずだが)エラーを返す
          */
-        $get: (option?: { headers?: Methods12['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-          fetch<Methods12['get']['resBody'], BasicHeaders, Methods12['get']['status']>(prefix, PATH12, GET, option).json().then(r => r.body),
-        $path: () => `${prefix}${PATH12}`
+        $post: (option: { body: Methods12['post']['reqBody'], headers?: Methods12['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods12['post']['status']>(prefix, PATH11, POST, option).send().then(r => r.body),
+        $path: () => `${prefix}${PATH11}`
       }
     },
-    guest: {
+    reservation: {
       info: {
-        _guest_id: (val2: string) => {
-          const prefix2 = `${PATH13}/${val2}`
+        _reservation_id: (val2: string) => {
+          const prefix2 = `${PATH12}/${val2}`
 
           return {
             /**
@@ -248,40 +253,6 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
              */
             $get: (option?: { headers?: Methods13['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
               fetch<Methods13['get']['resBody'], BasicHeaders, Methods13['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
-            $path: () => `${prefix}${prefix2}`
-          }
-        }
-      },
-      register: {
-        /**
-         * 同一の予約からの登録はひとつにまとめる。人数が超過したら(する前にフロントで警告が出るはずだが)エラーを返す
-         */
-        post: (option: { body: Methods14['post']['reqBody'], headers?: Methods14['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods14['post']['status']>(prefix, PATH14, POST, option).send(),
-        /**
-         * 同一の予約からの登録はひとつにまとめる。人数が超過したら(する前にフロントで警告が出るはずだが)エラーを返す
-         */
-        $post: (option: { body: Methods14['post']['reqBody'], headers?: Methods14['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods14['post']['status']>(prefix, PATH14, POST, option).send().then(r => r.body),
-        $path: () => `${prefix}${PATH14}`
-      }
-    },
-    reservation: {
-      info: {
-        _reservation_id: (val2: string) => {
-          const prefix2 = `${PATH15}/${val2}`
-
-          return {
-            /**
-             * @returns 正常レスポンス
-             */
-            get: (option?: { headers?: Methods15['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-              fetch<Methods15['get']['resBody'], BasicHeaders, Methods15['get']['status']>(prefix, prefix2, GET, option).json(),
-            /**
-             * @returns 正常レスポンス
-             */
-            $get: (option?: { headers?: Methods15['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-              fetch<Methods15['get']['resBody'], BasicHeaders, Methods15['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
             $path: () => `${prefix}${prefix2}`
           }
         }
