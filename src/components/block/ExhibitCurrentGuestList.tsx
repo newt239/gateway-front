@@ -56,7 +56,6 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
           <DataGrid
             rows={rows}
             columns={columns}
-            pageSize={10}
             checkboxSelection
             rowHeight={50}
             localeText={{

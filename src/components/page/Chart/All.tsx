@@ -84,8 +84,8 @@ const ChartAll = () => {
         <DataGrid
           rows={rows}
           columns={columns}
-          pageSize={10}
           rowHeight={50}
+          hideFooter
           localeText={{
             noRowsLabel: '入室中のゲストはいません',
             footerRowSelected: (count) => `${count.toLocaleString()} 人を選択中`
