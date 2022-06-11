@@ -19,7 +19,6 @@ import ReserveCheck from "#/components/page/Entrance/ReserveCheck";
 import EntranceEnter from "#/components/page/Entrance/Enter";
 import EntranceExit from "#/components/page/Entrance/Exit";
 import DocsMarkdown from "#/components/page/Docs/Markdown";
-import AdminManageUser from "#/components/page/Admin/ManageUser";
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminManageExhibit from "#/components/page/Admin/ManageExhibit";
 import Extra from "#/components/page/Extra";
@@ -155,7 +154,6 @@ const Body = () => {
             <Route path="admin">
               {["admin", "moderator"].includes(profile.user_type) ? (
                 <>
-                  <Route path="user" element={<AdminManageUser />} />
                   <Route path="guest" element={<AdminCheckGuest />} />
                   <Route path="exhibit" element={<AdminManageExhibit />} />
                 </>
