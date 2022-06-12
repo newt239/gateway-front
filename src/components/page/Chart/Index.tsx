@@ -6,7 +6,7 @@ import ExhibitListTableCard from "#/components/block/ExhibitListTableCard.tsx";
 import { Grid } from "@mui/material";
 
 
-const ChartAll = () => {
+const ChartIndex = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {
     setPageInfo({ title: "滞在状況" });
@@ -24,4 +24,4 @@ const ChartAll = () => {
   );
 };
 
-export default ChartAll;
+export default ChartIndex;

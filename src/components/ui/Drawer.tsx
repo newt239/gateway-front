@@ -165,8 +165,8 @@ const DrawerLeft = () => {
               <Divider />
               <List subheader={<ListSubheader>データ</ListSubheader>}>
                 <ListItemButton
-                  selected={path === `/chart/all`}
-                  onClick={() => navigate("/chart/all")}
+                  selected={path === `/chart`}
+                  onClick={() => navigate("/chart")}
                 >
                   <ListItemIcon>
                     <TableChartRoundedIcon />
