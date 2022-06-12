@@ -11,7 +11,7 @@ export const exhibitListState = atom<exhibitProp[]>({
   key: "exhibitListState",
   default: selector<exhibitProp[]>({
     key: "exhibitListSelector",
-    get: ({ get }) => {
+    get: async ({ get }) => {
       const tokenStateValue = get(tokenState);
       const profileStateValue = get(profileState);
       if (tokenStateValue && profileStateValue) {
@@ -23,7 +23,7 @@ export const exhibitListState = atom<exhibitProp[]>({
             { "exhibit_id": "cafeteria", "exhibit_name": "食堂" }
           ]
         } else if (["admin", "moderator"].includes(profileStateValue.user_type)) {
-          return apiClient(
+          return await apiClient(
             process.env.REACT_APP_API_BASE_URL
           ).exhibit.list.$get({
             headers: {

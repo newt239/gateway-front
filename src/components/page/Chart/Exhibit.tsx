@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from "recoil";
 import { profileState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
 
@@ -9,6 +9,7 @@ import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRound
 
 import ExhibitEnterCountBarChart from "../../block/ExhibitEnterCountBarChart";
 import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList";
+import { exhibitListState } from "#/recoil/exhibit";
 
 const ChartExhibit = () => {
   const navigate = useNavigate();
@@ -24,8 +25,18 @@ const ChartExhibit = () => {
     });
 
     const setPageInfo = useSetRecoilState(pageStateSelector);
+    const exhibitListValue = useRecoilValueLoadable(exhibitListState);
     useEffect(() => {
-      setPageInfo({ title: `${exhibit_id} - 現在の滞在状況` });
+      if (exhibitListValue.state === "hasValue") {
+        if (exhibitListValue.contents) {
+          const currentExhibit = exhibitListValue.contents.find(v => v.exhibit_id === exhibit_id);
+          if (currentExhibit) {
+            setPageInfo({ title: `${currentExhibit.exhibit_name} - 現在の滞在状況` });
+          }
+        }
+      } else if (exhibitListValue.state == "loading") {
+        setPageInfo({ title: `${exhibit_id} - 現在の滞在状況` });
+      }
     }, []);
 
     useEffect(() => {
@@ -49,7 +60,7 @@ const ChartExhibit = () => {
                 <Button
                   variant="text"
                   startIcon={<ArrowBackIosNewRoundedIcon />}
-                  onClick={() => navigate("/chart/all", { replace: true })}
+                  onClick={() => navigate("/chart", { replace: true })}
                 >
                   一覧に戻る
                 </Button>

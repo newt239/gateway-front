@@ -8,9 +8,10 @@ export type Methods = {
     status: 200
     /** 正常レスポンス */
     resBody: {
-      user_id: string
-      display_name: string
-      user_type: string
+      id: string
+      exhibit_name: string
+      count: number
+      capacity: number
     }[]
   }
 }

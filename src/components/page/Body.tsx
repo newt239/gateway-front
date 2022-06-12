@@ -11,7 +11,7 @@ import Home from "#/components/page/Home";
 import Login from "#/components/page/Login";
 import ExhibitIndex from "#/components/page/Exhibit/Index";
 import ExhibitScan from "#/components/page/Exhibit/ExhibitScan";
-import ChartAll from "#/components/page/Chart/All";
+import ChartIndex from "#/components/page/Chart/Index";
 import ChartExhibit from "#/components/page/Chart/Exhibit";
 import Heatmap from "#/components/page/Chart/Heatmap";
 import Entrance from "#/components/page/Entrance/Index";
@@ -133,7 +133,7 @@ const Body = () => {
                 profile.user_type
               ) ? (
                 <>
-                  <Route path="all" element={<ChartAll />} />
+                  <Route index element={<ChartIndex />} />
                   <Route
                     path="exhibit/:exhibit_id"
                     element={<ChartExhibit />}
