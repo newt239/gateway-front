@@ -89,7 +89,7 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
       },
     },
     noData: {
-      text: "表示するデータがありません",
+      text: "表示できるデータがありません",
     },
   };
   const series = [

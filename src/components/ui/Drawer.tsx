@@ -164,15 +164,15 @@ const DrawerLeft = () => {
           {["admin", "moderator", "analysis"].includes(profile.user_type) && (
             <>
               <Divider />
-              <List subheader={<ListSubheader>混雑状況</ListSubheader>}>
+              <List subheader={<ListSubheader>データ</ListSubheader>}>
                 <ListItemButton
-                  selected={path === `/chart/all`}
-                  onClick={() => navigate("/chart/all")}
+                  selected={path === `/chart`}
+                  onClick={() => navigate("/chart")}
                 >
                   <ListItemIcon>
                     <TableChartRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="全体の滞在状況" />
+                  <ListItemText primary="滞在状況" />
                 </ListItemButton>
                 <ListItemButton
                   selected={path === `/chart/heatmap`}

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
 
-import { Grid, Typography, Button } from "@mui/material";
+import { Grid, Card, Box, Typography, Button } from "@mui/material";
 
 type extraProp = {
   type: "404" | "401";
@@ -19,14 +19,22 @@ const NotFound = (props: extraProp) => {
   return (
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
-        {props.type === "404" ? (
-          <Typography>お探しのページは見つかりませんでした。</Typography>
-        ) : (
-          <Typography>このページを表示する権限がありません。</Typography>
-        )}
-        <Button onClick={() => navigate("/", { replace: true })}>
-          トップに戻る
-        </Button>
+        <Grid item xs={12}>
+          <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+            {props.type === "404" ? (
+              <Typography>お探しのページは見つかりませんでした。</Typography>
+            ) : props.type === "401" ? (
+              <Typography>このページを表示する権限がありません。</Typography>
+            ) : (
+              <Typography>何らかのエラーが発生しました。</Typography>
+            )}
+            <Box sx={{ textAlign: "right" }}>
+              <Button onClick={() => navigate("/", { replace: true })} variant="outlined">
+                トップに戻る
+              </Button>
+            </Box>
+          </Card>
+        </Grid>
       </Grid>
     </>
   );
