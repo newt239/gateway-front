@@ -319,7 +319,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   <span style={{ fontSize: "2rem", fontWeight: 800 }}>{currentCount} </span><span> / {capacity} 人</span>
                 </Grid>
                 <Grid item >
-                  <span style={{ fontSize: ".5rem" }}> (最終更新: {lastUpdate.format("HH:mm:ss")})</span><br />
+                  <span style={{ fontSize: ".5rem" }}> ({lastUpdate.format("HH:mm:ss")}現在)</span><br />
                   <Button size="small" startIcon={<ReplayRoundedIcon />} onClick={updateExhibitInfo}>更新</Button>
                 </Grid>
               </Grid>

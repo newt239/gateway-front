@@ -66,7 +66,7 @@ const ReserveCheck = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
 
   useEffect(() => {
-    setPageInfo({ title: "入場処理" });
+    setPageInfo({ title: "エントランス入場処理" });
   }, []);
 
   const handleScan = (scanText: string | null) => {
@@ -204,7 +204,10 @@ const ReserveCheck = () => {
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
-        <Typography variant="h3">Step1: 予約用QRコードスキャン</Typography>
+        <Card variant="outlined" sx={{ p: 2 }}>
+          <Typography variant="h3">予約確認</Typography>
+          <Typography variant="body1">予約用QRコードをスキャンしてください。</Typography>
+        </Card>
       </Grid>
       <Grid item xs={12} md={6}>
         <Scanner handleScan={handleScan} />
