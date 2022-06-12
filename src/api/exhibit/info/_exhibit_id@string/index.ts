@@ -13,6 +13,8 @@ export type Methods = {
       exhibit_name: string
       exhibit_type: string
       room_name: string
+      capacity: number
+      current: number
       status: number
     }
   }

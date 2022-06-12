@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
@@ -35,7 +35,6 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
-import { exhibitListState } from "#/recoil/exhibit";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -43,7 +42,7 @@ type ExhibitScanProps = {
 
 const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const { exhibit_id } = useParams<{ exhibit_id: string }>() || "unknown";
-
+  const navigate = useNavigate();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const profile = useRecoilValue(profileState);
@@ -55,6 +54,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
+  const [capacity, setCapacity] = useState(0);
+  const [currentCount, setCurrentCount] = useState(0);
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
     message: string;
@@ -63,15 +64,30 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
   const setDeviceState = useSetRecoilState(deviceState);
-  const setPageInfo = useSetRecoilState(pageStateSelector);
 
+  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const updateExhibitInfo = () => {
+    if (token && exhibit_id) {
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .exhibit.info._exhibit_id(exhibit_id)
+        .$get({
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          setPageInfo({ title: res.exhibit_name });
+          setCapacity(res.capacity);
+          setCurrentCount(res.current);
+        }).catch((err) => {
+          console.log(err);
+        })
+    }
+  };
   useEffect(() => {
-    setScanStatus("waiting");
-    setMessage("");
-    setPageInfo({
-      title: scanType === "enter" ? "入室スキャン" : "退室スキャン",
-    });
-  }, [scanType]);
+    updateExhibitInfo();
+  }, []);
 
   const handleScan = (scanText: string | null) => {
     if (scanText) {
@@ -145,17 +161,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setScanStatus("waiting");
     setSmDrawerStatus(false);
   };
-
-  const ExhibitName = () => {
-    const exhibitList = useRecoilValue(exhibitListState);
-    if (exhibitList) {
-      const currentExhibit = exhibitList.find(v => v.exhibit_id === exhibit_id);
-      if (currentExhibit) {
-        return <Typography variant="h2">{currentExhibit.exhibit_name}</Typography>
-      }
-    }
-    return <Typography variant="h2">読み込み中...</Typography>
-  }
 
   const GuestInfoCard = () => {
     const postApi = () => {
@@ -276,10 +281,33 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12}>
-        <Suspense fallback={<div>読み込み中</div>}>
-          <ExhibitName />
-        </Suspense>
+      <Grid item xs={6}>
+        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+          <Grid container>
+            <Grid item xs={6}>
+              <Typography variant="h2">{scanType === "enter" ? "入室スキャン" : "退室スキャン"}</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Button onClick={() => navigate(`/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"}`, { replace: true })}>
+                {scanType === "enter" ? "退室スキャン" : "入室スキャン"}に切り替え
+              </Button>
+            </Grid>
+          </Grid>
+        </Card>
+      </Grid>
+      <Grid item xs={6}>
+        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+          <Grid container>
+            <Grid item xs={6}>
+              <span style={{ fontSize: "2rem", fontWeight: 800 }}>{currentCount} </span><span> / {capacity} 人</span>
+            </Grid>
+            <Grid item xs={6}>
+              <Button>
+                更新
+              </Button>
+            </Grid>
+          </Grid>
+        </Card>
       </Grid>
       <Grid item xs={12} md={6}>
         <Scanner handleScan={handleScan} />
