@@ -38,16 +38,12 @@ const AllAreaSummaryCard = () => {
 
   const options: ApexOptions = {
     chart: {
-      width: 200,
-      type: 'pie',
+      type: 'pie'
     },
     labels: allAreaChartCategories,
     responsive: [{
       breakpoint: 480,
       options: {
-        chart: {
-          width: 100
-        },
         legend: {
           position: 'bottom'
         }
@@ -62,7 +58,7 @@ const AllAreaSummaryCard = () => {
     <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
       <Typography variant="h3">全体の滞在状況</Typography>
       {allAreaTotalCount && (<Typography>校内滞在者数 {allAreaTotalCount}人</Typography>)}
-      <Box sx={{ width: "50%", maxWidth: "300px", margin: "auto" }}>
+      <Box sx={{ margin: "auto", width: "100%" }}>
         <Chart options={options} series={allAreaChartSeries} type="pie" />
       </Box>
     </Card>
