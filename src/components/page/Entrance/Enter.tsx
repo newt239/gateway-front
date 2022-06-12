@@ -66,7 +66,7 @@ const EntranceEnter = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
 
   useEffect(() => {
-    setPageInfo({ title: "入場処理" });
+    setPageInfo({ title: "エントランス入場処理" });
   }, []);
 
   useEffect(() => {
@@ -262,9 +262,10 @@ const EntranceEnter = () => {
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <Typography variant="h3">
-            Step2: 登録するリストバンドのQRコードをかざしてください
-          </Typography>
+          <Card variant="outlined" sx={{ p: 2 }}>
+            <Typography variant="h3">リストバンド登録</Typography>
+            <Typography variant="body1">登録するリストバンドのQRコードをスキャンしてください</Typography>
+          </Card>
         </Grid>
         <Grid item xs={12} md={6}>
           <Scanner handleScan={handleScan} />

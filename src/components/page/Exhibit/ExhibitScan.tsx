@@ -1,11 +1,12 @@
 import React, { useState, useEffect, Suspense } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
+import moment, { Moment } from "moment";
 
 import {
   Alert,
@@ -32,10 +33,11 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
+import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
+import PublishedWithChangesRoundedIcon from '@mui/icons-material/PublishedWithChangesRounded';
 
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
-import { exhibitListState } from "#/recoil/exhibit";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -43,7 +45,7 @@ type ExhibitScanProps = {
 
 const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const { exhibit_id } = useParams<{ exhibit_id: string }>() || "unknown";
-
+  const navigate = useNavigate();
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.up("sm"));
   const profile = useRecoilValue(profileState);
@@ -55,6 +57,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
+  const [capacity, setCapacity] = useState(0);
+  const [currentCount, setCurrentCount] = useState(0);
+  const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
     message: string;
@@ -63,15 +68,31 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
   const setDeviceState = useSetRecoilState(deviceState);
-  const setPageInfo = useSetRecoilState(pageStateSelector);
 
+  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const updateExhibitInfo = () => {
+    if (token && exhibit_id) {
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .exhibit.info._exhibit_id(exhibit_id)
+        .$get({
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+          setPageInfo({ title: res.exhibit_name });
+          setCapacity(res.capacity);
+          setCurrentCount(res.current);
+          setLastUpdate(moment());
+        }).catch((err) => {
+          console.log(err);
+        })
+    }
+  };
   useEffect(() => {
-    setScanStatus("waiting");
-    setMessage("");
-    setPageInfo({
-      title: scanType === "enter" ? "入室スキャン" : "退室スキャン",
-    });
-  }, [scanType]);
+    updateExhibitInfo();
+  }, []);
 
   const handleScan = (scanText: string | null) => {
     if (scanText) {
@@ -146,17 +167,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setSmDrawerStatus(false);
   };
 
-  const ExhibitName = () => {
-    const exhibitList = useRecoilValue(exhibitListState);
-    if (exhibitList) {
-      const currentExhibit = exhibitList.find(v => v.exhibit_id === exhibit_id);
-      if (currentExhibit) {
-        return <Typography variant="h2">{currentExhibit.exhibit_name}</Typography>
-      }
-    }
-    return <Typography variant="h2">読み込み中...</Typography>
-  }
-
   const GuestInfoCard = () => {
     const postApi = () => {
       if (profile && guestInfo && token && exhibit_id) {
@@ -164,42 +174,52 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           guest_id: text,
           exhibit_id: exhibit_id,
         };
-        apiClient(process.env.REACT_APP_API_BASE_URL)
-          .activity[scanType].$post({
-            headers: { Authorization: "Bearer " + token },
-            body: payload,
-          })
-          .then(() => {
-            setDeviceState(true);
-            setText("");
-            setMessage("");
-            setSnackbar({
-              status: true,
-              message: "処理が完了しました。",
-              severity: "success",
-            });
-            setScanStatus("waiting");
-            setSmDrawerStatus(false);
-          })
-          .catch((err: AxiosError) => {
-            if (err.message) {
-              setSnackbar({
-                status: true,
-                message: err.message,
-                severity: "error",
-              });
-            } else {
-              setSnackbar({
-                status: true,
-                message: "何らかのエラーが発生しました。",
-                severity: "error",
-              });
-            }
-            setText("");
-            setDeviceState(true);
-            setSmDrawerStatus(false);
+        updateExhibitInfo()
+        if (scanType === "enter" && currentCount >= capacity) {
+          setSnackbar({
+            status: true,
+            message: "滞在者数が上限に達しています。",
+            severity: "error",
           });
+        } else {
+          apiClient(process.env.REACT_APP_API_BASE_URL)
+            .activity[scanType].$post({
+              headers: { Authorization: "Bearer " + token },
+              body: payload,
+            })
+            .then(() => {
+              setDeviceState(true);
+              setText("");
+              setMessage("");
+              setSnackbar({
+                status: true,
+                message: "処理が完了しました。",
+                severity: "success",
+              });
+              setScanStatus("waiting");
+              setSmDrawerStatus(false);
+            })
+            .catch((err: AxiosError) => {
+              if (err.message) {
+                setSnackbar({
+                  status: true,
+                  message: err.message,
+                  severity: "error",
+                });
+              } else {
+                setSnackbar({
+                  status: true,
+                  message: "何らかのエラーが発生しました。",
+                  severity: "error",
+                });
+              }
+              setText("");
+              setDeviceState(true);
+              setSmDrawerStatus(false);
+            });
+        }
       }
+
     };
 
     return (
@@ -277,9 +297,35 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
-        <Suspense fallback={<div>読み込み中</div>}>
-          <ExhibitName />
-        </Suspense>
+        <Grid container spacing={2}>
+          <Grid item>
+            <Card variant="outlined" sx={{ p: 2, height: "100%", margin: "auto" }}>
+              <Grid container sx={{ alignItems: "end" }}>
+                <Grid item>
+                  <span style={{ fontSize: "2rem", fontWeight: 600 }}>{scanType === "enter" ? "入室スキャン" : "退室スキャン"}</span>
+                </Grid>
+                <Grid item sx={{ pl: 2 }}>
+                  <Button size="small" startIcon={<PublishedWithChangesRoundedIcon />} onClick={() => navigate(`/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"}`, { replace: true })}>
+                    {scanType === "enter" ? "退室スキャン" : "入室スキャン"}に切り替え
+                  </Button>
+                </Grid>
+              </Grid>
+            </Card>
+          </Grid>
+          <Grid item>
+            <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+              <Grid container spacing={2} sx={{ alignItems: "end" }}>
+                <Grid item>
+                  <span style={{ fontSize: "2rem", fontWeight: 800 }}>{currentCount} </span><span> / {capacity} 人</span>
+                </Grid>
+                <Grid item >
+                  <span style={{ fontSize: ".5rem" }}> ({lastUpdate.format("HH:mm:ss")}現在)</span><br />
+                  <Button size="small" startIcon={<ReplayRoundedIcon />} onClick={updateExhibitInfo}>更新</Button>
+                </Grid>
+              </Grid>
+            </Card>
+          </Grid>
+        </Grid>
       </Grid>
       <Grid item xs={12} md={6}>
         <Scanner handleScan={handleScan} />

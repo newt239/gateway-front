@@ -20,7 +20,8 @@ import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import TableChartRoundedIcon from "@mui/icons-material/TableChartRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
-import PlaylistAddCheckRoundedIcon from "@mui/icons-material/PlaylistAddCheckRounded";
+import PermDataSettingRoundedIcon from '@mui/icons-material/PermDataSettingRounded';
+import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
 
 import UserInfo from "#/components/block/UserInfo";
 
@@ -163,15 +164,15 @@ const DrawerLeft = () => {
           {["admin", "moderator", "analysis"].includes(profile.user_type) && (
             <>
               <Divider />
-              <List subheader={<ListSubheader>混雑状況</ListSubheader>}>
+              <List subheader={<ListSubheader>データ</ListSubheader>}>
                 <ListItemButton
-                  selected={path === `/chart/all`}
-                  onClick={() => navigate("/chart/all")}
+                  selected={path === `/chart`}
+                  onClick={() => navigate("/chart")}
                 >
                   <ListItemIcon>
                     <TableChartRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="全体の滞在状況" />
+                  <ListItemText primary="滞在状況" />
                 </ListItemButton>
                 <ListItemButton
                   selected={path === `/chart/heatmap`}
@@ -194,7 +195,7 @@ const DrawerLeft = () => {
                   onClick={() => navigate("/admin/guest")}
                 >
                   <ListItemIcon>
-                    <PlaylistAddCheckRoundedIcon />
+                    <BadgeRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="ゲスト照会" />
                 </ListItemButton>
@@ -203,7 +204,7 @@ const DrawerLeft = () => {
                   onClick={() => navigate("/admin/exhibit")}
                 >
                   <ListItemIcon>
-                    <PlaylistAddCheckRoundedIcon />
+                    <PermDataSettingRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="展示管理" />
                 </ListItemButton>
@@ -212,6 +213,12 @@ const DrawerLeft = () => {
           )}
         </>
       )}
+      <Divider />
+      <Box sx={{ p: 2 }}>
+        <Typography variant="caption">ver. {`${process.env.REACT_APP_VERSION || ""}`}</Typography>
+        <br />
+        <Typography variant="caption">© 栄東祭実行委員会 技術部</Typography>
+      </Box>
     </Drawer>
   );
 };

@@ -59,7 +59,7 @@ const EntranceExit = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
 
   useEffect(() => {
-    setPageInfo({ title: "退場処理" });
+    setPageInfo({ title: "エントランス" });
   }, []);
 
   const handleScan = (scanText: string | null) => {
@@ -224,6 +224,12 @@ const EntranceExit = () => {
 
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid item xs={12}>
+        <Card variant="outlined" sx={{ p: 2 }}>
+          <Typography variant="h3">退場処理</Typography>
+          <Typography variant="body1">会場からの退場処理を行います</Typography>
+        </Card>
+      </Grid>
       <Grid item xs={12} md={6}>
         <Scanner handleScan={handleScan} />
       </Grid>

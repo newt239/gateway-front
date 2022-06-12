@@ -64,7 +64,7 @@ const SimpleBottomNavigation = () => {
               />
               <BottomNavigationAction
                 label="滞在状況"
-                value="chart/exhibit"
+                value="chart"
                 icon={<AutoGraphRoundedIcon />}
               />
             </BottomNavigation>
