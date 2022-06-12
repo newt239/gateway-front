@@ -50,6 +50,12 @@ const Body = () => {
           })
         })
         .catch((err: AxiosError) => {
+          if (err.code === "401") {
+            setErrorDialogTitle("セッションがタイムアウトしました");
+            setMessageDialogMessage([
+              "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。",
+            ]);
+          }
           if (err.message === "Network Error") {
             setErrorDialogTitle("サーバーが起動していません");
             setMessageDialogMessage([
