@@ -15,8 +15,8 @@ import { ApexOptions } from "apexcharts";
 const AllAreaSummaryCard = () => {
   const token = useRecoilValue(tokenState);
   const [allAreaTotalCount, setAllAreaTotalCount] = useState<number>(0);
-  const [allAreaChartCategories, setAllAreaChartCategories] = useState<string[]>([]);
-  const [allAreaChartSeries, setAllAreaChartSeries] = useState<number[]>([]);
+  const [allAreaChartCategories, setAllAreaChartCategories] = useState<string[]>(["general"]);
+  const [allAreaChartSeries, setAllAreaChartSeries] = useState<number[]>([0]);
 
   useEffect(() => {
     if (token) {
@@ -41,7 +41,8 @@ const AllAreaSummaryCard = () => {
       width: 200,
       type: 'pie',
     },
-    labels: allAreaChartCategories, responsive: [{
+    labels: allAreaChartCategories,
+    responsive: [{
       breakpoint: 480,
       options: {
         chart: {
@@ -67,5 +68,4 @@ const AllAreaSummaryCard = () => {
     </Card>
   );
 };
-
 export default AllAreaSummaryCard;
