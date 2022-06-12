@@ -4,6 +4,7 @@ import { RecoilRoot } from "recoil";
 import "#/index.css";
 import App from "#/App";
 import * as serviceWorkerRegistration from "./serviceWorkerRegistration";
+import { SWUpdateDialog } from "./components/block/SWUpdateDialog";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,4 +15,10 @@ ReactDOM.render(
   document.getElementById("root")
 );
 
-serviceWorkerRegistration.register();
+serviceWorkerRegistration.register({
+  onUpdate: registration => {
+    if (registration.waiting) {
+      ReactDOM.render(<SWUpdateDialog registration={registration} />, document.querySelector('.SW-update-dialog'));
+    }
+  },
+});
