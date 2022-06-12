@@ -133,12 +133,22 @@ const Login = () => {
                 password: event.target.value,
               })
             }
+            onKeyPress={e => {
+              if (e.key === "Enter") {
+                login()
+              }
+            }}
             fullWidth
           />
         </Grid>
         <Grid item xs={12}>
           <Button
             onClick={login}
+            onKeyPress={e => {
+              if (e.key === "Enter") {
+                login()
+              }
+            }}
             variant="outlined"
             size="large"
             startIcon={<LoginRoundedIcon />}
