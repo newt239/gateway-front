@@ -29,7 +29,10 @@ const NotFound = (props: extraProp) => {
               <Typography>何らかのエラーが発生しました。</Typography>
             )}
             <Box sx={{ textAlign: "right" }}>
-              <Button onClick={() => navigate("/", { replace: true })} variant="outlined">
+              <Button
+                onClick={() => navigate("/", { replace: true })}
+                variant="outlined"
+              >
                 トップに戻る
               </Button>
             </Box>

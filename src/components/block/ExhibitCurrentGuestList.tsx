@@ -37,9 +37,14 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
           const currentGuestList = res.map((v) => {
             return {
               ...v,
-              guest_type: v.guest_type === "student" ? "生徒" : v.guest_type === "family" ? "保護者" : "その他",
-              enter_at: moment(v.enter_at).format("MM/DD HH:MM:SS")
-            }
+              guest_type:
+                v.guest_type === "student"
+                  ? "生徒"
+                  : v.guest_type === "family"
+                  ? "保護者"
+                  : "その他",
+              enter_at: moment(v.enter_at).format("MM/DD HH:MM:SS"),
+            };
           });
           setRows(currentGuestList);
         })
@@ -53,12 +58,7 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
         <Box sx={{ height: "60vh", width: "100%" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            rowHeight={50}
-            hideFooter
-          />
+          <DataGrid rows={rows} columns={columns} rowHeight={50} hideFooter />
         </Box>
       </Grid>
     </Grid>

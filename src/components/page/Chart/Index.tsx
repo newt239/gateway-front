@@ -5,7 +5,6 @@ import AllAreaSummaryCard from "#/components/block/AllAreaSummaryCard";
 import ExhibitListTableCard from "#/components/block/ExhibitListTableCard.tsx";
 import { Grid } from "@mui/material";
 
-
 const ChartIndex = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {

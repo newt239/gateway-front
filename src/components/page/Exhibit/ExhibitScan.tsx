@@ -33,8 +33,8 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
-import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
-import PublishedWithChangesRoundedIcon from '@mui/icons-material/PublishedWithChangesRounded';
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
+import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
@@ -85,9 +85,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           setCapacity(res.capacity);
           setCurrentCount(res.current);
           setLastUpdate(moment());
-        }).catch((err) => {
-          console.log(err);
         })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
   useEffect(() => {
@@ -174,7 +175,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           guest_id: text,
           exhibit_id: exhibit_id,
         };
-        updateExhibitInfo()
+        updateExhibitInfo();
         if (scanType === "enter" && currentCount >= capacity) {
           setSnackbar({
             status: true,
@@ -219,7 +220,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             });
         }
       }
-
     };
 
     return (
@@ -229,9 +229,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             variant="filled"
             severity="error"
             action={
-              <Button color="inherit" sx={{
-                whiteSpace: "nowrap"
-              }} onClick={retry}>
+              <Button
+                color="inherit"
+                sx={{
+                  whiteSpace: "nowrap",
+                }}
+                onClick={retry}
+              >
                 再スキャン
               </Button>
             }
@@ -299,14 +303,31 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       <Grid item xs={12}>
         <Grid container spacing={2}>
           <Grid item>
-            <Card variant="outlined" sx={{ p: 2, height: "100%", margin: "auto" }}>
+            <Card
+              variant="outlined"
+              sx={{ p: 2, height: "100%", margin: "auto" }}
+            >
               <Grid container sx={{ alignItems: "end" }}>
                 <Grid item>
-                  <span style={{ fontSize: "2rem", fontWeight: 600 }}>{scanType === "enter" ? "入室スキャン" : "退室スキャン"}</span>
+                  <span style={{ fontSize: "2rem", fontWeight: 600 }}>
+                    {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
+                  </span>
                 </Grid>
                 <Grid item sx={{ pl: 2 }}>
-                  <Button size="small" startIcon={<PublishedWithChangesRoundedIcon />} onClick={() => navigate(`/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"}`, { replace: true })}>
-                    {scanType === "enter" ? "退室スキャン" : "入室スキャン"}に切り替え
+                  <Button
+                    size="small"
+                    startIcon={<PublishedWithChangesRoundedIcon />}
+                    onClick={() =>
+                      navigate(
+                        `/exhibit/${exhibit_id || "unknown"}/${
+                          scanType === "enter" ? "exit" : "enter"
+                        }`,
+                        { replace: true }
+                      )
+                    }
+                  >
+                    {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
+                    に切り替え
                   </Button>
                 </Grid>
               </Grid>
@@ -316,11 +337,24 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
               <Grid container spacing={2} sx={{ alignItems: "end" }}>
                 <Grid item>
-                  <span style={{ fontSize: "2rem", fontWeight: 800 }}>{currentCount} </span><span> / {capacity} 人</span>
+                  <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+                    {currentCount}{" "}
+                  </span>
+                  <span> / {capacity} 人</span>
                 </Grid>
-                <Grid item >
-                  <span style={{ fontSize: ".5rem" }}> ({lastUpdate.format("HH:mm:ss")}現在)</span><br />
-                  <Button size="small" startIcon={<ReplayRoundedIcon />} onClick={updateExhibitInfo}>更新</Button>
+                <Grid item>
+                  <span style={{ fontSize: ".5rem" }}>
+                    {" "}
+                    ({lastUpdate.format("HH:mm:ss")}現在)
+                  </span>
+                  <br />
+                  <Button
+                    size="small"
+                    startIcon={<ReplayRoundedIcon />}
+                    onClick={updateExhibitInfo}
+                  >
+                    更新
+                  </Button>
                 </Grid>
               </Grid>
             </Card>
@@ -396,14 +430,17 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       <Snackbar
         open={snackbar.status}
         anchorOrigin={{
-          vertical: "top", horizontal: "right"
+          vertical: "top",
+          horizontal: "right",
         }}
         autoHideDuration={6000}
         onClose={() =>
           setSnackbar({ status: false, message: "", severity: "success" })
         }
       >
-        <Alert variant="filled" severity={snackbar.severity}>{snackbar.message}</Alert>
+        <Alert variant="filled" severity={snackbar.severity}>
+          {snackbar.message}
+        </Alert>
       </Snackbar>
     </Grid>
   );

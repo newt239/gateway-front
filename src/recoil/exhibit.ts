@@ -17,12 +17,14 @@ export const exhibitListState = atom<exhibitProp[]>({
       if (tokenStateValue && profileStateValue) {
         if (profileStateValue.user_type === "executive") {
           return [
-            { "exhibit_id": "gym", "exhibit_name": "体育館" },
-            { "exhibit_id": "auditorium", "exhibit_name": "講堂" },
-            { "exhibit_id": "cchall", "exhibit_name": "CCホール" },
-            { "exhibit_id": "cafeteria", "exhibit_name": "食堂" }
-          ]
-        } else if (["admin", "moderator"].includes(profileStateValue.user_type)) {
+            { exhibit_id: "gym", exhibit_name: "体育館" },
+            { exhibit_id: "auditorium", exhibit_name: "講堂" },
+            { exhibit_id: "cchall", exhibit_name: "CCホール" },
+            { exhibit_id: "cafeteria", exhibit_name: "食堂" },
+          ];
+        } else if (
+          ["admin", "moderator"].includes(profileStateValue.user_type)
+        ) {
           return await apiClient(
             process.env.REACT_APP_API_BASE_URL
           ).exhibit.list.$get({

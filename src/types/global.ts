@@ -26,7 +26,7 @@ export type guestInfoProp = {
   reservation_id: string;
   part: string;
   available: number;
-}
+};
 
 export interface guestsInfoSuccessProp {
   status: "success";

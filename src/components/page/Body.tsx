@@ -47,7 +47,7 @@ const Body = () => {
             category: "login",
             action: "auto_success",
             label: meRes.user_id,
-          })
+          });
         })
         .catch((err: AxiosError) => {
           if (err.code === "401") {

@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useRecoilValue, useRecoilValueLoadable, useSetRecoilState } from "recoil";
+import {
+  useRecoilValue,
+  useRecoilValueLoadable,
+  useSetRecoilState,
+} from "recoil";
 import { profileState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
 
@@ -29,9 +33,13 @@ const ChartExhibit = () => {
     useEffect(() => {
       if (exhibitListValue.state === "hasValue") {
         if (exhibitListValue.contents) {
-          const currentExhibit = exhibitListValue.contents.find(v => v.exhibit_id === exhibit_id);
+          const currentExhibit = exhibitListValue.contents.find(
+            (v) => v.exhibit_id === exhibit_id
+          );
           if (currentExhibit) {
-            setPageInfo({ title: `${currentExhibit.exhibit_name} - 現在の滞在状況` });
+            setPageInfo({
+              title: `${currentExhibit.exhibit_name} - 現在の滞在状況`,
+            });
           }
         }
       } else if (exhibitListValue.state == "loading") {

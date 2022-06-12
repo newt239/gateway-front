@@ -10,15 +10,19 @@ const ExhibitIndex = () => {
   const navigate = useNavigate();
 
   type moveButtonProp = {
-    type: "enter" | "exit"
-  }
+    type: "enter" | "exit";
+  };
   const MoveButton = ({ type }: moveButtonProp) => {
     const currentExhibit = useRecoilValue(currentExhibitState);
-    return (<Button onClick={() => navigate(`${currentExhibit.exhibit_id}/${type}`)} variant="outlined">
-      開く
-    </Button>)
-  }
-
+    return (
+      <Button
+        onClick={() => navigate(`${currentExhibit.exhibit_id}/${type}`)}
+        variant="outlined"
+      >
+        開く
+      </Button>
+    );
+  };
 
   return (
     <>

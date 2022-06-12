@@ -20,8 +20,8 @@ import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import TableChartRoundedIcon from "@mui/icons-material/TableChartRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
-import PermDataSettingRoundedIcon from '@mui/icons-material/PermDataSettingRounded';
-import BadgeRoundedIcon from '@mui/icons-material/BadgeRounded';
+import PermDataSettingRoundedIcon from "@mui/icons-material/PermDataSettingRounded";
+import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 
 import UserInfo from "#/components/block/UserInfo";
 
@@ -215,7 +215,9 @@ const DrawerLeft = () => {
       )}
       <Divider />
       <Box sx={{ p: 2 }}>
-        <Typography variant="caption">ver. {`${process.env.REACT_APP_VERSION || ""}`}</Typography>
+        <Typography variant="caption">
+          ver. {`${process.env.REACT_APP_VERSION || ""}`}
+        </Typography>
         <br />
         <Typography variant="caption">© 栄東祭実行委員会 技術部</Typography>
       </Box>

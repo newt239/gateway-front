@@ -206,7 +206,9 @@ const ReserveCheck = () => {
       <Grid item xs={12}>
         <Card variant="outlined" sx={{ p: 2 }}>
           <Typography variant="h3">予約確認</Typography>
-          <Typography variant="body1">予約用QRコードをスキャンしてください。</Typography>
+          <Typography variant="body1">
+            予約用QRコードをスキャンしてください。
+          </Typography>
         </Card>
       </Grid>
       <Grid item xs={12} md={6}>
