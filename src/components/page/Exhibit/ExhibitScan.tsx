@@ -301,38 +301,31 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
-        <Grid container spacing={2}>
+        <Grid container sx={{ alignItems: "end" }}>
           <Grid item>
-            <Card
-              variant="outlined"
-              sx={{ p: 2, height: "100%", margin: "auto" }}
-            >
-              <Grid container sx={{ alignItems: "end" }}>
-                <Grid item>
-                  <span style={{ fontSize: "2rem", fontWeight: 600 }}>
-                    {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
-                  </span>
-                </Grid>
-                <Grid item sx={{ pl: 2 }}>
-                  <Button
-                    size="small"
-                    startIcon={<PublishedWithChangesRoundedIcon />}
-                    onClick={() =>
-                      navigate(
-                        `/exhibit/${exhibit_id || "unknown"}/${
-                          scanType === "enter" ? "exit" : "enter"
-                        }`,
-                        { replace: true }
-                      )
-                    }
-                  >
-                    {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
-                    に切り替え
-                  </Button>
-                </Grid>
-              </Grid>
-            </Card>
+            <Typography variant="h3">
+              {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
+            </Typography>
           </Grid>
+          <Grid item sx={{ pl: 2 }}>
+            <Button
+              size="small"
+              startIcon={<PublishedWithChangesRoundedIcon />}
+              onClick={() =>
+                navigate(
+                  `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                  }`,
+                  { replace: true }
+                )
+              }
+            >
+              {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
+            </Button>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container spacing={2}>
           <Grid item>
             <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
               <Grid container spacing={2} sx={{ alignItems: "end" }}>
