@@ -12,6 +12,10 @@ import {
   Box,
   Button,
   CircularProgress,
+  List,
+  ListItem,
+  ListItemText,
+  ListItemIcon,
 } from "@mui/material";
 import { guestInfoProp } from "#/types/global";
 import Timeline from '@mui/lab/Timeline';
@@ -21,6 +25,10 @@ import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
+import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
+import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 
 const AdminCheckGuest = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -34,11 +42,12 @@ const AdminCheckGuest = () => {
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const [guestActivity, setGuestActivity] = useState([{
-    datetime: "09:00", exhibit_id: "a", activity_type: "enter"
-  }, {
-    datetime: "10:00", exhibit_id: "a", activity_type: "exit"
-  }]);
+  type guestActivityParams = {
+    datetime: string;
+    exhibit_id: string;
+    activity_type: string;
+  }[]
+  const [guestActivity, setGuestActivity] = useState<guestActivityParams>([]);
 
   const searchGuest = () => {
     if (token && !loading && guestId !== "") {
@@ -81,7 +90,7 @@ const AdminCheckGuest = () => {
       <Grid item xs={12}>
         <TextField
           id="guestId"
-          label="ゲストid"
+          label="ゲストID"
           value={guestId}
           onChange={(e) => setGuestId(e.target.value)}
           margin="normal"
@@ -98,39 +107,64 @@ const AdminCheckGuest = () => {
           </Button>
         </Box>
       </Grid>
-      <Grid item xs={12}>
-        <Card variant="outlined" sx={{ p: 2 }}>
-          <Timeline position="alternate">
-            {guestActivity.map((v, i) => {
-              return (
-                <TimelineItem key={i}>
-                  <TimelineOppositeContent color="text.secondary">
-                    {moment(v.datetime).format("HH:mm:ss")}
-                  </TimelineOppositeContent>
-                  <TimelineSeparator>
-                    <TimelineDot />
-                    <TimelineConnector />
-                  </TimelineSeparator>
-                  <TimelineContent>{`${v.exhibit_id} ${v.activity_type === "enter" ? "入室" : "退室"}`}</TimelineContent>
-                </TimelineItem>
-              )
-            })}
-          </Timeline>
-        </Card>
-      </Grid>
-      <Grid item xs={12}>
-        {guestInfo && (
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h4">ゲスト種別</Typography>
-            <Typography>{guestInfo.guest_type}</Typography>
-            <Typography variant="h4">時間帯</Typography>
-            <Typography>{guestInfo.part}</Typography>
-            <Typography variant="h4">予約id</Typography>
-            <Typography>{guestInfo.reservation_id}</Typography>
-          </Card>
-        )}
-      </Grid>
-    </Grid>
+      {guestInfo && (
+        <>
+          <Grid item xs={12} md={6}>
+            <Card variant="outlined" sx={{ p: 2 }}>
+              <Typography variant="h3">行動履歴</Typography>
+              <Timeline position="alternate">
+                {guestActivity.map((v, i) => {
+                  return (
+                    <TimelineItem key={i}>
+                      <TimelineOppositeContent color="text.secondary">
+                        {moment(v.datetime).format("HH:mm:ss")}
+                      </TimelineOppositeContent>
+                      <TimelineSeparator>
+                        <TimelineDot color="primary" />
+                        {v.activity_type === "enter" ? <TimelineConnector sx={{ bgcolor: "primary.main" }} /> : <TimelineConnector />}
+                      </TimelineSeparator>
+                      {v.activity_type === "enter" ? <TimelineContent>{`${v.exhibit_id}`}</TimelineContent> : <TimelineContent>退室</TimelineContent>}
+                    </TimelineItem>
+                  )
+                })}
+              </Timeline>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Card variant="outlined" sx={{ p: 2 }}>
+              <Typography variant="h3">ゲスト情報</Typography>
+              <List dense>
+                <ListItem>
+                  <ListItemIcon>
+                    <AssignmentIndRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={guestInfo.guest_type}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <PeopleRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={guestInfo.part}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <AccessTimeRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={guestInfo.reservation_id}
+                  />
+                </ListItem>
+              </List>
+            </Card>
+          </Grid>
+        </>
+      )
+      }
+    </Grid >
   );
 };
 
