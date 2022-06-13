@@ -14,23 +14,19 @@ const ExhibitListCard = () => {
   const [exhibitListTableRows, setExhibitListTableRows] =
     useState<exhibitListTableListProp>([]);
   const columns: GridColDef[] = [
-    { field: "id", headerName: "展示id" },
+    { field: "id", headerName: "展示ID" },
     {
       field: "exhibit_name",
       headerName: "展示名",
       width: 200,
-      renderCell: (params) => (
-        <Button
-          onClick={() =>
-            navigate(`/chart/exhibit/${params.id}`, { replace: true })
-          }
-        >
-          {params.value}
-        </Button>
-      ),
     },
     { field: "count", headerName: "現在の人数" },
     { field: "capacity", headerName: "上限" },
+    {
+      field: "detail", headerName: "詳細", renderCell: (params) => (
+        <Button variant="outlined" onClick={() => navigate(`/chart/exhibit/${params.id}`, { replace: true })}>開く</Button>
+      ),
+    },
   ];
 
   type exhibitListTableListProp = {
@@ -64,6 +60,7 @@ const ExhibitListCard = () => {
           columns={columns}
           rowHeight={50}
           hideFooter
+          checkboxSelection
           localeText={{
             noRowsLabel: "現在有効な展示がありません",
           }}
