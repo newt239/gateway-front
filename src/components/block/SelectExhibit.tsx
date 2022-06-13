@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { currentExhibitState, exhibitListState } from "#/recoil/exhibit";
+import { AxiosError } from "axios";
+import apiClient from "#/axios-config";
 
 import {
   FormControl,
@@ -8,24 +9,53 @@ import {
   SelectChangeEvent,
   MenuItem,
 } from "@mui/material";
+import { profileState, tokenState } from "#/recoil/user";
+import { currentExhibitState } from "#/recoil/exhibit";
+
+type exhibitProp = {
+  exhibit_id: string;
+  group_name: string;
+  exhibit_type: string;
+};
 
 const SelectExhibit: React.FunctionComponent<{
   disabled?: boolean | false;
 }> = ({ disabled }) => {
-  const [currentExhibit, setCurrentExhibit] =
-    useRecoilState(currentExhibitState);
-  const exhibitList = useRecoilValue(exhibitListState);
+  const token = useRecoilValue(tokenState);
+  const profile = useRecoilValue(profileState);
+  const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
+  const [currentExhibit, setCurrentExhibit] = useRecoilState(currentExhibitState);
+
+  useEffect(() => {
+    if (token && profile) {
+      apiClient(
+        process.env.REACT_APP_API_BASE_URL
+      ).exhibit.list.$get({
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((res) => {
+        if (profile.user_type === "executive") {
+          setExhibitList(res.filter(v => v.exhibit_type === "stage"));
+        } else {
+          setExhibitList(res);
+        }
+        setCurrentExhibit(res[0].exhibit_id);
+      }).catch((err: AxiosError) => {
+        console.log(err)
+      })
+    }
+  }, [profile]);
 
   const handleChange = (event: SelectChangeEvent) => {
-    const newCurrentExhibit = exhibitList.find((v) => {
+    const newCurrentExhibit = exhibitList.find(v => {
       if (v.exhibit_id === event.target.value) {
         return v;
       }
     });
     if (newCurrentExhibit) {
-      return setCurrentExhibit(newCurrentExhibit);
+      return setCurrentExhibit(newCurrentExhibit.exhibit_id);
     }
-    setCurrentExhibit({ exhibit_id: "", group_name: "", exhibit_type: "" });
   };
 
   return (
@@ -33,7 +63,7 @@ const SelectExhibit: React.FunctionComponent<{
       <Select
         disabled={disabled}
         size="small"
-        value={currentExhibit.exhibit_id}
+        value={currentExhibit}
         onChange={handleChange}
       >
         {exhibitList.map((v) => {

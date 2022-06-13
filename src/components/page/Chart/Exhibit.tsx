@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
-  useRecoilValue,
-  useRecoilValueLoadable,
-  useSetRecoilState,
+  useRecoilValue, useSetRecoilState
 } from "recoil";
-import { profileState } from "#/recoil/user";
+import { profileState, tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
-
+import { AxiosError } from "axios";
+import apiClient from "#/axios-config";
 import { Grid, Card, Button, Typography } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 
 import ExhibitEnterCountBarChart from "../../block/ExhibitEnterCountBarChart";
 import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList";
-import { exhibitListState } from "#/recoil/exhibit";
 
 const ChartExhibit = () => {
   const navigate = useNavigate();
+  const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
   if (profile) {
     const exhibit_id =
@@ -29,21 +28,24 @@ const ChartExhibit = () => {
     });
 
     const setPageInfo = useSetRecoilState(pageStateSelector);
-    const exhibitListValue = useRecoilValueLoadable(exhibitListState);
+
     useEffect(() => {
-      if (exhibitListValue.state === "hasValue") {
-        if (exhibitListValue.contents) {
-          const currentExhibit = exhibitListValue.contents.find(
-            (v) => v.exhibit_id === exhibit_id
-          );
+      if (token && profile) {
+        apiClient(
+          process.env.REACT_APP_API_BASE_URL
+        ).exhibit.list.$get({
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }).then((res) => {
+          const currentExhibit = res.find(v => v.exhibit_id === exhibit_id);
           if (currentExhibit) {
-            setPageInfo({
-              title: `${currentExhibit.group_name} - 現在の滞在状況`,
-            });
+            setPageInfo({ title: `${currentExhibit.group_name} - 現在の滞在状況` });
           }
-        }
-      } else if (exhibitListValue.state == "loading") {
-        setPageInfo({ title: `${exhibit_id} - 現在の滞在状況` });
+        }).catch((err: AxiosError) => {
+          console.log(err)
+          setPageInfo({ title: `${exhibit_id} - 現在の滞在状況` });
+        })
       }
     }, []);
 

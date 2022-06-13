@@ -23,7 +23,7 @@ const ExhibitIndex = () => {
     const currentExhibit = useRecoilValue(currentExhibitState);
     return (
       <Button
-        onClick={() => navigate(`${currentExhibit.exhibit_id}/${type}`)}
+        onClick={() => currentExhibit && navigate(`${currentExhibit}/${type}`)}
         variant="outlined"
       >
         開く
