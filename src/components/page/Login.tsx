@@ -111,59 +111,65 @@ const Login = () => {
   return (
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
-        <Grid item xs={12} sx={{ display: message.display }}>
-          <Alert severity={message.severity}>{message.message}</Alert>
-        </Grid>
         <Grid item xs={12}>
-          {loading && <LinearProgress />}
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            id="user_id"
-            label="ユーザーid"
-            type="text"
-            onChange={(event) =>
-              updateValue({
-                user_id: event.target.value,
-                password: inputValue.password,
-              })
-            }
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            id="password"
-            label="パスワード"
-            type="password"
-            onChange={(event) =>
-              updateValue({
-                user_id: inputValue.user_id,
-                password: event.target.value,
-              })
-            }
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                login();
-              }
-            }}
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button
-            onClick={login}
-            onKeyPress={(e) => {
-              if (e.key === "Enter") {
-                login();
-              }
-            }}
-            variant="outlined"
-            size="large"
-            startIcon={<LoginRoundedIcon />}
-          >
-            ログイン
-          </Button>
+          <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+            <Grid container spacing={2} sx={{ p: 2 }}>
+              <Grid item xs={12} sx={{ display: message.display }}>
+                <Alert severity={message.severity}>{message.message}</Alert>
+              </Grid>
+              <Grid item xs={12}>
+                {loading && <LinearProgress />}
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  id="user_id"
+                  label="ユーザーID"
+                  type="text"
+                  onChange={(event) =>
+                    updateValue({
+                      user_id: event.target.value,
+                      password: inputValue.password,
+                    })
+                  }
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  id="password"
+                  label="パスワード"
+                  type="password"
+                  onChange={(event) =>
+                    updateValue({
+                      user_id: inputValue.user_id,
+                      password: event.target.value,
+                    })
+                  }
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      login();
+                    }
+                  }}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Button
+                  onClick={login}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      login();
+                    }
+                  }}
+                  variant="outlined"
+                  size="large"
+                  startIcon={<LoginRoundedIcon />}
+                >
+                  ログイン
+                </Button>
+              </Grid>
+            </Grid>
+          </Card>
         </Grid>
         <Grid item xs={12} md={6}>
           <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
@@ -184,9 +190,6 @@ const Login = () => {
         <Grid item xs={12} md={6}>
           <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
             <Typography variant="h2">このアプリのインストール方法</Typography>
-            <Typography variant="body1">
-              インストールすることで通信量を抑えることができます。
-            </Typography>
             <ol>
               <li>
                 Chromebookやパソコン・AndroidのGoogle
