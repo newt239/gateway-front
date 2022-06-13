@@ -55,12 +55,12 @@ const SimpleBottomNavigation = () => {
                 icon={<HomeRoundedIcon />}
               />
               <BottomNavigationAction
-                label="入退場処理"
+                label="エントランス"
                 value="entrance"
                 icon={<MeetingRoomRoundedIcon />}
               />
               <BottomNavigationAction
-                label="ステージ"
+                label="入退室処理"
                 value="exhibit"
                 icon={<CelebrationRoundedIcon />}
               />
