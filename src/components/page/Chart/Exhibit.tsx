@@ -38,7 +38,7 @@ const ChartExhibit = () => {
           );
           if (currentExhibit) {
             setPageInfo({
-              title: `${currentExhibit.exhibit_name} - 現在の滞在状況`,
+              title: `${currentExhibit.group_name} - 現在の滞在状況`,
             });
           }
         }

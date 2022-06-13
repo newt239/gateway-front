@@ -25,7 +25,7 @@ const SelectExhibit: React.FunctionComponent<{
     if (newCurrentExhibit) {
       return setCurrentExhibit(newCurrentExhibit);
     }
-    setCurrentExhibit({ exhibit_id: "", exhibit_name: "" });
+    setCurrentExhibit({ exhibit_id: "", group_name: "", exhibit_type: "" });
   };
 
   return (
@@ -39,7 +39,7 @@ const SelectExhibit: React.FunctionComponent<{
         {exhibitList.map((v) => {
           return (
             <MenuItem value={v.exhibit_id} key={v.exhibit_id}>
-              {v.exhibit_name}
+              {v.group_name}
             </MenuItem>
           );
         })}
