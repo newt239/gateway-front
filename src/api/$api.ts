@@ -11,9 +11,10 @@ import type { Methods as Methods8 } from './exhibit/history/_exhibit_id@string/_
 import type { Methods as Methods9 } from './exhibit/info'
 import type { Methods as Methods10 } from './exhibit/info/_exhibit_id@string'
 import type { Methods as Methods11 } from './exhibit/list'
-import type { Methods as Methods12 } from './guest/info/_guest_id@string'
-import type { Methods as Methods13 } from './guest/register'
-import type { Methods as Methods14 } from './reservation/info/_reservation_id@string'
+import type { Methods as Methods12 } from './guest/activity/_guest_id@string'
+import type { Methods as Methods13 } from './guest/info/_guest_id@string'
+import type { Methods as Methods14 } from './guest/register'
+import type { Methods as Methods15 } from './reservation/info/_reservation_id@string'
 
 const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
   const prefix = (baseURL === undefined ? 'https://api.sh-fes.com/v1' : baseURL).replace(/\/$/, '')
@@ -27,9 +28,10 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
   const PATH7 = '/exhibit/history'
   const PATH8 = '/exhibit/info'
   const PATH9 = '/exhibit/list'
-  const PATH10 = '/guest/info'
-  const PATH11 = '/guest/register'
-  const PATH12 = '/reservation/info'
+  const PATH10 = '/guest/activity'
+  const PATH11 = '/guest/info'
+  const PATH12 = '/guest/register'
+  const PATH13 = '/reservation/info'
   const GET = 'GET'
   const POST = 'POST'
   const DELETE = 'DELETE'
@@ -216,7 +218,7 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
       }
     },
     guest: {
-      info: {
+      activity: {
         _guest_id: (val2: string) => {
           const prefix2 = `${PATH10}/${val2}`
 
@@ -235,36 +237,55 @@ const api = <T>({ baseURL, fetch }: AspidaClient<T>) => {
           }
         }
       },
-      register: {
-        /**
-         * 同一の予約からの登録はひとつにまとめる。人数が超過したら(する前にフロントで警告が出るはずだが)エラーを返す
-         */
-        post: (option: { body: Methods13['post']['reqBody'], headers?: Methods13['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods13['post']['status']>(prefix, PATH11, POST, option).send(),
-        /**
-         * 同一の予約からの登録はひとつにまとめる。人数が超過したら(する前にフロントで警告が出るはずだが)エラーを返す
-         */
-        $post: (option: { body: Methods13['post']['reqBody'], headers?: Methods13['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
-          fetch<void, BasicHeaders, Methods13['post']['status']>(prefix, PATH11, POST, option).send().then(r => r.body),
-        $path: () => `${prefix}${PATH11}`
-      }
-    },
-    reservation: {
       info: {
-        _reservation_id: (val2: string) => {
-          const prefix2 = `${PATH12}/${val2}`
+        _guest_id: (val2: string) => {
+          const prefix2 = `${PATH11}/${val2}`
 
           return {
             /**
              * @returns 正常レスポンス
              */
-            get: (option?: { headers?: Methods14['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-              fetch<Methods14['get']['resBody'], BasicHeaders, Methods14['get']['status']>(prefix, prefix2, GET, option).json(),
+            get: (option?: { headers?: Methods13['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods13['get']['resBody'], BasicHeaders, Methods13['get']['status']>(prefix, prefix2, GET, option).json(),
             /**
              * @returns 正常レスポンス
              */
-            $get: (option?: { headers?: Methods14['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
-              fetch<Methods14['get']['resBody'], BasicHeaders, Methods14['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
+            $get: (option?: { headers?: Methods13['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods13['get']['resBody'], BasicHeaders, Methods13['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
+            $path: () => `${prefix}${prefix2}`
+          }
+        }
+      },
+      register: {
+        /**
+         * 同一の予約からの登録はひとつにまとめる。人数が超過したら(する前にフロントで警告が出るはずだが)エラーを返す
+         */
+        post: (option: { body: Methods14['post']['reqBody'], headers?: Methods14['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods14['post']['status']>(prefix, PATH12, POST, option).send(),
+        /**
+         * 同一の予約からの登録はひとつにまとめる。人数が超過したら(する前にフロントで警告が出るはずだが)エラーを返す
+         */
+        $post: (option: { body: Methods14['post']['reqBody'], headers?: Methods14['post']['reqHeaders'] | undefined, config?: T | undefined }) =>
+          fetch<void, BasicHeaders, Methods14['post']['status']>(prefix, PATH12, POST, option).send().then(r => r.body),
+        $path: () => `${prefix}${PATH12}`
+      }
+    },
+    reservation: {
+      info: {
+        _reservation_id: (val2: string) => {
+          const prefix2 = `${PATH13}/${val2}`
+
+          return {
+            /**
+             * @returns 正常レスポンス
+             */
+            get: (option?: { headers?: Methods15['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods15['get']['resBody'], BasicHeaders, Methods15['get']['status']>(prefix, prefix2, GET, option).json(),
+            /**
+             * @returns 正常レスポンス
+             */
+            $get: (option?: { headers?: Methods15['get']['reqHeaders'] | undefined, config?: T | undefined } | undefined) =>
+              fetch<Methods15['get']['resBody'], BasicHeaders, Methods15['get']['status']>(prefix, prefix2, GET, option).json().then(r => r.body),
             $path: () => `${prefix}${prefix2}`
           }
         }
