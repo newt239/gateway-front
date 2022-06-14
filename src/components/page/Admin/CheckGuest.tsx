@@ -18,13 +18,13 @@ import {
   ListItemIcon,
 } from "@mui/material";
 import { guestInfoProp } from "#/types/global";
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineDot from '@mui/lab/TimelineDot';
-import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+import Timeline from "@mui/lab/Timeline";
+import TimelineItem from "@mui/lab/TimelineItem";
+import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import TimelineConnector from "@mui/lab/TimelineConnector";
+import TimelineContent from "@mui/lab/TimelineContent";
+import TimelineDot from "@mui/lab/TimelineDot";
+import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
@@ -45,7 +45,7 @@ const AdminCheckGuest = () => {
     datetime: string;
     exhibit_id: string;
     activity_type: string;
-  }[]
+  }[];
   const [guestActivity, setGuestActivity] = useState<guestActivityParams>([]);
 
   const searchGuest = () => {
@@ -63,19 +63,30 @@ const AdminCheckGuest = () => {
           console.log(err);
         });
       apiClient(process.env.REACT_APP_API_BASE_URL)
-        .guest.activity._guest_id(guestId).$get({
+        .guest.activity._guest_id(guestId)
+        .$get({
           headers: { Authorization: "Bearer " + token },
         })
         .then((res) => {
           const guestActivityList = [];
-          console.log(res)
+          console.log(res);
           for (const eachSession of res) {
-            guestActivityList.push({ datetime: eachSession.enter_at, exhibit_id: eachSession.exhibit_id, activity_type: "enter" })
+            guestActivityList.push({
+              datetime: eachSession.enter_at,
+              exhibit_id: eachSession.exhibit_id,
+              activity_type: "enter",
+            });
             if (eachSession.exit_at !== "current") {
-              guestActivityList.push({ datetime: eachSession.exit_at, exhibit_id: eachSession.exhibit_id, activity_type: "exit" })
+              guestActivityList.push({
+                datetime: eachSession.exit_at,
+                exhibit_id: eachSession.exhibit_id,
+                activity_type: "exit",
+              });
             }
           }
-          setGuestActivity(guestActivityList.sort((a, b) => (a.datetime < b.datetime) ? -1 : 1));
+          setGuestActivity(
+            guestActivityList.sort((a, b) => (a.datetime < b.datetime ? -1 : 1))
+          );
         })
         .catch((err) => {
           console.log(err);
@@ -120,11 +131,19 @@ const AdminCheckGuest = () => {
                       </TimelineOppositeContent>
                       <TimelineSeparator>
                         <TimelineDot color="primary" />
-                        {v.activity_type === "enter" ? <TimelineConnector sx={{ bgcolor: "primary.main" }} /> : <TimelineConnector />}
+                        {v.activity_type === "enter" ? (
+                          <TimelineConnector sx={{ bgcolor: "primary.main" }} />
+                        ) : (
+                          <TimelineConnector />
+                        )}
                       </TimelineSeparator>
-                      {v.activity_type === "enter" ? <TimelineContent>{`${v.exhibit_id}`}</TimelineContent> : <TimelineContent>退室</TimelineContent>}
+                      {v.activity_type === "enter" ? (
+                        <TimelineContent>{`${v.exhibit_id}`}</TimelineContent>
+                      ) : (
+                        <TimelineContent>退室</TimelineContent>
+                      )}
                     </TimelineItem>
-                  )
+                  );
                 })}
               </Timeline>
             </Card>
@@ -137,33 +156,26 @@ const AdminCheckGuest = () => {
                   <ListItemIcon>
                     <AssignmentIndRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText
-                    primary={guestInfo.guest_type}
-                  />
+                  <ListItemText primary={guestInfo.guest_type} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <PeopleRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText
-                    primary={guestInfo.part}
-                  />
+                  <ListItemText primary={guestInfo.part} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <AccessTimeRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText
-                    primary={guestInfo.reservation_id}
-                  />
+                  <ListItemText primary={guestInfo.reservation_id} />
                 </ListItem>
               </List>
             </Card>
           </Grid>
         </>
-      )
-      }
-    </Grid >
+      )}
+    </Grid>
   );
 };
 

@@ -24,31 +24,33 @@ const SelectExhibit: React.FunctionComponent<{
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
   const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
-  const [currentExhibit, setCurrentExhibit] = useRecoilState(currentExhibitState);
+  const [currentExhibit, setCurrentExhibit] =
+    useRecoilState(currentExhibitState);
 
   useEffect(() => {
     if (token && profile) {
-      apiClient(
-        process.env.REACT_APP_API_BASE_URL
-      ).exhibit.list.$get({
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }).then((res) => {
-        if (profile.user_type === "executive") {
-          setExhibitList(res.filter(v => v.exhibit_type === "stage"));
-        } else {
-          setExhibitList(res);
-        }
-        setCurrentExhibit(res[0].exhibit_id);
-      }).catch((err: AxiosError) => {
-        console.log(err)
-      })
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .exhibit.list.$get({
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          if (profile.user_type === "executive") {
+            setExhibitList(res.filter((v) => v.exhibit_type === "stage"));
+          } else {
+            setExhibitList(res);
+          }
+          setCurrentExhibit(res[0].exhibit_id);
+        })
+        .catch((err: AxiosError) => {
+          console.log(err);
+        });
     }
   }, [profile]);
 
   const handleChange = (event: SelectChangeEvent) => {
-    const newCurrentExhibit = exhibitList.find(v => {
+    const newCurrentExhibit = exhibitList.find((v) => {
       if (v.exhibit_id === event.target.value) {
         return v;
       }

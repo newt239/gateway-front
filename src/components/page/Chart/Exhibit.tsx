@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  useRecoilValue, useSetRecoilState
-} from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
 import { profileState, tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
 import { AxiosError } from "axios";
@@ -31,21 +29,24 @@ const ChartExhibit = () => {
 
     useEffect(() => {
       if (token && profile) {
-        apiClient(
-          process.env.REACT_APP_API_BASE_URL
-        ).exhibit.list.$get({
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }).then((res) => {
-          const currentExhibit = res.find(v => v.exhibit_id === exhibit_id);
-          if (currentExhibit) {
-            setPageInfo({ title: `${currentExhibit.group_name} - 現在の滞在状況` });
-          }
-        }).catch((err: AxiosError) => {
-          console.log(err)
-          setPageInfo({ title: `${exhibit_id} - 現在の滞在状況` });
-        })
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .exhibit.list.$get({
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            const currentExhibit = res.find((v) => v.exhibit_id === exhibit_id);
+            if (currentExhibit) {
+              setPageInfo({
+                title: `${currentExhibit.group_name} - 現在の滞在状況`,
+              });
+            }
+          })
+          .catch((err: AxiosError) => {
+            console.log(err);
+            setPageInfo({ title: `${exhibit_id} - 現在の滞在状況` });
+          });
       }
     }, []);
 

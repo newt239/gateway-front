@@ -318,7 +318,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               startIcon={<PublishedWithChangesRoundedIcon />}
               onClick={() =>
                 navigate(
-                  `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                  `/exhibit/${exhibit_id || "unknown"}/${
+                    scanType === "enter" ? "exit" : "enter"
                   }`,
                   { replace: true }
                 )
@@ -352,7 +353,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   <span> / {capacity} 人</span>
                 </Grid>
                 <Grid item>
-                  <div style={{ fontSize: ".5rem" }}>{lastUpdate.format("HH:mm:ss")}現在</div>
+                  <div style={{ fontSize: ".5rem" }}>
+                    {lastUpdate.format("HH:mm:ss")}現在
+                  </div>
                   <Button
                     size="small"
                     startIcon={<ReplayRoundedIcon />}
@@ -366,8 +369,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Grid>
           <Grid item>
             <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-              <div>展示名: <span style={{ fontWeight: 600 }}>{exhibitName}</span></div>
-              <div>教室名: <span style={{ fontWeight: 600 }}>{roomName}</span></div>
+              <div>
+                展示名: <span style={{ fontWeight: 600 }}>{exhibitName}</span>
+              </div>
+              <div>
+                教室名: <span style={{ fontWeight: 600 }}>{roomName}</span>
+              </div>
             </Card>
           </Grid>
         </Grid>
@@ -383,7 +390,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>ゲストID:</Typography>
+          <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
+            ゲストID:
+          </Typography>
           <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
             <OutlinedInput
               type="text"

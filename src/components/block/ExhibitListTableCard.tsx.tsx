@@ -23,8 +23,17 @@ const ExhibitListCard = () => {
     { field: "count", headerName: "現在の人数" },
     { field: "capacity", headerName: "上限" },
     {
-      field: "detail", headerName: "詳細", renderCell: (params) => (
-        <Button variant="outlined" onClick={() => navigate(`/chart/exhibit/${params.id}`, { replace: true })}>開く</Button>
+      field: "detail",
+      headerName: "詳細",
+      renderCell: (params) => (
+        <Button
+          variant="outlined"
+          onClick={() =>
+            navigate(`/chart/exhibit/${params.id}`, { replace: true })
+          }
+        >
+          開く
+        </Button>
       ),
     },
   ];

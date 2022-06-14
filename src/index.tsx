@@ -16,9 +16,12 @@ ReactDOM.render(
 );
 
 serviceWorkerRegistration.register({
-  onUpdate: registration => {
+  onUpdate: (registration) => {
     if (registration.waiting) {
-      ReactDOM.render(<SWUpdateDialog registration={registration} />, document.querySelector('.SW-update-dialog'));
+      ReactDOM.render(
+        <SWUpdateDialog registration={registration} />,
+        document.querySelector(".SW-update-dialog")
+      );
     }
   },
 });

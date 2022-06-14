@@ -41,8 +41,8 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "family"
-                    ? "保護者"
-                    : "その他",
+                  ? "保護者"
+                  : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:MM:SS"),
             };
           });
@@ -58,7 +58,13 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
         <Box sx={{ height: "60vh", width: "100%" }}>
-          <DataGrid rows={rows} columns={columns} rowHeight={50} hideFooter checkboxSelection />
+          <DataGrid
+            rows={rows}
+            columns={columns}
+            rowHeight={50}
+            hideFooter
+            checkboxSelection
+          />
         </Box>
       </Grid>
     </Grid>
