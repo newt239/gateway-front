@@ -35,6 +35,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
+import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
@@ -59,6 +60,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [capacity, setCapacity] = useState(0);
   const [currentCount, setCurrentCount] = useState(0);
+  const [exhibitName, setExhibitName] = useState("");
+  const [roomName, setRoomName] = useState("");
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
@@ -84,6 +87,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           setPageInfo({ title: res.exhibit_name });
           setCapacity(res.capacity);
           setCurrentCount(res.current);
+          setExhibitName(res.exhibit_name);
+          setRoomName(res.room_name);
           setLastUpdate(moment());
         })
         .catch((err) => {
@@ -301,13 +306,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
-        <Grid container sx={{ alignItems: "end" }}>
-          <Grid item>
+        <Grid container sx={{ alignItems: "center" }}>
+          <Grid item sx={{ pr: 4 }}>
             <Typography variant="h3">
               {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
             </Typography>
           </Grid>
-          <Grid item sx={{ pl: 2 }}>
+          <Grid item sx={{ pr: 2 }}>
             <Button
               size="small"
               startIcon={<PublishedWithChangesRoundedIcon />}
@@ -322,6 +327,17 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
             </Button>
           </Grid>
+          <Grid item>
+            {profile && profile.user_type !== "exhibit" && (
+              <Button
+                size="small"
+                startIcon={<ArrowBackIosNewRoundedIcon />}
+                onClick={() => navigate("/exhibit", { replace: true })}
+              >
+                一覧に戻る
+              </Button>
+            )}
+          </Grid>
         </Grid>
       </Grid>
       <Grid item xs={12}>
@@ -331,16 +347,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               <Grid container spacing={2} sx={{ alignItems: "end" }}>
                 <Grid item>
                   <span style={{ fontSize: "2rem", fontWeight: 800 }}>
-                    {currentCount}{" "}
+                    {currentCount}
                   </span>
                   <span> / {capacity} 人</span>
                 </Grid>
                 <Grid item>
-                  <span style={{ fontSize: ".5rem" }}>
-                    {" "}
-                    ({lastUpdate.format("HH:mm:ss")}現在)
-                  </span>
-                  <br />
+                  <div style={{ fontSize: ".5rem" }}>{lastUpdate.format("HH:mm:ss")}現在</div>
                   <Button
                     size="small"
                     startIcon={<ReplayRoundedIcon />}
@@ -352,12 +364,18 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               </Grid>
             </Card>
           </Grid>
+          <Grid item>
+            <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+              <div>展示名: <span style={{ fontWeight: 600 }}>{exhibitName}</span></div>
+              <div>教室名: <span style={{ fontWeight: 600 }}>{roomName}</span></div>
+            </Card>
+          </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={5}>
         <Scanner handleScan={handleScan} />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={4}>
         <Box
           sx={{
             display: "flex",
@@ -365,7 +383,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h4">id:</Typography>
+          <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>ゲストID:</Typography>
           <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
             <OutlinedInput
               type="text"
