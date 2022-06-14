@@ -331,16 +331,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               <Grid container spacing={2} sx={{ alignItems: "end" }}>
                 <Grid item>
                   <span style={{ fontSize: "2rem", fontWeight: 800 }}>
-                    {currentCount}{" "}
+                    {currentCount}
                   </span>
                   <span> / {capacity} 人</span>
                 </Grid>
                 <Grid item>
-                  <span style={{ fontSize: ".5rem" }}>
-                    {" "}
-                    ({lastUpdate.format("HH:mm:ss")}現在)
-                  </span>
-                  <br />
+                  <div style={{ fontSize: ".5rem" }}>{lastUpdate.format("HH:mm:ss")}現在</div>
                   <Button
                     size="small"
                     startIcon={<ReplayRoundedIcon />}
@@ -354,10 +350,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={5}>
         <Scanner handleScan={handleScan} />
       </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={4}>
         <Box
           sx={{
             display: "flex",
