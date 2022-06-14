@@ -10,8 +10,9 @@ export type Methods = {
     status: 200;
     /** 正常レスポンス */
     resBody: {
-      guest_type: string;
-      count: number;
+      exhibit_id: string;
+      enter_at: string;
+      exit_at: string;
     }[];
   };
 };

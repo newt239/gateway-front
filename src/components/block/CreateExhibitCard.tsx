@@ -50,7 +50,7 @@ const CreateExhibitCard = () => {
         exhibit_name: exhibitNameValue,
         room_name: roomNameValue,
         exhibit_type: exhibitTypeValue,
-        capacity: capacityValue
+        capacity: capacityValue,
       };
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .admin.exhibit.create.$post({

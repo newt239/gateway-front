@@ -16,6 +16,7 @@ const App = () => {
       <BrowserRouter>
         <ScreenWidth />
       </BrowserRouter>
+      <div className="SW-update-dialog"></div>
     </ThemeProvider>
   );
 };

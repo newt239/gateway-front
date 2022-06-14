@@ -47,7 +47,7 @@ const Body = () => {
             category: "login",
             action: "auto_success",
             label: meRes.user_id,
-          })
+          });
         })
         .catch((err: AxiosError) => {
           if (err.code === "401") {
@@ -87,7 +87,9 @@ const Body = () => {
             <Route path="docs/:doc_id" element={<DocsMarkdown />} />
             <Route path="exhibit">
               // すべてのページにアクセス可能
-              {["admin", "moderator"].includes(profile.user_type) ? (
+              {["admin", "moderator", "executive"].includes(
+                profile.user_type
+              ) ? (
                 <>
                   <Route index element={<ExhibitIndex />} />
                   <Route path=":exhibit_id">
@@ -100,9 +102,9 @@ const Body = () => {
                       element={<ExhibitScan scanType="exit" />}
                     />
                   </Route>
-                  // 自分の展示のページのみアクセス可能
                 </>
-              ) : ["exhibit"].includes(profile.user_type) ? (
+              ) : // 自分の展示のページのみアクセス可能
+              ["exhibit"].includes(profile.user_type) ? (
                 <>
                   <Route index element={<ExhibitIndex />} />
                   <Route path={profile.user_id}>

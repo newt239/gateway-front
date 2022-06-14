@@ -73,8 +73,8 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
       type: "datetime",
       categories: categories,
       labels: {
-        datetimeUTC: false
-      }
+        datetimeUTC: false,
+      },
     },
     yaxis: {
       labels: {

@@ -1,24 +1,35 @@
-import React, { Suspense } from "react";
+import React, { useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { currentExhibitState } from "#/recoil/exhibit";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 import SelectExhibit from "#/components/block/SelectExhibit";
+import { pageStateSelector } from "#/recoil/page";
+import { useSetRecoilState } from "recoil";
 
 const ExhibitIndex = () => {
   const navigate = useNavigate();
+  const setPageInfo = useSetRecoilState(pageStateSelector);
+
+  useEffect(() => {
+    setPageInfo({ title: "展示一覧" });
+  }, []);
 
   type moveButtonProp = {
-    type: "enter" | "exit"
-  }
+    type: "enter" | "exit";
+  };
   const MoveButton = ({ type }: moveButtonProp) => {
     const currentExhibit = useRecoilValue(currentExhibitState);
-    return (<Button onClick={() => navigate(`${currentExhibit.exhibit_id}/${type}`)} variant="outlined">
-      開く
-    </Button>)
-  }
-
+    return (
+      <Button
+        onClick={() => currentExhibit && navigate(`${currentExhibit}/${type}`)}
+        variant="outlined"
+      >
+        開く
+      </Button>
+    );
+  };
 
   return (
     <>

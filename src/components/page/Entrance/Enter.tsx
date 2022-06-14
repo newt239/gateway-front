@@ -264,7 +264,9 @@ const EntranceEnter = () => {
         <Grid item xs={12}>
           <Card variant="outlined" sx={{ p: 2 }}>
             <Typography variant="h3">リストバンド登録</Typography>
-            <Typography variant="body1">登録するリストバンドのQRコードをスキャンしてください</Typography>
+            <Typography variant="body1">
+              登録するリストバンドのQRコードをスキャンしてください
+            </Typography>
           </Card>
         </Grid>
         <Grid item xs={12} md={6}>

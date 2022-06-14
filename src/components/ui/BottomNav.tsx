@@ -12,8 +12,8 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import MeetingRoomRoundedIcon from "@mui/icons-material/MeetingRoomRounded";
-import CelebrationRoundedIcon from '@mui/icons-material/CelebrationRounded';
-import AutoGraphRoundedIcon from '@mui/icons-material/AutoGraphRounded';
+import CelebrationRoundedIcon from "@mui/icons-material/CelebrationRounded";
+import AutoGraphRoundedIcon from "@mui/icons-material/AutoGraphRounded";
 
 const SimpleBottomNavigation = () => {
   const profile = useRecoilValue(profileState);
@@ -28,6 +28,8 @@ const SimpleBottomNavigation = () => {
       setValue("exhibit");
     } else if (/entrance/.test(path)) {
       setValue("entrance");
+    } else if (/chart/.test(path)) {
+      setValue("chart");
     } else {
       setValue("other");
     }
@@ -53,12 +55,12 @@ const SimpleBottomNavigation = () => {
                 icon={<HomeRoundedIcon />}
               />
               <BottomNavigationAction
-                label="入退場処理"
+                label="エントランス"
                 value="entrance"
                 icon={<MeetingRoomRoundedIcon />}
               />
               <BottomNavigationAction
-                label="ステージ"
+                label="入退室処理"
                 value="exhibit"
                 icon={<CelebrationRoundedIcon />}
               />
