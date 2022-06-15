@@ -24,7 +24,7 @@ const SimpleBottomNavigation = () => {
   useEffect(() => {
     if (path === "/") {
       setValue("");
-    } else if (/exhibit/.test(path)) {
+    } else if (/exhibit/.test(path) && !(/chart\/exhibit/.test(path))) {
       setValue("exhibit");
     } else if (/entrance/.test(path)) {
       setValue("entrance");
@@ -58,6 +58,7 @@ const SimpleBottomNavigation = () => {
                 label="エントランス"
                 value="entrance"
                 icon={<MeetingRoomRoundedIcon />}
+                sx={{ whiteSpace: 'nowrap' }}
               />
               <BottomNavigationAction
                 label="入退室処理"
