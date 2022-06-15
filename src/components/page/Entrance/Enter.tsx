@@ -81,6 +81,7 @@ const EntranceEnter = () => {
       setText(scanText);
       if (scanText.length === 10 && scanText.startsWith("G")) {
         if (!guestList.some((guest) => guest === scanText)) {
+          setSmDrawerStatus(true);
           setGuest([...guestList, scanText]);
           setScanStatus("success");
           setActiveStep(guestList.length);

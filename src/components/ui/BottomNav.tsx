@@ -64,6 +64,7 @@ const SimpleBottomNavigation = () => {
                 label="入退室処理"
                 value="exhibit"
                 icon={<CelebrationRoundedIcon />}
+                sx={{ whiteSpace: 'nowrap' }}
               />
               <BottomNavigationAction
                 label="滞在状況"
