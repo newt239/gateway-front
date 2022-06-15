@@ -63,7 +63,7 @@ const ExhibitListCard = () => {
   return (
     <Card variant="outlined" sx={{ p: 2 }}>
       <Typography variant="h3">展示別の滞在状況</Typography>
-      <Box sx={{ p: 2, height: "50vh", width: "100%" }}>
+      <Box sx={{ height: "50vh", width: "100%", pt: 2 }}>
         <DataGrid
           rows={exhibitListTableRows}
           columns={columns}
