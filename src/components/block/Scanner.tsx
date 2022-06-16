@@ -15,9 +15,11 @@ import {
   DialogActions,
   Button,
   IconButton,
-  Autocomplete,
-  TextField,
+  FormControl,
+  Select,
+  SelectChangeEvent,
   DialogTitle,
+  MenuItem,
 } from "@mui/material";
 import CameraswitchRoundedIcon from "@mui/icons-material/CameraswitchRounded";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -55,7 +57,18 @@ const Scanner = ({ handleScan }: ScannerProps) => {
       )
       .then((devices) => {
         setDeviceList(devices);
-        setCurrentDevice(devices[0]);
+        const savedCurrentCameraDeviceId = localStorage.getItem("currentCameraDeviceId");
+        if (savedCurrentCameraDeviceId) {
+          const device = devices.find(v => {
+            if (v.deviceId === savedCurrentCameraDeviceId) {
+              return v;
+            }
+          });
+          if (device) {
+            return setCurrentDevice(device);
+          }
+        }
+        return setCurrentDevice(devices[0]);
       })
       .catch((err) => {
         console.log(err);
@@ -87,12 +100,17 @@ const Scanner = ({ handleScan }: ScannerProps) => {
     if (!refreshQrReader) setRefreshQrReader(true);
   }, [refreshQrReader]);
 
-  const changeCamera = (
-    _event: React.SyntheticEvent<Element, Event>,
-    value: { deviceId: string; label: string }
-  ) => {
-    setCurrentDevice(value);
-    setRefreshQrReader(false);
+  const changeCamera = (event: SelectChangeEvent) => {
+    const newCurrenDevice = deviceList.find(v => {
+      if (v.deviceId === event.target.value) {
+        return v;
+      }
+    })
+    if (newCurrenDevice) {
+      localStorage.setItem("currentCameraDeviceId", newCurrenDevice.deviceId);
+      setCurrentDevice(newCurrenDevice);
+      setRefreshQrReader(false);
+    }
   };
 
   // https://github.com/afes-website/cappuccino-app/blob/824cf2295cebae85b762b6c7a21cbbe94bf1d0ee/src/components/QRScanner.tsx#L201
@@ -187,17 +205,21 @@ const Scanner = ({ handleScan }: ScannerProps) => {
             >
               <DialogTitle>カメラ切り替え</DialogTitle>
               <DialogContent>
-                <Autocomplete
-                  disablePortal
-                  disableClearable
-                  onChange={changeCamera}
-                  options={deviceList}
-                  getOptionLabel={(option) => option.label}
-                  value={currentDevice}
-                  renderInput={(params) => <TextField {...params} />}
-                  size="small"
-                  sx={{ width: 300, p: 1 }}
-                />
+                <FormControl sx={{ m: 1, minWidth: 200 }}>
+                  <Select
+                    size="small"
+                    value={currentDevice.deviceId}
+                    onChange={changeCamera}
+                  >
+                    {deviceList.map((v) => {
+                      return (
+                        <MenuItem value={v.deviceId} key={v.deviceId}>
+                          {v.label}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                </FormControl>
               </DialogContent>
               <DialogActions>
                 <Button onClick={() => setSelectCameraModalOpen(false)}>
