@@ -318,8 +318,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               startIcon={<PublishedWithChangesRoundedIcon />}
               onClick={() =>
                 navigate(
-                  `/exhibit/${exhibit_id || "unknown"}/${
-                    scanType === "enter" ? "exit" : "enter"
+                  `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                   }`,
                   { replace: true }
                 )
@@ -353,36 +352,35 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   <span> / {capacity} 人</span>
                 </Grid>
                 <Grid item>
-                  <div style={{ fontSize: ".5rem" }}>
-                    {lastUpdate.format("HH:mm:ss")}現在
-                  </div>
                   <Button
                     size="small"
                     startIcon={<ReplayRoundedIcon />}
                     onClick={updateExhibitInfo}
                   >
-                    更新
+                    {lastUpdate.format("HH:mm:ss")}現在
                   </Button>
                 </Grid>
               </Grid>
             </Card>
           </Grid>
-          <Grid item>
-            <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-              <div>
-                展示名: <span style={{ fontWeight: 600 }}>{exhibitName}</span>
-              </div>
-              <div>
-                教室名: <span style={{ fontWeight: 600 }}>{roomName}</span>
-              </div>
-            </Card>
-          </Grid>
+          {matches && (
+            <Grid item xs={6} md="auto">
+              <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+                <div>
+                  {matches && <span>展示名:</span>} <span style={{ fontWeight: 600 }}>{exhibitName}</span>
+                </div>
+                <div>
+                  {matches && <span>教室名:</span>} <span style={{ fontWeight: 600 }}>{roomName}</span>
+                </div>
+              </Card>
+            </Grid>
+          )}
         </Grid>
       </Grid>
       <Grid item xs={12} md={5}>
         <Scanner handleScan={handleScan} />
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={7} xl={5}>
         <Box
           sx={{
             display: "flex",

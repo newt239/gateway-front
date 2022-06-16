@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
+import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment from "moment";
 import {
@@ -28,6 +29,13 @@ import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+
+type exhibitProp = {
+  exhibit_id: string;
+  group_name: string;
+  exhibit_type: string;
+};
 
 const AdminCheckGuest = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -40,6 +48,24 @@ const AdminCheckGuest = () => {
   const [guestId, setGuestId] = useState("");
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [loading, setLoading] = useState(false);
+  const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
+
+  useEffect(() => {
+    if (token) {
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .exhibit.list.$get({
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          setExhibitList(res);
+        })
+        .catch((err: AxiosError) => {
+          console.log(err);
+        });
+    }
+  }, [token]);
 
   type guestActivityParams = {
     datetime: string;
@@ -95,6 +121,17 @@ const AdminCheckGuest = () => {
     }
   };
 
+  const getExhibitName = (exhibit_id: string) => {
+    const exhibit = exhibitList.find(v => v.exhibit_id === v.exhibit_id);
+    if (exhibit_id === "entrance") {
+      return "エントランス"
+    } else if (exhibit) {
+      return exhibit.group_name
+    } else {
+      return exhibit_id
+    }
+  }
+
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
       <Grid item xs={12}>
@@ -138,7 +175,7 @@ const AdminCheckGuest = () => {
                         )}
                       </TimelineSeparator>
                       {v.activity_type === "enter" ? (
-                        <TimelineContent>{`${v.exhibit_id}`}</TimelineContent>
+                        <TimelineContent>{getExhibitName(v.exhibit_id)}</TimelineContent>
                       ) : (
                         <TimelineContent>退室</TimelineContent>
                       )}
@@ -154,21 +191,27 @@ const AdminCheckGuest = () => {
               <List dense>
                 <ListItem>
                   <ListItemIcon>
+                    <PersonRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={guestInfo.guest_id} />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
                     <AssignmentIndRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary={guestInfo.guest_type} />
+                  <ListItemText primary={guestInfo.reservation_id} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <PeopleRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary={guestInfo.part} />
+                  <ListItemText primary={guestInfo.guest_type} />
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <AccessTimeRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary={guestInfo.reservation_id} />
+                  <ListItemText primary={guestInfo.part} />
                 </ListItem>
               </List>
             </Card>
