@@ -77,11 +77,11 @@ const EntranceExit = () => {
             setLoading(false);
             setGuestInfo(res);
             if (res.available) {
-              setScanStatus("error");
-              setMessage(["このゲストは無効です。"]);
+              setScanStatus("success");
               setSmDrawerStatus(true);
             } else {
-              setScanStatus("success");
+              setScanStatus("error");
+              setMessage(["このゲストは無効です。"]);
               setSmDrawerStatus(true);
             }
           })
