@@ -31,7 +31,7 @@ const TopBar = () => {
           </Typography>
           <Box sx={{ display: "flex" }}>
             <IconButton
-              onClick={() => { window.location.href = process.env.REACT_APP_API_MANUAL_URL || "https://gateway.sh-fes.com/docs" }}
+              onClick={() => { window.open(process.env.REACT_APP_MANUAL_URL || "/", "_blank") }}
               size="large"
               color="inherit"
             >
