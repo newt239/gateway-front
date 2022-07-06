@@ -4,6 +4,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
@@ -74,7 +75,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   const setPageInfo = useSetRecoilState(pageStateSelector);
   const updateExhibitInfo = () => {
-    if (token && exhibit_id) {
+    if (token && profile && exhibit_id) {
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .exhibit.info._exhibit_id(exhibit_id)
         .$get({
@@ -90,6 +91,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           setExhibitName(res.exhibit_name);
           setRoomName(res.room_name);
           setLastUpdate(moment());
+          ReactGA.event({
+            category: "scan",
+            action: "exhibit_info_request",
+            label: profile.user_id,
+          });
         })
         .catch((err) => {
           console.log(err);

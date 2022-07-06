@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
-import { tokenState } from "#/recoil/user";
+import { tokenState, profileState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment from "moment";
@@ -44,6 +45,7 @@ const AdminCheckGuest = () => {
   }, []);
 
   const token = useRecoilValue(tokenState);
+  const profile = useRecoilValue(profileState);
 
   const [guestId, setGuestId] = useState("");
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
@@ -75,7 +77,7 @@ const AdminCheckGuest = () => {
   const [guestActivity, setGuestActivity] = useState<guestActivityParams>([]);
 
   const searchGuest = () => {
-    if (token && !loading && guestId !== "") {
+    if (token && profile && !loading && guestId !== "") {
       setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .guest.info._guest_id(guestId)
@@ -116,6 +118,12 @@ const AdminCheckGuest = () => {
         })
         .catch((err) => {
           console.log(err);
+        }).finally(() => {
+          ReactGA.event({
+            category: "info",
+            action: "guest_activity_request",
+            label: profile.user_id,
+          });
         });
       setLoading(false);
     }
