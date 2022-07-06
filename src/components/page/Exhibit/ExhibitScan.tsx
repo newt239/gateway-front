@@ -366,12 +366,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           {matches && (
             <Grid item xs={6} md="auto">
               <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-                <div>
-                  {matches && <span>展示名:</span>} <span style={{ fontWeight: 600 }}>{exhibitName}</span>
-                </div>
-                <div>
-                  {matches && <span>教室名:</span>} <span style={{ fontWeight: 600 }}>{roomName}</span>
-                </div>
+                <div style={{ fontWeight: 600 }}>{exhibitName}</div>
+                <div>( {roomName} )</div>
               </Card>
             </Grid>
           )}
