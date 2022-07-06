@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
 
@@ -14,7 +13,6 @@ import {
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 
 const TopBar = () => {
-  const navigate = useNavigate();
   const pageProps = useRecoilValue(pageStateSelector);
 
   return (
@@ -33,7 +31,7 @@ const TopBar = () => {
           </Typography>
           <Box sx={{ display: "flex" }}>
             <IconButton
-              onClick={() => navigate("/docs/index", { replace: true })}
+              onClick={() => { window.location.href = process.env.REACT_APP_API_MANUAL_URL || "https://gateway.sh-fes.com/docs" }}
               size="large"
               color="inherit"
             >
