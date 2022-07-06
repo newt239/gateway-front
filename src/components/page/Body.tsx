@@ -50,17 +50,21 @@ const Body = () => {
           });
         })
         .catch((err: AxiosError) => {
-          if (err.code === "401") {
-            setErrorDialogTitle("セッションがタイムアウトしました");
-            setMessageDialogMessage([
-              "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。",
-            ]);
-          }
-          if (err.message === "Network Error") {
-            setErrorDialogTitle("サーバーが起動していません");
-            setMessageDialogMessage([
-              "コストカットのため必要時以外はサーバーを停止させています。",
-            ]);
+          if (err.response) {
+            if (err.response.status === 401) {
+              setErrorDialogTitle("セッションがタイムアウトしました");
+              setMessageDialogMessage([
+                "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。",
+              ]);
+            }
+            if (err.message === "Network Error") {
+              setErrorDialogTitle("サーバーが起動していません");
+              setMessageDialogMessage([
+                "コストカットのため必要時以外はサーバーを停止させています。",
+              ]);
+            } else {
+              setMessageDialogMessage([err.response.statusText]);
+            }
           } else {
             setMessageDialogMessage([err.message]);
           }
@@ -104,23 +108,23 @@ const Body = () => {
                   </Route>
                 </>
               ) : // 自分の展示のページのみアクセス可能
-              ["exhibit"].includes(profile.user_type) ? (
-                <>
-                  <Route index element={<ExhibitIndex />} />
-                  <Route path={profile.user_id}>
-                    <Route
-                      path="enter"
-                      element={<ExhibitScan scanType="enter" />}
-                    />
-                    <Route
-                      path="exit"
-                      element={<ExhibitScan scanType="exit" />}
-                    />
-                  </Route>
-                </>
-              ) : (
-                <Route path="*" element={<Extra type="401" />} />
-              )}
+                ["exhibit"].includes(profile.user_type) ? (
+                  <>
+                    <Route index element={<ExhibitIndex />} />
+                    <Route path={profile.user_id}>
+                      <Route
+                        path="enter"
+                        element={<ExhibitScan scanType="enter" />}
+                      />
+                      <Route
+                        path="exit"
+                        element={<ExhibitScan scanType="exit" />}
+                      />
+                    </Route>
+                  </>
+                ) : (
+                  <Route path="*" element={<Extra type="401" />} />
+                )}
             </Route>
             <Route path="entrance">
               {["admin", "moderator", "executive"].includes(
