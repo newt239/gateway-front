@@ -216,7 +216,7 @@ const DrawerLeft = () => {
       <Divider />
       <Box sx={{ p: 2 }}>
         <Typography variant="caption">
-          ver. 1.2.0 (22/06/16)
+          ver. 1.3.0 (22/07/07)
         </Typography>
         <br />
         <Typography variant="caption">© 栄東祭実行委員会 技術部</Typography>
