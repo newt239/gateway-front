@@ -37,7 +37,7 @@ const SelectExhibit: React.FunctionComponent<{
         })
         .then((res) => {
           if (profile.user_type === "executive") {
-            setExhibitList(res.filter((v) => v.exhibit_type !== "class" && v.exhibit_type !== "club"));
+            setExhibitList(res.filter((v) => v.exhibit_type === "stage" || v.exhibit_type === "special"));
           } else {
             setExhibitList(res);
           }
