@@ -25,6 +25,7 @@ import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 import ExploreOffRoundedIcon from '@mui/icons-material/ExploreOffRounded';
 
 import UserInfo from "#/components/block/UserInfo";
+import Version from "#/components/block/Version";
 
 const drawerWidth = 240;
 
@@ -216,11 +217,7 @@ const DrawerLeft = () => {
       )}
       <Divider />
       <Box sx={{ p: 2 }}>
-        <Typography variant="caption">
-          ver. 1.3.0 (22/07/07)
-        </Typography>
-        <br />
-        <Typography variant="caption">© 栄東祭実行委員会 技術部</Typography>
+        <Version />
       </Box>
     </Drawer>
   );
