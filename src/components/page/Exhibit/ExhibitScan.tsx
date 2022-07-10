@@ -67,6 +67,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [exhibitName, setExhibitName] = useState("");
   const [roomName, setRoomName] = useState("");
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
+  const [alertStatus, setAlertStatus] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
     message: string;
@@ -137,6 +138,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     setMessage(
                       "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
                     );
+                    setAlertStatus(true);
                   } else {
                     // 前の展示で退場処理が行われていない場合
                     const payload = {
@@ -164,6 +166,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                             message: "前の展示の退場処理に際し何らかのエラーが発生しました。",
                             severity: "error",
                           });
+                          setAlertStatus(true);
                         }
                         setText("");
                         setDeviceState(true);
@@ -178,9 +181,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     setMessage(
                       "このゲストは現在この展示に入室していません。入室スキャンと間違えていませんか？"
                     );
+                    setAlertStatus(true);
                   } else {
                     setScanStatus("error");
                     setMessage("このゲストは他の展示に入室中です。");
+                    setAlertStatus(true);
                   }
                 }
               }
@@ -191,11 +196,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             console.log(err);
             setScanStatus("error");
             setMessage("予期せぬエラーが発生しました。");
+            setAlertStatus(true);
           });
         setLoading(false);
       } else {
         setScanStatus("error");
         setMessage("ゲストidの形式が正しくありません。");
+        setAlertStatus(true);
         setSmDrawerStatus(true);
       }
     }
@@ -207,6 +214,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setMessage("");
     setSnackbar({ status: false, message: "", severity: "success" });
     setScanStatus("waiting");
+    setAlertStatus(false);
     setSmDrawerStatus(false);
   };
 
@@ -266,7 +274,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
     return (
       <>
-        {scanStatus === "error" && (
+        {alertStatus && (
           <Alert
             variant="filled"
             severity="error"
