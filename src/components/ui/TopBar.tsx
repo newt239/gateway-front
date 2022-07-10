@@ -31,7 +31,9 @@ const TopBar = () => {
           </Typography>
           <Box sx={{ display: "flex" }}>
             <IconButton
-              onClick={() => { window.open(process.env.REACT_APP_MANUAL_URL || "/", "_blank") }}
+              onClick={() => {
+                window.open(process.env.REACT_APP_MANUAL_URL || "/", "_blank");
+              }}
               size="large"
               color="inherit"
             >

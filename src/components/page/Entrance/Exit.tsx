@@ -33,6 +33,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import generalProps from "#/components/functional/generalProps";
+import { getTimePart } from "#/components/functional/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
 
@@ -193,11 +194,7 @@ const EntranceExit = () => {
                 <ListItemIcon>
                   <AccessTimeRoundedIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={
-                    guestInfo.part === "all" ? "全時間帯" : guestInfo.part
-                  }
-                />
+                <ListItemText primary={getTimePart(guestInfo.part).part_name} />
               </ListItem>
             </List>
             <Box

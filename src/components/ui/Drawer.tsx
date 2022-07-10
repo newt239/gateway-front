@@ -20,10 +20,13 @@ import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import TableChartRoundedIcon from "@mui/icons-material/TableChartRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
-import PermDataSettingRoundedIcon from "@mui/icons-material/PermDataSettingRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
+import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
+import ExploreOffRoundedIcon from "@mui/icons-material/ExploreOffRounded";
+import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 
 import UserInfo from "#/components/block/UserInfo";
+import Version from "#/components/block/Version";
 
 const drawerWidth = 240;
 
@@ -113,7 +116,7 @@ const DrawerLeft = () => {
                   }
                 >
                   <ListItemIcon>
-                    <LogoutRoundedIcon />
+                    <BarChartRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="滞在状況" />
                 </ListItemButton>
@@ -129,7 +132,7 @@ const DrawerLeft = () => {
                   onClick={() => navigate(`/exhibit/`)}
                 >
                   <ListItemIcon>
-                    <LoginRoundedIcon />
+                    <LocationOnRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="展示一覧" />
                 </ListItemButton>
@@ -200,13 +203,13 @@ const DrawerLeft = () => {
                   <ListItemText primary="ゲスト照会" />
                 </ListItemButton>
                 <ListItemButton
-                  selected={path === `/admin/exhibit`}
-                  onClick={() => navigate("/admin/exhibit")}
+                  selected={path === `/admin/lost-wristband`}
+                  onClick={() => navigate("/admin/lost-wristband")}
                 >
                   <ListItemIcon>
-                    <PermDataSettingRoundedIcon />
+                    <ExploreOffRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="展示管理" />
+                  <ListItemText primary="リストバンド紛失" />
                 </ListItemButton>
               </List>
             </>
@@ -215,11 +218,7 @@ const DrawerLeft = () => {
       )}
       <Divider />
       <Box sx={{ p: 2 }}>
-        <Typography variant="caption">
-          ver. 1.3.0 (22/07/07)
-        </Typography>
-        <br />
-        <Typography variant="caption">© 栄東祭実行委員会 技術部</Typography>
+        <Version />
       </Box>
     </Drawer>
   );

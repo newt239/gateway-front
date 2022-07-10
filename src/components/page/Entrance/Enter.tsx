@@ -38,6 +38,7 @@ import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
 import generalProps from "#/components/functional/generalProps";
+import { getTimePart } from "#/components/functional/commonFunction";
 import Scanner from "#/components/block/Scanner";
 
 const EntranceEnter = () => {
@@ -203,9 +204,7 @@ const EntranceEnter = () => {
                     <AccessTimeRoundedIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary={
-                      reservation.part === "all" ? "全時間帯" : reservation.part
-                    }
+                    primary={getTimePart(reservation.part).part_name}
                   />
                 </ListItem>
               </List>

@@ -20,7 +20,7 @@ import EntranceEnter from "#/components/page/Entrance/Enter";
 import EntranceExit from "#/components/page/Entrance/Exit";
 import DocsMarkdown from "#/components/page/Docs/Markdown";
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
-import AdminManageExhibit from "#/components/page/Admin/ManageExhibit";
+import AdminLostWristband from "#/components/page/Admin/LostWristband";
 import Extra from "#/components/page/Extra";
 
 const Body = () => {
@@ -90,41 +90,23 @@ const Body = () => {
             <Route path="login" element={<Login />} />
             <Route path="docs/:doc_id" element={<DocsMarkdown />} />
             <Route path="exhibit">
-              // すべてのページにアクセス可能
-              {["admin", "moderator", "executive"].includes(
+              <Route index element={<ExhibitIndex />} />
+              {["admin", "moderator", "executive", "exhibit"].includes(
                 profile.user_type
               ) ? (
-                <>
-                  <Route index element={<ExhibitIndex />} />
-                  <Route path=":exhibit_id">
-                    <Route
-                      path="enter"
-                      element={<ExhibitScan scanType="enter" />}
-                    />
-                    <Route
-                      path="exit"
-                      element={<ExhibitScan scanType="exit" />}
-                    />
-                  </Route>
-                </>
-              ) : // 自分の展示のページのみアクセス可能
-                ["exhibit"].includes(profile.user_type) ? (
-                  <>
-                    <Route index element={<ExhibitIndex />} />
-                    <Route path={profile.user_id}>
-                      <Route
-                        path="enter"
-                        element={<ExhibitScan scanType="enter" />}
-                      />
-                      <Route
-                        path="exit"
-                        element={<ExhibitScan scanType="exit" />}
-                      />
-                    </Route>
-                  </>
-                ) : (
-                  <Route path="*" element={<Extra type="401" />} />
-                )}
+                <Route path=":exhibit_id">
+                  <Route
+                    path="enter"
+                    element={<ExhibitScan scanType="enter" />}
+                  />
+                  <Route
+                    path="exit"
+                    element={<ExhibitScan scanType="exit" />}
+                  />
+                </Route>
+              ) : (
+                <Route path="*" element={<Extra type="401" />} />
+              )}
             </Route>
             <Route path="entrance">
               {["admin", "moderator", "executive"].includes(
@@ -167,7 +149,10 @@ const Body = () => {
               {["admin", "moderator"].includes(profile.user_type) ? (
                 <>
                   <Route path="guest" element={<AdminCheckGuest />} />
-                  <Route path="exhibit" element={<AdminManageExhibit />} />
+                  <Route
+                    path="lost-wristband"
+                    element={<AdminLostWristband />}
+                  />
                 </>
               ) : (
                 <Route path="*" element={<Extra type="401" />} />

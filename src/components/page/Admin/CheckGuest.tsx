@@ -118,7 +118,8 @@ const AdminCheckGuest = () => {
         })
         .catch((err) => {
           console.log(err);
-        }).finally(() => {
+        })
+        .finally(() => {
           ReactGA.event({
             category: "info",
             action: "guest_activity_request",
@@ -130,15 +131,15 @@ const AdminCheckGuest = () => {
   };
 
   const getExhibitName = (exhibit_id: string) => {
-    const exhibit = exhibitList.find(v => v.exhibit_id === v.exhibit_id);
+    const exhibit = exhibitList.find((v) => v.exhibit_id === v.exhibit_id);
     if (exhibit_id === "entrance") {
-      return "エントランス"
+      return "エントランス";
     } else if (exhibit) {
-      return exhibit.group_name
+      return exhibit.group_name;
     } else {
-      return exhibit_id
+      return exhibit_id;
     }
-  }
+  };
 
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
@@ -183,7 +184,9 @@ const AdminCheckGuest = () => {
                         )}
                       </TimelineSeparator>
                       {v.activity_type === "enter" ? (
-                        <TimelineContent>{getExhibitName(v.exhibit_id)}</TimelineContent>
+                        <TimelineContent>
+                          {getExhibitName(v.exhibit_id)}
+                        </TimelineContent>
                       ) : (
                         <TimelineContent>退室</TimelineContent>
                       )}

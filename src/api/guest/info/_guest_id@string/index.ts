@@ -15,7 +15,7 @@ export type Methods = {
       guest_type: string;
       exhibit_id: string;
       reservation_id: string;
-      part: string;
+      part: number;
       available: number;
     };
   };

@@ -13,7 +13,7 @@ export type Methods = {
     resBody: {
       reservation_id: string;
       guest_type: string;
-      part: string;
+      part: number;
       count: number;
       registered: number;
       available: number;
