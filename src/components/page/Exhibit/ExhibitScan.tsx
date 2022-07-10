@@ -80,29 +80,31 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
-      apiClient(process.env.REACT_APP_API_BASE_URL)
-        .exhibit.info._exhibit_id(exhibit_id)
-        .$get({
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setPageInfo({ title: res.exhibit_name });
-          setCapacity(res.capacity);
-          setCurrentCount(res.current);
-          setExhibitName(res.exhibit_name);
-          setRoomName(res.room_name);
-          setLastUpdate(moment());
-          ReactGA.event({
-            category: "scan",
-            action: "exhibit_info_request",
-            label: profile.user_id,
+      if (moment().diff(lastUpdate) > 30000) {
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .exhibit.info._exhibit_id(exhibit_id)
+          .$get({
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            setPageInfo({ title: res.exhibit_name });
+            setCapacity(res.capacity);
+            setCurrentCount(res.current);
+            setExhibitName(res.exhibit_name);
+            setRoomName(res.room_name);
+            setLastUpdate(moment());
+            ReactGA.event({
+              category: "scan",
+              action: "exhibit_info_request",
+              label: profile.user_id,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      }
     }
   };
   useEffect(() => {
