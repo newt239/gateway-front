@@ -109,8 +109,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   }, []);
 
   const handleScan = (scanText: string | null) => {
-    if (scanText) {
-      if (scanText.length === 10 && scanText.startsWith("G") && token) {
+    if (scanText && token && exhibit_id) {
+      if (scanText.length === 10 && scanText.startsWith("G")) {
         setDeviceState(false);
         setText(scanText);
         setLoading(true);
@@ -138,8 +138,37 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
                     );
                   } else {
-                    setScanStatus("error");
-                    setMessage("このゲストはすでに他の展示に入室中です。");
+                    // 前の展示で退場処理が行われていない場合
+                    const payload = {
+                      guest_id: text,
+                      exhibit_id: exhibit_id,
+                    };
+                    apiClient(process.env.REACT_APP_API_BASE_URL)
+                      .activity.exit.$post({
+                        headers: { Authorization: "Bearer " + token },
+                        body: payload,
+                      })
+                      .then(() => {
+                        setDeviceState(true);
+                      })
+                      .catch((err: AxiosError) => {
+                        if (err.message) {
+                          setSnackbar({
+                            status: true,
+                            message: err.message,
+                            severity: "error",
+                          });
+                        } else {
+                          setSnackbar({
+                            status: true,
+                            message: "前の展示の退場処理に際し何らかのエラーが発生しました。",
+                            severity: "error",
+                          });
+                        }
+                        setText("");
+                        setDeviceState(true);
+                        setSmDrawerStatus(false);
+                      });
                   }
                 } else if (scanType === "exit") {
                   if (res.exhibit_id === exhibit_id) {
@@ -336,8 +365,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${
-                        scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
