@@ -3,7 +3,7 @@ import { atom } from "recoil";
 interface reservationInfoProp {
   reservation_id: string;
   guest_type: string; // "general" | "student" | "family" | "special";
-  part: string;
+  part: number;
   count: number;
   registered: number;
   available: number;

@@ -40,6 +40,7 @@ import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithCh
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 
+import { getTimePart } from "#/components/functional/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
 
@@ -282,9 +283,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   <AccessTimeRoundedIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={
-                    guestInfo.part === "all" ? "全時間帯" : guestInfo.part
-                  }
+                  primary={getTimePart(guestInfo.part).part_name}
                 />
               </ListItem>
             </List>

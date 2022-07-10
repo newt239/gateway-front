@@ -24,7 +24,7 @@ export type guestInfoProp = {
   guest_id: string;
   guest_type: string;
   reservation_id: string;
-  part: string;
+  part: number;
   available: number;
 };
 
