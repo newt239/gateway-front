@@ -37,11 +37,13 @@ const SelectExhibit: React.FunctionComponent<{
         })
         .then((res) => {
           if (profile.user_type === "executive") {
-            setExhibitList(res.filter((v) => v.exhibit_type === "stage" || v.exhibit_type === "special"));
+            const executiveExhibitList = res.filter((v) => v.exhibit_type === "stage" || v.exhibit_type === "special");
+            setExhibitList(executiveExhibitList);
+            setCurrentExhibit(executiveExhibitList[0].exhibit_id);
           } else {
             setExhibitList(res);
+            setCurrentExhibit(res[0].exhibit_id);
           }
-          setCurrentExhibit(res[0].exhibit_id);
         })
         .catch((err: AxiosError) => {
           console.log(err);

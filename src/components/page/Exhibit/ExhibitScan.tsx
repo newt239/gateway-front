@@ -77,7 +77,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   const setPageInfo = useSetRecoilState(pageStateSelector);
   const updateExhibitInfo = () => {
-    console.log(token, profile, exhibit_id)
     if (token && profile && exhibit_id) {
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .exhibit.info._exhibit_id(exhibit_id)
