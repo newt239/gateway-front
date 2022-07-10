@@ -80,7 +80,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
-      if (moment().diff(lastUpdate) > 30000) {
+      if (!exhibitName || moment().diff(lastUpdate) > 30000) {
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.info._exhibit_id(exhibit_id)
           .$get({
@@ -426,9 +426,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           <Grid item xs={12}>
             <Grid container spacing={2}>
               <Grid item>
-                <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+                <Card variant="outlined" sx={{ height: "100%" }}>
                   {capacity ? (
-                    <Grid container spacing={2} sx={{ alignItems: "end" }}>
+                    <Grid container spacing={2} sx={{ p: 2, alignItems: "end" }}>
                       <Grid item>
                         <span style={{ fontSize: "2rem", fontWeight: 800 }}>
                           {currentCount}
@@ -446,19 +446,19 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       </Grid>
                     </Grid>
                   ) : (
-                    <Skeleton variant="rectangular" width={250} height="3rem" />
+                    <Skeleton variant="rectangular" width={250} height="100%" />
                   )}
                 </Card>
               </Grid>
               <Grid item xs={6} md="auto">
-                <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+                <Card variant="outlined" sx={{ height: "100%" }}>
                   {matches && exhibitName && roomName ? (
-                    <>
+                    <Box sx={{ p: 2 }}>
                       <div style={{ fontWeight: 600 }}>{exhibitName}</div>
                       <div>( {roomName} )</div>
-                    </>
+                    </Box>
                   ) : (
-                    <Skeleton variant="rectangular" width={200} height="3rem" />
+                    <Skeleton variant="rectangular" width={200} height="100%" />
                   )}
                 </Card>
               </Grid>
