@@ -41,6 +41,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import Scanner from "#/components/block/Scanner";
+import generalProps from "#/components/functional/generalProps";
 
 const ReserveCheck = () => {
   const theme = useTheme();
@@ -68,6 +69,19 @@ const ReserveCheck = () => {
   useEffect(() => {
     setPageInfo({ title: "エントランス入場処理" });
   }, []);
+
+  const getTimePart = (part: number) => {
+    const time_part = generalProps.time_part;
+    if (part < time_part.length) {
+      return time_part[part]
+    } else {
+      return {
+        "part_name": "無効な時間帯",
+        "start": "",
+        "end": ""
+      }
+    }
+  }
 
   const handleScan = (scanText: string | null) => {
     if (scanText) {
@@ -157,16 +171,14 @@ const ReserveCheck = () => {
                 <ListItemIcon>
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary={reservation.guest_type} />
+                <ListItemText primary={reservation.guest_type === "family" ? "保護者" : reservation.guest_type} />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
                   <AccessTimeRoundedIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={
-                    reservation.part === "all" ? "全時間帯" : reservation.part
-                  }
+                  primary={getTimePart(reservation.part).part_name}
                 />
               </ListItem>
               <ListItem>
@@ -222,7 +234,7 @@ const ReserveCheck = () => {
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h4">id:</Typography>
+          <Typography variant="h4">予約ID:</Typography>
           <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
             <OutlinedInput
               type="text"

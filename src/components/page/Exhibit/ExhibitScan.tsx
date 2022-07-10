@@ -86,7 +86,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           },
         })
         .then((res) => {
-          console.log(res);
           setPageInfo({ title: res.exhibit_name });
           setCapacity(res.capacity);
           setCurrentCount(res.current);
