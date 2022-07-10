@@ -8,8 +8,8 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
-import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
+import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 
 type errorDialogProps = {
   open: boolean;

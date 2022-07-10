@@ -21,9 +21,9 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import TableChartRoundedIcon from "@mui/icons-material/TableChartRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
-import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
-import ExploreOffRoundedIcon from '@mui/icons-material/ExploreOffRounded';
-import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
+import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
+import ExploreOffRoundedIcon from "@mui/icons-material/ExploreOffRounded";
+import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";

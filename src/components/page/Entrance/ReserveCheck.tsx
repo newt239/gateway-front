@@ -158,7 +158,13 @@ const ReserveCheck = () => {
                 <ListItemIcon>
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary={reservation.guest_type === "family" ? "保護者" : reservation.guest_type} />
+                <ListItemText
+                  primary={
+                    reservation.guest_type === "family"
+                      ? "保護者"
+                      : reservation.guest_type
+                  }
+                />
               </ListItem>
               <ListItem>
                 <ListItemIcon>

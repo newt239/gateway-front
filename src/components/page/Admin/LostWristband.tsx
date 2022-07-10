@@ -5,13 +5,7 @@ import { reservationState } from "#/recoil/reservation";
 import { pageStateSelector } from "#/recoil/page";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
-import {
-  Grid,
-  TextField,
-  Box,
-  Button,
-  CircularProgress,
-} from "@mui/material";
+import { Grid, TextField, Box, Button, CircularProgress } from "@mui/material";
 
 import MessageDialog from "#/components/block/MessageDialog";
 
@@ -45,24 +39,30 @@ const LostWristband = () => {
         })
         .catch((err: AxiosError) => {
           console.log(err);
-        }).finally(() => {
+        })
+        .finally(() => {
           setLoading(false);
         });
     }
-  }
+  };
 
   const registNewWristband = () => {
-    if (token && reservation && newGuestId.length === 10 && newGuestId.startsWith("G")) {
+    if (
+      token &&
+      reservation &&
+      newGuestId.length === 10 &&
+      newGuestId.startsWith("G")
+    ) {
       setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .guest.revoke.$post({
           headers: { Authorization: "Bearer " + token },
           body: {
-            "reservation_id": reservationId,
-            "guest_id": newGuestId,
-            "guest_type": reservation.guest_type,
-            "part": reservation.part
-          }
+            reservation_id: reservationId,
+            guest_id: newGuestId,
+            guest_type: reservation.guest_type,
+            part: reservation.part,
+          },
         })
         .then((res) => {
           console.log(res);
@@ -71,11 +71,12 @@ const LostWristband = () => {
         })
         .catch((err: AxiosError) => {
           console.log(err);
-        }).finally(() => {
+        })
+        .finally(() => {
           setLoading(false);
         });
     }
-  }
+  };
 
   const handleClose = () => {
     setDialogOpen(false);

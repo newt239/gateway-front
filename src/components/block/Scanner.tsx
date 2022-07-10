@@ -57,9 +57,11 @@ const Scanner = ({ handleScan }: ScannerProps) => {
       )
       .then((devices) => {
         setDeviceList(devices);
-        const savedCurrentCameraDeviceId = localStorage.getItem("currentCameraDeviceId");
+        const savedCurrentCameraDeviceId = localStorage.getItem(
+          "currentCameraDeviceId"
+        );
         if (savedCurrentCameraDeviceId) {
-          const device = devices.find(v => {
+          const device = devices.find((v) => {
             if (v.deviceId === savedCurrentCameraDeviceId) {
               return v;
             }
@@ -101,11 +103,11 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   }, [refreshQrReader]);
 
   const changeCamera = (event: SelectChangeEvent) => {
-    const newCurrenDevice = deviceList.find(v => {
+    const newCurrenDevice = deviceList.find((v) => {
       if (v.deviceId === event.target.value) {
         return v;
       }
-    })
+    });
     if (newCurrenDevice) {
       localStorage.setItem("currentCameraDeviceId", newCurrenDevice.deviceId);
       setCurrentDevice(newCurrenDevice);

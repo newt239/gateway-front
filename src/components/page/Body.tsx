@@ -149,7 +149,10 @@ const Body = () => {
               {["admin", "moderator"].includes(profile.user_type) ? (
                 <>
                   <Route path="guest" element={<AdminCheckGuest />} />
-                  <Route path="lost-wristband" element={<AdminLostWristband />} />
+                  <Route
+                    path="lost-wristband"
+                    element={<AdminLostWristband />}
+                  />
                 </>
               ) : (
                 <Route path="*" element={<Extra type="401" />} />

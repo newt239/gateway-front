@@ -194,9 +194,7 @@ const EntranceExit = () => {
                 <ListItemIcon>
                   <AccessTimeRoundedIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={getTimePart(guestInfo.part).part_name}
-                />
+                <ListItemText primary={getTimePart(guestInfo.part).part_name} />
               </ListItem>
             </List>
             <Box

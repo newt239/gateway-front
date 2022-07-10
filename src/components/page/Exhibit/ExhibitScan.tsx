@@ -38,7 +38,7 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
-import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
+import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
 import { getTimePart } from "#/components/functional/commonFunction";
 import Scanner from "#/components/block/Scanner";
@@ -282,9 +282,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 <ListItemIcon>
                   <AccessTimeRoundedIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={getTimePart(guestInfo.part).part_name}
-                />
+                <ListItemText primary={getTimePart(guestInfo.part).part_name} />
               </ListItem>
             </List>
             <Box
@@ -309,183 +307,200 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     );
   };
 
-  return (<>
-    {!exhibit_id ? (<>展示idが正しくありません。</>) : (profile && profile.user_type === "exhibit" && profile.user_id !== exhibit_id) ? (
-      <Grid container spacing={2} sx={{ p: 2 }}>
-        <Grid item xs={12}>
-          <Card variant="outlined" sx={{ p: 2 }}>このページを表示する権限がありません。</Card>
+  return (
+    <>
+      {!exhibit_id ? (
+        <>展示idが正しくありません。</>
+      ) : profile &&
+        profile.user_type === "exhibit" &&
+        profile.user_id !== exhibit_id ? (
+        <Grid container spacing={2} sx={{ p: 2 }}>
+          <Grid item xs={12}>
+            <Card variant="outlined" sx={{ p: 2 }}>
+              このページを表示する権限がありません。
+            </Card>
+          </Grid>
         </Grid>
-      </Grid>
-    ) : (
-      <Grid container spacing={2} sx={{ p: 2 }}>
-        <Grid item xs={12}>
-          <Grid container sx={{ alignItems: "center" }}>
-            <Grid item sx={{ pr: 4 }}>
-              <Typography variant="h3">
-                {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
+      ) : (
+        <Grid container spacing={2} sx={{ p: 2 }}>
+          <Grid item xs={12}>
+            <Grid container sx={{ alignItems: "center" }}>
+              <Grid item sx={{ pr: 4 }}>
+                <Typography variant="h3">
+                  {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
+                </Typography>
+              </Grid>
+              <Grid item sx={{ pr: 2 }}>
+                <Button
+                  size="small"
+                  startIcon={<PublishedWithChangesRoundedIcon />}
+                  onClick={() =>
+                    navigate(
+                      `/exhibit/${exhibit_id || "unknown"}/${
+                        scanType === "enter" ? "exit" : "enter"
+                      }`,
+                      { replace: true }
+                    )
+                  }
+                >
+                  {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
+                </Button>
+              </Grid>
+              {profile && profile.user_type === "exhibit" && (
+                <Grid item>
+                  <Button
+                    size="small"
+                    startIcon={<BarChartRoundedIcon />}
+                    onClick={() =>
+                      navigate(`/chart/exhibit/${exhibit_id}`, {
+                        replace: true,
+                      })
+                    }
+                  >
+                    滞在状況
+                  </Button>
+                </Grid>
+              )}
+              {profile && profile.user_type !== "exhibit" && (
+                <Grid item>
+                  <Button
+                    size="small"
+                    startIcon={<ArrowBackIosNewRoundedIcon />}
+                    onClick={() => navigate("/exhibit", { replace: true })}
+                  >
+                    一覧に戻る
+                  </Button>
+                </Grid>
+              )}
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <Grid container spacing={2}>
+              <Grid item>
+                <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+                  {capacity ? (
+                    <Grid container spacing={2} sx={{ alignItems: "end" }}>
+                      <Grid item>
+                        <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+                          {currentCount}
+                        </span>
+                        <span> / {capacity} 人</span>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          size="small"
+                          startIcon={<ReplayRoundedIcon />}
+                          onClick={updateExhibitInfo}
+                        >
+                          {lastUpdate.format("HH:mm:ss")}現在
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <Skeleton variant="rectangular" width={250} height="3rem" />
+                  )}
+                </Card>
+              </Grid>
+              <Grid item xs={6} md="auto">
+                <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+                  {matches && exhibitName && roomName ? (
+                    <>
+                      <div style={{ fontWeight: 600 }}>{exhibitName}</div>
+                      <div>( {roomName} )</div>
+                    </>
+                  ) : (
+                    <Skeleton variant="rectangular" width={200} height="3rem" />
+                  )}
+                </Card>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={12} md={5}>
+            <Scanner handleScan={handleScan} />
+          </Grid>
+          <Grid item xs={12} md={7} xl={5}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
+                ゲストID:
               </Typography>
-            </Grid>
-            <Grid item sx={{ pr: 2 }}>
-              <Button
-                size="small"
-                startIcon={<PublishedWithChangesRoundedIcon />}
-                onClick={() =>
-                  navigate(
-                    `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
-                    }`,
-                    { replace: true }
-                  )
-                }
-              >
-                {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
-              </Button>
-            </Grid>
-            {profile && profile.user_type === "exhibit" && (
-              <Grid item>
-                <Button
+              <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
+                <OutlinedInput
+                  type="text"
                   size="small"
-                  startIcon={<BarChartRoundedIcon />}
-                  onClick={() => navigate(`/chart/exhibit/${exhibit_id}`, { replace: true })}
-                >
-                  滞在状況
-                </Button>
-              </Grid>
-            )}
-            {profile && profile.user_type !== "exhibit" && (
-              <Grid item>
-                <Button
-                  size="small"
-                  startIcon={<ArrowBackIosNewRoundedIcon />}
-                  onClick={() => navigate("/exhibit", { replace: true })}
-                >
-                  一覧に戻る
-                </Button>
-              </Grid>
-            )}
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container spacing={2}>
-            <Grid item>
-              <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-                {capacity ? (
-                  <Grid container spacing={2} sx={{ alignItems: "end" }}>
-                    <Grid item>
-                      <span style={{ fontSize: "2rem", fontWeight: 800 }}>
-                        {currentCount}
-                      </span>
-                      <span> / {capacity} 人</span>
-                    </Grid>
-                    <Grid item>
-                      <Button
-                        size="small"
-                        startIcon={<ReplayRoundedIcon />}
-                        onClick={updateExhibitInfo}
+                  value={text}
+                  onChange={(e) => setText(e.target.value)}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="copy id to clipboard"
+                        onClick={() => {
+                          if (text !== "") {
+                            navigator.clipboard
+                              .writeText(text)
+                              .catch((e) => console.log(e));
+                            setSnackbar({
+                              status: true,
+                              message: "コピーしました",
+                              severity: "success",
+                            });
+                          }
+                        }}
+                        edge="end"
                       >
-                        {lastUpdate.format("HH:mm:ss")}現在
-                      </Button>
-                    </Grid>
-                  </Grid>
-                ) : (<Skeleton variant="rectangular" width={250} height="3rem" />)}
-              </Card>
-            </Grid>
-            <Grid item xs={6} md="auto">
-              <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-                {(matches && exhibitName && roomName) ? (
-                  <>
-                    <div style={{ fontWeight: 600 }}>{exhibitName}</div>
-                    <div>( {roomName} )</div>
-                  </>
-                ) : (<Skeleton variant="rectangular" width={200} height="3rem" />)}
-              </Card>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={12} md={5}>
-          <Scanner handleScan={handleScan} />
-        </Grid>
-        <Grid item xs={12} md={7} xl={5}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
-              ゲストID:
-            </Typography>
-            <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
-              <OutlinedInput
-                type="text"
-                size="small"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="copy id to clipboard"
-                      onClick={() => {
-                        if (text !== "") {
-                          navigator.clipboard
-                            .writeText(text)
-                            .catch((e) => console.log(e));
-                          setSnackbar({
-                            status: true,
-                            message: "コピーしました",
-                            severity: "success",
-                          });
-                        }
-                      }}
-                      edge="end"
-                    >
-                      <ContentCopyRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
-                disabled
-                fullWidth
-              />
-            </FormControl>
-          </Box>
-          <Suspense fallback={<p>読込中...</p>}>
-            {loading && (
-              <Box sx={{ width: "100%" }}>
-                <LinearProgress />
-              </Box>
-            )}
-            {scanStatus !== "waiting" &&
-              (matches ? (
-                <GuestInfoCard />
-              ) : (
-                <SwipeableDrawer
-                  anchor="bottom"
-                  open={smDrawerOpen}
-                  onClose={() => retry()}
-                  onOpen={() => setSmDrawerStatus(true)}
-                >
+                        <ContentCopyRoundedIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                  disabled
+                  fullWidth
+                />
+              </FormControl>
+            </Box>
+            <Suspense fallback={<p>読込中...</p>}>
+              {loading && (
+                <Box sx={{ width: "100%" }}>
+                  <LinearProgress />
+                </Box>
+              )}
+              {scanStatus !== "waiting" &&
+                (matches ? (
                   <GuestInfoCard />
-                </SwipeableDrawer>
-              ))}
-          </Suspense>
+                ) : (
+                  <SwipeableDrawer
+                    anchor="bottom"
+                    open={smDrawerOpen}
+                    onClose={() => retry()}
+                    onOpen={() => setSmDrawerStatus(true)}
+                  >
+                    <GuestInfoCard />
+                  </SwipeableDrawer>
+                ))}
+            </Suspense>
+          </Grid>
+          <Snackbar
+            open={snackbar.status}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            autoHideDuration={6000}
+            onClose={() =>
+              setSnackbar({ status: false, message: "", severity: "success" })
+            }
+          >
+            <Alert variant="filled" severity={snackbar.severity}>
+              {snackbar.message}
+            </Alert>
+          </Snackbar>
         </Grid>
-        <Snackbar
-          open={snackbar.status}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
-          autoHideDuration={6000}
-          onClose={() =>
-            setSnackbar({ status: false, message: "", severity: "success" })
-          }
-        >
-          <Alert variant="filled" severity={snackbar.severity}>
-            {snackbar.message}
-          </Alert>
-        </Snackbar>
-      </Grid>
-    )}</>
+      )}
+    </>
   );
 };
 

@@ -7,7 +7,7 @@ import { Grid, Card, Box, Typography, Button } from "@mui/material";
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";
 
-import LibraryBooksRoundedIcon from '@mui/icons-material/LibraryBooksRounded';
+import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 
 import GatewayThumbnail from "#/images/gateway-home-thumbnail.png";
 
@@ -38,14 +38,26 @@ const Home = () => {
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-          <Grid container sx={{ flexDirection: "column", justifyContent: "space-between", height: "100%" }}>
+          <Grid
+            container
+            sx={{
+              flexDirection: "column",
+              justifyContent: "space-between",
+              height: "100%",
+            }}
+          >
             <Typography variant="h3">アプリ情報</Typography>
             <Version />
             <Box sx={{ width: "100%", textAlign: "right" }}>
               <Button
                 variant="outlined"
                 color="info"
-                onClick={() => { window.open(process.env.REACT_APP_MANUAL_URL || "/", "_blank") }}
+                onClick={() => {
+                  window.open(
+                    process.env.REACT_APP_MANUAL_URL || "/",
+                    "_blank"
+                  );
+                }}
                 sx={{ mt: 2 }}
                 startIcon={<LibraryBooksRoundedIcon />}
               >
