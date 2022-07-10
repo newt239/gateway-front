@@ -23,6 +23,7 @@ import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import PermDataSettingRoundedIcon from "@mui/icons-material/PermDataSettingRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
+import ExploreOffRoundedIcon from '@mui/icons-material/ExploreOffRounded';
 
 import UserInfo from "#/components/block/UserInfo";
 
@@ -199,6 +200,15 @@ const DrawerLeft = () => {
                     <BadgeRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="ゲスト照会" />
+                </ListItemButton>
+                <ListItemButton
+                  selected={path === `/admin/lost-wristband`}
+                  onClick={() => navigate("/admin/lost-wristband")}
+                >
+                  <ListItemIcon>
+                    <ExploreOffRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="リストバンド紛失" />
                 </ListItemButton>
                 <ListItemButton
                   selected={path === `/admin/exhibit`}
