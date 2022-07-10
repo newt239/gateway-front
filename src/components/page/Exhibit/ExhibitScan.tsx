@@ -38,6 +38,7 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
+import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
@@ -312,7 +313,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   };
 
   return (<>
-    {profile && profile.user_type === "exhibit" && profile.user_id !== exhibit_id ? (
+    {!exhibit_id ? (<>展示idが正しくありません。</>) : (profile && profile.user_type === "exhibit" && profile.user_id !== exhibit_id) ? (
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
           <Card variant="outlined" sx={{ p: 2 }}>このページを表示する権限がありません。</Card>
@@ -342,8 +343,19 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
               </Button>
             </Grid>
-            <Grid item>
-              {profile && profile.user_type !== "exhibit" && (
+            {profile && profile.user_type === "exhibit" && (
+              <Grid item>
+                <Button
+                  size="small"
+                  startIcon={<BarChartRoundedIcon />}
+                  onClick={() => navigate(`/chart/exhibit/${exhibit_id}`, { replace: true })}
+                >
+                  滞在状況
+                </Button>
+              </Grid>
+            )}
+            {profile && profile.user_type !== "exhibit" && (
+              <Grid item>
                 <Button
                   size="small"
                   startIcon={<ArrowBackIosNewRoundedIcon />}
@@ -351,8 +363,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 >
                   一覧に戻る
                 </Button>
-              )}
-            </Grid>
+              </Grid>
+            )}
           </Grid>
         </Grid>
         <Grid item xs={12}>

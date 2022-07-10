@@ -22,6 +22,7 @@ import TableChartRoundedIcon from "@mui/icons-material/TableChartRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import PermDataSettingRoundedIcon from "@mui/icons-material/PermDataSettingRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
+import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 
 import UserInfo from "#/components/block/UserInfo";
 
@@ -113,7 +114,7 @@ const DrawerLeft = () => {
                   }
                 >
                   <ListItemIcon>
-                    <LogoutRoundedIcon />
+                    <BarChartRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="滞在状況" />
                 </ListItemButton>
