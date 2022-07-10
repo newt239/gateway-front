@@ -174,7 +174,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
           borderRadius: "1rem",
         }}
       >
-        {qrReaderIsShow && refreshQrReader ? (
+        {qrReaderIsShow && refreshQrReader && (
           <div style={{ position: "relative" }}>
             <QrReader
               onScan={(text: string | null) => handleScan(text)}
@@ -228,10 +228,8 @@ const Scanner = ({ handleScan }: ScannerProps) => {
               </DialogActions>
             </Dialog>
           </div>
-        ) : (
-          <Loading />
         )}
-        {["loading", "error"].includes(scannerStatus) && (
+        {(refreshQrReader || ["loading", "error"].includes(scannerStatus)) && (
           <>{scannerStatus === "loading" && <Loading />}</>
         )}
       </Box>
