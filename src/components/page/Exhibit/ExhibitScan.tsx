@@ -27,6 +27,7 @@ import {
   ListItemIcon,
   ListItemText,
   Snackbar,
+  Skeleton,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -358,33 +359,37 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           <Grid container spacing={2}>
             <Grid item>
               <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-                <Grid container spacing={2} sx={{ alignItems: "end" }}>
-                  <Grid item>
-                    <span style={{ fontSize: "2rem", fontWeight: 800 }}>
-                      {currentCount}
-                    </span>
-                    <span> / {capacity} 人</span>
+                {capacity ? (
+                  <Grid container spacing={2} sx={{ alignItems: "end" }}>
+                    <Grid item>
+                      <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+                        {currentCount}
+                      </span>
+                      <span> / {capacity} 人</span>
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        size="small"
+                        startIcon={<ReplayRoundedIcon />}
+                        onClick={updateExhibitInfo}
+                      >
+                        {lastUpdate.format("HH:mm:ss")}現在
+                      </Button>
+                    </Grid>
                   </Grid>
-                  <Grid item>
-                    <Button
-                      size="small"
-                      startIcon={<ReplayRoundedIcon />}
-                      onClick={updateExhibitInfo}
-                    >
-                      {lastUpdate.format("HH:mm:ss")}現在
-                    </Button>
-                  </Grid>
-                </Grid>
+                ) : (<Skeleton variant="rectangular" width={250} height="3rem" />)}
               </Card>
             </Grid>
-            {matches && (
-              <Grid item xs={6} md="auto">
-                <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-                  <div style={{ fontWeight: 600 }}>{exhibitName}</div>
-                  <div>( {roomName} )</div>
-                </Card>
-              </Grid>
-            )}
+            <Grid item xs={6} md="auto">
+              <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+                {(matches && exhibitName && roomName) ? (
+                  <>
+                    <div style={{ fontWeight: 600 }}>{exhibitName}</div>
+                    <div>( {roomName} )</div>
+                  </>
+                ) : (<Skeleton variant="rectangular" width={200} height="3rem" />)}
+              </Card>
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12} md={5}>
