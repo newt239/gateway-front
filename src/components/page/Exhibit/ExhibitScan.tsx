@@ -40,7 +40,7 @@ import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithCh
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
-import { getTimePart } from "#/components/functional/commonFunction";
+import { getTimePart, guestIdValitation } from "#/components/functional/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
 
@@ -111,7 +111,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   const handleScan = (scanText: string | null) => {
     if (scanText && token && exhibit_id) {
-      if (scanText.length === 10 && scanText.startsWith("G")) {
+      if (guestIdValitation(scanText)) {
         setDeviceState(false);
         setText(scanText);
         setLoading(true);
@@ -127,7 +127,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setGuestInfo(res);
             if (!res.available) {
               setScanStatus("error");
-              setMessage("このゲストは無効です。");
+              setMessage("このゲストIDは存在しません。");
             } else {
               if (profile) {
                 if (scanType === "enter") {
