@@ -127,7 +127,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setGuestInfo(res);
             if (!res.available) {
               setScanStatus("error");
-              setMessage("このゲストIDは存在しません。");
+              setMessage("このゲストIDは無効です。");
             } else {
               if (profile) {
                 if (scanType === "enter") {
@@ -183,7 +183,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     );
                     setAlertStatus(true);
                   } else {
-                    setScanStatus("error");
+                    setScanStatus("success");
                     setMessage("このゲストは他の展示に入室中です。");
                     setAlertStatus(true);
                   }
@@ -201,7 +201,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
         setLoading(false);
       } else {
         setScanStatus("error");
-        setMessage("ゲストidの形式が正しくありません。");
+        setMessage("このゲストIDは存在しません。");
         setAlertStatus(true);
         setSmDrawerStatus(true);
       }
