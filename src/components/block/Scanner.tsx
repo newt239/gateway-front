@@ -231,7 +231,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
             </Dialog>
           </div>
         )}
-        {(refreshQrReader || ["loading", "error"].includes(scannerStatus)) && (
+        {(refreshQrReader || ["loading"].includes(scannerStatus)) && (
           <>{scannerStatus === "loading" && <Loading />}</>
         )}
       </Box>

@@ -354,7 +354,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <>
       {!exhibit_id ? (
-        <>展示idが正しくありません。</>
+        <Grid container spacing={2} sx={{ p: 2 }}>
+          <Grid item xs={12}>
+            <Card variant="outlined" sx={{ p: 2 }}>
+              展示IDが正しくありません。
+            </Card>
+          </Grid>
+        </Grid>
       ) : profile &&
         profile.user_type === "exhibit" &&
         profile.user_id !== exhibit_id ? (
