@@ -8,8 +8,8 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-import DoneOutlineRoundedIcon from "@mui/icons-material/DoneOutlineRounded";
-import ErrorOutlineRoundedIcon from "@mui/icons-material/ErrorOutlineRounded";
+import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 
 type errorDialogProps = {
   open: boolean;
@@ -30,7 +30,7 @@ const MessageDialog = (props: errorDialogProps) => {
             color: "success.main",
           }}
         >
-          <DoneOutlineRoundedIcon />
+          <CheckCircleRoundedIcon />
           {props.title || "処理が完了しました"}
         </DialogTitle>
       ) : (
@@ -41,7 +41,7 @@ const MessageDialog = (props: errorDialogProps) => {
             color: "error.main",
           }}
         >
-          <ErrorOutlineRoundedIcon />
+          <ErrorRoundedIcon />
           {props.title || "エラーが発生しました"}
         </DialogTitle>
       )}

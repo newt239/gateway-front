@@ -23,6 +23,7 @@ import MapRoundedIcon from "@mui/icons-material/MapRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 import ExploreOffRoundedIcon from '@mui/icons-material/ExploreOffRounded';
+import LocationOnRoundedIcon from '@mui/icons-material/LocationOnRounded';
 
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";
@@ -131,7 +132,7 @@ const DrawerLeft = () => {
                   onClick={() => navigate(`/exhibit/`)}
                 >
                   <ListItemIcon>
-                    <LoginRoundedIcon />
+                    <LocationOnRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="展示一覧" />
                 </ListItemButton>
