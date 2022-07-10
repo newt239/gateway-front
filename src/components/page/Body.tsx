@@ -21,6 +21,7 @@ import EntranceExit from "#/components/page/Entrance/Exit";
 import DocsMarkdown from "#/components/page/Docs/Markdown";
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminManageExhibit from "#/components/page/Admin/ManageExhibit";
+import AdminLostWristband from "#/components/page/Admin/LostWristband";
 import Extra from "#/components/page/Extra";
 
 const Body = () => {
@@ -150,6 +151,7 @@ const Body = () => {
                 <>
                   <Route path="guest" element={<AdminCheckGuest />} />
                   <Route path="exhibit" element={<AdminManageExhibit />} />
+                  <Route path="lost-wristband" element={<AdminLostWristband />} />
                 </>
               ) : (
                 <Route path="*" element={<Extra type="401" />} />
