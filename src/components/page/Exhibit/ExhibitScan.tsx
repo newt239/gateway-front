@@ -63,7 +63,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [capacity, setCapacity] = useState(0);
-  const [currentCount, setCurrentCount] = useState(0);
+  const [currentCount, setCurrentCount] = useState<number>(0);
   const [exhibitName, setExhibitName] = useState("");
   const [roomName, setRoomName] = useState("");
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
@@ -232,6 +232,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             message: "滞在者数が上限に達しています。",
             severity: "error",
           });
+          setAlertStatus(true);
         } else {
           apiClient(process.env.REACT_APP_API_BASE_URL)
             .activity[scanType].$post({
@@ -239,6 +240,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               body: payload,
             })
             .then(() => {
+              setCurrentCount(currentCount + 1);
               setDeviceState(true);
               setText("");
               setMessage("");
@@ -247,6 +249,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 message: "処理が完了しました。",
                 severity: "success",
               });
+              setAlertStatus(true);
               setScanStatus("waiting");
               setSmDrawerStatus(false);
             })
@@ -257,12 +260,14 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   message: err.message,
                   severity: "error",
                 });
+                setAlertStatus(true);
               } else {
                 setSnackbar({
                   status: true,
                   message: "何らかのエラーが発生しました。",
                   severity: "error",
                 });
+                setAlertStatus(true);
               }
               setText("");
               setDeviceState(true);
