@@ -20,7 +20,6 @@ import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import TableChartRoundedIcon from "@mui/icons-material/TableChartRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
-import PermDataSettingRoundedIcon from "@mui/icons-material/PermDataSettingRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import BarChartRoundedIcon from '@mui/icons-material/BarChartRounded';
 import ExploreOffRoundedIcon from '@mui/icons-material/ExploreOffRounded';
@@ -209,15 +208,6 @@ const DrawerLeft = () => {
                     <ExploreOffRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="リストバンド紛失" />
-                </ListItemButton>
-                <ListItemButton
-                  selected={path === `/admin/exhibit`}
-                  onClick={() => navigate("/admin/exhibit")}
-                >
-                  <ListItemIcon>
-                    <PermDataSettingRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary="展示管理" />
                 </ListItemButton>
               </List>
             </>
