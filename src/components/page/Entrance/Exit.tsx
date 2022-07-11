@@ -32,7 +32,6 @@ import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
-import generalProps from "#/components/lib/generalProps";
 import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
@@ -102,7 +101,6 @@ const EntranceExit = () => {
 
   const postApi = () => {
     if (token && profile && guestInfo) {
-      // TODO: エンドポイントを別個に用意するか検討
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .activity.exit.$post({
           body: {
@@ -183,8 +181,9 @@ const EntranceExit = () => {
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    // TODO: string template literalへの対応
-                    generalProps.reservation.guest_type["student"]
+                    guestInfo.guest_type === "student"
+                      ? "生徒"
+                      : guestInfo.guest_type === "family" ? "保護者" : "その他"
                   }
                 />
               </ListItem>
@@ -222,7 +221,7 @@ const EntranceExit = () => {
       <Grid item xs={12}>
         <Card variant="outlined" sx={{ p: 2 }}>
           <Typography variant="h3">退場処理</Typography>
-          <Typography variant="body1">会場からの退場処理を行います</Typography>
+          <Typography variant="body1">会場からの退場処理を行います。</Typography>
         </Card>
       </Grid>
       <Grid item xs={12} md={6}>
@@ -246,7 +245,7 @@ const EntranceExit = () => {
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="copy id to clipboard"
+                    aria-label="ゲストIDをコピー"
                     onClick={() => {
                       if (text !== "") {
                         navigator.clipboard

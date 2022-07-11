@@ -228,7 +228,7 @@ const ReserveCheck = () => {
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="copy id to clipboard"
+                    aria-label="予約IDをコピー"
                     onClick={() => {
                       if (text !== "") {
                         navigator.clipboard

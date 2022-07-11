@@ -290,7 +290,7 @@ const EntranceEnter = () => {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label="copy id to clipboard"
+                      aria-label="ゲストIDをコピー"
                       onClick={() => {
                         if (text !== "") {
                           navigator.clipboard
