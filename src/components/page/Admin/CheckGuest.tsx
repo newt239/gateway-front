@@ -19,7 +19,7 @@ import {
   ListItemText,
   ListItemIcon,
 } from "@mui/material";
-import { guestInfoProp } from "#/types/global";
+import { guestInfoProp } from "#/components/types/global";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";

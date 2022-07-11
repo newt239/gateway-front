@@ -40,9 +40,9 @@ import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithCh
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
-import { getTimePart } from "#/components/functional/commonFunction";
+import { getTimePart, guestIdValitation } from "#/components/functional/commonFunction";
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp } from "#/types/global";
+import { guestInfoProp } from "#/components/types/global";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -63,10 +63,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [capacity, setCapacity] = useState(0);
-  const [currentCount, setCurrentCount] = useState(0);
+  const [currentCount, setCurrentCount] = useState<number>(0);
   const [exhibitName, setExhibitName] = useState("");
   const [roomName, setRoomName] = useState("");
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
+  const [alertStatus, setAlertStatus] = useState(false);
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
     message: string;
@@ -79,29 +80,31 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
-      apiClient(process.env.REACT_APP_API_BASE_URL)
-        .exhibit.info._exhibit_id(exhibit_id)
-        .$get({
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then((res) => {
-          setPageInfo({ title: res.exhibit_name });
-          setCapacity(res.capacity);
-          setCurrentCount(res.current);
-          setExhibitName(res.exhibit_name);
-          setRoomName(res.room_name);
-          setLastUpdate(moment());
-          ReactGA.event({
-            category: "scan",
-            action: "exhibit_info_request",
-            label: profile.user_id,
+      if (!exhibitName || moment().diff(lastUpdate) > 30000) {
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .exhibit.info._exhibit_id(exhibit_id)
+          .$get({
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((res) => {
+            setPageInfo({ title: res.exhibit_name });
+            setCapacity(res.capacity);
+            setCurrentCount(res.current);
+            setExhibitName(res.exhibit_name);
+            setRoomName(res.room_name);
+            setLastUpdate(moment());
+            ReactGA.event({
+              category: "scan",
+              action: "exhibit_info_request",
+              label: profile.user_id,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      }
     }
   };
   useEffect(() => {
@@ -109,8 +112,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   }, []);
 
   const handleScan = (scanText: string | null) => {
-    if (scanText) {
-      if (scanText.length === 10 && scanText.startsWith("G") && token) {
+    if (scanText && token && exhibit_id) {
+      if (guestIdValitation(scanText)) {
         setDeviceState(false);
         setText(scanText);
         setLoading(true);
@@ -127,6 +130,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             if (!res.available) {
               setScanStatus("error");
               setMessage("このゲストは無効です。");
+              setAlertStatus(true);
             } else {
               if (profile) {
                 if (scanType === "enter") {
@@ -137,9 +141,40 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     setMessage(
                       "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
                     );
+                    setAlertStatus(true);
                   } else {
-                    setScanStatus("error");
-                    setMessage("このゲストはすでに他の展示に入室中です。");
+                    // 前の展示で退場処理が行われていない場合
+                    const payload = {
+                      guest_id: text,
+                      exhibit_id: exhibit_id,
+                    };
+                    apiClient(process.env.REACT_APP_API_BASE_URL)
+                      .activity.exit.$post({
+                        headers: { Authorization: "Bearer " + token },
+                        body: payload,
+                      })
+                      .then(() => {
+                        setDeviceState(true);
+                      })
+                      .catch((err: AxiosError) => {
+                        if (err.message) {
+                          setSnackbar({
+                            status: true,
+                            message: err.message,
+                            severity: "error",
+                          });
+                        } else {
+                          setSnackbar({
+                            status: true,
+                            message: "前の展示の退場処理に際し何らかのエラーが発生しました。",
+                            severity: "error",
+                          });
+                          setAlertStatus(true);
+                        }
+                        setText("");
+                        setDeviceState(true);
+                        setSmDrawerStatus(false);
+                      });
                   }
                 } else if (scanType === "exit") {
                   if (res.exhibit_id === exhibit_id) {
@@ -149,9 +184,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     setMessage(
                       "このゲストは現在この展示に入室していません。入室スキャンと間違えていませんか？"
                     );
+                    setAlertStatus(true);
                   } else {
-                    setScanStatus("error");
+                    setScanStatus("success");
                     setMessage("このゲストは他の展示に入室中です。");
+                    setAlertStatus(true);
                   }
                 }
               }
@@ -162,11 +199,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             console.log(err);
             setScanStatus("error");
             setMessage("予期せぬエラーが発生しました。");
+            setAlertStatus(true);
           });
         setLoading(false);
       } else {
         setScanStatus("error");
-        setMessage("ゲストidの形式が正しくありません。");
+        setMessage("このゲストは存在しません。");
+        setAlertStatus(true);
         setSmDrawerStatus(true);
       }
     }
@@ -178,6 +217,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setMessage("");
     setSnackbar({ status: false, message: "", severity: "success" });
     setScanStatus("waiting");
+    setAlertStatus(false);
     setSmDrawerStatus(false);
   };
 
@@ -195,6 +235,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             message: "滞在者数が上限に達しています。",
             severity: "error",
           });
+          setAlertStatus(true);
         } else {
           apiClient(process.env.REACT_APP_API_BASE_URL)
             .activity[scanType].$post({
@@ -202,6 +243,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               body: payload,
             })
             .then(() => {
+              setCurrentCount(currentCount + 1);
               setDeviceState(true);
               setText("");
               setMessage("");
@@ -210,6 +252,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 message: "処理が完了しました。",
                 severity: "success",
               });
+              setAlertStatus(true);
               setScanStatus("waiting");
               setSmDrawerStatus(false);
             })
@@ -220,12 +263,14 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   message: err.message,
                   severity: "error",
                 });
+                setAlertStatus(true);
               } else {
                 setSnackbar({
                   status: true,
                   message: "何らかのエラーが発生しました。",
                   severity: "error",
                 });
+                setAlertStatus(true);
               }
               setText("");
               setDeviceState(true);
@@ -237,7 +282,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
     return (
       <>
-        {scanStatus === "error" && (
+        {alertStatus && (
           <Alert
             variant="filled"
             severity="error"
@@ -274,7 +319,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   primary={
                     guestInfo.guest_type === "student"
                       ? "生徒"
-                      : guestInfo.guest_type
+                      : guestInfo.guest_type === "family" ? "保護者" : "その他"
                   }
                 />
               </ListItem>
@@ -310,7 +355,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <>
       {!exhibit_id ? (
-        <>展示idが正しくありません。</>
+        <Grid container spacing={2} sx={{ p: 2 }}>
+          <Grid item xs={12}>
+            <Card variant="outlined" sx={{ p: 2 }}>
+              展示IDが正しくありません。
+            </Card>
+          </Grid>
+        </Grid>
       ) : profile &&
         profile.user_type === "exhibit" &&
         profile.user_id !== exhibit_id ? (
@@ -325,7 +376,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
         <Grid container spacing={2} sx={{ p: 2 }}>
           <Grid item xs={12}>
             <Grid container sx={{ alignItems: "center" }}>
-              <Grid item sx={{ pr: 4 }}>
+              <Grid item sx={{ pr: 4 }} xs={12} sm lg={2}>
                 <Typography variant="h3">
                   {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
                 </Typography>
@@ -336,8 +387,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${
-                        scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
@@ -377,9 +427,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           <Grid item xs={12}>
             <Grid container spacing={2}>
               <Grid item>
-                <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+                <Card variant="outlined" sx={{ height: "100%" }}>
                   {capacity ? (
-                    <Grid container spacing={2} sx={{ alignItems: "end" }}>
+                    <Grid container spacing={2} sx={{ p: 2, alignItems: "end" }}>
                       <Grid item>
                         <span style={{ fontSize: "2rem", fontWeight: 800 }}>
                           {currentCount}
@@ -397,22 +447,24 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       </Grid>
                     </Grid>
                   ) : (
-                    <Skeleton variant="rectangular" width={250} height="3rem" />
+                    <Skeleton variant="rectangular" width={250} height="100%" />
                   )}
                 </Card>
               </Grid>
-              <Grid item xs={6} md="auto">
-                <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-                  {matches && exhibitName && roomName ? (
-                    <>
-                      <div style={{ fontWeight: 600 }}>{exhibitName}</div>
-                      <div>( {roomName} )</div>
-                    </>
-                  ) : (
-                    <Skeleton variant="rectangular" width={200} height="3rem" />
-                  )}
-                </Card>
-              </Grid>
+              {matches && (
+                <Grid item>
+                  <Card variant="outlined" sx={{ height: "100%" }}>
+                    {exhibitName && roomName ? (
+                      <Box sx={{ p: 2 }}>
+                        <div style={{ fontWeight: 600 }}>{exhibitName}</div>
+                        <div>- {roomName}</div>
+                      </Box>
+                    ) : (
+                      <Skeleton variant="rectangular" width={200} height="100%" />
+                    )}
+                  </Card>
+                </Grid>
+              )}
             </Grid>
           </Grid>
           <Grid item xs={12} md={5}>
