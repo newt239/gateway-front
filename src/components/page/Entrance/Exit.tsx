@@ -32,10 +32,10 @@ import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
-import generalProps from "#/components/functional/generalProps";
-import { getTimePart, guestIdValitation } from "#/components/functional/commonFunction";
+import generalProps from "#/components/lib/generalProps";
+import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp } from "#/components/types/global";
+import { guestInfoProp } from "#/types/global";
 
 const EntranceExit = () => {
   const theme = useTheme();

@@ -1,8 +1,8 @@
 import React from "react";
 import { Container, Toolbar } from "@mui/material";
 
-import BottomNav from "#/components/ui/BottomNav";
-import TopBar from "#/components/ui/TopBar";
+import BottomNav from "#/components/layout/BottomNav";
+import TopBar from "#/components/layout/TopBar";
 import Body from "#/components/page/Body";
 
 const Mobile = () => {

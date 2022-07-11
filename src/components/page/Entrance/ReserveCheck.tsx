@@ -41,7 +41,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import Scanner from "#/components/block/Scanner";
-import { getTimePart } from "#/components/functional/commonFunction";
+import { getTimePart } from "#/components/lib/commonFunction";
 
 const ReserveCheck = () => {
   const theme = useTheme();

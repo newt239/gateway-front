@@ -1,8 +1,8 @@
 import React from "react";
 import { Container, Box, Toolbar } from "@mui/material";
 
-import Drawer from "#/components/ui/Drawer";
-import TopBar from "#/components/ui/TopBar";
+import Drawer from "#/components/layout/Drawer";
+import TopBar from "#/components/layout/TopBar";
 import Body from "#/components/page/Body";
 
 const Desktop = () => {

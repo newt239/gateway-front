@@ -37,8 +37,8 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
-import generalProps from "#/components/functional/generalProps";
-import { getTimePart, guestIdValitation } from "#/components/functional/commonFunction";
+import generalProps from "#/components/lib/generalProps";
+import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 
 const EntranceEnter = () => {

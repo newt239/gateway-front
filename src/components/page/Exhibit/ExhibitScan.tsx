@@ -40,9 +40,9 @@ import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithCh
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
-import { getTimePart, guestIdValitation } from "#/components/functional/commonFunction";
+import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp } from "#/components/types/global";
+import { guestInfoProp } from "#/types/global";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
