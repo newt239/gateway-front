@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { profileProp } from "#/components/types/global";
+import { profileProp } from "#/types/global";
 export const tokenState = atom<null | string>({
   key: "tokenState",
   default: localStorage.getItem("gatewayApiToken"),
