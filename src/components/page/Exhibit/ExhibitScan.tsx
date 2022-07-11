@@ -40,7 +40,10 @@ import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithCh
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
-import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
+import {
+  getTimePart,
+  guestIdValitation,
+} from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
 
@@ -166,7 +169,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                         } else {
                           setSnackbar({
                             status: true,
-                            message: "前の展示の退場処理に際し何らかのエラーが発生しました。",
+                            message:
+                              "前の展示の退場処理に際し何らかのエラーが発生しました。",
                             severity: "error",
                           });
                           setAlertStatus(true);
@@ -319,7 +323,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   primary={
                     guestInfo.guest_type === "student"
                       ? "生徒"
-                      : guestInfo.guest_type === "family" ? "保護者" : "その他"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -387,7 +393,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${
+                        scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
@@ -429,7 +436,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               <Grid item>
                 <Card variant="outlined" sx={{ height: "100%" }}>
                   {capacity ? (
-                    <Grid container spacing={2} sx={{ p: 2, alignItems: "end" }}>
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ p: 2, alignItems: "end" }}
+                    >
                       <Grid item>
                         <span style={{ fontSize: "2rem", fontWeight: 800 }}>
                           {currentCount}
@@ -460,7 +471,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                         <div>- {roomName}</div>
                       </Box>
                     ) : (
-                      <Skeleton variant="rectangular" width={200} height="100%" />
+                      <Skeleton
+                        variant="rectangular"
+                        width={200}
+                        height="100%"
+                      />
                     )}
                   </Card>
                 </Grid>
