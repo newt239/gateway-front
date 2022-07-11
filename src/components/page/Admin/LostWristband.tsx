@@ -20,6 +20,7 @@ const LostWristband = () => {
   const [reservationId, setReservationId] = useState("");
   const [reservation, setReservation] = useRecoilState(reservationState);
   const [newGuestId, setNewGuestId] = useState("");
+  const [oldGuestId, setOldGuestId] = useState("");
   const [loading, setLoading] = useState(false);
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -59,7 +60,8 @@ const LostWristband = () => {
           headers: { Authorization: "Bearer " + token },
           body: {
             reservation_id: reservationId,
-            guest_id: newGuestId,
+            new_guest_id: newGuestId,
+            old_guest_id: oldGuestId,
             guest_type: reservation.guest_type,
             part: reservation.part,
           },
@@ -119,6 +121,16 @@ const LostWristband = () => {
             label="新しいゲストID"
             value={newGuestId}
             onChange={(e) => setNewGuestId(e.target.value)}
+            margin="normal"
+            fullWidth
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            id="oldGuestId"
+            label="紛失したゲストID(省略可)"
+            value={oldGuestId}
+            onChange={(e) => setOldGuestId(e.target.value)}
             margin="normal"
             fullWidth
           />

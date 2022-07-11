@@ -32,8 +32,7 @@ import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
-import generalProps from "#/components/functional/generalProps";
-import { getTimePart } from "#/components/functional/commonFunction";
+import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
 
@@ -46,7 +45,7 @@ const EntranceExit = () => {
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
-  const [message, setMessage] = useState<string[]>([]);
+  const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [snackbar, setSnackbar] = useState<{
@@ -66,7 +65,7 @@ const EntranceExit = () => {
   const handleScan = (scanText: string | null) => {
     if (token && scanText) {
       setText(scanText);
-      if (scanText.length === 10 && scanText.startsWith("G")) {
+      if (guestIdValitation(scanText)) {
         setDeviceState(false);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
@@ -82,19 +81,19 @@ const EntranceExit = () => {
               setSmDrawerStatus(true);
             } else {
               setScanStatus("error");
-              setMessage(["このゲストは無効です。"]);
+              setMessage("このゲストは無効です。");
               setSmDrawerStatus(true);
             }
           })
           .catch((err: AxiosError) => {
             setLoading(false);
             setScanStatus("error");
-            setMessage([err.message]);
+            setMessage(err.message);
             setSmDrawerStatus(true);
           });
       } else {
         setScanStatus("error");
-        setMessage(["ゲストidの形式が正しくありません。"]);
+        setMessage("このゲストIDは存在しません。");
         setSmDrawerStatus(true);
       }
     }
@@ -102,7 +101,6 @@ const EntranceExit = () => {
 
   const postApi = () => {
     if (token && profile && guestInfo) {
-      // TODO: エンドポイントを別個に用意するか検討
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .activity.exit.$post({
           body: {
@@ -114,7 +112,7 @@ const EntranceExit = () => {
         .then(() => {
           setDeviceState(true);
           setText("");
-          setMessage([]);
+          setMessage("");
           setSnackbar({ status: false, message: "", severity: "success" });
           setScanStatus("waiting");
           setSmDrawerStatus(false);
@@ -164,9 +162,7 @@ const EntranceExit = () => {
               </Button>
             }
           >
-            {message.map((text, index) => (
-              <span key={index}>{text}</span>
-            ))}
+            {message}
           </Alert>
         )}
         {scanStatus === "success" && guestInfo && (
@@ -185,8 +181,9 @@ const EntranceExit = () => {
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    // TODO: string template literalへの対応
-                    generalProps.reservation.guest_type["student"]
+                    guestInfo.guest_type === "student"
+                      ? "生徒"
+                      : guestInfo.guest_type === "family" ? "保護者" : "その他"
                   }
                 />
               </ListItem>
@@ -224,7 +221,7 @@ const EntranceExit = () => {
       <Grid item xs={12}>
         <Card variant="outlined" sx={{ p: 2 }}>
           <Typography variant="h3">退場処理</Typography>
-          <Typography variant="body1">会場からの退場処理を行います</Typography>
+          <Typography variant="body1">会場からの退場処理を行います。</Typography>
         </Card>
       </Grid>
       <Grid item xs={12} md={6}>
@@ -238,7 +235,7 @@ const EntranceExit = () => {
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h4">id:</Typography>
+          <Typography variant="h4">ゲストID:</Typography>
           <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
             <OutlinedInput
               type="text"
@@ -248,7 +245,7 @@ const EntranceExit = () => {
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
-                    aria-label="copy id to clipboard"
+                    aria-label="ゲストIDをコピー"
                     onClick={() => {
                       if (text !== "") {
                         navigator.clipboard

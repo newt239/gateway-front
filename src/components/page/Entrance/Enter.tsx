@@ -37,8 +37,7 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
-import generalProps from "#/components/functional/generalProps";
-import { getTimePart } from "#/components/functional/commonFunction";
+import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 
 const EntranceEnter = () => {
@@ -80,13 +79,15 @@ const EntranceEnter = () => {
   const handleScan = (scanText: string | null) => {
     if (reservation && scanText && profile) {
       setText(scanText);
-      if (scanText.length === 10 && scanText.startsWith("G")) {
+      if (guestIdValitation(scanText)) {
         if (!guestList.some((guest) => guest === scanText)) {
           setSmDrawerStatus(true);
           setGuest([...guestList, scanText]);
           setScanStatus("success");
           setActiveStep(guestList.length);
         }
+      } else {
+        console.log(`${scanText}というゲストは存在しません。`)
       }
     }
   };
@@ -180,8 +181,7 @@ const EntranceEnter = () => {
             />
             <Card variant="outlined" sx={{ p: 2 }}>
               <Typography variant="h4">
-                ゲスト情報 ( {activeStep + 1} /{" "}
-                {reservation.count - reservation.registered} )
+                ゲスト情報 ( {activeStep + 1} 人目 / {reservation.count - reservation.registered} 人中 )
               </Typography>
               <List dense>
                 <ListItem>
@@ -195,8 +195,7 @@ const EntranceEnter = () => {
                     <GroupWorkRoundedIcon />
                   </ListItemIcon>
                   <ListItemText
-                    // TODO: string template literalへの対応
-                    primary={generalProps.reservation.guest_type["student"]}
+                    primary={reservation.guest_type === "family" ? "保護者" : "その他"}
                   />
                 </ListItem>
                 <ListItem>
@@ -265,7 +264,7 @@ const EntranceEnter = () => {
           <Card variant="outlined" sx={{ p: 2 }}>
             <Typography variant="h3">リストバンド登録</Typography>
             <Typography variant="body1">
-              登録するリストバンドのQRコードをスキャンしてください
+              登録するリストバンドのQRコードをスキャンしてください。
             </Typography>
           </Card>
         </Grid>
@@ -280,7 +279,7 @@ const EntranceEnter = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4">id:</Typography>
+            <Typography variant="h4">ゲストID:</Typography>
             <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
               <OutlinedInput
                 type="text"
@@ -290,7 +289,7 @@ const EntranceEnter = () => {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label="copy id to clipboard"
+                      aria-label="ゲストIDをコピー"
                       onClick={() => {
                         if (text !== "") {
                           navigator.clipboard
