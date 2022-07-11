@@ -32,8 +32,8 @@ import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
-import generalProps from "#/components/functional/generalProps";
-import { getTimePart } from "#/components/functional/commonFunction";
+import generalProps from "#/components/lib/generalProps";
+import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
 
@@ -46,7 +46,7 @@ const EntranceExit = () => {
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
-  const [message, setMessage] = useState<string[]>([]);
+  const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [snackbar, setSnackbar] = useState<{
@@ -66,7 +66,7 @@ const EntranceExit = () => {
   const handleScan = (scanText: string | null) => {
     if (token && scanText) {
       setText(scanText);
-      if (scanText.length === 10 && scanText.startsWith("G")) {
+      if (guestIdValitation(scanText)) {
         setDeviceState(false);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
@@ -82,19 +82,19 @@ const EntranceExit = () => {
               setSmDrawerStatus(true);
             } else {
               setScanStatus("error");
-              setMessage(["このゲストは無効です。"]);
+              setMessage("このゲストは無効です。");
               setSmDrawerStatus(true);
             }
           })
           .catch((err: AxiosError) => {
             setLoading(false);
             setScanStatus("error");
-            setMessage([err.message]);
+            setMessage(err.message);
             setSmDrawerStatus(true);
           });
       } else {
         setScanStatus("error");
-        setMessage(["ゲストidの形式が正しくありません。"]);
+        setMessage("このゲストIDは存在しません。");
         setSmDrawerStatus(true);
       }
     }
@@ -114,7 +114,7 @@ const EntranceExit = () => {
         .then(() => {
           setDeviceState(true);
           setText("");
-          setMessage([]);
+          setMessage("");
           setSnackbar({ status: false, message: "", severity: "success" });
           setScanStatus("waiting");
           setSmDrawerStatus(false);
@@ -164,9 +164,7 @@ const EntranceExit = () => {
               </Button>
             }
           >
-            {message.map((text, index) => (
-              <span key={index}>{text}</span>
-            ))}
+            {message}
           </Alert>
         )}
         {scanStatus === "success" && guestInfo && (
@@ -238,7 +236,7 @@ const EntranceExit = () => {
             justifyContent: "space-between",
           }}
         >
-          <Typography variant="h4">id:</Typography>
+          <Typography variant="h4">ゲストID:</Typography>
           <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
             <OutlinedInput
               type="text"

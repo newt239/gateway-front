@@ -2,8 +2,8 @@ import React from "react";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
 
-import Desktop from "#/components/ui/Desktop";
-import Mobile from "#/components/ui/Mobile";
+import Desktop from "#/components/layout/Desktop";
+import Mobile from "#/components/layout/Mobile";
 
 const ScreenWidth = () => {
   const MediaQuery = () => {
