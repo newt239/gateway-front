@@ -35,7 +35,7 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import generalProps from "#/components/functional/generalProps";
 import { getTimePart, guestIdValitation } from "#/components/functional/commonFunction";
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp } from "#/types/global";
+import { guestInfoProp } from "#/components/types/global";
 
 const EntranceExit = () => {
   const theme = useTheme();

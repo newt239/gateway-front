@@ -42,7 +42,7 @@ import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
 import { getTimePart, guestIdValitation } from "#/components/functional/commonFunction";
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp } from "#/types/global";
+import { guestInfoProp } from "#/components/types/global";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -319,7 +319,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   primary={
                     guestInfo.guest_type === "student"
                       ? "生徒"
-                      : guestInfo.guest_type
+                      : guestInfo.guest_type === "family" ? "保護者" : "その他"
                   }
                 />
               </ListItem>
