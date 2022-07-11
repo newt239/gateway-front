@@ -23,6 +23,7 @@ const theme = createTheme({
     h3: {
       fontSize: "1.3rem",
       fontWeight: 900,
+      whiteSpace: "nowrap",
     },
     h4: {
       fontSize: "1.3rem",

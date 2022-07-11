@@ -129,7 +129,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setGuestInfo(res);
             if (!res.available) {
               setScanStatus("error");
-              setMessage("このゲストIDは無効です。");
+              setMessage("このゲストは無効です。");
+              setAlertStatus(true);
             } else {
               if (profile) {
                 if (scanType === "enter") {
@@ -203,7 +204,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
         setLoading(false);
       } else {
         setScanStatus("error");
-        setMessage("このゲストIDは存在しません。");
+        setMessage("このゲストは存在しません。");
         setAlertStatus(true);
         setSmDrawerStatus(true);
       }
@@ -375,7 +376,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
         <Grid container spacing={2} sx={{ p: 2 }}>
           <Grid item xs={12}>
             <Grid container sx={{ alignItems: "center" }}>
-              <Grid item sx={{ pr: 4 }}>
+              <Grid item sx={{ pr: 4 }} xs={12} sm lg={2}>
                 <Typography variant="h3">
                   {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
                 </Typography>
@@ -450,18 +451,20 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   )}
                 </Card>
               </Grid>
-              <Grid item xs={6} md="auto">
-                <Card variant="outlined" sx={{ height: "100%" }}>
-                  {matches && exhibitName && roomName ? (
-                    <Box sx={{ p: 2 }}>
-                      <div style={{ fontWeight: 600 }}>{exhibitName}</div>
-                      <div>( {roomName} )</div>
-                    </Box>
-                  ) : (
-                    <Skeleton variant="rectangular" width={200} height="100%" />
-                  )}
-                </Card>
-              </Grid>
+              {matches && (
+                <Grid item>
+                  <Card variant="outlined" sx={{ height: "100%" }}>
+                    {exhibitName && roomName ? (
+                      <Box sx={{ p: 2 }}>
+                        <div style={{ fontWeight: 600 }}>{exhibitName}</div>
+                        <div>- {roomName}</div>
+                      </Box>
+                    ) : (
+                      <Skeleton variant="rectangular" width={200} height="100%" />
+                    )}
+                  </Card>
+                </Grid>
+              )}
             </Grid>
           </Grid>
           <Grid item xs={12} md={5}>
