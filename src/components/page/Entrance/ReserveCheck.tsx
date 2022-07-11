@@ -41,7 +41,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import Scanner from "#/components/block/Scanner";
-import { getTimePart } from "#/components/lib/commonFunction";
+import { getTimePart, reservationIdValitation } from "#/components/lib/commonFunction";
 
 const ReserveCheck = () => {
   const theme = useTheme();
@@ -59,7 +59,7 @@ const ReserveCheck = () => {
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
-  const [message, setMessage] = useState<string[]>([]);
+  const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
@@ -71,50 +71,48 @@ const ReserveCheck = () => {
   }, []);
 
   const handleScan = (scanText: string | null) => {
-    if (scanText) {
-      setText(scanText);
-      if (token) {
-        if (scanText.length === 7 && scanText.startsWith("R")) {
-          setDeviceState(false);
-          setLoading(true);
-          apiClient(process.env.REACT_APP_API_BASE_URL)
-            .reservation.info._reservation_id(scanText)
-            .$get({
-              headers: { Authorization: "Bearer " + token },
-            })
-            .then((res) => {
-              setLoading(false);
-              setReservation(res);
-              if (res.available) {
-                if (res.count === res.registered) {
-                  setScanStatus("error");
-                  setMessage(["この予約idは既に利用済みです。"]);
-                  setSmDrawerStatus(true);
-                } else {
-                  setScanStatus("success");
-                  setSmDrawerStatus(true);
-                }
-              } else {
+    if (scanText && token) {
+      if (reservationIdValitation(scanText)) {
+        setDeviceState(false);
+        setText(scanText);
+        setLoading(true);
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .reservation.info._reservation_id(scanText)
+          .$get({
+            headers: { Authorization: "Bearer " + token },
+          })
+          .then((res) => {
+            setLoading(false);
+            setReservation(res);
+            if (res.available) {
+              if (res.count === res.registered) {
                 setScanStatus("error");
-                setMessage(["この予約idは無効です。"]);
+                setMessage("この予約IDは既に利用済みです。");
+                setSmDrawerStatus(true);
+              } else {
+                setScanStatus("success");
                 setSmDrawerStatus(true);
               }
-            })
-            .catch((err: AxiosError) => {
-              setLoading(false);
+            } else {
               setScanStatus("error");
-              setMessage([err.message]);
+              setMessage("この予約IDは無効です。");
               setSmDrawerStatus(true);
-            });
-        } else if (scanText.startsWith("G")) {
-          setScanStatus("error");
-          setMessage(["このidはゲストidです。予約idをスキャンしてください。"]);
-          setSmDrawerStatus(true);
-        } else {
-          setScanStatus("error");
-          setMessage(["予約idの形式が正しくありません。"]);
-          setSmDrawerStatus(true);
-        }
+            }
+          })
+          .catch((err: AxiosError) => {
+            setLoading(false);
+            setScanStatus("error");
+            setMessage(err.message);
+            setSmDrawerStatus(true);
+          });
+      } else if (scanText.startsWith("G")) {
+        setScanStatus("error");
+        setMessage("これはゲストIDです。予約IDをスキャンしてください。");
+        setSmDrawerStatus(true);
+      } else {
+        setScanStatus("error");
+        setMessage("これは予約IDではありません。");
+        setSmDrawerStatus(true);
       }
     }
   };
@@ -138,10 +136,7 @@ const ReserveCheck = () => {
                 スキャンし直す
               </Button>
             }
-          >
-            {message.map((text, index) => (
-              <span key={index}>{text}</span>
-            ))}
+          >{message}
           </Alert>
         )}
         {reservation && scanStatus === "success" && (
@@ -159,11 +154,7 @@ const ReserveCheck = () => {
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={
-                    reservation.guest_type === "family"
-                      ? "保護者"
-                      : reservation.guest_type
-                  }
+                  primary={reservation.guest_type === "family" ? "保護者" : "その他"}
                 />
               </ListItem>
               <ListItem>

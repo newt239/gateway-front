@@ -29,3 +29,15 @@ export function guestIdValitation(guest_id: string) {
   }
   return false;
 }
+
+export function reservationIdValitation(reservation_id: string) {
+  if (reservation_id.length === 7) {
+    if (reservation_id.startsWith("R")) {
+      const guestIdNumberList = Array.from(reservation_id.slice(1, 6)).map(nstr => Number(nstr));
+      if (guestIdNumberList[0] === 0 || guestIdNumberList[1] === 1) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
