@@ -37,7 +37,6 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
-import generalProps from "#/components/lib/generalProps";
 import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 
@@ -182,7 +181,7 @@ const EntranceEnter = () => {
             />
             <Card variant="outlined" sx={{ p: 2 }}>
               <Typography variant="h4">
-                ゲスト情報 ( {activeStep + 1} 人目 / {reservation.count - reservation.registered} 人中)
+                ゲスト情報 ( {activeStep + 1} 人目 / {reservation.count - reservation.registered} 人中 )
               </Typography>
               <List dense>
                 <ListItem>
@@ -196,7 +195,7 @@ const EntranceEnter = () => {
                     <GroupWorkRoundedIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary={generalProps.reservation.guest_type["student"]}
+                    primary={reservation.guest_type === "family" ? "保護者" : "その他"}
                   />
                 </ListItem>
                 <ListItem>
