@@ -41,7 +41,10 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import Scanner from "#/components/block/Scanner";
-import { getTimePart, reservationIdValitation } from "#/components/lib/commonFunction";
+import {
+  getTimePart,
+  reservationIdValitation,
+} from "#/components/lib/commonFunction";
 
 const ReserveCheck = () => {
   const theme = useTheme();
@@ -136,7 +139,8 @@ const ReserveCheck = () => {
                 スキャンし直す
               </Button>
             }
-          >{message}
+          >
+            {message}
           </Alert>
         )}
         {reservation && scanStatus === "success" && (
@@ -154,7 +158,9 @@ const ReserveCheck = () => {
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
                 <ListItemText
-                  primary={reservation.guest_type === "family" ? "保護者" : "その他"}
+                  primary={
+                    reservation.guest_type === "family" ? "保護者" : "その他"
+                  }
                 />
               </ListItem>
               <ListItem>

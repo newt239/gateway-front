@@ -37,7 +37,10 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
-import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
+import {
+  getTimePart,
+  guestIdValitation,
+} from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 
 const EntranceEnter = () => {
@@ -87,7 +90,7 @@ const EntranceEnter = () => {
           setActiveStep(guestList.length);
         }
       } else {
-        console.log(`${scanText}というゲストは存在しません。`)
+        console.log(`${scanText}というゲストは存在しません。`);
       }
     }
   };
@@ -181,7 +184,8 @@ const EntranceEnter = () => {
             />
             <Card variant="outlined" sx={{ p: 2 }}>
               <Typography variant="h4">
-                ゲスト情報 ( {activeStep + 1} 人目 / {reservation.count - reservation.registered} 人中 )
+                ゲスト情報 ( {activeStep + 1} 人目 /{" "}
+                {reservation.count - reservation.registered} 人中 )
               </Typography>
               <List dense>
                 <ListItem>
@@ -195,7 +199,9 @@ const EntranceEnter = () => {
                     <GroupWorkRoundedIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary={reservation.guest_type === "family" ? "保護者" : "その他"}
+                    primary={
+                      reservation.guest_type === "family" ? "保護者" : "その他"
+                    }
                   />
                 </ListItem>
                 <ListItem>
