@@ -182,8 +182,7 @@ const EntranceEnter = () => {
             />
             <Card variant="outlined" sx={{ p: 2 }}>
               <Typography variant="h4">
-                ゲスト情報 ( {activeStep + 1} /{" "}
-                {reservation.count - reservation.registered} )
+                ゲスト情報 ( {activeStep + 1} 人目 / {reservation.count - reservation.registered} 人中)
               </Typography>
               <List dense>
                 <ListItem>
@@ -197,7 +196,6 @@ const EntranceEnter = () => {
                     <GroupWorkRoundedIcon />
                   </ListItemIcon>
                   <ListItemText
-                    // TODO: string template literalへの対応
                     primary={generalProps.reservation.guest_type["student"]}
                   />
                 </ListItem>
@@ -282,7 +280,7 @@ const EntranceEnter = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4">id:</Typography>
+            <Typography variant="h4">ゲストID:</Typography>
             <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
               <OutlinedInput
                 type="text"
