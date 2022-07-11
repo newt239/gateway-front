@@ -9,7 +9,7 @@ import Version from "#/components/block/Version";
 
 import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 
-import GatewayThumbnail from "#/images/gateway-home-thumbnail.png";
+import GatewayThumbnail from "#/asset/gateway-home-thumbnail.png";
 
 const Home = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
