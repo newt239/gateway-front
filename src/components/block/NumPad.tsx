@@ -3,7 +3,7 @@ import { Box, Button, Dialog, DialogContent, DialogTitle, Fab, Grid } from "@mui
 import ModeEditRoundedIcon from '@mui/icons-material/ModeEditRounded';
 import BackspaceRoundedIcon from '@mui/icons-material/BackspaceRounded';
 
-const NumPad = ({ scanType, onClose }: { scanType: "reservation" | "guest", onClose: () => void }) => {
+const NumPad = ({ scanType, onClose }: { scanType: "reservation" | "guest", onClose: (num: number[]) => void }) => {
 
   const [open, setOpen] = useState(false);
   const [id, setId] = useState<number[]>([]);
@@ -18,14 +18,16 @@ const NumPad = ({ scanType, onClose }: { scanType: "reservation" | "guest", onCl
       handleClose()
     }
   };
+
   const onDeleteNum = () => {
     if (id.length > 0) {
       setId(id.slice(0, id.length - 1));
     }
-  }
+  };
+
   const handleClose = () => {
     setOpen(false);
-    onClose();
+    onClose(id);
   };
 
   return (
@@ -41,12 +43,12 @@ const NumPad = ({ scanType, onClose }: { scanType: "reservation" | "guest", onCl
       >
         <DialogTitle sx={{ textAlign: "center" }}>
           {scanType === "reservation" ? "R" : "G"}
-          - {id.map(n => <span>{n}</span>)}</DialogTitle>
+          - {id.map(n => <span key={n}>{n}</span>)}</DialogTitle>
         <DialogContent sx={{ padding: "20px 5rem" }}>
           <Grid container sx={{ gap: "1rem", justifyContent: "space-between" }}>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map(n => {
               return (
-                <Grid item key={n}>
+                <Grid item key={String(n)}>
                   <Button variant="outlined" onClick={() => onNumClick(n)}>{n}</Button>
                 </Grid>
               )

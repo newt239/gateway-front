@@ -46,6 +46,7 @@ import {
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
+import NumPad from "#/components/block/NumPad";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -110,15 +111,16 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       }
     }
   };
+
   useEffect(() => {
     updateExhibitInfo();
   }, []);
 
   const handleScan = (scanText: string | null) => {
     if (scanText && token && exhibit_id) {
+      setText(scanText);
       if (guestIdValitation(scanText)) {
         setDeviceState(false);
-        setText(scanText);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .guest.info._guest_id(scanText)
@@ -223,6 +225,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setScanStatus("waiting");
     setAlertStatus(false);
     setSmDrawerStatus(false);
+  };
+
+  const onNumPadClose = (num: number[]) => {
+    handleScan(num.map(n => String(n)).join(""));
   };
 
   const GuestInfoCard = () => {
@@ -566,6 +572,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Snackbar>
         </Grid>
       )}
+      <NumPad scanType="guest" onClose={onNumPadClose} />
     </>
   );
 };
