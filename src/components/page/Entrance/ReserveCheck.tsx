@@ -10,6 +10,7 @@ import { tokenState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -94,9 +95,19 @@ const ReserveCheck = () => {
                 setScanStatus("error");
                 setMessage("この予約IDは既に利用済みです。");
                 setSmDrawerStatus(true);
+                ReactGA.event({
+                  category: "scan",
+                  action: "entrance_reservation_used",
+                  label: res.reservation_id,
+                });
               } else {
                 setScanStatus("success");
                 setSmDrawerStatus(true);
+                ReactGA.event({
+                  category: "scan",
+                  action: "entrance_reservation_pass",
+                  label: res.reservation_id,
+                });
               }
             } else {
               setScanStatus("error");
@@ -114,6 +125,11 @@ const ReserveCheck = () => {
         setScanStatus("error");
         setMessage("これはゲストIDです。予約IDをスキャンしてください。");
         setSmDrawerStatus(true);
+        ReactGA.event({
+          category: "scan",
+          action: "entrance_is_guest_id",
+          label: scanText,
+        });
       } else {
         setScanStatus("error");
         setMessage("これは予約IDではありません。");
