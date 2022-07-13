@@ -32,7 +32,7 @@ const NumPad = ({ scanType, onClose }: { scanType: "reservation" | "guest", onCl
 
   return (
     <>
-      <Fab variant="extended" onClick={openNumPad}>
+      <Fab variant="extended" onClick={openNumPad} color="primary" sx={{ position: "fixed", bottom: "10vh", right: "10vw" }}>
         <ModeEditRoundedIcon sx={{ mr: 1 }} />
         直接入力する
       </Fab>
