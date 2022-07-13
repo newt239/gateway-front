@@ -19,7 +19,7 @@ const NumPad = ({ scanType, onClose }: { scanType: "reservation" | "guest", onCl
 
   const onNumClick = (n: number) => {
     setId([...id, n]);
-    if ((scanType === "reservation" && id.length >= 7) || (scanType === "guest" && id.length >= 10)) {
+    if ((scanType === "reservation" && id.length >= 6) || (scanType === "guest" && id.length >= 9)) {
       handleClose()
     }
   };
@@ -56,7 +56,7 @@ const NumPad = ({ scanType, onClose }: { scanType: "reservation" | "guest", onCl
               {scanType === "reservation" ? "R" : "G"}
               <span style={{ padding: "0 .5rem" }}>-</span>
               <ButtonGroup variant="outlined">
-                {(scanType === "reservation" ? [0, 1, 2, 3, 4, 5, 6] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).map(i => {
+                {(scanType === "reservation" ? [0, 1, 2, 3, 4, 5] : [0, 1, 2, 3, 4, 5, 6, 7, 8]).map(i => {
                   return <Button disabled sx={{ fontWeight: 800, "&.Mui-disabled": { color: "black" } }} key={i}>{i < id.length ? id[i] : "_"}</Button>;
                 })}
               </ButtonGroup>
@@ -78,7 +78,6 @@ const NumPad = ({ scanType, onClose }: { scanType: "reservation" | "guest", onCl
             <DialogActions>
               <Button
                 onClick={handleClose}
-                sx={{ mt: 2 }}
               >
                 閉じる
               </Button>
