@@ -13,7 +13,7 @@ const ExhibitIndex = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
 
   useEffect(() => {
-    setPageInfo({ title: "展示一覧" });
+    setPageInfo({ title: "展示選択" });
   }, []);
 
   type moveButtonProp = {
@@ -35,11 +35,14 @@ const ExhibitIndex = () => {
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Suspense fallback={<div>読み込み中...</div>}>
-              <SelectExhibit />
-            </Suspense>
-          </Card>
+          <Grid container sx={{ p: 2, alignItems: "center" }}>
+            <Grid item>スキャンする展示：</Grid>
+            <Grid item>
+              <Suspense fallback={<div>読み込み中...</div>}>
+                <SelectExhibit />
+              </Suspense>
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
           <Card variant="outlined" sx={{ p: 2 }}>

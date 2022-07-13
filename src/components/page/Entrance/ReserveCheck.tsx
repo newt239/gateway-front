@@ -10,6 +10,7 @@ import { tokenState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -45,6 +46,7 @@ import {
   getTimePart,
   reservationIdValitation,
 } from "#/components/lib/commonFunction";
+import NumPad from "#/components/block/NumPad";
 
 const ReserveCheck = () => {
   const theme = useTheme();
@@ -85,16 +87,27 @@ const ReserveCheck = () => {
             headers: { Authorization: "Bearer " + token },
           })
           .then((res) => {
+            console.log(res);
             setLoading(false);
             setReservation(res);
             if (res.available) {
-              if (res.count === res.registered) {
+              if (res.count === res.registered.length) {
                 setScanStatus("error");
                 setMessage("この予約IDは既に利用済みです。");
                 setSmDrawerStatus(true);
+                ReactGA.event({
+                  category: "scan",
+                  action: "entrance_reservation_used",
+                  label: res.reservation_id,
+                });
               } else {
                 setScanStatus("success");
                 setSmDrawerStatus(true);
+                ReactGA.event({
+                  category: "scan",
+                  action: "entrance_reservation_pass",
+                  label: res.reservation_id,
+                });
               }
             } else {
               setScanStatus("error");
@@ -112,6 +125,11 @@ const ReserveCheck = () => {
         setScanStatus("error");
         setMessage("これはゲストIDです。予約IDをスキャンしてください。");
         setSmDrawerStatus(true);
+        ReactGA.event({
+          category: "scan",
+          action: "entrance_is_guest_id",
+          label: scanText,
+        });
       } else {
         setScanStatus("error");
         setMessage("これは予約IDではありません。");
@@ -125,6 +143,10 @@ const ReserveCheck = () => {
     setText("");
     resetReservation();
     setDeviceState(true);
+  };
+
+  const onNumPadClose = (num: number[]) => {
+    handleScan(num.map((n) => String(n)).join(""));
   };
 
   const ReservationInfoCard = () => {
@@ -204,89 +226,94 @@ const ReserveCheck = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12}>
-        <Card variant="outlined" sx={{ p: 2 }}>
-          <Typography variant="h3">予約確認</Typography>
-          <Typography variant="body1">
-            予約用QRコードをスキャンしてください。
-          </Typography>
-        </Card>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Scanner handleScan={handleScan} />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography variant="h4">予約ID:</Typography>
-          <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
-            <OutlinedInput
-              type="text"
-              size="small"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="予約IDをコピー"
-                    onClick={() => {
-                      if (text !== "") {
-                        navigator.clipboard
-                          .writeText(text)
-                          .catch((e) => console.log(e));
-                        setSnackbar({
-                          status: true,
-                          message: "コピーしました",
-                          severity: "success",
-                        });
-                      }
-                    }}
-                    edge="end"
-                  >
-                    <ContentCopyRoundedIcon />
-                  </IconButton>
-                </InputAdornment>
-              }
-              disabled
-              fullWidth
-            />
-          </FormControl>
-        </Box>
-        {loading && (
-          <Box sx={{ width: "100%" }}>
-            <LinearProgress />
+    <>
+      <Grid container spacing={2} sx={{ p: 2 }}>
+        <Grid item xs={12}>
+          <Card variant="outlined" sx={{ p: 2 }}>
+            <Typography variant="h3">予約確認</Typography>
+            <Typography variant="body1">
+              予約用QRコードをスキャンしてください。
+            </Typography>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Scanner handleScan={handleScan} />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
+              予約ID:
+            </Typography>
+            <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
+              <OutlinedInput
+                type="text"
+                size="small"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="予約IDをコピー"
+                      onClick={() => {
+                        if (text !== "") {
+                          navigator.clipboard
+                            .writeText(text)
+                            .catch((e) => console.log(e));
+                          setSnackbar({
+                            status: true,
+                            message: "コピーしました",
+                            severity: "success",
+                          });
+                        }
+                      }}
+                      edge="end"
+                    >
+                      <ContentCopyRoundedIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+                disabled
+                fullWidth
+              />
+            </FormControl>
           </Box>
-        )}
-        {scanStatus !== "waiting" &&
-          (matches ? (
-            <ReservationInfoCard />
-          ) : (
-            <SwipeableDrawer
-              anchor="bottom"
-              open={smDrawerOpen}
-              onClose={() => retry()}
-              onOpen={() => setSmDrawerStatus(true)}
-            >
+          {loading && (
+            <Box sx={{ width: "100%" }}>
+              <LinearProgress />
+            </Box>
+          )}
+          {scanStatus !== "waiting" &&
+            (matches ? (
               <ReservationInfoCard />
-            </SwipeableDrawer>
-          ))}
+            ) : (
+              <SwipeableDrawer
+                anchor="bottom"
+                open={smDrawerOpen}
+                onClose={() => retry()}
+                onOpen={() => setSmDrawerStatus(true)}
+              >
+                <ReservationInfoCard />
+              </SwipeableDrawer>
+            ))}
+        </Grid>
+        <Snackbar
+          open={snackbar.status}
+          autoHideDuration={6000}
+          onClose={() =>
+            setSnackbar({ status: false, message: "", severity: "success" })
+          }
+        >
+          <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+        </Snackbar>
       </Grid>
-      <Snackbar
-        open={snackbar.status}
-        autoHideDuration={6000}
-        onClose={() =>
-          setSnackbar({ status: false, message: "", severity: "success" })
-        }
-      >
-        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
-      </Snackbar>
-    </Grid>
+      <NumPad scanType="reservation" onClose={onNumPadClose} />
+    </>
   );
 };
 

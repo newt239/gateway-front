@@ -42,6 +42,7 @@ import {
   guestIdValitation,
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
+import NumPad from "#/components/block/NumPad";
 
 const EntranceEnter = () => {
   const navigate = useNavigate();
@@ -94,6 +95,7 @@ const EntranceEnter = () => {
       }
     }
   };
+
   const postApi = () => {
     setLoading(true);
     if (token && reservation && guestList.length === reservation.count) {
@@ -145,7 +147,7 @@ const EntranceEnter = () => {
           <>
             <MobileStepper
               variant="dots"
-              steps={reservation.count - reservation.registered}
+              steps={reservation.count - reservation.registered.length}
               position="static"
               activeStep={activeStep}
               sx={{ flexGrow: 1 }}
@@ -185,7 +187,7 @@ const EntranceEnter = () => {
             <Card variant="outlined" sx={{ p: 2 }}>
               <Typography variant="h4">
                 ゲスト情報 ( {activeStep + 1} 人目 /{" "}
-                {reservation.count - reservation.registered} 人中 )
+                {reservation.count - reservation.registered.length} 人中 )
               </Typography>
               <List dense>
                 <ListItem>
@@ -261,6 +263,10 @@ const EntranceEnter = () => {
       const newGuestList = guestList;
       setGuest(newGuestList.splice(activeStep - 1, 1));
     }
+  };
+
+  const onNumPadClose = (num: number[]) => {
+    handleScan(num.map((n) => String(n)).join(""));
   };
 
   return (
@@ -348,6 +354,7 @@ const EntranceEnter = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
+      <NumPad scanType="guest" onClose={onNumPadClose} />
     </>
   );
 };
