@@ -42,6 +42,7 @@ import {
   guestIdValitation,
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
+import NumPad from "#/components/block/NumPad";
 
 const EntranceEnter = () => {
   const navigate = useNavigate();
@@ -94,6 +95,7 @@ const EntranceEnter = () => {
       }
     }
   };
+
   const postApi = () => {
     setLoading(true);
     if (token && reservation && guestList.length === reservation.count) {
@@ -263,6 +265,10 @@ const EntranceEnter = () => {
     }
   };
 
+  const onNumPadClose = (num: number[]) => {
+    handleScan(num.map(n => String(n)).join(""));
+  };
+
   return (
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
@@ -348,6 +354,7 @@ const EntranceEnter = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
+      <NumPad scanType="guest" onClose={onNumPadClose} />
     </>
   );
 };

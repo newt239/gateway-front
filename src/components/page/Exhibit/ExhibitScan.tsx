@@ -46,6 +46,7 @@ import {
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
+import NumPad from "#/components/block/NumPad";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -110,15 +111,16 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       }
     }
   };
+
   useEffect(() => {
     updateExhibitInfo();
   }, []);
 
   const handleScan = (scanText: string | null) => {
     if (scanText && token && exhibit_id) {
+      setText(scanText);
       if (guestIdValitation(scanText)) {
         setDeviceState(false);
-        setText(scanText);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .guest.info._guest_id(scanText)
@@ -225,6 +227,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setSmDrawerStatus(false);
   };
 
+  const onNumPadClose = (num: number[]) => {
+    handleScan(num.map(n => String(n)).join(""));
+  };
+
   const GuestInfoCard = () => {
     const postApi = () => {
       if (profile && guestInfo && token && exhibit_id) {
@@ -324,8 +330,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "保護者"
+                        : "その他"
                   }
                 />
               </ListItem>
@@ -393,8 +399,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${
-                        scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
@@ -567,6 +572,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Snackbar>
         </Grid>
       )}
+      <NumPad scanType="guest" onClose={onNumPadClose} />
     </>
   );
 };
