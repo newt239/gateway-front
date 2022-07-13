@@ -9,12 +9,14 @@ import {
   List,
   ListSubheader,
   Divider,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
   Typography,
-} from "@mui/material";
 
+} from "@mui/material";
+import ListItemButton, { ListItemButtonProps } from '@mui/material/ListItemButton';
+
+import { styled } from '@mui/material/styles';
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
@@ -28,12 +30,17 @@ import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 
 const DrawerLeft = () => {
   const path = useLocation().pathname;
   const navigate = useNavigate();
   const profile = useRecoilValue(profileState);
+
+  const StyledListItemButton = styled(ListItemButton)<ListItemButtonProps>(() => ({
+    margin: ".1rem .5rem",
+    borderRadius: "1rem"
+  }));
 
   return (
     <Drawer
@@ -67,7 +74,7 @@ const DrawerLeft = () => {
         <>
           <Divider />
           <List>
-            <ListItemButton
+            <StyledListItemButton
               selected={path === "/"}
               onClick={() => navigate("/")}
             >
@@ -75,13 +82,12 @@ const DrawerLeft = () => {
                 <HomeRoundedIcon />
               </ListItemIcon>
               <ListItemText primary="ホーム" />
-            </ListItemButton>
+            </StyledListItemButton>
           </List>
           {["exhibit"].includes(profile.user_type) && (
             <>
-              <Divider />
               <List subheader={<ListSubheader>展示企画</ListSubheader>}>
-                <ListItemButton
+                <StyledListItemButton
                   selected={
                     path === `/exhibit/${profile.user_id || "unknown"}/enter`
                   }
@@ -93,8 +99,8 @@ const DrawerLeft = () => {
                     <LoginRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="入室スキャン" />
-                </ListItemButton>
-                <ListItemButton
+                </StyledListItemButton>
+                <StyledListItemButton
                   selected={
                     path === `/exhibit/${profile.user_id || "unknown"}/exit`
                   }
@@ -106,8 +112,8 @@ const DrawerLeft = () => {
                     <LogoutRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="退室スキャン" />
-                </ListItemButton>
-                <ListItemButton
+                </StyledListItemButton>
+                <StyledListItemButton
                   selected={
                     path === `/chart/exhibit/${profile.user_id || "unknown"}`
                   }
@@ -119,31 +125,29 @@ const DrawerLeft = () => {
                     <BarChartRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="滞在状況" />
-                </ListItemButton>
+                </StyledListItemButton>
               </List>
             </>
           )}
           {["admin", "moderator", "executive"].includes(profile.user_type) && (
             <>
-              <Divider />
               <List subheader={<ListSubheader>展示企画</ListSubheader>}>
-                <ListItemButton
+                <StyledListItemButton
                   selected={path === `/exhibit/`}
                   onClick={() => navigate(`/exhibit/`)}
                 >
                   <ListItemIcon>
                     <LocationOnRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="展示一覧" />
-                </ListItemButton>
+                  <ListItemText primary="展示選択" />
+                </StyledListItemButton>
               </List>
             </>
           )}
           {["admin", "moderator", "executive"].includes(profile.user_type) && (
             <>
-              <Divider />
               <List subheader={<ListSubheader>エントランス</ListSubheader>}>
-                <ListItemButton
+                <StyledListItemButton
                   selected={path === `/entrance/reserve-check`}
                   onClick={() => navigate("/entrance/reserve-check")}
                 >
@@ -151,8 +155,8 @@ const DrawerLeft = () => {
                     <LoginRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="入場スキャン" />
-                </ListItemButton>
-                <ListItemButton
+                </StyledListItemButton>
+                <StyledListItemButton
                   selected={path === `/entrance/exit`}
                   onClick={() => navigate("/entrance/exit")}
                 >
@@ -160,15 +164,14 @@ const DrawerLeft = () => {
                     <LogoutRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="退場スキャン" />
-                </ListItemButton>
+                </StyledListItemButton>
               </List>
             </>
           )}
           {["admin", "moderator", "analysis"].includes(profile.user_type) && (
             <>
-              <Divider />
               <List subheader={<ListSubheader>データ</ListSubheader>}>
-                <ListItemButton
+                <StyledListItemButton
                   selected={path === `/chart`}
                   onClick={() => navigate("/chart")}
                 >
@@ -176,8 +179,8 @@ const DrawerLeft = () => {
                     <TableChartRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="滞在状況" />
-                </ListItemButton>
-                <ListItemButton
+                </StyledListItemButton>
+                <StyledListItemButton
                   selected={path === `/chart/heatmap`}
                   onClick={() => navigate("/chart/heatmap")}
                 >
@@ -185,15 +188,14 @@ const DrawerLeft = () => {
                     <MapRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="ヒートマップ" />
-                </ListItemButton>
+                </StyledListItemButton>
               </List>
             </>
           )}
           {["admin", "moderator"].includes(profile.user_type) && (
             <>
-              <Divider />
               <List subheader={<ListSubheader>管理用操作</ListSubheader>}>
-                <ListItemButton
+                <StyledListItemButton
                   selected={path === `/admin/guest`}
                   onClick={() => navigate("/admin/guest")}
                 >
@@ -201,16 +203,16 @@ const DrawerLeft = () => {
                     <BadgeRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="ゲスト照会" />
-                </ListItemButton>
-                <ListItemButton
+                </StyledListItemButton>
+                <StyledListItemButton
                   selected={path === `/admin/lost-wristband`}
                   onClick={() => navigate("/admin/lost-wristband")}
                 >
                   <ListItemIcon>
                     <ExploreOffRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="リストバンド紛失" />
-                </ListItemButton>
+                  <ListItemText primary="紛失対応" />
+                </StyledListItemButton>
               </List>
             </>
           )}
