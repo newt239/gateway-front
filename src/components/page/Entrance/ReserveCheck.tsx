@@ -85,10 +85,11 @@ const ReserveCheck = () => {
             headers: { Authorization: "Bearer " + token },
           })
           .then((res) => {
+            console.log(res);
             setLoading(false);
             setReservation(res);
             if (res.available) {
-              if (res.count === res.registered) {
+              if (res.count === res.registered.length) {
                 setScanStatus("error");
                 setMessage("この予約IDは既に利用済みです。");
                 setSmDrawerStatus(true);
