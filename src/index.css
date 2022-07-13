@@ -11,3 +11,7 @@ code {
 .qrcode section video {
   border-radius: 1rem;
 }
+
+.customizeDisabledButton {
+  color: black;
+}
