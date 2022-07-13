@@ -12,11 +12,12 @@ import {
   ListItemIcon,
   ListItemText,
   Typography,
-
 } from "@mui/material";
-import ListItemButton, { ListItemButtonProps } from '@mui/material/ListItemButton';
+import ListItemButton, {
+  ListItemButtonProps,
+} from "@mui/material/ListItemButton";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
@@ -37,10 +38,12 @@ const DrawerLeft = () => {
   const navigate = useNavigate();
   const profile = useRecoilValue(profileState);
 
-  const StyledListItemButton = styled(ListItemButton)<ListItemButtonProps>(() => ({
-    margin: ".1rem .5rem",
-    borderRadius: "1rem"
-  }));
+  const StyledListItemButton = styled(ListItemButton)<ListItemButtonProps>(
+    () => ({
+      margin: ".1rem .5rem",
+      borderRadius: "1rem",
+    })
+  );
 
   return (
     <Drawer

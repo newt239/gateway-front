@@ -34,7 +34,10 @@ const TopBar = () => {
             <Tooltip title="マニュアルを確認する">
               <IconButton
                 onClick={() => {
-                  window.open(process.env.REACT_APP_MANUAL_URL || "/", "_blank");
+                  window.open(
+                    process.env.REACT_APP_MANUAL_URL || "/",
+                    "_blank"
+                  );
                 }}
                 size="large"
                 color="inherit"

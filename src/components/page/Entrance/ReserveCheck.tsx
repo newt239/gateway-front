@@ -146,7 +146,7 @@ const ReserveCheck = () => {
   };
 
   const onNumPadClose = (num: number[]) => {
-    handleScan(num.map(n => String(n)).join(""));
+    handleScan(num.map((n) => String(n)).join(""));
   };
 
   const ReservationInfoCard = () => {
@@ -247,7 +247,9 @@ const ReserveCheck = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>予約ID:</Typography>
+            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
+              予約ID:
+            </Typography>
             <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
               <OutlinedInput
                 type="text"

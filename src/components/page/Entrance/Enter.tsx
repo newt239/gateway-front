@@ -266,7 +266,7 @@ const EntranceEnter = () => {
   };
 
   const onNumPadClose = (num: number[]) => {
-    handleScan(num.map(n => String(n)).join(""));
+    handleScan(num.map((n) => String(n)).join(""));
   };
 
   return (

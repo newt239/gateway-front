@@ -13,10 +13,7 @@ export const SWUpdateDialog: React.FC<{
   };
 
   return show ? (
-    <Dialog
-      onClose={handleClose}
-      open={show}
-    >
+    <Dialog onClose={handleClose} open={show}>
       <DialogContent>新しいバージョンがリリースされました。</DialogContent>
       <DialogActions>
         <Button autoFocus onClick={handleClose}>

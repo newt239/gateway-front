@@ -28,15 +28,35 @@ const UserInfo = () => {
     if (profile && profile.available) {
       switch (profile.user_type) {
         case "admin":
-          return <Tooltip title="管理者用アカウント"><AdminPanelSettingsIcon /></Tooltip>;
+          return (
+            <Tooltip title="管理者用アカウント">
+              <AdminPanelSettingsIcon />
+            </Tooltip>
+          );
         case "moderator":
-          return <Tooltip title="管理者用アカウント"><ManageAccountsIcon /></Tooltip>;
+          return (
+            <Tooltip title="管理者用アカウント">
+              <ManageAccountsIcon />
+            </Tooltip>
+          );
         case "executive":
-          return <Tooltip title="文実用アカウント"><AccountCircleIcon /></Tooltip>;
+          return (
+            <Tooltip title="文実用アカウント">
+              <AccountCircleIcon />
+            </Tooltip>
+          );
         case "exhibit":
-          return <Tooltip title="展示用アカウント"><GroupIcon /></Tooltip>;
+          return (
+            <Tooltip title="展示用アカウント">
+              <GroupIcon />
+            </Tooltip>
+          );
         default:
-          return <Tooltip title="権限不明"><NoAccountsIcon /></Tooltip>;
+          return (
+            <Tooltip title="権限不明">
+              <NoAccountsIcon />
+            </Tooltip>
+          );
       }
     } else {
       return <NoAccountsIcon />;
