@@ -4,7 +4,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 // @ts-ignore
 import Identicon from "boring-avatars";
-import { Button, Box, Typography } from "@mui/material";
+import { Button, Box, Typography, Tooltip } from "@mui/material";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
@@ -28,15 +28,15 @@ const UserInfo = () => {
     if (profile && profile.available) {
       switch (profile.user_type) {
         case "admin":
-          return <AdminPanelSettingsIcon />;
+          return <Tooltip title="管理者用アカウント"><AdminPanelSettingsIcon /></Tooltip>;
         case "moderator":
-          return <ManageAccountsIcon />;
+          return <Tooltip title="管理者用アカウント"><ManageAccountsIcon /></Tooltip>;
         case "executive":
-          return <AccountCircleIcon />;
+          return <Tooltip title="文実用アカウント"><AccountCircleIcon /></Tooltip>;
         case "exhibit":
-          return <GroupIcon />;
+          return <Tooltip title="展示用アカウント"><GroupIcon /></Tooltip>;
         default:
-          return <NoAccountsIcon />;
+          return <Tooltip title="権限不明"><NoAccountsIcon /></Tooltip>;
       }
     } else {
       return <NoAccountsIcon />;

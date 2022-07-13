@@ -9,6 +9,7 @@ import {
   Toolbar,
   Typography,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 
@@ -30,15 +31,17 @@ const TopBar = () => {
             {pageProps.title}
           </Typography>
           <Box sx={{ display: "flex" }}>
-            <IconButton
-              onClick={() => {
-                window.open(process.env.REACT_APP_MANUAL_URL || "/", "_blank");
-              }}
-              size="large"
-              color="inherit"
-            >
-              <HelpOutlineRoundedIcon />
-            </IconButton>
+            <Tooltip title="マニュアルを確認する">
+              <IconButton
+                onClick={() => {
+                  window.open(process.env.REACT_APP_MANUAL_URL || "/", "_blank");
+                }}
+                size="large"
+                color="inherit"
+              >
+                <HelpOutlineRoundedIcon />
+              </IconButton>
+            </Tooltip>
           </Box>
         </Toolbar>
       </Container>
