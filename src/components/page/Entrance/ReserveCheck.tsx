@@ -231,7 +231,7 @@ const ReserveCheck = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4">予約ID:</Typography>
+            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>予約ID:</Typography>
             <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
               <OutlinedInput
                 type="text"

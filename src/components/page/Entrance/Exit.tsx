@@ -248,7 +248,7 @@ const EntranceExit = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4">ゲストID:</Typography>
+            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>ゲストID:</Typography>
             <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
               <OutlinedInput
                 type="text"

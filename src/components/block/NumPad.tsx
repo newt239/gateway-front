@@ -12,7 +12,6 @@ const NumPad = ({ scanType, onClose }: { scanType: "reservation" | "guest", onCl
 
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
-  console.log(md)
   const openNumPad = () => {
     setOpen(true);
   };
