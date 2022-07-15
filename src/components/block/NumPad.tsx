@@ -8,7 +8,6 @@ import {
   Fab,
   Grid,
   ButtonGroup,
-  DialogContentText,
   DialogActions,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -74,7 +73,7 @@ const NumPad = ({
         >
           <DialogTitle>ID手動入力</DialogTitle>
           <DialogContent>
-            <DialogContentText sx={{ textAlign: "center", fontWeight: 800 }}>
+            <Box sx={{ textAlign: "center", fontWeight: 800 }}>
               {scanType === "reservation" ? "R" : "G"}
               <span style={{ padding: "0 .5rem" }}>-</span>
               <ButtonGroup variant="outlined">
@@ -87,6 +86,7 @@ const NumPad = ({
                       disabled
                       sx={{
                         fontWeight: 800,
+                        p: 1,
                         "&.Mui-disabled": { color: "black" },
                       }}
                       key={i}
@@ -96,7 +96,7 @@ const NumPad = ({
                   );
                 })}
               </ButtonGroup>
-            </DialogContentText>
+            </Box>
             <Grid
               container
               sx={{
@@ -110,7 +110,7 @@ const NumPad = ({
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((n) => {
                 return (
                   <Grid item key={String(n)}>
-                    <Button variant="outlined" onClick={() => onNumClick(n)}>
+                    <Button variant="outlined" onClick={() => onNumClick(n)} sx={{ p: 1 }}>
                       {n}
                     </Button>
                   </Grid>
@@ -121,6 +121,7 @@ const NumPad = ({
                   variant="outlined"
                   onClick={onDeleteNum}
                   disabled={id.length <= 0}
+                  sx={{ p: 1 }}
                 >
                   <BackspaceRoundedIcon />
                 </Button>

@@ -42,6 +42,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const [errorDialogOpen, setMessageDialogOpen] = useState(false);
   const [errorDialogTitle, setMessageDialogTitle] = useState("");
   const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
+
   useEffect(() => {
     navigator.mediaDevices
       .enumerateDevices()
