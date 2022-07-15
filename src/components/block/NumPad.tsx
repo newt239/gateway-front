@@ -8,7 +8,6 @@ import {
   Fab,
   Grid,
   ButtonGroup,
-  DialogContentText,
   DialogActions,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -33,12 +32,13 @@ const NumPad = ({
   };
 
   const onNumClick = (n: number) => {
-    setId([...id, n]);
+    const newId = [...id, n];
+    setId(newId);
     if (
-      (scanType === "reservation" && id.length >= 6) ||
-      (scanType === "guest" && id.length >= 9)
+      (scanType === "reservation" && newId.length === 6) ||
+      (scanType === "guest" && (newId.length === 9))
     ) {
-      handleClose();
+      handleClose(newId);
     }
   };
 
@@ -48,9 +48,9 @@ const NumPad = ({
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (newId: number[]) => {
     setOpen(false);
-    onClose(id);
+    onClose(newId);
   };
 
   return (
@@ -64,7 +64,7 @@ const NumPad = ({
         <ModeEditRoundedIcon sx={{ mr: 1 }} />
         直接入力する
       </Fab>
-      <Dialog open={open} onClose={handleClose} maxWidth="xs" fullScreen={md}>
+      <Dialog open={open} onClose={() => handleClose(id)} maxWidth="xs" fullScreen={md}>
         <Box
           sx={{
             display: "grid",
@@ -74,12 +74,12 @@ const NumPad = ({
         >
           <DialogTitle>ID手動入力</DialogTitle>
           <DialogContent>
-            <DialogContentText sx={{ textAlign: "center", fontWeight: 800 }}>
+            <Box sx={{ textAlign: "center", fontWeight: 800 }}>
               {scanType === "reservation" ? "R" : "G"}
               <span style={{ padding: "0 .5rem" }}>-</span>
               <ButtonGroup variant="outlined">
                 {(scanType === "reservation"
-                  ? [0, 1, 2, 3, 4, 5]
+                  ? [0, 1, 2, 3, 4, 5, 6]
                   : [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 ).map((i) => {
                   return (
@@ -87,6 +87,7 @@ const NumPad = ({
                       disabled
                       sx={{
                         fontWeight: 800,
+                        p: 1,
                         "&.Mui-disabled": { color: "black" },
                       }}
                       key={i}
@@ -96,7 +97,7 @@ const NumPad = ({
                   );
                 })}
               </ButtonGroup>
-            </DialogContentText>
+            </Box>
             <Grid
               container
               sx={{
@@ -110,7 +111,7 @@ const NumPad = ({
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((n) => {
                 return (
                   <Grid item key={String(n)}>
-                    <Button variant="outlined" onClick={() => onNumClick(n)}>
+                    <Button variant="outlined" onClick={() => onNumClick(n)} sx={{ p: 1 }}>
                       {n}
                     </Button>
                   </Grid>
@@ -121,13 +122,14 @@ const NumPad = ({
                   variant="outlined"
                   onClick={onDeleteNum}
                   disabled={id.length <= 0}
+                  sx={{ p: 1 }}
                 >
                   <BackspaceRoundedIcon />
                 </Button>
               </Grid>
             </Grid>
             <DialogActions>
-              <Button onClick={handleClose}>閉じる</Button>
+              <Button onClick={() => handleClose(id)}>閉じる</Button>
             </DialogActions>
           </DialogContent>
         </Box>
