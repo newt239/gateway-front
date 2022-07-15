@@ -32,12 +32,13 @@ const NumPad = ({
   };
 
   const onNumClick = (n: number) => {
-    setId([...id, n]);
+    const newId = [...id, n];
+    setId(newId);
     if (
-      (scanType === "reservation" && id.length >= 6) ||
-      (scanType === "guest" && id.length >= 9)
+      (scanType === "reservation" && newId.length === 6) ||
+      (scanType === "guest" && (newId.length === 9))
     ) {
-      handleClose();
+      handleClose(newId);
     }
   };
 
@@ -47,9 +48,9 @@ const NumPad = ({
     }
   };
 
-  const handleClose = () => {
+  const handleClose = (newId: number[]) => {
     setOpen(false);
-    onClose(id);
+    onClose(newId);
   };
 
   return (
@@ -63,7 +64,7 @@ const NumPad = ({
         <ModeEditRoundedIcon sx={{ mr: 1 }} />
         直接入力する
       </Fab>
-      <Dialog open={open} onClose={handleClose} maxWidth="xs" fullScreen={md}>
+      <Dialog open={open} onClose={() => handleClose(id)} maxWidth="xs" fullScreen={md}>
         <Box
           sx={{
             display: "grid",
@@ -128,7 +129,7 @@ const NumPad = ({
               </Grid>
             </Grid>
             <DialogActions>
-              <Button onClick={handleClose}>閉じる</Button>
+              <Button onClick={() => handleClose(id)}>閉じる</Button>
             </DialogActions>
           </DialogContent>
         </Box>
