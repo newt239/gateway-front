@@ -13,7 +13,7 @@ export function getTimePart(part: number) {
   }
 }
 
-export function guestIdValitation(guest_id: string) {
+export function guestIdValidation(guest_id: string) {
   if (guest_id.length === 10) {
     if (guest_id.startsWith("G")) {
       const guestIdNumberList = Array.from(guest_id.slice(1, 9)).map((nstr) =>
@@ -34,7 +34,7 @@ export function guestIdValitation(guest_id: string) {
   return false;
 }
 
-export function reservationIdValitation(reservation_id: string) {
+export function reservationIdValidation(reservation_id: string) {
   if (reservation_id.length === 7) {
     if (reservation_id.startsWith("R")) {
       const guestIdNumberList = Array.from(reservation_id.slice(1, 6)).map(

@@ -39,7 +39,7 @@ import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
 import {
   getTimePart,
-  guestIdValitation,
+  guestIdValidation,
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
@@ -83,7 +83,7 @@ const EntranceEnter = () => {
   const handleScan = (scanText: string | null) => {
     if (reservation && scanText && profile) {
       setText(scanText);
-      if (guestIdValitation(scanText)) {
+      if (guestIdValidation(scanText)) {
         if (!guestList.some((guest) => guest === scanText)) {
           setSmDrawerStatus(true);
           setGuest([...guestList, scanText]);

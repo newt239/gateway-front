@@ -42,7 +42,7 @@ import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
 import {
   getTimePart,
-  guestIdValitation,
+  guestIdValidation,
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
@@ -119,7 +119,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const handleScan = (scanText: string | null) => {
     if (scanText && token && exhibit_id) {
       setText(scanText);
-      if (guestIdValitation(scanText)) {
+      if (guestIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
@@ -360,8 +360,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "保護者"
+                        : "その他"
                   }
                 />
               </ListItem>
@@ -429,8 +429,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${
-                        scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )

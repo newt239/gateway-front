@@ -44,7 +44,7 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import Scanner from "#/components/block/Scanner";
 import {
   getTimePart,
-  reservationIdValitation,
+  reservationIdValidation,
 } from "#/components/lib/commonFunction";
 import NumPad from "#/components/block/NumPad";
 
@@ -77,7 +77,7 @@ const ReserveCheck = () => {
 
   const handleScan = (scanText: string | null) => {
     if (scanText && token) {
-      if (reservationIdValitation(scanText)) {
+      if (reservationIdValidation(scanText)) {
         setDeviceState(false);
         setText(scanText);
         setLoading(true);

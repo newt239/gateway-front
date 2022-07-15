@@ -34,7 +34,7 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import {
   getTimePart,
-  guestIdValitation,
+  guestIdValidation,
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
@@ -69,7 +69,7 @@ const EntranceExit = () => {
   const handleScan = (scanText: string | null) => {
     if (token && scanText) {
       setText(scanText);
-      if (guestIdValitation(scanText)) {
+      if (guestIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
@@ -192,8 +192,8 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "保護者"
+                        : "その他"
                   }
                 />
               </ListItem>
