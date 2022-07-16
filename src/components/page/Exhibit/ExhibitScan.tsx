@@ -233,11 +233,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setAlertStatus(true);
             ReactGA.event({
               category: "scan",
-              action: "exhibit_unexpected",
+              action: "exhibit_unknown_error",
               label: err.message,
             });
+          }).finally(() => {
+            setLoading(false);
           });
-        setLoading(false);
       } else {
         setScanStatus("error");
         setMessage("このゲストは存在しません。");
