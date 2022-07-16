@@ -32,7 +32,11 @@ const Heatmap = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setFloor1List(res);
+          setFloor1List(res.sort((a, b) => {
+            if (a.count > b.count) return -1;
+            if (a.count < b.count) return 1;
+            return 0;
+          }));
         })
         .catch((err: AxiosError) => {
           console.log(err);
