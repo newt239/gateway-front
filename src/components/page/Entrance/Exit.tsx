@@ -155,7 +155,7 @@ const EntranceExit = () => {
   };
 
   const onNumPadClose = (num: number[]) => {
-    handleScan(num.map((n) => String(n)).join(""));
+    handleScan("G" + num.map((n) => String(n)).join(""));
   };
 
   const GuestInfoCard = () => {
