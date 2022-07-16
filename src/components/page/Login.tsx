@@ -98,7 +98,7 @@ const Login = () => {
             });
             ReactGA.event({
               category: "login",
-              action: "error",
+              action: "unknown_error",
               label: inputValue.user_id,
             });
           }
