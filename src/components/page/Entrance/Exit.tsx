@@ -32,9 +32,12 @@ import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
-import generalProps from "#/components/lib/generalProps";
-import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
+import {
+  getTimePart,
+  guestIdValidation,
+} from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
+import NumPad from "#/components/block/NumPad";
 import { guestInfoProp } from "#/types/global";
 
 const EntranceExit = () => {
@@ -66,7 +69,7 @@ const EntranceExit = () => {
   const handleScan = (scanText: string | null) => {
     if (token && scanText) {
       setText(scanText);
-      if (guestIdValitation(scanText)) {
+      if (guestIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
@@ -102,7 +105,6 @@ const EntranceExit = () => {
 
   const postApi = () => {
     if (token && profile && guestInfo) {
-      // TODO: エンドポイントを別個に用意するか検討
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .activity.exit.$post({
           body: {
@@ -152,6 +154,10 @@ const EntranceExit = () => {
     setDeviceState(true);
   };
 
+  const onNumPadClose = (num: number[]) => {
+    handleScan("G" + num.map((n) => String(n)).join(""));
+  };
+
   const GuestInfoCard = () => {
     return (
       <>
@@ -183,8 +189,11 @@ const EntranceExit = () => {
                 </ListItemIcon>
                 <ListItemText
                   primary={
-                    // TODO: string template literalへの対応
-                    generalProps.reservation.guest_type["student"]
+                    guestInfo.guest_type === "student"
+                      ? "生徒"
+                      : guestInfo.guest_type === "family"
+                        ? "保護者"
+                        : "その他"
                   }
                 />
               </ListItem>
@@ -218,87 +227,94 @@ const EntranceExit = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12}>
-        <Card variant="outlined" sx={{ p: 2 }}>
-          <Typography variant="h3">退場処理</Typography>
-          <Typography variant="body1">会場からの退場処理を行います</Typography>
-        </Card>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Scanner handleScan={handleScan} />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography variant="h4">ゲストID:</Typography>
-          <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
-            <OutlinedInput
-              type="text"
-              size="small"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="copy id to clipboard"
-                    onClick={() => {
-                      if (text !== "") {
-                        navigator.clipboard
-                          .writeText(text)
-                          .catch((e) => console.log(e));
-                        setSnackbar({
-                          status: true,
-                          message: "コピーしました",
-                          severity: "success",
-                        });
-                      }
-                    }}
-                    edge="end"
-                  >
-                    <ContentCopyRoundedIcon />
-                  </IconButton>
-                </InputAdornment>
-              }
-              disabled
-              fullWidth
-            />
-          </FormControl>
-        </Box>
-        {loading && (
-          <Box sx={{ width: "100%" }}>
-            <LinearProgress />
+    <>
+      <Grid container spacing={2} sx={{ p: 2 }}>
+        <Grid item xs={12}>
+          <Card variant="outlined" sx={{ p: 2 }}>
+            <Typography variant="h3">退場処理</Typography>
+            <Typography variant="body1">
+              会場からの退場処理を行います。
+            </Typography>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Scanner handleScan={handleScan} />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
+              ゲストID:
+            </Typography>
+            <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
+              <OutlinedInput
+                type="text"
+                size="small"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="ゲストIDをコピー"
+                      onClick={() => {
+                        if (text !== "") {
+                          navigator.clipboard
+                            .writeText(text)
+                            .catch((e) => console.log(e));
+                          setSnackbar({
+                            status: true,
+                            message: "コピーしました",
+                            severity: "success",
+                          });
+                        }
+                      }}
+                      edge="end"
+                    >
+                      <ContentCopyRoundedIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+                disabled
+                fullWidth
+              />
+            </FormControl>
           </Box>
-        )}
-        {scanStatus !== "waiting" &&
-          (matches ? (
-            <GuestInfoCard />
-          ) : (
-            <SwipeableDrawer
-              anchor="bottom"
-              open={smDrawerOpen}
-              onClose={() => retry()}
-              onOpen={() => setSmDrawerStatus(true)}
-            >
+          {loading && (
+            <Box sx={{ width: "100%" }}>
+              <LinearProgress />
+            </Box>
+          )}
+          {scanStatus !== "waiting" &&
+            (matches ? (
               <GuestInfoCard />
-            </SwipeableDrawer>
-          ))}
+            ) : (
+              <SwipeableDrawer
+                anchor="bottom"
+                open={smDrawerOpen}
+                onClose={() => retry()}
+                onOpen={() => setSmDrawerStatus(true)}
+              >
+                <GuestInfoCard />
+              </SwipeableDrawer>
+            ))}
+        </Grid>
+        <Snackbar
+          open={snackbar.status}
+          autoHideDuration={6000}
+          onClose={() =>
+            setSnackbar({ status: false, message: "", severity: "success" })
+          }
+        >
+          <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+        </Snackbar>
       </Grid>
-      <Snackbar
-        open={snackbar.status}
-        autoHideDuration={6000}
-        onClose={() =>
-          setSnackbar({ status: false, message: "", severity: "success" })
-        }
-      >
-        <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
-      </Snackbar>
-    </Grid>
+      <NumPad scanType="reservation" onClose={onNumPadClose} />
+    </>
   );
 };
 

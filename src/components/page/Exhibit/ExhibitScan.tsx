@@ -40,9 +40,13 @@ import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithCh
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
-import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
+import {
+  getTimePart,
+  guestIdValidation,
+} from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
+import NumPad from "#/components/block/NumPad";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -107,15 +111,16 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       }
     }
   };
+
   useEffect(() => {
     updateExhibitInfo();
   }, []);
 
   const handleScan = (scanText: string | null) => {
     if (scanText && token && exhibit_id) {
-      if (guestIdValitation(scanText)) {
+      setText(scanText);
+      if (guestIdValidation(scanText)) {
         setDeviceState(false);
-        setText(scanText);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .guest.info._guest_id(scanText)
@@ -136,12 +141,22 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 if (scanType === "enter") {
                   if (res.exhibit_id === "") {
                     setScanStatus("success");
+                    ReactGA.event({
+                      category: "scan",
+                      action: "exhibit_success",
+                      label: profile.user_id,
+                    });
                   } else if (res.exhibit_id === exhibit_id) {
                     setScanStatus("error");
                     setMessage(
                       "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
                     );
                     setAlertStatus(true);
+                    ReactGA.event({
+                      category: "scan",
+                      action: "exhibit_enter_already",
+                      label: profile.user_id,
+                    });
                   } else {
                     // 前の展示で退場処理が行われていない場合
                     const payload = {
@@ -166,10 +181,16 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                         } else {
                           setSnackbar({
                             status: true,
-                            message: "前の展示の退場処理に際し何らかのエラーが発生しました。",
+                            message:
+                              "前の展示の退場処理に際し何らかのエラーが発生しました。",
                             severity: "error",
                           });
                           setAlertStatus(true);
+                          ReactGA.event({
+                            category: "scan",
+                            action: "exhibit_enter_reject",
+                            label: profile.user_id,
+                          });
                         }
                         setText("");
                         setDeviceState(true);
@@ -185,10 +206,20 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       "このゲストは現在この展示に入室していません。入室スキャンと間違えていませんか？"
                     );
                     setAlertStatus(true);
+                    ReactGA.event({
+                      category: "scan",
+                      action: "exhibit_exit_reject",
+                      label: profile.user_id,
+                    });
                   } else {
                     setScanStatus("success");
                     setMessage("このゲストは他の展示に入室中です。");
                     setAlertStatus(true);
+                    ReactGA.event({
+                      category: "scan",
+                      action: "exhibit_exit_already_other",
+                      label: profile.user_id,
+                    });
                   }
                 }
               }
@@ -200,8 +231,14 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setScanStatus("error");
             setMessage("予期せぬエラーが発生しました。");
             setAlertStatus(true);
+            ReactGA.event({
+              category: "scan",
+              action: "exhibit_unknown_error",
+              label: err.message,
+            });
+          }).finally(() => {
+            setLoading(false);
           });
-        setLoading(false);
       } else {
         setScanStatus("error");
         setMessage("このゲストは存在しません。");
@@ -219,6 +256,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setScanStatus("waiting");
     setAlertStatus(false);
     setSmDrawerStatus(false);
+  };
+
+  const onNumPadClose = (num: number[]) => {
+    handleScan("G" + num.map((n) => String(n)).join(""));
   };
 
   const GuestInfoCard = () => {
@@ -319,7 +360,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   primary={
                     guestInfo.guest_type === "student"
                       ? "生徒"
-                      : guestInfo.guest_type === "family" ? "保護者" : "その他"
+                      : guestInfo.guest_type === "family"
+                        ? "保護者"
+                        : "その他"
                   }
                 />
               </ListItem>
@@ -429,7 +472,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               <Grid item>
                 <Card variant="outlined" sx={{ height: "100%" }}>
                   {capacity ? (
-                    <Grid container spacing={2} sx={{ p: 2, alignItems: "end" }}>
+                    <Grid
+                      container
+                      spacing={2}
+                      sx={{ p: 2, alignItems: "end" }}
+                    >
                       <Grid item>
                         <span style={{ fontSize: "2rem", fontWeight: 800 }}>
                           {currentCount}
@@ -460,7 +507,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                         <div>- {roomName}</div>
                       </Box>
                     ) : (
-                      <Skeleton variant="rectangular" width={200} height="100%" />
+                      <Skeleton
+                        variant="rectangular"
+                        width={200}
+                        height="100%"
+                      />
                     )}
                   </Card>
                 </Grid>
@@ -490,7 +541,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
-                        aria-label="copy id to clipboard"
+                        aria-label="ゲストIDをコピー"
                         onClick={() => {
                           if (text !== "") {
                             navigator.clipboard
@@ -552,6 +603,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Snackbar>
         </Grid>
       )}
+      <NumPad scanType="guest" onClose={onNumPadClose} />
     </>
   );
 };

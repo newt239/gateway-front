@@ -37,9 +37,12 @@ import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
-import generalProps from "#/components/lib/generalProps";
-import { getTimePart, guestIdValitation } from "#/components/lib/commonFunction";
+import {
+  getTimePart,
+  guestIdValidation,
+} from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
+import NumPad from "#/components/block/NumPad";
 
 const EntranceEnter = () => {
   const navigate = useNavigate();
@@ -80,7 +83,7 @@ const EntranceEnter = () => {
   const handleScan = (scanText: string | null) => {
     if (reservation && scanText && profile) {
       setText(scanText);
-      if (guestIdValitation(scanText)) {
+      if (guestIdValidation(scanText)) {
         if (!guestList.some((guest) => guest === scanText)) {
           setSmDrawerStatus(true);
           setGuest([...guestList, scanText]);
@@ -88,10 +91,11 @@ const EntranceEnter = () => {
           setActiveStep(guestList.length);
         }
       } else {
-        console.log(`${scanText}というゲストは存在しません。`)
+        console.log(`${scanText}というゲストは存在しません。`);
       }
     }
   };
+
   const postApi = () => {
     setLoading(true);
     if (token && reservation && guestList.length === reservation.count) {
@@ -136,6 +140,24 @@ const EntranceEnter = () => {
     }
   };
 
+  const retry = (activeStep: number) => {
+    setDeviceState(true);
+    setText("");
+    setSnackbar({ status: false, message: "", severity: "success" });
+    setScanStatus("waiting");
+    setSmDrawerStatus(false);
+    if (activeStep === 0) {
+      setGuest([]);
+    } else {
+      const newGuestList = guestList;
+      setGuest(newGuestList.splice(activeStep - 1, 1));
+    }
+  };
+
+  const onNumPadClose = (num: number[]) => {
+    handleScan("G" + num.map((n) => String(n)).join(""));
+  };
+
   const GuestInfoCard = () => {
     return (
       <>
@@ -143,7 +165,7 @@ const EntranceEnter = () => {
           <>
             <MobileStepper
               variant="dots"
-              steps={reservation.count - reservation.registered}
+              steps={reservation.count - reservation.registered.length}
               position="static"
               activeStep={activeStep}
               sx={{ flexGrow: 1 }}
@@ -182,8 +204,8 @@ const EntranceEnter = () => {
             />
             <Card variant="outlined" sx={{ p: 2 }}>
               <Typography variant="h4">
-                ゲスト情報 ( {activeStep + 1} /{" "}
-                {reservation.count - reservation.registered} )
+                ゲスト情報 ( {activeStep + 1} 人目 /{" "}
+                {reservation.count - reservation.registered.length} 人中 )
               </Typography>
               <List dense>
                 <ListItem>
@@ -197,8 +219,9 @@ const EntranceEnter = () => {
                     <GroupWorkRoundedIcon />
                   </ListItemIcon>
                   <ListItemText
-                    // TODO: string template literalへの対応
-                    primary={generalProps.reservation.guest_type["student"]}
+                    primary={
+                      reservation.guest_type === "family" ? "保護者" : "その他"
+                    }
                   />
                 </ListItem>
                 <ListItem>
@@ -246,20 +269,6 @@ const EntranceEnter = () => {
     );
   };
 
-  const retry = (activeStep: number) => {
-    setDeviceState(true);
-    setText("");
-    setSnackbar({ status: false, message: "", severity: "success" });
-    setScanStatus("waiting");
-    setSmDrawerStatus(false);
-    if (activeStep === 0) {
-      setGuest([]);
-    } else {
-      const newGuestList = guestList;
-      setGuest(newGuestList.splice(activeStep - 1, 1));
-    }
-  };
-
   return (
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
@@ -282,7 +291,7 @@ const EntranceEnter = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4">id:</Typography>
+            <Typography variant="h4">ゲストID:</Typography>
             <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
               <OutlinedInput
                 type="text"
@@ -292,7 +301,7 @@ const EntranceEnter = () => {
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
-                      aria-label="copy id to clipboard"
+                      aria-label="ゲストIDをコピー"
                       onClick={() => {
                         if (text !== "") {
                           navigator.clipboard
@@ -345,6 +354,7 @@ const EntranceEnter = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
+      <NumPad scanType="guest" onClose={onNumPadClose} />
     </>
   );
 };

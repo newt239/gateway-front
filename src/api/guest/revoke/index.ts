@@ -13,7 +13,8 @@ export type Methods = {
     reqBody: {
       reservation_id: string;
       guest_type: string;
-      guest_id: string;
+      new_guest_id: string;
+      old_guest_id: string;
       part: number;
     };
   };

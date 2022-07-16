@@ -56,19 +56,40 @@ const Body = () => {
               setMessageDialogMessage([
                 "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。",
               ]);
+              ReactGA.event({
+                category: "login",
+                action: "session_timeout",
+                label: err.message,
+              });
+            } else {
+              setMessageDialogMessage([err.response.statusText]);
+              ReactGA.event({
+                category: "login",
+                action: "unknown_error",
+                label: err.response.statusText,
+              });
             }
+          } else {
             if (err.message === "Network Error") {
               setErrorDialogTitle("サーバーが起動していません");
               setMessageDialogMessage([
                 "コストカットのため必要時以外はサーバーを停止させています。",
               ]);
+              ReactGA.event({
+                category: "login",
+                action: "network_error",
+                label: err.message,
+              });
             } else {
-              setMessageDialogMessage([err.response.statusText]);
+              setMessageDialogMessage([err.message]);
+              setShowMessageDialog(true);
+              ReactGA.event({
+                category: "login",
+                action: "unknown_error",
+                label: err.message,
+              });
             }
-          } else {
-            setMessageDialogMessage([err.message]);
           }
-          setShowMessageDialog(true);
         });
     } else {
       // 未ログイン時ログインページへ遷移
