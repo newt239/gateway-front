@@ -181,16 +181,16 @@ const DrawerLeft = () => {
                   <ListItemIcon>
                     <TableChartRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="滞在状況" />
+                  <ListItemText primary="全体概況" />
                 </StyledListItemButton>
                 <StyledListItemButton
-                  selected={path === `/chart/heatmap`}
-                  onClick={() => navigate("/chart/heatmap")}
+                  selected={path === `/chart/summary`}
+                  onClick={() => navigate("/chart/summary")}
                 >
                   <ListItemIcon>
                     <MapRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="ヒートマップ" />
+                  <ListItemText primary="展示一覧" />
                 </StyledListItemButton>
               </List>
             </>

@@ -155,7 +155,7 @@ const EntranceExit = () => {
   };
 
   const onNumPadClose = (num: number[]) => {
-    handleScan(num.map((n) => String(n)).join(""));
+    handleScan("G" + num.map((n) => String(n)).join(""));
   };
 
   const GuestInfoCard = () => {
@@ -192,8 +192,8 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                        ? "保護者"
-                        : "その他"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>

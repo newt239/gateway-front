@@ -28,6 +28,7 @@ import {
   ListItemText,
   Snackbar,
   Skeleton,
+  Tooltip,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -233,11 +234,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setAlertStatus(true);
             ReactGA.event({
               category: "scan",
-              action: "exhibit_unexpected",
+              action: "exhibit_unknown_error",
               label: err.message,
             });
+          })
+          .finally(() => {
+            setLoading(false);
           });
-        setLoading(false);
       } else {
         setScanStatus("error");
         setMessage("このゲストは存在しません。");
@@ -258,7 +261,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   };
 
   const onNumPadClose = (num: number[]) => {
-    handleScan(num.map((n) => String(n)).join(""));
+    handleScan("G" + num.map((n) => String(n)).join(""));
   };
 
   const GuestInfoCard = () => {
@@ -360,8 +363,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                        ? "保護者"
-                        : "その他"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -429,7 +432,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${
+                        scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
@@ -483,13 +487,15 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                         <span> / {capacity} 人</span>
                       </Grid>
                       <Grid item>
-                        <Button
-                          size="small"
-                          startIcon={<ReplayRoundedIcon />}
-                          onClick={updateExhibitInfo}
-                        >
-                          {lastUpdate.format("HH:mm:ss")}現在
-                        </Button>
+                        <Tooltip title={`${lastUpdate.format("HH:mm:ss")}現在`}>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={updateExhibitInfo}
+                          >
+                            <ReplayRoundedIcon />
+                          </IconButton>
+                        </Tooltip>
                       </Grid>
                     </Grid>
                   ) : (

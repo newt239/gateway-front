@@ -140,6 +140,24 @@ const EntranceEnter = () => {
     }
   };
 
+  const retry = (activeStep: number) => {
+    setDeviceState(true);
+    setText("");
+    setSnackbar({ status: false, message: "", severity: "success" });
+    setScanStatus("waiting");
+    setSmDrawerStatus(false);
+    if (activeStep === 0) {
+      setGuest([]);
+    } else {
+      const newGuestList = guestList;
+      setGuest(newGuestList.splice(activeStep - 1, 1));
+    }
+  };
+
+  const onNumPadClose = (num: number[]) => {
+    handleScan("G" + num.map((n) => String(n)).join(""));
+  };
+
   const GuestInfoCard = () => {
     return (
       <>
@@ -249,24 +267,6 @@ const EntranceEnter = () => {
         )}
       </>
     );
-  };
-
-  const retry = (activeStep: number) => {
-    setDeviceState(true);
-    setText("");
-    setSnackbar({ status: false, message: "", severity: "success" });
-    setScanStatus("waiting");
-    setSmDrawerStatus(false);
-    if (activeStep === 0) {
-      setGuest([]);
-    } else {
-      const newGuestList = guestList;
-      setGuest(newGuestList.splice(activeStep - 1, 1));
-    }
-  };
-
-  const onNumPadClose = (num: number[]) => {
-    handleScan(num.map((n) => String(n)).join(""));
   };
 
   return (
