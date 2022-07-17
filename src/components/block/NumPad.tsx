@@ -36,7 +36,7 @@ const NumPad = ({
     setId(newId);
     if (
       (scanType === "reservation" && newId.length === 6) ||
-      (scanType === "guest" && (newId.length === 9))
+      (scanType === "guest" && newId.length === 9)
     ) {
       handleClose(newId);
     }
@@ -59,12 +59,21 @@ const NumPad = ({
         variant="extended"
         onClick={openNumPad}
         color="primary"
-        sx={{ position: "fixed", bottom: "min(10vh, 10vw)", right: "min(10vh,10vw)" }}
+        sx={{
+          position: "fixed",
+          bottom: "min(10vh, 10vw)",
+          right: "min(10vh,10vw)",
+        }}
       >
         <ModeEditRoundedIcon sx={{ mr: 1 }} />
         直接入力する
       </Fab>
-      <Dialog open={open} onClose={() => handleClose(id)} maxWidth="xs" fullScreen={md}>
+      <Dialog
+        open={open}
+        onClose={() => handleClose(id)}
+        maxWidth="xs"
+        fullScreen={md}
+      >
         <Box
           sx={{
             display: "grid",
@@ -111,7 +120,11 @@ const NumPad = ({
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((n) => {
                 return (
                   <Grid item key={String(n)}>
-                    <Button variant="outlined" onClick={() => onNumClick(n)} sx={{ p: 1 }}>
+                    <Button
+                      variant="outlined"
+                      onClick={() => onNumClick(n)}
+                      sx={{ p: 1 }}
+                    >
                       {n}
                     </Button>
                   </Grid>

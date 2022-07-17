@@ -25,7 +25,9 @@ const AllAreaPieChart = () => {
         })
         .then((res) => {
           setAllAreaTotalCount(res.reduce((a, c) => a + c.count, 0));
-          setAllAreaChartCategories(res.map((v) => v.guest_type === "student" ? "生徒" : "保護者"));
+          setAllAreaChartCategories(
+            res.map((v) => (v.guest_type === "student" ? "生徒" : "保護者"))
+          );
           setAllAreaChartSeries(res.map((v) => v.count));
         })
         .catch((err: AxiosError) => {
@@ -59,12 +61,16 @@ const AllAreaPieChart = () => {
       <Typography variant="h3">全体の滞在状況</Typography>
       {allAreaTotalCount ? (
         <>
-          <Typography sx={{ pt: 2 }}>校内滞在者数 {allAreaTotalCount}人</Typography>
+          <Typography sx={{ pt: 2 }}>
+            校内滞在者数 {allAreaTotalCount}人
+          </Typography>
           <Box sx={{ margin: "auto", width: "100%" }}>
             <Chart options={options} series={allAreaChartSeries} type="pie" />
           </Box>
         </>
-      ) : (<Typography sx={{ pt: 2 }}>読み込み中...</Typography>)}
+      ) : (
+        <Typography sx={{ pt: 2 }}>読み込み中...</Typography>
+      )}
     </Card>
   );
 };

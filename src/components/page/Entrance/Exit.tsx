@@ -192,8 +192,8 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                        ? "保護者"
-                        : "その他"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>

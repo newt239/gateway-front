@@ -4,7 +4,9 @@ import { pageStateSelector } from "#/recoil/page";
 import { tokenState } from "#/recoil/user";
 
 import { Grid, List, ListItem, ListItemText, Typography } from "@mui/material";
-import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import LinearProgress, {
+  linearProgressClasses,
+} from "@mui/material/LinearProgress";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -45,10 +47,26 @@ const Summary = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setClubList(res.filter(e => e.exhibit_type === "club").sort(sortExhibitByCount));
-          setClassList(res.filter(e => e.exhibit_type === "class").sort(sortExhibitByCount));
-          setStageList(res.filter(e => e.exhibit_type === "stage").sort(sortExhibitByCount));
-          setOtherList(res.filter(e => e.exhibit_type === "other").sort(sortExhibitByCount));
+          setClubList(
+            res
+              .filter((e) => e.exhibit_type === "club")
+              .sort(sortExhibitByCount)
+          );
+          setClassList(
+            res
+              .filter((e) => e.exhibit_type === "class")
+              .sort(sortExhibitByCount)
+          );
+          setStageList(
+            res
+              .filter((e) => e.exhibit_type === "stage")
+              .sort(sortExhibitByCount)
+          );
+          setOtherList(
+            res
+              .filter((e) => e.exhibit_type === "other")
+              .sort(sortExhibitByCount)
+          );
         })
         .catch((err: AxiosError) => {
           console.log(err);
@@ -59,21 +77,46 @@ const Summary = () => {
   const ExhibitListBlock = ({ exhibit }: { exhibit: exhibitProp }) => {
     return (
       <ListItem divider sx={{ flexDirection: "column" }} disablePadding>
-        <Grid container sx={{ alignItems: "center", justifyContent: "space-between", flexWrap: "nowrap" }}>
-          <Grid item><ListItemText secondary={`${exhibit.group_name} ・ ${exhibit.room_name}`} secondaryTypographyProps={{ sx: { p: 0 } }}>{exhibit.exhibit_name}</ListItemText></Grid>
-          <Grid item><span style={{ fontSize: "2rem", fontWeight: 800 }}>{exhibit.count}</span> /{exhibit.capacity}</Grid>
+        <Grid
+          container
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "nowrap",
+          }}
+        >
+          <Grid item>
+            <ListItemText
+              secondary={`${exhibit.group_name} ・ ${exhibit.room_name}`}
+              secondaryTypographyProps={{ sx: { p: 0 } }}
+            >
+              {exhibit.exhibit_name}
+            </ListItemText>
+          </Grid>
+          <Grid item>
+            <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+              {exhibit.count}
+            </span>{" "}
+            /{exhibit.capacity}
+          </Grid>
         </Grid>
-        <LinearProgress variant="determinate" value={exhibit.count / exhibit.capacity * 100 || 1} sx={{
-          width: "100%", height: 10, [`&.${linearProgressClasses.colorPrimary}`]: {
-            backgroundColor: "transparent",
-          },
-          [`& .${linearProgressClasses.bar}`]: {
-            borderRadius: 5,
-            backgroundColor: '#1a90ff',
-          },
-        }} />
+        <LinearProgress
+          variant="determinate"
+          value={(exhibit.count / exhibit.capacity) * 100 || 1}
+          sx={{
+            width: "100%",
+            height: 10,
+            [`&.${linearProgressClasses.colorPrimary}`]: {
+              backgroundColor: "transparent",
+            },
+            [`& .${linearProgressClasses.bar}`]: {
+              borderRadius: 5,
+              backgroundColor: "#1a90ff",
+            },
+          }}
+        />
       </ListItem>
-    )
+    );
   };
 
   return (
@@ -81,13 +124,17 @@ const Summary = () => {
       <Grid item xs={12} md={4}>
         <Typography variant="h3">部活動</Typography>
         <List>
-          {clubList.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
+          {clubList.map((exhibit) => (
+            <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
+          ))}
         </List>
       </Grid>
       <Grid item xs={12} md={4}>
         <Typography variant="h3">クラス</Typography>
         <List>
-          {classList.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
+          {classList.map((exhibit) => (
+            <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
+          ))}
         </List>
       </Grid>
       <Grid item xs={12} md={4}>
@@ -95,13 +142,17 @@ const Summary = () => {
           <Grid item xs={12}>
             <Typography variant="h3">ステージ</Typography>
             <List>
-              {stageList.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
+              {stageList.map((exhibit) => (
+                <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
+              ))}
             </List>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h3">その他</Typography>
             <List>
-              {otherList.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
+              {otherList.map((exhibit) => (
+                <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
+              ))}
             </List>
           </Grid>
         </Grid>
