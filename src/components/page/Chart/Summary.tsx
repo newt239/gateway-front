@@ -8,10 +8,10 @@ import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgr
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
-const Heatmap = () => {
+const Summary = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {
-    setPageInfo({ title: "ヒートマップ" });
+    setPageInfo({ title: "展示一覧" });
   }, []);
 
   const token = useRecoilValue(tokenState);
@@ -110,4 +110,4 @@ const Heatmap = () => {
   );
 };
 
-export default Heatmap;
+export default Summary;

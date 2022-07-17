@@ -9,7 +9,7 @@ import apiClient from "#/axios-config";
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-const AllAreaSummaryCard = () => {
+const AllAreaPieChart = () => {
   const token = useRecoilValue(tokenState);
   const [allAreaTotalCount, setAllAreaTotalCount] = useState<number>(0);
   const [allAreaChartCategories, setAllAreaChartCategories] = useState<
@@ -68,4 +68,4 @@ const AllAreaSummaryCard = () => {
     </>
   );
 };
-export default AllAreaSummaryCard;
+export default AllAreaPieChart;
