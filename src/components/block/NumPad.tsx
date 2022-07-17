@@ -59,7 +59,7 @@ const NumPad = ({
         variant="extended"
         onClick={openNumPad}
         color="primary"
-        sx={{ position: "fixed", bottom: "10vh", right: "10vw" }}
+        sx={{ position: "fixed", bottom: "min(10vh, 10vw)", right: "min(10vh,10vw)" }}
       >
         <ModeEditRoundedIcon sx={{ mr: 1 }} />
         直接入力する

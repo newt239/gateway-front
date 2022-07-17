@@ -28,6 +28,7 @@ import {
   ListItemText,
   Snackbar,
   Skeleton,
+  Tooltip,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -484,13 +485,15 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                         <span> / {capacity} 人</span>
                       </Grid>
                       <Grid item>
-                        <Button
-                          size="small"
-                          startIcon={<ReplayRoundedIcon />}
-                          onClick={updateExhibitInfo}
-                        >
-                          {lastUpdate.format("HH:mm:ss")}現在
-                        </Button>
+                        <Tooltip title={`${lastUpdate.format("HH:mm:ss")}現在`}>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={updateExhibitInfo}
+                          >
+                            <ReplayRoundedIcon />
+                          </IconButton>
+                        </Tooltip>
                       </Grid>
                     </Grid>
                   ) : (

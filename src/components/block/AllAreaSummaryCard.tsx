@@ -55,17 +55,17 @@ const AllAreaSummaryCard = () => {
   };
 
   return (
-    <>
-      {allAreaTotalCount && (
-        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-          <Typography variant="h3">全体の滞在状況</Typography>
-          <Typography>校内滞在者数 {allAreaTotalCount}人</Typography>
+    <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+      <Typography variant="h3">全体の滞在状況</Typography>
+      {allAreaTotalCount ? (
+        <>
+          <Typography sx={{ pt: 2 }}>校内滞在者数 {allAreaTotalCount}人</Typography>
           <Box sx={{ margin: "auto", width: "100%" }}>
             <Chart options={options} series={allAreaChartSeries} type="pie" />
           </Box>
-        </Card>
-      )}
-    </>
+        </>
+      ) : (<Typography sx={{ pt: 2 }}>読み込み中...</Typography>)}
+    </Card>
   );
 };
 export default AllAreaSummaryCard;
