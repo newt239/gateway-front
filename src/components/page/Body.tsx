@@ -13,7 +13,7 @@ import ExhibitIndex from "#/components/page/Exhibit/Index";
 import ExhibitScan from "#/components/page/Exhibit/ExhibitScan";
 import ChartIndex from "#/components/page/Chart/Index";
 import ChartExhibit from "#/components/page/Chart/Exhibit";
-import Heatmap from "#/components/page/Chart/Heatmap";
+import Summary from "#/components/page/Chart/Summary";
 import Entrance from "#/components/page/Entrance/Index";
 import ReserveCheck from "#/components/page/Entrance/ReserveCheck";
 import EntranceEnter from "#/components/page/Entrance/Enter";
@@ -153,7 +153,7 @@ const Body = () => {
                     path="exhibit/:exhibit_id"
                     element={<ChartExhibit />}
                   />
-                  <Route path="heatmap" element={<Heatmap />} />
+                  <Route path="summary" element={<Summary />} />
                 </>
               ) : ["exhibit"].includes(profile.user_type) ? (
                 <>

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSetRecoilState } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
-import AllAreaSummaryCard from "#/components/block/AllAreaSummaryCard";
+import AllAreaPieChart from "#/components/block/AllAreaPieChart";
 import ExhibitListTableCard from "#/components/block/ExhibitListTableCard.tsx";
 import { Grid } from "@mui/material";
 
@@ -16,7 +16,7 @@ const ChartIndex = () => {
       <Grid item xs={12}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6}>
-            <AllAreaSummaryCard />
+            <AllAreaPieChart />
           </Grid>
         </Grid>
       </Grid>
