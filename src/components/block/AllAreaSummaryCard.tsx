@@ -14,7 +14,7 @@ const AllAreaSummaryCard = () => {
   const [allAreaTotalCount, setAllAreaTotalCount] = useState<number>(0);
   const [allAreaChartCategories, setAllAreaChartCategories] = useState<
     string[]
-  >(["general"]);
+  >(["保護者", "生徒"]);
   const [allAreaChartSeries, setAllAreaChartSeries] = useState<number[]>([0]);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const AllAreaSummaryCard = () => {
         })
         .then((res) => {
           setAllAreaTotalCount(res.reduce((a, c) => a + c.count, 0));
-          setAllAreaChartCategories(res.map((v) => v.guest_type));
+          setAllAreaChartCategories(res.map((v) => v.guest_type === "student" ? "生徒" : "保護者"));
           setAllAreaChartSeries(res.map((v) => v.count));
         })
         .catch((err: AxiosError) => {
