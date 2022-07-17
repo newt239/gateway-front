@@ -11,7 +11,9 @@ export type Methods = {
       id: string
       exhibit_name: string
       group_name: string
+      room_name: string
       exhibit_type: string
+      position: string
       count: number
       capacity: number
     }[]

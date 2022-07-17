@@ -19,6 +19,10 @@ const Heatmap = () => {
   type exhibitProp = {
     id: string;
     exhibit_name: string;
+    group_name: string;
+    room_name: string;
+    exhibit_type: string;
+    position: string;
     count: number;
     capacity: number;
   };
@@ -48,7 +52,7 @@ const Heatmap = () => {
     return (
       <ListItem divider sx={{ flexDirection: "column" }}>
         <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
-          <Grid item><ListItemText secondary="">{exhibit.exhibit_name}</ListItemText></Grid>
+          <Grid item><ListItemText secondary={`${exhibit.group_name} ・ ${exhibit.room_name}`}>{exhibit.exhibit_name}</ListItemText></Grid>
           <Grid item><span style={{ fontSize: "2rem", fontWeight: 800 }}>{exhibit.count}</span> / {exhibit.capacity} 人</Grid>
         </Grid>
         <LinearProgress variant="determinate" value={exhibit.count / exhibit.capacity * 100} sx={{
