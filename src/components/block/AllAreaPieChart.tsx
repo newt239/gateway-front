@@ -14,7 +14,7 @@ const AllAreaPieChart = () => {
   const [allAreaTotalCount, setAllAreaTotalCount] = useState<number>(0);
   const [allAreaChartCategories, setAllAreaChartCategories] = useState<
     string[]
-  >(["general"]);
+  >(["保護者", "生徒"]);
   const [allAreaChartSeries, setAllAreaChartSeries] = useState<number[]>([0]);
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const AllAreaPieChart = () => {
         })
         .then((res) => {
           setAllAreaTotalCount(res.reduce((a, c) => a + c.count, 0));
-          setAllAreaChartCategories(res.map((v) => v.guest_type));
+          setAllAreaChartCategories(res.map((v) => v.guest_type === "student" ? "生徒" : "保護者"));
           setAllAreaChartSeries(res.map((v) => v.count));
         })
         .catch((err: AxiosError) => {
@@ -55,17 +55,17 @@ const AllAreaPieChart = () => {
   };
 
   return (
-    <>
-      {allAreaTotalCount && (
-        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-          <Typography variant="h3">全体の滞在状況</Typography>
-          <Typography>校内滞在者数 {allAreaTotalCount}人</Typography>
+    <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+      <Typography variant="h3">全体の滞在状況</Typography>
+      {allAreaTotalCount ? (
+        <>
+          <Typography sx={{ pt: 2 }}>校内滞在者数 {allAreaTotalCount}人</Typography>
           <Box sx={{ margin: "auto", width: "100%" }}>
             <Chart options={options} series={allAreaChartSeries} type="pie" />
           </Box>
-        </Card>
-      )}
-    </>
+        </>
+      ) : (<Typography sx={{ pt: 2 }}>読み込み中...</Typography>)}
+    </Card>
   );
 };
 export default AllAreaPieChart;

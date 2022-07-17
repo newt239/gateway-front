@@ -77,9 +77,9 @@ const ReserveCheck = () => {
 
   const handleScan = (scanText: string | null) => {
     if (scanText && token) {
+      setText(scanText);
       if (reservationIdValidation(scanText)) {
         setDeviceState(false);
-        setText(scanText);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .reservation.info._reservation_id(scanText)
@@ -146,6 +146,7 @@ const ReserveCheck = () => {
   };
 
   const onNumPadClose = (num: number[]) => {
+    console.log("hey");
     handleScan("R" + num.map((n) => String(n)).join(""));
   };
 

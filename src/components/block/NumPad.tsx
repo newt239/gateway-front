@@ -59,7 +59,7 @@ const NumPad = ({
         variant="extended"
         onClick={openNumPad}
         color="primary"
-        sx={{ position: "fixed", bottom: "10vh", right: "10vw" }}
+        sx={{ position: "fixed", bottom: "min(10vh, 10vw)", right: "min(10vh,10vw)" }}
       >
         <ModeEditRoundedIcon sx={{ mr: 1 }} />
         直接入力する
@@ -79,7 +79,7 @@ const NumPad = ({
               <span style={{ padding: "0 .5rem" }}>-</span>
               <ButtonGroup variant="outlined">
                 {(scanType === "reservation"
-                  ? [0, 1, 2, 3, 4, 5, 6]
+                  ? [0, 1, 2, 3, 4, 5]
                   : [0, 1, 2, 3, 4, 5, 6, 7, 8]
                 ).map((i) => {
                   return (
