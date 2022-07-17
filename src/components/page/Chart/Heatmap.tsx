@@ -30,6 +30,13 @@ const Heatmap = () => {
   const [clubList, setClubList] = useState<exhibitProp[]>([]);
   const [classList, setClassList] = useState<exhibitProp[]>([]);
   const [stageList, setStageList] = useState<exhibitProp[]>([]);
+  const [otherList, setOtherList] = useState<exhibitProp[]>([]);
+
+  const sortExhibitByCount = (a: exhibitProp, b: exhibitProp) => {
+    if (a.count > b.count) return -1;
+    if (a.count < b.count) return 1;
+    return 0;
+  };
 
   useEffect(() => {
     if (token) {
@@ -38,21 +45,10 @@ const Heatmap = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setClubList(res.filter(e => e.exhibit_type === "club").sort((a, b) => {
-            if (a.count > b.count) return -1;
-            if (a.count < b.count) return 1;
-            return 0;
-          }));
-          setClassList(res.filter(e => e.exhibit_type === "class").sort((a, b) => {
-            if (a.count > b.count) return -1;
-            if (a.count < b.count) return 1;
-            return 0;
-          }));
-          setStageList(res.filter(e => e.exhibit_type === "stage").sort((a, b) => {
-            if (a.count > b.count) return -1;
-            if (a.count < b.count) return 1;
-            return 0;
-          }));
+          setClubList(res.filter(e => e.exhibit_type === "club").sort(sortExhibitByCount));
+          setClassList(res.filter(e => e.exhibit_type === "class").sort(sortExhibitByCount));
+          setStageList(res.filter(e => e.exhibit_type === "stage").sort(sortExhibitByCount));
+          setOtherList(res.filter(e => e.exhibit_type === "other").sort(sortExhibitByCount));
         })
         .catch((err: AxiosError) => {
           console.log(err);
@@ -81,7 +77,7 @@ const Heatmap = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ p: 2, overflowX: "scroll" }}>
+    <Grid container spacing={2} sx={{ pt: 2 }}>
       <Grid item xs={12} md={4}>
         <Typography variant="h3">部活動</Typography>
         <List>
@@ -95,10 +91,20 @@ const Heatmap = () => {
         </List>
       </Grid>
       <Grid item xs={12} md={4}>
-        <Typography variant="h3">ステージ</Typography>
-        <List>
-          {stageList.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
-        </List>
+        <Grid container sx={{ flexDirection: "row" }}>
+          <Grid item xs={12}>
+            <Typography variant="h3">ステージ</Typography>
+            <List>
+              {stageList.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
+            </List>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h3">その他</Typography>
+            <List>
+              {otherList.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
+            </List>
+          </Grid>
+        </Grid>
       </Grid>
     </Grid>
   );
