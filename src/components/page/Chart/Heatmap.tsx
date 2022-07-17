@@ -27,7 +27,9 @@ const Heatmap = () => {
     capacity: number;
   };
 
-  const [floor1List, setFloor1List] = useState<exhibitProp[]>([]);
+  const [clubList, setClubList] = useState<exhibitProp[]>([]);
+  const [classList, setClassList] = useState<exhibitProp[]>([]);
+  const [stageList, setStageList] = useState<exhibitProp[]>([]);
 
   useEffect(() => {
     if (token) {
@@ -36,7 +38,17 @@ const Heatmap = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setFloor1List(res.sort((a, b) => {
+          setClubList(res.filter(e => e.exhibit_type === "club").sort((a, b) => {
+            if (a.count > b.count) return -1;
+            if (a.count < b.count) return 1;
+            return 0;
+          }));
+          setClassList(res.filter(e => e.exhibit_type === "class").sort((a, b) => {
+            if (a.count > b.count) return -1;
+            if (a.count < b.count) return 1;
+            return 0;
+          }));
+          setStageList(res.filter(e => e.exhibit_type === "stage").sort((a, b) => {
             if (a.count > b.count) return -1;
             if (a.count < b.count) return 1;
             return 0;
@@ -50,15 +62,14 @@ const Heatmap = () => {
 
   const ExhibitListBlock = ({ exhibit }: { exhibit: exhibitProp }) => {
     return (
-      <ListItem divider sx={{ flexDirection: "column" }}>
-        <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
-          <Grid item><ListItemText secondary={`${exhibit.group_name} ・ ${exhibit.room_name}`}>{exhibit.exhibit_name}</ListItemText></Grid>
-          <Grid item><span style={{ fontSize: "2rem", fontWeight: 800 }}>{exhibit.count}</span> / {exhibit.capacity} 人</Grid>
+      <ListItem divider sx={{ flexDirection: "column" }} disablePadding>
+        <Grid container sx={{ alignItems: "center", justifyContent: "space-between", flexWrap: "nowrap" }}>
+          <Grid item><ListItemText secondary={`${exhibit.group_name} ・ ${exhibit.room_name}`} secondaryTypographyProps={{ sx: { p: 0 } }}>{exhibit.exhibit_name}</ListItemText></Grid>
+          <Grid item><span style={{ fontSize: "2rem", fontWeight: 800 }}>{exhibit.count}</span> /{exhibit.capacity}</Grid>
         </Grid>
-        <LinearProgress variant="determinate" value={exhibit.count / exhibit.capacity * 100} sx={{
+        <LinearProgress variant="determinate" value={exhibit.count / exhibit.capacity * 100 || 1} sx={{
           width: "100%", height: 10, [`&.${linearProgressClasses.colorPrimary}`]: {
             backgroundColor: "transparent",
-            borderRadius: 5
           },
           [`& .${linearProgressClasses.bar}`]: {
             borderRadius: 5,
@@ -70,11 +81,23 @@ const Heatmap = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12} md={6}>
-        <Typography variant="h3">Floor 1</Typography>
+    <Grid container spacing={2} sx={{ p: 2, overflowX: "scroll" }}>
+      <Grid item xs={12} md={4}>
+        <Typography variant="h3">部活動</Typography>
         <List>
-          {floor1List.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
+          {clubList.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
+        </List>
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <Typography variant="h3">クラス</Typography>
+        <List>
+          {classList.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
+        </List>
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <Typography variant="h3">ステージ</Typography>
+        <List>
+          {stageList.map((exhibit) => (<ExhibitListBlock key={exhibit.id} exhibit={exhibit} />))}
         </List>
       </Grid>
     </Grid>
