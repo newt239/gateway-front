@@ -161,9 +161,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   } else {
                     // 前の展示で退場処理が行われていない場合
                     const payload = {
-                      guest_id: text,
-                      exhibit_id: exhibit_id,
+                      guest_id: scanText,
+                      exhibit_id: res.exhibit_id,
                     };
+                    console.log(payload);
                     apiClient(process.env.REACT_APP_API_BASE_URL)
                       .activity.exit.$post({
                         headers: { Authorization: "Bearer " + token },
@@ -171,6 +172,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       })
                       .then(() => {
                         setDeviceState(true);
+                        setScanStatus("success");
+                        setMessage("前の展示で退室処理が行われていなかったため退室処理しました。");
+                        setAlertStatus(true);
                       })
                       .catch((err: AxiosError) => {
                         if (err.message) {
