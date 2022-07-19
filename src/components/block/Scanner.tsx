@@ -43,7 +43,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const [errorDialogTitle, setMessageDialogTitle] = useState("");
   const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
 
-  useEffect(() => {
+  const getCameraDeviceList = () => {
     navigator.mediaDevices
       .enumerateDevices()
       .then((mediaDevices) =>
@@ -76,6 +76,10 @@ const Scanner = ({ handleScan }: ScannerProps) => {
       .catch((err) => {
         console.log(err);
       });
+  }
+
+  useEffect(() => {
+    getCameraDeviceList();
   }, []);
 
   // location以外のパスに移動したときにカメラを切る
@@ -197,7 +201,10 @@ const Scanner = ({ handleScan }: ScannerProps) => {
               className="qrcode"
             />
             <IconButton
-              onClick={() => setSelectCameraModalOpen(true)}
+              onClick={() => {
+                getCameraDeviceList();
+                setSelectCameraModalOpen(true);
+              }}
               sx={{ position: "absolute", color: "white", top: 0, left: 0 }}
             >
               <CameraswitchRoundedIcon />
