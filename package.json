@@ -1,6 +1,6 @@
 {
   "name": "gateway",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.0",
