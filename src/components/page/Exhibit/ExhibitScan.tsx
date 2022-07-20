@@ -123,6 +123,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       if (guestIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
+        // ゲスト情報を取得
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .guest.info._guest_id(scanText)
           .$get({
@@ -146,6 +147,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     label: profile.user_id,
                   });
                 } else if (res.exhibit_id === exhibit_id) {
+                  // すでに入室中の場合
                   setScanStatus("error");
                   setMessage(
                     "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
@@ -162,7 +164,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guest_id: scanText,
                     exhibit_id: res.exhibit_id,
                   };
-                  console.log(payload);
+                  // 前の展示の退室処理
                   apiClient(process.env.REACT_APP_API_BASE_URL)
                     .activity.exit.$post({
                       headers: { Authorization: "Bearer " + token },
@@ -174,25 +176,15 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       setMessage("前の展示で退室処理が行われていなかったため退室処理しました。");
                       setAlertStatus(true);
                     })
-                    .catch((err: AxiosError) => {
-                      if (err.message) {
-                        setSnackbar({
-                          status: true,
-                          message: err.message,
-                          severity: "error",
-                        });
-                      } else {
-                        setMessage("前の展示の退場処理に際し何らかのエラーが発生しました。");
-                        setAlertStatus(true);
-                        ReactGA.event({
-                          category: "scan",
-                          action: "exhibit_enter_reject",
-                          label: profile.user_id,
-                        });
-                      }
-                      setText("");
+                    .catch(() => {
+                      setMessage("前の展示の退場処理に際し何らかのエラーが発生しました。");
+                      setAlertStatus(true);
+                      ReactGA.event({
+                        category: "scan",
+                        action: "exhibit_enter_reject",
+                        label: profile.user_id,
+                      });
                       setDeviceState(true);
-                      setSmDrawerStatus(false);
                     });
                 }
               } else if (scanType === "exit") {
@@ -201,7 +193,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 } else if (res.exhibit_id === "") {
                   setScanStatus("error");
                   setMessage(
-                    "このゲストは現在この展示に入室していません。入室スキャンと間違えていませんか？"
+                    "このゲストは現在どの展示にも入室していません。入室スキャンと間違えていませんか？"
                   );
                   setAlertStatus(true);
                   ReactGA.event({
@@ -262,7 +254,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   const GuestInfoCard = () => {
     const postApi = () => {
-      if (profile && guestInfo && token && exhibit_id) {
+      if (token && profile && exhibit_id && guestInfo) {
         const payload = {
           guest_id: text,
           exhibit_id: exhibit_id,
@@ -284,37 +276,34 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             .then(() => {
               if (scanType === "enter") {
                 setCurrentCount(currentCount + 1);
-              } else {
+                setSnackbar({
+                  status: true,
+                  message: "入室処理が完了しました。",
+                  severity: "success",
+                });
+              } else if (scanType === "exit") {
                 setCurrentCount(currentCount - 1);
+                setSnackbar({
+                  status: true,
+                  message: "退室処理が完了しました。",
+                  severity: "success",
+                });
               }
               setDeviceState(true);
               setText("");
               setMessage("");
-              setSnackbar({
-                status: true,
-                message: "処理が完了しました。",
-                severity: "success",
-              });
               setAlertStatus(true);
               setScanStatus("waiting");
               setSmDrawerStatus(false);
             })
             .catch((err: AxiosError) => {
-              if (err.message) {
-                setSnackbar({
-                  status: true,
-                  message: err.message,
-                  severity: "error",
-                });
-                setAlertStatus(true);
-              } else {
-                setSnackbar({
-                  status: true,
-                  message: "何らかのエラーが発生しました。",
-                  severity: "error",
-                });
-                setAlertStatus(true);
-              }
+              console.log(err.message);
+              setSnackbar({
+                status: true,
+                message: "何らかのエラーが発生しました。",
+                severity: "error",
+              });
+              setAlertStatus(true);
               setText("");
               setDeviceState(true);
               setSmDrawerStatus(false);
