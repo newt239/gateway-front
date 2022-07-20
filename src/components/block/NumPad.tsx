@@ -61,8 +61,8 @@ const NumPad = ({
         color="primary"
         sx={{
           position: "fixed",
-          bottom: "min(10vh, 10vw)",
-          right: "min(10vh,10vw)",
+          bottom: "calc(env(safe-area-inset-bottom) + 72px)",
+          right: "10vw",
         }}
       >
         <ModeEditRoundedIcon sx={{ mr: 1 }} />

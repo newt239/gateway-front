@@ -85,7 +85,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
-      if (!exhibitName || moment().diff(lastUpdate) > 30000) {
+      if (!exhibitName || scanStatus === "success" || moment().diff(lastUpdate) > 10000) {
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.info._exhibit_id(exhibit_id)
           .$get({
@@ -118,11 +118,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   }, []);
 
   const handleScan = (scanText: string | null) => {
-    if (scanText && token && exhibit_id) {
+    if (scanText && token && profile && exhibit_id) {
       setText(scanText);
       if (guestIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
+        // ゲスト情報を取得
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .guest.info._guest_id(scanText)
           .$get({
@@ -131,97 +132,84 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             },
           })
           .then((res) => {
-            console.log(res);
             setGuestInfo(res);
             if (!res.available) {
               setScanStatus("error");
               setMessage("このゲストは無効です。");
               setAlertStatus(true);
             } else {
-              if (profile) {
-                if (scanType === "enter") {
-                  if (res.exhibit_id === "") {
-                    setScanStatus("success");
-                    ReactGA.event({
-                      category: "scan",
-                      action: "exhibit_success",
-                      label: profile.user_id,
-                    });
-                  } else if (res.exhibit_id === exhibit_id) {
-                    setScanStatus("error");
-                    setMessage(
-                      "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
-                    );
-                    setAlertStatus(true);
-                    ReactGA.event({
-                      category: "scan",
-                      action: "exhibit_enter_already",
-                      label: profile.user_id,
-                    });
-                  } else {
-                    // 前の展示で退場処理が行われていない場合
-                    const payload = {
-                      guest_id: text,
-                      exhibit_id: exhibit_id,
-                    };
-                    apiClient(process.env.REACT_APP_API_BASE_URL)
-                      .activity.exit.$post({
-                        headers: { Authorization: "Bearer " + token },
-                        body: payload,
-                      })
-                      .then(() => {
-                        setDeviceState(true);
-                      })
-                      .catch((err: AxiosError) => {
-                        if (err.message) {
-                          setSnackbar({
-                            status: true,
-                            message: err.message,
-                            severity: "error",
-                          });
-                        } else {
-                          setSnackbar({
-                            status: true,
-                            message:
-                              "前の展示の退場処理に際し何らかのエラーが発生しました。",
-                            severity: "error",
-                          });
-                          setAlertStatus(true);
-                          ReactGA.event({
-                            category: "scan",
-                            action: "exhibit_enter_reject",
-                            label: profile.user_id,
-                          });
-                        }
-                        setText("");
-                        setDeviceState(true);
-                        setSmDrawerStatus(false);
+              if (scanType === "enter") {
+                if (res.exhibit_id === "") {
+                  setScanStatus("success");
+                  ReactGA.event({
+                    category: "scan",
+                    action: "exhibit_success",
+                    label: profile.user_id,
+                  });
+                } else if (res.exhibit_id === exhibit_id) {
+                  // すでに入室中の場合
+                  setScanStatus("error");
+                  setMessage(
+                    "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
+                  );
+                  setAlertStatus(true);
+                  ReactGA.event({
+                    category: "scan",
+                    action: "exhibit_enter_already",
+                    label: profile.user_id,
+                  });
+                } else {
+                  // 前の展示で退場処理が行われていない場合
+                  const payload = {
+                    guest_id: scanText,
+                    exhibit_id: res.exhibit_id,
+                  };
+                  // 前の展示の退室処理
+                  apiClient(process.env.REACT_APP_API_BASE_URL)
+                    .activity.exit.$post({
+                      headers: { Authorization: "Bearer " + token },
+                      body: payload,
+                    })
+                    .then(() => {
+                      setDeviceState(true);
+                      setScanStatus("success");
+                      setMessage("前の展示で退室処理が行われていなかったため退室処理しました。");
+                      setAlertStatus(true);
+                    })
+                    .catch(() => {
+                      setMessage("前の展示の退場処理に際し何らかのエラーが発生しました。");
+                      setAlertStatus(true);
+                      ReactGA.event({
+                        category: "scan",
+                        action: "exhibit_enter_reject",
+                        label: profile.user_id,
                       });
-                  }
-                } else if (scanType === "exit") {
-                  if (res.exhibit_id === exhibit_id) {
-                    setScanStatus("success");
-                  } else if (res.exhibit_id === "") {
-                    setScanStatus("error");
-                    setMessage(
-                      "このゲストは現在この展示に入室していません。入室スキャンと間違えていませんか？"
-                    );
-                    setAlertStatus(true);
-                    ReactGA.event({
-                      category: "scan",
-                      action: "exhibit_exit_reject",
-                      label: profile.user_id,
+                      setDeviceState(true);
                     });
-                  } else {
-                    setScanStatus("success");
-                    setMessage("このゲストは他の展示に入室中です。");
-                    setAlertStatus(true);
-                    ReactGA.event({
-                      category: "scan",
-                      action: "exhibit_exit_already_other",
-                      label: profile.user_id,
-                    });
-                  }
+                }
+              } else if (scanType === "exit") {
+                if (res.exhibit_id === exhibit_id) {
+                  setScanStatus("success");
+                } else if (res.exhibit_id === "") {
+                  setScanStatus("error");
+                  setMessage(
+                    "このゲストは現在どの展示にも入室していません。入室スキャンと間違えていませんか？"
+                  );
+                  setAlertStatus(true);
+                  ReactGA.event({
+                    category: "scan",
+                    action: "exhibit_exit_reject",
+                    label: profile.user_id,
+                  });
+                } else {
+                  setScanStatus("success");
+                  setMessage("このゲストは他の展示に入室中です。");
+                  setAlertStatus(true);
+                  ReactGA.event({
+                    category: "scan",
+                    action: "exhibit_exit_already_other",
+                    label: profile.user_id,
+                  });
                 }
               }
             }
@@ -239,6 +227,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             });
           })
           .finally(() => {
+            updateExhibitInfo();
             setLoading(false);
           });
       } else {
@@ -266,12 +255,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   const GuestInfoCard = () => {
     const postApi = () => {
-      if (profile && guestInfo && token && exhibit_id) {
+      if (token && profile && exhibit_id && guestInfo) {
         const payload = {
           guest_id: text,
           exhibit_id: exhibit_id,
         };
-        updateExhibitInfo();
         if (scanType === "enter" && currentCount >= capacity) {
           setSnackbar({
             status: true,
@@ -286,35 +274,36 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               body: payload,
             })
             .then(() => {
-              setCurrentCount(currentCount + 1);
+              if (scanType === "enter") {
+                setCurrentCount(currentCount + 1);
+                setSnackbar({
+                  status: true,
+                  message: "入室処理が完了しました。",
+                  severity: "success",
+                });
+              } else if (scanType === "exit") {
+                setCurrentCount(currentCount - 1);
+                setSnackbar({
+                  status: true,
+                  message: "退室処理が完了しました。",
+                  severity: "success",
+                });
+              }
               setDeviceState(true);
               setText("");
               setMessage("");
-              setSnackbar({
-                status: true,
-                message: "処理が完了しました。",
-                severity: "success",
-              });
               setAlertStatus(true);
               setScanStatus("waiting");
               setSmDrawerStatus(false);
             })
             .catch((err: AxiosError) => {
-              if (err.message) {
-                setSnackbar({
-                  status: true,
-                  message: err.message,
-                  severity: "error",
-                });
-                setAlertStatus(true);
-              } else {
-                setSnackbar({
-                  status: true,
-                  message: "何らかのエラーが発生しました。",
-                  severity: "error",
-                });
-                setAlertStatus(true);
-              }
+              console.log(err.message);
+              setSnackbar({
+                status: true,
+                message: "何らかのエラーが発生しました。",
+                severity: "error",
+              });
+              setAlertStatus(true);
               setText("");
               setDeviceState(true);
               setSmDrawerStatus(false);
@@ -363,8 +352,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "保護者"
+                        : "その他"
                   }
                 />
               </ListItem>
@@ -432,8 +421,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${
-                        scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
@@ -487,7 +475,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                         <span> / {capacity} 人</span>
                       </Grid>
                       <Grid item>
-                        <Tooltip title={`${lastUpdate.format("HH:mm:ss")}現在`}>
+                        <Tooltip title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}>
                           <IconButton
                             size="small"
                             color="primary"
