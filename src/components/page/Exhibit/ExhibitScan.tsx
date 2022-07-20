@@ -85,7 +85,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
-      if (!exhibitName || moment().diff(lastUpdate) > 30000) {
+      if (!exhibitName || scanStatus === "success" || moment().diff(lastUpdate) > 10000) {
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.info._exhibit_id(exhibit_id)
           .$get({
@@ -227,6 +227,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             });
           })
           .finally(() => {
+            updateExhibitInfo();
             setLoading(false);
           });
       } else {
@@ -259,7 +260,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           guest_id: text,
           exhibit_id: exhibit_id,
         };
-        updateExhibitInfo();
         if (scanType === "enter" && currentCount >= capacity) {
           setSnackbar({
             status: true,
@@ -475,7 +475,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                         <span> / {capacity} 人</span>
                       </Grid>
                       <Grid item>
-                        <Tooltip title={`${lastUpdate.format("HH:mm:ss")}現在`}>
+                        <Tooltip title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}>
                           <IconButton
                             size="small"
                             color="primary"
