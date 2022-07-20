@@ -1,7 +1,7 @@
 {
   "short_name": "Gateway",
   "name": "Gateway",
-  "description": "栄東祭2022入場者管理システム",
+  "description": "栄東祭2022滞在状況記録システム",
   "icons": [
     {
       "src": "/icon-192x192.png",
