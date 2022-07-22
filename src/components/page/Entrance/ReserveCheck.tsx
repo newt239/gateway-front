@@ -50,7 +50,7 @@ import NumPad from "#/components/block/NumPad";
 
 const ReserveCheck = () => {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
   const [reservation, setReservation] = useRecoilState(reservationState);
@@ -298,7 +298,7 @@ const ReserveCheck = () => {
             </Box>
           )}
           {scanStatus !== "waiting" &&
-            (matches ? (
+            (largerThanSM ? (
               <ReservationInfoCard />
             ) : (
               <SwipeableDrawer

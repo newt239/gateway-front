@@ -42,7 +42,7 @@ import { guestInfoProp } from "#/types/global";
 
 const EntranceExit = () => {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
   const [text, setText] = useState<string>("");
@@ -107,7 +107,7 @@ const EntranceExit = () => {
     }
   };
 
-  const postApi = () => {
+  const registerSession = () => {
     if (token && profile && guestInfo) {
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .activity.exit.$post({
@@ -223,7 +223,7 @@ const EntranceExit = () => {
               <Button variant="outlined" onClick={retry}>
                 スキャンし直す
               </Button>
-              <Button variant="contained" onClick={postApi}>
+              <Button variant="contained" onClick={registerSession}>
                 退場
               </Button>
             </Box>
@@ -297,7 +297,7 @@ const EntranceExit = () => {
             </Box>
           )}
           {scanStatus !== "waiting" &&
-            (matches ? (
+            (largerThanSM ? (
               <GuestInfoCard />
             ) : (
               <SwipeableDrawer

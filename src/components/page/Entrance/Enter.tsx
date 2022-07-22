@@ -46,7 +46,7 @@ import MessageDialog from "#/components/block/MessageDialog";
 const EntranceEnter = () => {
   const navigate = useNavigate();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
   const [text, setText] = useState<string>("");
@@ -147,7 +147,7 @@ const EntranceEnter = () => {
     }
   };
 
-  const onClose = () => {
+  const onDialogClose = () => {
     setDialogOpen(false);
     setDialogMessage("");
     navigate("/entrance/reserve-check", { replace: true });
@@ -321,7 +321,7 @@ const EntranceEnter = () => {
             </Box>
           )}
           {scanStatus !== "waiting" &&
-            (matches ? (
+            (largerThanSM ? (
               <GuestInfoCard />
             ) : (
               <SwipeableDrawer
@@ -334,7 +334,7 @@ const EntranceEnter = () => {
               </SwipeableDrawer>
             ))}
         </Grid>
-        <MessageDialog open={dialogOpen} type="success" title="処理が完了しました" message={[dialogMessage]} onClose={onClose} />
+        <MessageDialog open={dialogOpen} type="success" title="処理が完了しました" message={[dialogMessage]} onClose={onDialogClose} />
       </Grid>
       <NumPad scanType="guest" onClose={onNumPadClose} />
     </>

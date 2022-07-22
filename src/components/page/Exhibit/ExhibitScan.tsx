@@ -57,7 +57,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const { exhibit_id } = useParams<{ exhibit_id: string }>();
   const navigate = useNavigate();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const profile = useRecoilValue(profileState);
   const token = useRecoilValue(tokenState);
   const [text, setText] = useState<string>("");
@@ -256,7 +256,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   };
 
   const GuestInfoCard = () => {
-    const postApi = () => {
+    const registerSession = () => {
       if (token && profile && exhibit_id && guestInfo) {
         const payload = {
           guest_id: text,
@@ -378,7 +378,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               <Button variant="outlined" onClick={retry}>
                 スキャンし直す
               </Button>
-              <Button variant="contained" onClick={postApi}>
+              <Button variant="contained" onClick={registerSession}>
                 {scanType === "enter" ? "入室記録" : "退室記録"}
               </Button>
             </Box>
@@ -493,7 +493,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   )}
                 </Card>
               </Grid>
-              {matches && (
+              {largerThanSM && (
                 <Grid item>
                   <Card variant="outlined" sx={{ height: "100%" }}>
                     {exhibitName && roomName ? (
@@ -567,7 +567,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 </Box>
               )}
               {scanStatus !== "waiting" &&
-                (matches ? (
+                (largerThanSM ? (
                   <GuestInfoCard />
                 ) : (
                   <SwipeableDrawer
