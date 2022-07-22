@@ -146,8 +146,9 @@ const ReserveCheck = () => {
   };
 
   const onNumPadClose = (num: number[]) => {
-    console.log("hey");
-    handleScan("R" + num.map((n) => String(n)).join(""));
+    if (num.length > 0) {
+      handleScan("R" + num.map((n) => String(n)).join(""));
+    }
   };
 
   const ReservationInfoCard = () => {

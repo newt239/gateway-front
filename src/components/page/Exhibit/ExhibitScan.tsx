@@ -250,7 +250,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   };
 
   const onNumPadClose = (num: number[]) => {
-    handleScan("G" + num.map((n) => String(n)).join(""));
+    if (num.length > 0) {
+      handleScan("G" + num.map((n) => String(n)).join(""));
+    }
   };
 
   const GuestInfoCard = () => {
