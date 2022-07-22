@@ -42,7 +42,7 @@ import { guestInfoProp } from "#/types/global";
 
 const EntranceExit = () => {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
   const [text, setText] = useState<string>("");
@@ -95,6 +95,10 @@ const EntranceExit = () => {
             setMessage(err.message);
             setSmDrawerStatus(true);
           });
+      } else if (scanText.startsWith("R")) {
+        setScanStatus("error");
+        setMessage("これは予約IDです。");
+        setSmDrawerStatus(true);
       } else {
         setScanStatus("error");
         setMessage("このゲストIDは存在しません。");
@@ -103,7 +107,7 @@ const EntranceExit = () => {
     }
   };
 
-  const postApi = () => {
+  const registerSession = () => {
     if (token && profile && guestInfo) {
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .activity.exit.$post({
@@ -155,7 +159,9 @@ const EntranceExit = () => {
   };
 
   const onNumPadClose = (num: number[]) => {
-    handleScan("G" + num.map((n) => String(n)).join(""));
+    if (num.length > 0) {
+      handleScan("G" + num.map((n) => String(n)).join(""));
+    }
   };
 
   const GuestInfoCard = () => {
@@ -164,8 +170,9 @@ const EntranceExit = () => {
         {scanStatus === "error" && (
           <Alert
             severity="error"
+            variant="filled"
             action={
-              <Button color="error" onClick={retry}>
+              <Button color="inherit" onClick={retry}>
                 スキャンし直す
               </Button>
             }
@@ -216,7 +223,7 @@ const EntranceExit = () => {
               <Button variant="outlined" onClick={retry}>
                 スキャンし直す
               </Button>
-              <Button variant="contained" onClick={postApi}>
+              <Button variant="contained" onClick={registerSession}>
                 退場
               </Button>
             </Box>
@@ -230,12 +237,24 @@ const EntranceExit = () => {
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h3">退場処理</Typography>
-            <Typography variant="body1">
-              会場からの退場処理を行います。
-            </Typography>
-          </Card>
+          <Grid
+            container
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "nowrap",
+            }}
+          >
+            <Grid item>
+              <Typography variant="h3">退場処理</Typography>
+              <Typography variant="body1">
+                会場からの退場処理を行います。
+              </Typography>
+            </Grid>
+            <Grid item>
+              <NumPad scanType="guest" onClose={onNumPadClose} />
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
           <Scanner handleScan={handleScan} />
@@ -290,7 +309,7 @@ const EntranceExit = () => {
             </Box>
           )}
           {scanStatus !== "waiting" &&
-            (matches ? (
+            (largerThanSM ? (
               <GuestInfoCard />
             ) : (
               <SwipeableDrawer
@@ -313,7 +332,6 @@ const EntranceExit = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
-      <NumPad scanType="reservation" onClose={onNumPadClose} />
     </>
   );
 };

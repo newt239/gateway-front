@@ -50,7 +50,7 @@ import NumPad from "#/components/block/NumPad";
 
 const ReserveCheck = () => {
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
   const [reservation, setReservation] = useRecoilState(reservationState);
@@ -146,8 +146,9 @@ const ReserveCheck = () => {
   };
 
   const onNumPadClose = (num: number[]) => {
-    console.log("hey");
-    handleScan("R" + num.map((n) => String(n)).join(""));
+    if (num.length > 0) {
+      handleScan("R" + num.map((n) => String(n)).join(""));
+    }
   };
 
   const ReservationInfoCard = () => {
@@ -198,7 +199,15 @@ const ReserveCheck = () => {
                 <ListItemIcon>
                   <PeopleRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary={`${reservation.count}人`} />
+                <ListItemText>
+                  {reservation.count}人
+                  {reservation.count !== reservation.registered.length && (
+                    <span>
+                      （残り：
+                      {reservation.count - reservation.registered.length}人）
+                    </span>
+                  )}
+                </ListItemText>
               </ListItem>
             </List>
             <Box
@@ -230,12 +239,24 @@ const ReserveCheck = () => {
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h3">予約確認</Typography>
-            <Typography variant="body1">
-              予約用QRコードをスキャンしてください。
-            </Typography>
-          </Card>
+          <Grid
+            container
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "nowrap",
+            }}
+          >
+            <Grid item>
+              <Typography variant="h3">予約確認</Typography>
+              <Typography variant="body1">
+                予約用QRコードをスキャンしてください。
+              </Typography>
+            </Grid>
+            <Grid item>
+              <NumPad scanType="reservation" onClose={onNumPadClose} />
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
           <Scanner handleScan={handleScan} />
@@ -290,7 +311,7 @@ const ReserveCheck = () => {
             </Box>
           )}
           {scanStatus !== "waiting" &&
-            (matches ? (
+            (largerThanSM ? (
               <ReservationInfoCard />
             ) : (
               <SwipeableDrawer
@@ -313,7 +334,6 @@ const ReserveCheck = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
-      <NumPad scanType="reservation" onClose={onNumPadClose} />
     </>
   );
 };

@@ -57,7 +57,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const { exhibit_id } = useParams<{ exhibit_id: string }>();
   const navigate = useNavigate();
   const theme = useTheme();
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
   const profile = useRecoilValue(profileState);
   const token = useRecoilValue(tokenState);
   const [text, setText] = useState<string>("");
@@ -70,7 +70,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [capacity, setCapacity] = useState(0);
   const [currentCount, setCurrentCount] = useState<number>(0);
   const [exhibitName, setExhibitName] = useState("");
-  const [roomName, setRoomName] = useState("");
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [alertStatus, setAlertStatus] = useState(false);
   const [snackbar, setSnackbar] = useState<{
@@ -85,7 +84,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
-      if (!exhibitName || scanStatus === "success" || moment().diff(lastUpdate) > 10000) {
+      if (
+        !exhibitName ||
+        scanStatus === "success" ||
+        moment().diff(lastUpdate) > 10000
+      ) {
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.info._exhibit_id(exhibit_id)
           .$get({
@@ -94,11 +97,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             },
           })
           .then((res) => {
-            setPageInfo({ title: res.exhibit_name });
+            setPageInfo({ title: `${res.exhibit_name} - ${res.room_name}` });
             setCapacity(res.capacity);
             setCurrentCount(res.current);
             setExhibitName(res.exhibit_name);
-            setRoomName(res.room_name);
             setLastUpdate(moment());
             ReactGA.event({
               category: "scan",
@@ -173,11 +175,15 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     .then(() => {
                       setDeviceState(true);
                       setScanStatus("success");
-                      setMessage("前の展示で退室処理が行われていなかったため退室処理しました。");
+                      setMessage(
+                        "前の展示で退室処理が行われていなかったため退室処理しました。"
+                      );
                       setAlertStatus(true);
                     })
                     .catch(() => {
-                      setMessage("前の展示の退場処理に際し何らかのエラーが発生しました。");
+                      setMessage(
+                        "前の展示の退場処理に際し何らかのエラーが発生しました。"
+                      );
                       setAlertStatus(true);
                       ReactGA.event({
                         category: "scan",
@@ -250,11 +256,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   };
 
   const onNumPadClose = (num: number[]) => {
-    handleScan("G" + num.map((n) => String(n)).join(""));
+    if (num.length > 0) {
+      handleScan("G" + num.map((n) => String(n)).join(""));
+    }
   };
 
   const GuestInfoCard = () => {
-    const postApi = () => {
+    const registerSession = () => {
       if (token && profile && exhibit_id && guestInfo) {
         const payload = {
           guest_id: text,
@@ -352,8 +360,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                        ? "保護者"
-                        : "その他"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -376,7 +384,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               <Button variant="outlined" onClick={retry}>
                 スキャンし直す
               </Button>
-              <Button variant="contained" onClick={postApi}>
+              <Button variant="contained" onClick={registerSession}>
                 {scanType === "enter" ? "入室記録" : "退室記録"}
               </Button>
             </Box>
@@ -421,7 +429,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${
+                        scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
@@ -459,56 +468,47 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Grid container spacing={2}>
+            <Grid
+              container
+              sx={{ justifyContent: "space-between", alignItems: "center" }}
+            >
               <Grid item>
-                <Card variant="outlined" sx={{ height: "100%" }}>
-                  {capacity ? (
-                    <Grid
-                      container
-                      spacing={2}
-                      sx={{ p: 2, alignItems: "end" }}
-                    >
-                      <Grid item>
-                        <span style={{ fontSize: "2rem", fontWeight: 800 }}>
-                          {currentCount}
-                        </span>
-                        <span> / {capacity} 人</span>
-                      </Grid>
-                      <Grid item>
-                        <Tooltip title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}>
-                          <IconButton
-                            size="small"
-                            color="primary"
-                            onClick={updateExhibitInfo}
-                          >
-                            <ReplayRoundedIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </Grid>
+                {capacity ? (
+                  <Grid container spacing={2} sx={{ alignItems: "end" }}>
+                    <Grid item>
+                      <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+                        {currentCount}
+                      </span>
+                      <span> / {capacity} 人</span>
                     </Grid>
-                  ) : (
-                    <Skeleton variant="rectangular" width={250} height="100%" />
-                  )}
-                </Card>
+                    <Grid item>
+                      <Tooltip
+                        title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}
+                      >
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={updateExhibitInfo}
+                        >
+                          <ReplayRoundedIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <Skeleton variant="rectangular" width={250} height="100%" />
+                )}
               </Grid>
-              {matches && (
+              {largerThanMD && (
                 <Grid item>
-                  <Card variant="outlined" sx={{ height: "100%" }}>
-                    {exhibitName && roomName ? (
-                      <Box sx={{ p: 2 }}>
-                        <div style={{ fontWeight: 600 }}>{exhibitName}</div>
-                        <div>- {roomName}</div>
-                      </Box>
-                    ) : (
-                      <Skeleton
-                        variant="rectangular"
-                        width={200}
-                        height="100%"
-                      />
-                    )}
-                  </Card>
+                  <Alert severity="info">
+                    QRコードをカメラに水平にかざして下さい。
+                  </Alert>
                 </Grid>
               )}
+              <Grid item>
+                <NumPad scanType="guest" onClose={onNumPadClose} />
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12} md={5}>
@@ -565,7 +565,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 </Box>
               )}
               {scanStatus !== "waiting" &&
-                (matches ? (
+                (largerThanMD ? (
                   <GuestInfoCard />
                 ) : (
                   <SwipeableDrawer
@@ -596,7 +596,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Snackbar>
         </Grid>
       )}
-      <NumPad scanType="guest" onClose={onNumPadClose} />
     </>
   );
 };

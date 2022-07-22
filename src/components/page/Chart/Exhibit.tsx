@@ -53,7 +53,7 @@ const ChartExhibit = () => {
     useEffect(() => {
       if (profile) {
         if (exhibit_id === "") {
-          navigate("/chart/all", { replace: true });
+          navigate("/chart/summary", { replace: true });
         } else {
           setStatus({ status: true, message: "" });
         }
@@ -71,7 +71,7 @@ const ChartExhibit = () => {
                 <Button
                   variant="text"
                   startIcon={<ArrowBackIosNewRoundedIcon />}
-                  onClick={() => navigate("/chart", { replace: true })}
+                  onClick={() => navigate("/chart/summary", { replace: true })}
                 >
                   一覧に戻る
                 </Button>

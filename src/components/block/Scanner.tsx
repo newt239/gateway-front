@@ -76,7 +76,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   useEffect(() => {
     getCameraDeviceList();
@@ -175,7 +175,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
           position: "relative",
           margin: "auto",
           width: "100%",
-          maxWidth: "70vh",
+          maxWidth: "50vh",
           aspectRatio: "1 / 1",
           backgroundColor: "black",
           borderRadius: "1rem",

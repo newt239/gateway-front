@@ -1,14 +1,24 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
 import { tokenState } from "#/recoil/user";
 
-import { Grid, List, ListItem, ListItemText, Typography } from "@mui/material";
+import {
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
+import moment, { Moment } from "moment";
 
 const Summary = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -33,6 +43,7 @@ const Summary = () => {
   const [classList, setClassList] = useState<exhibitProp[]>([]);
   const [stageList, setStageList] = useState<exhibitProp[]>([]);
   const [otherList, setOtherList] = useState<exhibitProp[]>([]);
+  const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
 
   const sortExhibitByCount = (a: exhibitProp, b: exhibitProp) => {
     if (a.count > b.count) return -1;
@@ -40,7 +51,7 @@ const Summary = () => {
     return 0;
   };
 
-  useEffect(() => {
+  const getNowAllExhibit = () => {
     if (token) {
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .exhibit.current.$get({
@@ -67,11 +78,16 @@ const Summary = () => {
               .filter((e) => e.exhibit_type === "other")
               .sort(sortExhibitByCount)
           );
+          setLastUpdate(moment());
         })
         .catch((err: AxiosError) => {
           console.log(err);
         });
     }
+  };
+
+  useEffect(() => {
+    getNowAllExhibit();
   }, [token]);
 
   const ExhibitListBlock = ({ exhibit }: { exhibit: exhibitProp }) => {
@@ -90,7 +106,12 @@ const Summary = () => {
               secondary={`${exhibit.group_name} ・ ${exhibit.room_name}`}
               secondaryTypographyProps={{ sx: { p: 0 } }}
             >
-              {exhibit.exhibit_name}
+              <Link
+                to={`/chart/exhibit/${exhibit.id}`}
+                style={{ color: "black", textDecoration: "none" }}
+              >
+                {exhibit.exhibit_name}
+              </Link>
             </ListItemText>
           </Grid>
           <Grid item>
@@ -121,6 +142,13 @@ const Summary = () => {
 
   return (
     <Grid container spacing={2} sx={{ pt: 2 }}>
+      <Grid item xs={12}>
+        滞在者数の多い順に表示しています。 最終更新：
+        {lastUpdate.format("HH:mm:ss")}
+        <IconButton size="small" color="primary" onClick={getNowAllExhibit}>
+          <ReplayRoundedIcon />
+        </IconButton>
+      </Grid>
       <Grid item xs={12} md={4}>
         <Typography variant="h3">部活動</Typography>
         <List>
