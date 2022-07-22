@@ -459,13 +459,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Grid container spacing={2} sx={{ justifyContent: "space-between", alignItems: "center" }}>
+            <Grid container sx={{ justifyContent: "space-between", alignItems: "center" }}>
               <Grid item>
                 {capacity ? (
                   <Grid
                     container
                     spacing={2}
-                    sx={{ p: 2, alignItems: "end" }}
+                    sx={{ alignItems: "end" }}
                   >
                     <Grid item>
                       <span style={{ fontSize: "2rem", fontWeight: 800 }}>
