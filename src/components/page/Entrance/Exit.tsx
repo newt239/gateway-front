@@ -95,6 +95,10 @@ const EntranceExit = () => {
             setMessage(err.message);
             setSmDrawerStatus(true);
           });
+      } else if (scanText.startsWith("R")) {
+        setScanStatus("error");
+        setMessage("これは予約IDです。");
+        setSmDrawerStatus(true);
       } else {
         setScanStatus("error");
         setMessage("このゲストIDは存在しません。");
@@ -164,8 +168,9 @@ const EntranceExit = () => {
         {scanStatus === "error" && (
           <Alert
             severity="error"
+            variant="filled"
             action={
-              <Button color="error" onClick={retry}>
+              <Button color="inherit" onClick={retry}>
                 スキャンし直す
               </Button>
             }
@@ -192,8 +197,8 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "保護者"
+                        : "その他"
                   }
                 />
               </ListItem>

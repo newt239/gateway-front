@@ -10,7 +10,6 @@ import apiClient from "#/axios-config";
 
 import {
   MobileStepper,
-  Alert,
   SwipeableDrawer,
   Grid,
   Typography,
@@ -26,7 +25,6 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Snackbar,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -43,6 +41,7 @@ import {
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
+import MessageDialog from "#/components/block/MessageDialog";
 
 const EntranceEnter = () => {
   const navigate = useNavigate();
@@ -58,11 +57,6 @@ const EntranceEnter = () => {
   const reservation = useRecoilValue(reservationState);
   const resetReservation = useResetRecoilState(reservationState);
   const [guestList, setGuest] = useState<string[]>([]);
-  const [snackbar, setSnackbar] = useState<{
-    status: boolean;
-    message: string;
-    severity: "success" | "error";
-  }>({ status: false, message: "", severity: "success" });
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
 
@@ -80,15 +74,21 @@ const EntranceEnter = () => {
     }
   }, [reservation]);
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
   const handleScan = (scanText: string | null) => {
     if (reservation && scanText && profile) {
       setText(scanText);
       if (guestIdValidation(scanText)) {
-        if (!guestList.some((guest) => guest === scanText)) {
-          setSmDrawerStatus(true);
-          setGuest([...guestList, scanText]);
-          setScanStatus("success");
-          setActiveStep(guestList.length);
+        if (!reservation.registered.includes(scanText)) {
+          if (!guestList.some((guest) => guest === scanText)) {
+            setSmDrawerStatus(true);
+            setGuest([...guestList, scanText]);
+            setScanStatus("success");
+            setActiveStep(guestList.length);
+          }
+        } else {
+          console.log(`${scanText}はすでに登録済みです。`);
         }
       } else {
         console.log(`${scanText}というゲストは存在しません。`);
@@ -98,7 +98,7 @@ const EntranceEnter = () => {
 
   const postApi = () => {
     setLoading(true);
-    if (token && reservation && guestList.length === reservation.count) {
+    if (token && reservation) {
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .guest.register.$post({
           body: {
@@ -113,37 +113,24 @@ const EntranceEnter = () => {
           resetReservation();
           setDeviceState(true);
           setText("");
-          setSnackbar({ status: false, message: "", severity: "success" });
           setScanStatus("waiting");
           setSmDrawerStatus(false);
-          navigate("/entrance/reserve-check", { replace: true });
+          setDialogOpen(true);
+          setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
         })
         .catch((err: AxiosError) => {
-          if (err.message) {
-            setSnackbar({
-              status: true,
-              message: err.message,
-              severity: "error",
-            });
-          } else {
-            setSnackbar({
-              status: true,
-              message: "何らかのエラーが発生しました。",
-              severity: "error",
-            });
-          }
+          console.log(err.message);
           setText("");
           setDeviceState(true);
           setSmDrawerStatus(false);
         });
-      setLoading(false);
     }
+    setLoading(false);
   };
 
   const retry = (activeStep: number) => {
     setDeviceState(true);
     setText("");
-    setSnackbar({ status: false, message: "", severity: "success" });
     setScanStatus("waiting");
     setSmDrawerStatus(false);
     if (activeStep === 0) {
@@ -157,6 +144,12 @@ const EntranceEnter = () => {
   const onNumPadClose = (num: number[]) => {
     handleScan("G" + num.map((n) => String(n)).join(""));
   };
+
+  const onClose = () => {
+    setDialogOpen(false);
+    setDialogMessage("");
+    navigate("/entrance/reserve-check", { replace: true });
+  }
 
   const GuestInfoCard = () => {
     return (
@@ -307,11 +300,6 @@ const EntranceEnter = () => {
                           navigator.clipboard
                             .writeText(text)
                             .catch((e) => console.log(e));
-                          setSnackbar({
-                            status: true,
-                            message: "コピーしました",
-                            severity: "success",
-                          });
                         }
                       }}
                       edge="end"
@@ -344,15 +332,7 @@ const EntranceEnter = () => {
               </SwipeableDrawer>
             ))}
         </Grid>
-        <Snackbar
-          open={snackbar.status}
-          autoHideDuration={6000}
-          onClose={() =>
-            setSnackbar({ status: false, message: "", severity: "success" })
-          }
-        >
-          <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
-        </Snackbar>
+        <MessageDialog open={dialogOpen} type="success" title="処理が完了しました" message={[dialogMessage]} onClose={onClose} />
       </Grid>
       <NumPad scanType="guest" onClose={onNumPadClose} />
     </>

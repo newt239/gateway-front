@@ -198,7 +198,14 @@ const ReserveCheck = () => {
                 <ListItemIcon>
                   <PeopleRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary={`${reservation.count}人`} />
+                <ListItemText >
+                  {reservation.count}人
+                  {reservation.count !== reservation.registered.length && (
+                    <span>
+                      （残り：{reservation.count - reservation.registered.length}人）
+                    </span>)
+                  }
+                </ListItemText>
               </ListItem>
             </List>
             <Box
