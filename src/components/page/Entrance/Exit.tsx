@@ -199,8 +199,8 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                        ? "保護者"
-                        : "その他"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -237,7 +237,14 @@ const EntranceExit = () => {
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <Grid container sx={{ alignItems: "center", justifyContent: "space-between", flexWrap: "nowrap" }}>
+          <Grid
+            container
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "nowrap",
+            }}
+          >
             <Grid item>
               <Typography variant="h3">退場処理</Typography>
               <Typography variant="body1">

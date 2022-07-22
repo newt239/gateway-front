@@ -199,13 +199,14 @@ const ReserveCheck = () => {
                 <ListItemIcon>
                   <PeopleRoundedIcon />
                 </ListItemIcon>
-                <ListItemText >
+                <ListItemText>
                   {reservation.count}人
                   {reservation.count !== reservation.registered.length && (
                     <span>
-                      （残り：{reservation.count - reservation.registered.length}人）
-                    </span>)
-                  }
+                      （残り：
+                      {reservation.count - reservation.registered.length}人）
+                    </span>
+                  )}
                 </ListItemText>
               </ListItem>
             </List>
@@ -238,7 +239,14 @@ const ReserveCheck = () => {
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <Grid container sx={{ alignItems: "center", justifyContent: "space-between", flexWrap: "nowrap" }}>
+          <Grid
+            container
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "nowrap",
+            }}
+          >
             <Grid item>
               <Typography variant="h3">予約確認</Typography>
               <Typography variant="body1">

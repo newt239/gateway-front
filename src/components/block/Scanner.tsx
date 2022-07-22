@@ -76,7 +76,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
       .catch((err) => {
         console.log(err);
       });
-  }
+  };
 
   useEffect(() => {
     getCameraDeviceList();

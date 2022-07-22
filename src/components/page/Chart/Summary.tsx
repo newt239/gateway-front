@@ -4,7 +4,14 @@ import { useSetRecoilState, useRecoilValue } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
 import { tokenState } from "#/recoil/user";
 
-import { Grid, IconButton, List, ListItem, ListItemText, Typography } from "@mui/material";
+import {
+  Grid,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import LinearProgress, {
   linearProgressClasses,
@@ -77,7 +84,7 @@ const Summary = () => {
           console.log(err);
         });
     }
-  }
+  };
 
   useEffect(() => {
     getNowAllExhibit();
@@ -99,7 +106,10 @@ const Summary = () => {
               secondary={`${exhibit.group_name} ・ ${exhibit.room_name}`}
               secondaryTypographyProps={{ sx: { p: 0 } }}
             >
-              <Link to={`/chart/exhibit/${exhibit.id}`} style={{ color: "black", textDecoration: "none" }}>
+              <Link
+                to={`/chart/exhibit/${exhibit.id}`}
+                style={{ color: "black", textDecoration: "none" }}
+              >
                 {exhibit.exhibit_name}
               </Link>
             </ListItemText>
@@ -133,13 +143,9 @@ const Summary = () => {
   return (
     <Grid container spacing={2} sx={{ pt: 2 }}>
       <Grid item xs={12}>
-        滞在者数の多い順に表示しています。
-        最終更新：{lastUpdate.format("HH:mm:ss")}
-        <IconButton
-          size="small"
-          color="primary"
-          onClick={getNowAllExhibit}
-        >
+        滞在者数の多い順に表示しています。 最終更新：
+        {lastUpdate.format("HH:mm:ss")}
+        <IconButton size="small" color="primary" onClick={getNowAllExhibit}>
           <ReplayRoundedIcon />
         </IconButton>
       </Grid>

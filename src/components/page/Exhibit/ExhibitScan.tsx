@@ -84,7 +84,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
-      if (!exhibitName || scanStatus === "success" || moment().diff(lastUpdate) > 10000) {
+      if (
+        !exhibitName ||
+        scanStatus === "success" ||
+        moment().diff(lastUpdate) > 10000
+      ) {
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.info._exhibit_id(exhibit_id)
           .$get({
@@ -171,11 +175,15 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     .then(() => {
                       setDeviceState(true);
                       setScanStatus("success");
-                      setMessage("前の展示で退室処理が行われていなかったため退室処理しました。");
+                      setMessage(
+                        "前の展示で退室処理が行われていなかったため退室処理しました。"
+                      );
                       setAlertStatus(true);
                     })
                     .catch(() => {
-                      setMessage("前の展示の退場処理に際し何らかのエラーが発生しました。");
+                      setMessage(
+                        "前の展示の退場処理に際し何らかのエラーが発生しました。"
+                      );
                       setAlertStatus(true);
                       ReactGA.event({
                         category: "scan",
@@ -352,8 +360,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                        ? "保護者"
-                        : "その他"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -421,7 +429,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${
+                        scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
@@ -459,14 +468,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Grid container sx={{ justifyContent: "space-between", alignItems: "center" }}>
+            <Grid
+              container
+              sx={{ justifyContent: "space-between", alignItems: "center" }}
+            >
               <Grid item>
                 {capacity ? (
-                  <Grid
-                    container
-                    spacing={2}
-                    sx={{ alignItems: "end" }}
-                  >
+                  <Grid container spacing={2} sx={{ alignItems: "end" }}>
                     <Grid item>
                       <span style={{ fontSize: "2rem", fontWeight: 800 }}>
                         {currentCount}
@@ -474,7 +482,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       <span> / {capacity} 人</span>
                     </Grid>
                     <Grid item>
-                      <Tooltip title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}>
+                      <Tooltip
+                        title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}
+                      >
                         <IconButton
                           size="small"
                           color="primary"
@@ -491,7 +501,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               </Grid>
               {largerThanMD && (
                 <Grid item>
-                  <Alert severity="info">QRコードをカメラに水平にかざして下さい。</Alert>
+                  <Alert severity="info">
+                    QRコードをカメラに水平にかざして下さい。
+                  </Alert>
                 </Grid>
               )}
               <Grid item>
@@ -583,9 +595,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             </Alert>
           </Snackbar>
         </Grid>
-      )
-      }
-
+      )}
     </>
   );
 };

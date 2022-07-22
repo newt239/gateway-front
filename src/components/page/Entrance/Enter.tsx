@@ -151,7 +151,7 @@ const EntranceEnter = () => {
     setDialogOpen(false);
     setDialogMessage("");
     navigate("/entrance/reserve-check", { replace: true });
-  }
+  };
 
   const GuestInfoCard = () => {
     return (
@@ -334,7 +334,13 @@ const EntranceEnter = () => {
               </SwipeableDrawer>
             ))}
         </Grid>
-        <MessageDialog open={dialogOpen} type="success" title="処理が完了しました" message={[dialogMessage]} onClose={onDialogClose} />
+        <MessageDialog
+          open={dialogOpen}
+          type="success"
+          title="処理が完了しました"
+          message={[dialogMessage]}
+          onClose={onDialogClose}
+        />
       </Grid>
       <NumPad scanType="guest" onClose={onNumPadClose} />
     </>
