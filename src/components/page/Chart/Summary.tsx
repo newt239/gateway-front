@@ -4,7 +4,8 @@ import { useSetRecoilState, useRecoilValue } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
 import { tokenState } from "#/recoil/user";
 
-import { Button, Grid, List, ListItem, ListItemText, Typography } from "@mui/material";
+import { Grid, IconButton, List, ListItem, ListItemText, Typography } from "@mui/material";
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
@@ -132,10 +133,15 @@ const Summary = () => {
   return (
     <Grid container spacing={2} sx={{ pt: 2 }}>
       <Grid item xs={12}>
-        <Grid container sx={{ alignItems: "center" }}>
-          <Grid item><Typography variant="body1">滞在者数の多い順に表示しています。</Typography></Grid>
-          <Grid item><Button size="small" onClick={getNowAllExhibit}>最終更新：{lastUpdate.format("HH:mm:ss")}</Button></Grid>
-        </Grid>
+        滞在者数の多い順に表示しています。
+        最終更新：{lastUpdate.format("HH:mm:ss")}
+        <IconButton
+          size="small"
+          color="primary"
+          onClick={getNowAllExhibit}
+        >
+          <ReplayRoundedIcon />
+        </IconButton>
       </Grid>
       <Grid item xs={12} md={4}>
         <Typography variant="h3">部活動</Typography>
