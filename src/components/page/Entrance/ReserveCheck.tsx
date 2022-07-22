@@ -238,12 +238,17 @@ const ReserveCheck = () => {
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h3">予約確認</Typography>
-            <Typography variant="body1">
-              予約用QRコードをスキャンしてください。
-            </Typography>
-          </Card>
+          <Grid container sx={{ alignItems: "center", justifyContent: "space-between", flexWrap: "nowrap" }}>
+            <Grid item>
+              <Typography variant="h3">予約確認</Typography>
+              <Typography variant="body1">
+                予約用QRコードをスキャンしてください。
+              </Typography>
+            </Grid>
+            <Grid item>
+              <NumPad scanType="reservation" onClose={onNumPadClose} />
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
           <Scanner handleScan={handleScan} />
@@ -321,7 +326,6 @@ const ReserveCheck = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
-      <NumPad scanType="reservation" onClose={onNumPadClose} />
     </>
   );
 };

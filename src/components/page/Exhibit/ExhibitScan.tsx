@@ -57,7 +57,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const { exhibit_id } = useParams<{ exhibit_id: string }>();
   const navigate = useNavigate();
   const theme = useTheme();
-  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
   const profile = useRecoilValue(profileState);
   const token = useRecoilValue(tokenState);
   const [text, setText] = useState<string>("");
@@ -70,7 +70,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [capacity, setCapacity] = useState(0);
   const [currentCount, setCurrentCount] = useState<number>(0);
   const [exhibitName, setExhibitName] = useState("");
-  const [roomName, setRoomName] = useState("");
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [alertStatus, setAlertStatus] = useState(false);
   const [snackbar, setSnackbar] = useState<{
@@ -94,11 +93,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             },
           })
           .then((res) => {
-            setPageInfo({ title: res.exhibit_name });
+            setPageInfo({ title: `${res.exhibit_name} - ${res.room_name}` });
             setCapacity(res.capacity);
             setCurrentCount(res.current);
             setExhibitName(res.exhibit_name);
-            setRoomName(res.room_name);
             setLastUpdate(moment());
             ReactGA.event({
               category: "scan",
@@ -461,56 +459,44 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             </Grid>
           </Grid>
           <Grid item xs={12}>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} sx={{ justifyContent: "space-between", alignItems: "center" }}>
               <Grid item>
-                <Card variant="outlined" sx={{ height: "100%" }}>
-                  {capacity ? (
-                    <Grid
-                      container
-                      spacing={2}
-                      sx={{ p: 2, alignItems: "end" }}
-                    >
-                      <Grid item>
-                        <span style={{ fontSize: "2rem", fontWeight: 800 }}>
-                          {currentCount}
-                        </span>
-                        <span> / {capacity} 人</span>
-                      </Grid>
-                      <Grid item>
-                        <Tooltip title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}>
-                          <IconButton
-                            size="small"
-                            color="primary"
-                            onClick={updateExhibitInfo}
-                          >
-                            <ReplayRoundedIcon />
-                          </IconButton>
-                        </Tooltip>
-                      </Grid>
+                {capacity ? (
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{ p: 2, alignItems: "end" }}
+                  >
+                    <Grid item>
+                      <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+                        {currentCount}
+                      </span>
+                      <span> / {capacity} 人</span>
                     </Grid>
-                  ) : (
-                    <Skeleton variant="rectangular" width={250} height="100%" />
-                  )}
-                </Card>
+                    <Grid item>
+                      <Tooltip title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={updateExhibitInfo}
+                        >
+                          <ReplayRoundedIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </Grid>
+                  </Grid>
+                ) : (
+                  <Skeleton variant="rectangular" width={250} height="100%" />
+                )}
               </Grid>
-              {largerThanSM && (
+              {largerThanMD && (
                 <Grid item>
-                  <Card variant="outlined" sx={{ height: "100%" }}>
-                    {exhibitName && roomName ? (
-                      <Box sx={{ p: 2 }}>
-                        <div style={{ fontWeight: 600 }}>{exhibitName}</div>
-                        <div>- {roomName}</div>
-                      </Box>
-                    ) : (
-                      <Skeleton
-                        variant="rectangular"
-                        width={200}
-                        height="100%"
-                      />
-                    )}
-                  </Card>
+                  <Alert severity="info">QRコードをカメラに水平にかざして下さい。</Alert>
                 </Grid>
               )}
+              <Grid item>
+                <NumPad scanType="guest" onClose={onNumPadClose} />
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12} md={5}>
@@ -567,7 +553,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 </Box>
               )}
               {scanStatus !== "waiting" &&
-                (largerThanSM ? (
+                (largerThanMD ? (
                   <GuestInfoCard />
                 ) : (
                   <SwipeableDrawer
@@ -597,8 +583,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             </Alert>
           </Snackbar>
         </Grid>
-      )}
-      <NumPad scanType="guest" onClose={onNumPadClose} />
+      )
+      }
+
     </>
   );
 };

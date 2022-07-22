@@ -237,12 +237,17 @@ const EntranceExit = () => {
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h3">退場処理</Typography>
-            <Typography variant="body1">
-              会場からの退場処理を行います。
-            </Typography>
-          </Card>
+          <Grid container sx={{ alignItems: "center", justifyContent: "space-between", flexWrap: "nowrap" }}>
+            <Grid item>
+              <Typography variant="h3">退場処理</Typography>
+              <Typography variant="body1">
+                会場からの退場処理を行います。
+              </Typography>
+            </Grid>
+            <Grid item>
+              <NumPad scanType="guest" onClose={onNumPadClose} />
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
           <Scanner handleScan={handleScan} />
@@ -320,7 +325,6 @@ const EntranceExit = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
-      <NumPad scanType="reservation" onClose={onNumPadClose} />
     </>
   );
 };

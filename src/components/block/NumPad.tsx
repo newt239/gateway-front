@@ -27,6 +27,7 @@ const NumPad = ({
 
   const theme = useTheme();
   const md = useMediaQuery(theme.breakpoints.down("md"));
+  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const openNumPad = () => {
     setOpen(true);
   };
@@ -56,17 +57,12 @@ const NumPad = ({
   return (
     <>
       <Fab
-        variant="extended"
+        variant={largerThanSM ? "extended" : "circular"}
         onClick={openNumPad}
         color="primary"
-        sx={{
-          position: "fixed",
-          bottom: "calc(env(safe-area-inset-bottom) + 72px)",
-          right: "10vw",
-        }}
       >
-        <ModeEditRoundedIcon sx={{ mr: 1 }} />
-        直接入力する
+        <ModeEditRoundedIcon sx={{ mr: largerThanSM ? 1 : 0 }} />
+        {largerThanSM && <>直接入力</>}
       </Fab>
       <Dialog
         open={open}
