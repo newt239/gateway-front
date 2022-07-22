@@ -112,7 +112,7 @@ const Body = () => {
             <Route path="docs/:doc_id" element={<DocsMarkdown />} />
             <Route path="exhibit">
               <Route index element={<ExhibitIndex />} />
-              {["admin", "moderator", "executive", "exhibit"].includes(
+              {["moderator", "executive", "exhibit"].includes(
                 profile.user_type
               ) ? (
                 <Route path=":exhibit_id">
@@ -130,7 +130,7 @@ const Body = () => {
               )}
             </Route>
             <Route path="entrance">
-              {["admin", "moderator", "executive"].includes(
+              {["moderator", "executive"].includes(
                 profile.user_type
               ) ? (
                 <>
@@ -144,7 +144,7 @@ const Body = () => {
               )}
             </Route>
             <Route path="chart">
-              {["admin", "moderator", "analysis"].includes(
+              {["moderator", "analysis"].includes(
                 profile.user_type
               ) ? (
                 <>
@@ -167,7 +167,7 @@ const Body = () => {
               )}
             </Route>
             <Route path="admin">
-              {["admin", "moderator"].includes(profile.user_type) ? (
+              {["moderator"].includes(profile.user_type) ? (
                 <>
                   <Route path="guest" element={<AdminCheckGuest />} />
                   <Route

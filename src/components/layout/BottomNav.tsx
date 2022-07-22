@@ -47,7 +47,7 @@ const SimpleBottomNavigation = () => {
           sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 1 }}
           elevation={3}
         >
-          {["admin", "moderator", "executive"].includes(profile.user_type) && (
+          {["moderator", "executive"].includes(profile.user_type) && (
             <BottomNavigation showLabels value={value} onChange={handleChange}>
               <BottomNavigationAction
                 label="ホーム"

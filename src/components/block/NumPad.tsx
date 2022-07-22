@@ -26,7 +26,7 @@ const NumPad = ({
   const [id, setId] = useState<number[]>([]);
 
   const theme = useTheme();
-  const md = useMediaQuery(theme.breakpoints.down("md"));
+  const smallerThanMD = useMediaQuery(theme.breakpoints.down("md"));
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const openNumPad = () => {
     setOpen(true);
@@ -68,7 +68,7 @@ const NumPad = ({
         open={open}
         onClose={() => handleClose(id)}
         maxWidth="xs"
-        fullScreen={md}
+        fullScreen={smallerThanMD}
       >
         <Box
           sx={{

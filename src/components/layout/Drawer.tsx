@@ -132,7 +132,7 @@ const DrawerLeft = () => {
               </List>
             </>
           )}
-          {["admin", "moderator", "executive"].includes(profile.user_type) && (
+          {["moderator", "executive"].includes(profile.user_type) && (
             <>
               <List subheader={<ListSubheader>展示企画</ListSubheader>}>
                 <StyledListItemButton
@@ -147,7 +147,7 @@ const DrawerLeft = () => {
               </List>
             </>
           )}
-          {["admin", "moderator", "executive"].includes(profile.user_type) && (
+          {["moderator", "executive"].includes(profile.user_type) && (
             <>
               <List subheader={<ListSubheader>エントランス</ListSubheader>}>
                 <StyledListItemButton
@@ -171,7 +171,7 @@ const DrawerLeft = () => {
               </List>
             </>
           )}
-          {["admin", "moderator", "analysis"].includes(profile.user_type) && (
+          {["moderator", "analysis"].includes(profile.user_type) && (
             <>
               <List subheader={<ListSubheader>データ</ListSubheader>}>
                 <StyledListItemButton
@@ -195,7 +195,7 @@ const DrawerLeft = () => {
               </List>
             </>
           )}
-          {["admin", "moderator"].includes(profile.user_type) && (
+          {["moderator"].includes(profile.user_type) && (
             <>
               <List subheader={<ListSubheader>管理用操作</ListSubheader>}>
                 <StyledListItemButton
