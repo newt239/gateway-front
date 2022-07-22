@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
 import { tokenState } from "#/recoil/user";
@@ -97,7 +98,9 @@ const Summary = () => {
               secondary={`${exhibit.group_name} ・ ${exhibit.room_name}`}
               secondaryTypographyProps={{ sx: { p: 0 } }}
             >
-              {exhibit.exhibit_name}
+              <Link to={`/chart/exhibit/${exhibit.id}`} style={{ color: "black", textDecoration: "none" }}>
+                {exhibit.exhibit_name}
+              </Link>
             </ListItemText>
           </Grid>
           <Grid item>
