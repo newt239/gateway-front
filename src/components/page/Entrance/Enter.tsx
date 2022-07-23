@@ -52,9 +52,6 @@ const EntranceEnter = () => {
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
   const [text, setText] = useState<string>("");
-  const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
-    "waiting"
-  );
   const [alertStatus, setAlertStatus] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
@@ -96,22 +93,21 @@ const EntranceEnter = () => {
   }, [guestList]);
 
   const handleScan = (scanText: string | null) => {
-    if (profile && reservation && scanText) {
-      setText(scanText);
-      if (guestIdValidation(scanText)) {
-        if (!guestList.includes(scanText)) {
-          setSmDrawerStatus(true);
-          setGuest([...guestList, scanText]);
-          setScanStatus("success");
+    if (text !== scanText) {
+      if (profile && reservation && scanText) {
+        setText(scanText);
+        if (guestIdValidation(scanText)) {
+          if (!guestList.includes(scanText)) {
+            setSmDrawerStatus(true);
+            setGuest([...guestList, scanText]);
+          } else {
+            setAlertMessage(`${scanText}は登録済みです。`);
+            setAlertStatus(true);
+          }
         } else {
-          setAlertMessage(`${scanText}は登録済みです。`);
+          setAlertMessage(`${scanText}というゲストは存在しません。`);
           setAlertStatus(true);
-          setScanStatus("error");
         }
-      } else {
-        setAlertMessage(`${scanText}というゲストは存在しません。`);
-        setAlertStatus(true);
-        setScanStatus("error");
       }
     }
   };
@@ -133,7 +129,6 @@ const EntranceEnter = () => {
           resetReservation();
           setDeviceState(true);
           setText("");
-          setScanStatus("waiting");
           setSmDrawerStatus(false);
           setDialogOpen(true);
           setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
@@ -226,7 +221,8 @@ const EntranceEnter = () => {
                     <Button variant="outlined" onClick={() => navigate("/entrance/reserve-check", { replace: true })}>
                       リセット
                     </Button>
-                    <Button variant="contained" onClick={registerWristband}>
+                    <Button variant="contained" onClick={registerWristband}
+                      disabled={reservation.registered.filter(guest => guest.is_spare === 0).map(guest => guest.guest_id).includes(guestList[guestList.length - 1])}>
                       登録
                     </Button>
                   </Box>
@@ -295,11 +291,15 @@ const EntranceEnter = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <Alert severity="info">{infoMessage}</Alert>
-      </Grid>
       <Grid item xs={12} md={6}>
-        <Scanner handleScan={handleScan} />
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Alert severity="info">{infoMessage}</Alert>
+          </Grid>
+          <Grid item xs={12}>
+            <Scanner handleScan={handleScan} />
+          </Grid>
+        </Grid>
       </Grid>
       <Grid item xs={12} md={6}>
         <Box
