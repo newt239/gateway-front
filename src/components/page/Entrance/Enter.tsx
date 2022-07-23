@@ -207,25 +207,19 @@ const EntranceEnter = () => {
                   <ListItemIcon>
                     <AssignmentIndRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary={guestList[activeStep]} />
+                  <ListItemText>{guestList[activeStep]}</ListItemText>
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <GroupWorkRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      reservation.guest_type === "family" ? "保護者" : "その他"
-                    }
-                  />
+                  <ListItemText>{reservation.guest_type === "family" ? "保護者" : "その他"}</ListItemText>
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <AccessTimeRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText
-                    primary={getTimePart(reservation.part).part_name}
-                  />
+                  <ListItemText>{getTimePart(reservation.part).part_name}</ListItemText>
                 </ListItem>
               </List>
               <Box
@@ -268,12 +262,24 @@ const EntranceEnter = () => {
     <>
       <Grid container spacing={2} sx={{ p: 2 }}>
         <Grid item xs={12}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h3">リストバンド登録</Typography>
-            <Typography variant="body1">
-              登録するリストバンドのQRコードをスキャンしてください。
-            </Typography>
-          </Card>
+          <Grid
+            container
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "nowrap",
+            }}
+          >
+            <Grid item>
+              <Typography variant="h3">リストバンド登録</Typography>
+              <Typography variant="body1">
+                登録するリストバンドのQRコードをスキャンしてください。
+              </Typography>
+            </Grid>
+            <Grid item>
+              <NumPad scanType="guest" onClose={onNumPadClose} />
+            </Grid>
+          </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
           <Scanner handleScan={handleScan} />
@@ -286,7 +292,7 @@ const EntranceEnter = () => {
               justifyContent: "space-between",
             }}
           >
-            <Typography variant="h4">ゲストID:</Typography>
+            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>ゲストID:</Typography>
             <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
               <OutlinedInput
                 type="text"
@@ -342,7 +348,6 @@ const EntranceEnter = () => {
           onClose={onDialogClose}
         />
       </Grid>
-      <NumPad scanType="guest" onClose={onNumPadClose} />
     </>
   );
 };
