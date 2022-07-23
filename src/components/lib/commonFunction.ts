@@ -40,7 +40,7 @@ export function reservationIdValidation(reservation_id: string) {
       const guestIdNumberList = Array.from(reservation_id.slice(1)).map(
         (nstr) => Number(nstr)
       );
-      if (guestIdNumberList[0] === 1 || guestIdNumberList[1] === 2) {
+      if (guestIdNumberList[0] === 1 || guestIdNumberList[0] === 2) {
         return true;
       }
     }

@@ -168,7 +168,7 @@ const ReserveCheck = () => {
         )}
         {reservation && scanStatus === "success" && (
           <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h4">ゲスト情報</Typography>
+            <Typography variant="h4">予約情報</Typography>
             <List dense>
               <ListItem>
                 <ListItemIcon>
