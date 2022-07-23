@@ -34,8 +34,8 @@ import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
-import DeleteIcon from '@mui/icons-material/Delete';
-import ContentCopyRoundedIcon from '@mui/icons-material/ContentCopyRounded';
+import DeleteIcon from "@mui/icons-material/Delete";
+import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import {
   getTimePart,
@@ -75,7 +75,11 @@ const EntranceEnter = () => {
       navigate("/entrance/reserve-check", { replace: true });
     }
     if (reservation) {
-      setGuest(reservation.registered.filter(guest => guest.is_spare === 0).map(guest => guest.guest_id));
+      setGuest(
+        reservation.registered
+          .filter((guest) => guest.is_spare === 0)
+          .map((guest) => guest.guest_id)
+      );
     }
   }, [reservation]);
 
@@ -85,9 +89,13 @@ const EntranceEnter = () => {
   useEffect(() => {
     if (reservation) {
       if (guestList.length < reservation.count) {
-        setInfoMessage(`${guestList.length + 1}枚目のリストバンドを登録してください`);
+        setInfoMessage(
+          `${guestList.length + 1}枚目のリストバンドを登録してください`
+        );
       } else {
-        setInfoMessage(`予約されている人数分のリストバンドの読み込みが終わりました。「登録」を押してください`);
+        setInfoMessage(
+          `予約されている人数分のリストバンドの読み込みが終わりました。「登録」を押してください`
+        );
       }
     }
   }, [guestList]);
@@ -138,7 +146,8 @@ const EntranceEnter = () => {
           setText("");
           setDeviceState(true);
           setSmDrawerStatus(false);
-        }).finally(() => {
+        })
+        .finally(() => {
           setLoading(false);
         });
     }
@@ -151,7 +160,7 @@ const EntranceEnter = () => {
   const closeAlert = () => {
     setAlertMessage("");
     setAlertStatus(false);
-  }
+  };
 
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
@@ -192,10 +201,18 @@ const EntranceEnter = () => {
             <Typography variant="h4">予約情報</Typography>
             <List dense>
               {guestList.map((guest, index) => (
-                <ListItem key={guest}
+                <ListItem
+                  key={guest}
                   secondaryAction={
-                    !reservation.registered.filter(guest => guest.is_spare === 0).map(guest => guest.guest_id).includes(guest) && (
-                      <IconButton edge="end" aria-label="delete" onClick={() => reset(index)}>
+                    !reservation.registered
+                      .filter((guest) => guest.is_spare === 0)
+                      .map((guest) => guest.guest_id)
+                      .includes(guest) && (
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => reset(index)}
+                      >
                         <DeleteIcon />
                       </IconButton>
                     )
@@ -218,11 +235,22 @@ const EntranceEnter = () => {
                       gap: "1rem",
                     }}
                   >
-                    <Button variant="outlined" onClick={() => navigate("/entrance/reserve-check", { replace: true })}>
+                    <Button
+                      variant="outlined"
+                      onClick={() =>
+                        navigate("/entrance/reserve-check", { replace: true })
+                      }
+                    >
                       リセット
                     </Button>
-                    <Button variant="contained" onClick={registerWristband}
-                      disabled={reservation.registered.filter(guest => guest.is_spare === 0).map(guest => guest.guest_id).includes(guestList[guestList.length - 1])}>
+                    <Button
+                      variant="contained"
+                      onClick={registerWristband}
+                      disabled={reservation.registered
+                        .filter((guest) => guest.is_spare === 0)
+                        .map((guest) => guest.guest_id)
+                        .includes(guestList[guestList.length - 1])}
+                    >
                       登録
                     </Button>
                   </Box>
@@ -257,12 +285,9 @@ const EntranceEnter = () => {
                 <ListItemIcon>
                   <PeopleRoundedIcon />
                 </ListItemIcon>
-                <ListItemText>
-                  {reservation.count}人
-                </ListItemText>
+                <ListItemText>{reservation.count}人</ListItemText>
               </ListItem>
             </List>
-
           </Card>
         )}
       </>

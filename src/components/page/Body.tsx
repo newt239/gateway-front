@@ -130,9 +130,7 @@ const Body = () => {
               )}
             </Route>
             <Route path="entrance">
-              {["moderator", "executive"].includes(
-                profile.user_type
-              ) ? (
+              {["moderator", "executive"].includes(profile.user_type) ? (
                 <>
                   <Route index element={<Entrance />} />
                   <Route path="reserve-check" element={<ReserveCheck />} />
@@ -144,9 +142,7 @@ const Body = () => {
               )}
             </Route>
             <Route path="chart">
-              {["moderator", "analysis"].includes(
-                profile.user_type
-              ) ? (
+              {["moderator", "analysis"].includes(profile.user_type) ? (
                 <>
                   <Route index element={<ChartIndex />} />
                   <Route

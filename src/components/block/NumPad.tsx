@@ -138,7 +138,13 @@ const NumPad = ({
               </Grid>
             </Grid>
             <DialogActions>
-              <Button onClick={() => setId([])} color="error" disabled={id.length === 0}>リセット</Button>
+              <Button
+                onClick={() => setId([])}
+                color="error"
+                disabled={id.length === 0}
+              >
+                リセット
+              </Button>
               <Button onClick={() => handleClose(id)}>閉じる</Button>
             </DialogActions>
           </DialogContent>

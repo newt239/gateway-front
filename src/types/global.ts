@@ -1,7 +1,4 @@
-export type userTypeProp =
-  | "moderator"
-  | "executive"
-  | "exhibit";
+export type userTypeProp = "moderator" | "executive" | "exhibit";
 
 export interface profileProp {
   user_id: string;

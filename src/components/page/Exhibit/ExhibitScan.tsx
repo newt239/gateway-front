@@ -362,8 +362,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "family"
-                        ? "保護者"
-                        : "その他"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -431,7 +431,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${
+                        scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
