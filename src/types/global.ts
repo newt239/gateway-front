@@ -1,9 +1,4 @@
-export type userTypeProp =
-  | "admin"
-  | "moderator"
-  | "executive"
-  | "exhibit"
-  | "analysis";
+export type userTypeProp = "moderator" | "executive" | "exhibit";
 
 export interface profileProp {
   user_id: string;
@@ -47,4 +42,4 @@ export type profileStateProp = {
   note: string;
 };
 
-export type exhibitTypeProp = "class" | "club" | "stage" | "special";
+export type exhibitTypeProp = "class" | "club" | "stage" | "other";

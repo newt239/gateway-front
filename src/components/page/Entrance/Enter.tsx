@@ -9,15 +9,10 @@ import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
 import {
-  MobileStepper,
   SwipeableDrawer,
   Grid,
   Typography,
-  Button,
-  FormControl,
   IconButton,
-  InputAdornment,
-  OutlinedInput,
   Box,
   LinearProgress,
   Card,
@@ -25,15 +20,22 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Alert,
+  Divider,
+  FormControl,
+  InputAdornment,
+  OutlinedInput,
+  Button,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
+import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
+import DeleteIcon from "@mui/icons-material/Delete";
 import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
-import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
-import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
 
 import {
   getTimePart,
@@ -50,15 +52,15 @@ const EntranceEnter = () => {
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
   const [text, setText] = useState<string>("");
-  const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
-    "waiting"
-  );
+  const [alertStatus, setAlertStatus] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
   const reservation = useRecoilValue(reservationState);
   const resetReservation = useResetRecoilState(reservationState);
   const [guestList, setGuest] = useState<string[]>([]);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-  const [activeStep, setActiveStep] = useState(0);
+
+  const [infoMessage, setInfoMessage] = useState("");
 
   const setDeviceState = useSetRecoilState(deviceState);
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -72,31 +74,53 @@ const EntranceEnter = () => {
     if (!reservation || reservation.reservation_id === "") {
       navigate("/entrance/reserve-check", { replace: true });
     }
+    if (reservation) {
+      setGuest(
+        reservation.registered
+          .filter((guest) => guest.is_spare === 0)
+          .map((guest) => guest.guest_id)
+      );
+    }
   }, [reservation]);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+
+  useEffect(() => {
+    if (reservation) {
+      if (guestList.length < reservation.count) {
+        setInfoMessage(
+          `${guestList.length + 1}枚目のリストバンドを登録してください`
+        );
+      } else {
+        setInfoMessage(
+          `予約されている人数分のリストバンドの読み込みが終わりました。「登録」を押してください`
+        );
+      }
+    }
+  }, [guestList]);
+
   const handleScan = (scanText: string | null) => {
-    if (reservation && scanText && profile) {
-      setText(scanText);
-      if (guestIdValidation(scanText)) {
-        if (!reservation.registered.includes(scanText)) {
-          if (!guestList.some((guest) => guest === scanText)) {
+    if (text !== scanText) {
+      if (profile && reservation && scanText) {
+        setText(scanText);
+        if (guestIdValidation(scanText)) {
+          if (!guestList.includes(scanText)) {
             setSmDrawerStatus(true);
             setGuest([...guestList, scanText]);
-            setScanStatus("success");
-            setActiveStep(guestList.length);
+          } else {
+            setAlertMessage(`${scanText}は登録済みです。`);
+            setAlertStatus(true);
           }
         } else {
-          console.log(`${scanText}はすでに登録済みです。`);
+          setAlertMessage(`${scanText}というゲストは存在しません。`);
+          setAlertStatus(true);
         }
-      } else {
-        console.log(`${scanText}というゲストは存在しません。`);
       }
     }
   };
 
-  const postApi = () => {
+  const registerWristband = () => {
     setLoading(true);
     if (token && reservation) {
       apiClient(process.env.REACT_APP_API_BASE_URL)
@@ -113,7 +137,6 @@ const EntranceEnter = () => {
           resetReservation();
           setDeviceState(true);
           setText("");
-          setScanStatus("waiting");
           setSmDrawerStatus(false);
           setDialogOpen(true);
           setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
@@ -123,22 +146,20 @@ const EntranceEnter = () => {
           setText("");
           setDeviceState(true);
           setSmDrawerStatus(false);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
-    setLoading(false);
   };
 
-  const retry = (activeStep: number) => {
-    setDeviceState(true);
-    setText("");
-    setScanStatus("waiting");
-    setSmDrawerStatus(false);
-    if (activeStep === 0) {
-      setGuest([]);
-    } else {
-      const newGuestList = guestList;
-      setGuest(newGuestList.splice(activeStep - 1, 1));
-    }
+  const reset = (target: number) => {
+    setGuest(guestList.splice(target - 1, 1));
+  };
+
+  const closeAlert = () => {
+    setAlertMessage("");
+    setAlertStatus(false);
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -153,197 +174,223 @@ const EntranceEnter = () => {
     navigate("/entrance/reserve-check", { replace: true });
   };
 
-  const GuestInfoCard = () => {
+  const ReservationInfoCard = () => {
     return (
       <>
-        {reservation && guestList.length !== 0 && (
-          <>
-            <MobileStepper
-              variant="dots"
-              steps={reservation.count - reservation.registered.length}
-              position="static"
-              activeStep={activeStep}
-              sx={{ flexGrow: 1 }}
-              nextButton={
-                <Button
-                  size="small"
-                  onClick={() =>
-                    setActiveStep((prevActiveStep) => prevActiveStep + 1)
-                  }
-                  disabled={activeStep === guestList.length - 1}
-                >
-                  Next
-                  {theme.direction === "rtl" ? (
-                    <KeyboardArrowLeft />
-                  ) : (
-                    <KeyboardArrowRight />
-                  )}
-                </Button>
-              }
-              backButton={
-                <Button
-                  size="small"
-                  onClick={() =>
-                    setActiveStep((prevActiveStep) => prevActiveStep - 1)
-                  }
-                  disabled={activeStep === 0}
-                >
-                  {theme.direction === "rtl" ? (
-                    <KeyboardArrowRight />
-                  ) : (
-                    <KeyboardArrowLeft />
-                  )}
-                  Back
-                </Button>
-              }
-            />
-            <Card variant="outlined" sx={{ p: 2 }}>
-              <Typography variant="h4">
-                ゲスト情報 ( {activeStep + 1} 人目 /{" "}
-                {reservation.count - reservation.registered.length} 人中 )
-              </Typography>
-              <List dense>
-                <ListItem>
-                  <ListItemIcon>
-                    <AssignmentIndRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={guestList[activeStep]} />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <GroupWorkRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      reservation.guest_type === "family" ? "保護者" : "その他"
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <AccessTimeRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={getTimePart(reservation.part).part_name}
-                  />
-                </ListItem>
-              </List>
-              <Box
-                m={1}
+        {alertStatus && (
+          <Alert
+            variant="filled"
+            severity="error"
+            action={
+              <Button
+                color="inherit"
                 sx={{
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  alignItems: "flex-end",
-                  gap: "1rem",
+                  whiteSpace: "nowrap",
                 }}
+                onClick={closeAlert}
               >
-                <Button variant="outlined" onClick={() => retry(activeStep)}>
-                  スキャンし直す
-                </Button>
-              </Box>
-            </Card>
-            <Box
-              m={1}
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                gap: "1rem",
-              }}
-            >
-              <Button variant="outlined" onClick={() => retry(0)}>
-                全てスキャンし直す
+                非表示
               </Button>
-              <Button variant="contained" onClick={postApi}>
-                登録
-              </Button>
-            </Box>
-          </>
+            }
+          >
+            {alertMessage}
+          </Alert>
+        )}
+        {reservation && (
+          <Card variant="outlined" sx={{ p: 2 }}>
+            <Typography variant="h4">予約情報</Typography>
+            <List dense>
+              {guestList.map((guest, index) => (
+                <ListItem
+                  key={guest}
+                  secondaryAction={
+                    !reservation.registered
+                      .filter((guest) => guest.is_spare === 0)
+                      .map((guest) => guest.guest_id)
+                      .includes(guest) && (
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => reset(index)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    )
+                  }
+                >
+                  <ListItemIcon>
+                    <PersonRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText>{guest}</ListItemText>
+                </ListItem>
+              ))}
+              {guestList.length !== 0 && (
+                <>
+                  <Box
+                    m={1}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-end",
+                      gap: "1rem",
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      onClick={() =>
+                        navigate("/entrance/reserve-check", { replace: true })
+                      }
+                    >
+                      リセット
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={registerWristband}
+                      disabled={reservation.registered
+                        .filter((guest) => guest.is_spare === 0)
+                        .map((guest) => guest.guest_id)
+                        .includes(guestList[guestList.length - 1])}
+                    >
+                      登録
+                    </Button>
+                  </Box>
+                  <Divider />
+                </>
+              )}
+              <ListItem>
+                <ListItemIcon>
+                  <AssignmentIndRoundedIcon />
+                </ListItemIcon>
+                <ListItemText>{reservation.reservation_id}</ListItemText>
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <GroupWorkRoundedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    reservation.guest_type === "family" ? "保護者" : "その他"
+                  }
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <AccessTimeRoundedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={getTimePart(reservation.part).part_name}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <PeopleRoundedIcon />
+                </ListItemIcon>
+                <ListItemText>{reservation.count}人</ListItemText>
+              </ListItem>
+            </List>
+          </Card>
         )}
       </>
     );
   };
 
   return (
-    <>
-      <Grid container spacing={2} sx={{ p: 2 }}>
-        <Grid item xs={12}>
-          <Card variant="outlined" sx={{ p: 2 }}>
+    <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid item xs={12}>
+        <Grid
+          container
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            flexWrap: "nowrap",
+          }}
+        >
+          <Grid item>
             <Typography variant="h3">リストバンド登録</Typography>
             <Typography variant="body1">
               登録するリストバンドのQRコードをスキャンしてください。
             </Typography>
-          </Card>
+          </Grid>
+          <Grid item>
+            <NumPad scanType="guest" onClose={onNumPadClose} />
+          </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Scanner handleScan={handleScan} />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography variant="h4">ゲストID:</Typography>
-            <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
-              <OutlinedInput
-                type="text"
-                size="small"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="ゲストIDをコピー"
-                      onClick={() => {
-                        if (text !== "") {
-                          navigator.clipboard
-                            .writeText(text)
-                            .catch((e) => console.log(e));
-                        }
-                      }}
-                      edge="end"
-                    >
-                      <ContentCopyRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
-                disabled
-                fullWidth
-              />
-            </FormControl>
-          </Box>
-          {loading && (
-            <Box sx={{ width: "100%" }}>
-              <LinearProgress />
-            </Box>
-          )}
-          {scanStatus !== "waiting" &&
-            (largerThanSM ? (
-              <GuestInfoCard />
-            ) : (
-              <SwipeableDrawer
-                anchor="bottom"
-                open={smDrawerOpen}
-                onClose={() => retry(0)}
-                onOpen={() => setSmDrawerStatus(true)}
-              >
-                <GuestInfoCard />
-              </SwipeableDrawer>
-            ))}
-        </Grid>
-        <MessageDialog
-          open={dialogOpen}
-          type="success"
-          title="処理が完了しました"
-          message={[dialogMessage]}
-          onClose={onDialogClose}
-        />
       </Grid>
-      <NumPad scanType="guest" onClose={onNumPadClose} />
-    </>
+      <Grid item xs={12} md={6}>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Alert severity="info">{infoMessage}</Alert>
+          </Grid>
+          <Grid item xs={12}>
+            <Scanner handleScan={handleScan} />
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
+            ゲストID:
+          </Typography>
+          <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
+            <OutlinedInput
+              type="text"
+              size="small"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="ゲストIDをコピー"
+                    onClick={() => {
+                      if (text !== "") {
+                        navigator.clipboard
+                          .writeText(text)
+                          .catch((e) => console.log(e));
+                      }
+                    }}
+                    edge="end"
+                  >
+                    <ContentCopyRoundedIcon />
+                  </IconButton>
+                </InputAdornment>
+              }
+              disabled
+              fullWidth
+            />
+          </FormControl>
+        </Box>
+        {loading && (
+          <Box sx={{ width: "100%" }}>
+            <LinearProgress />
+          </Box>
+        )}
+        {largerThanSM ? (
+          <ReservationInfoCard />
+        ) : (
+          <SwipeableDrawer
+            anchor="bottom"
+            open={smDrawerOpen}
+            onClose={() => reset(0)}
+            onOpen={() => setSmDrawerStatus(true)}
+          >
+            <ReservationInfoCard />
+          </SwipeableDrawer>
+        )}
+      </Grid>
+      <MessageDialog
+        open={dialogOpen}
+        type="success"
+        title="処理が完了しました"
+        message={[dialogMessage]}
+        onClose={onDialogClose}
+      />
+    </Grid>
   );
 };
 

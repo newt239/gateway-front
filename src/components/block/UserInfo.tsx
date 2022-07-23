@@ -7,7 +7,6 @@ import Identicon from "boring-avatars";
 import { Button, Box, Typography, Tooltip } from "@mui/material";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GroupIcon from "@mui/icons-material/Group";
 import NoAccountsIcon from "@mui/icons-material/NoAccounts";
@@ -27,16 +26,10 @@ const UserInfo = () => {
   const AccountType = () => {
     if (profile && profile.available) {
       switch (profile.user_type) {
-        case "admin":
-          return (
-            <Tooltip title="管理者用アカウント">
-              <AdminPanelSettingsIcon />
-            </Tooltip>
-          );
         case "moderator":
           return (
             <Tooltip title="管理者用アカウント">
-              <ManageAccountsIcon />
+              <AdminPanelSettingsIcon />
             </Tooltip>
           );
         case "executive":

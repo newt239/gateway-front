@@ -15,7 +15,10 @@ export type Methods = {
       guest_type: string;
       part: number;
       count: number;
-      registered: string[];
+      registered: {
+        guest_id: string;
+        is_spare: number;
+      }[];
       available: number;
     };
   };

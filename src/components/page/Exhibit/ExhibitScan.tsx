@@ -64,7 +64,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
-  const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [capacity, setCapacity] = useState(0);
@@ -72,6 +71,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [exhibitName, setExhibitName] = useState("");
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [alertStatus, setAlertStatus] = useState(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
     message: string;
@@ -116,8 +116,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   };
 
   useEffect(() => {
+    setAlertMessage("");
+    setAlertStatus(false);
     updateExhibitInfo();
-  }, []);
+  }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
     if (scanText && token && profile && exhibit_id) {
@@ -137,7 +139,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setGuestInfo(res);
             if (!res.available) {
               setScanStatus("error");
-              setMessage("このゲストは無効です。");
+              setAlertMessage("このゲストは無効です。");
               setAlertStatus(true);
             } else {
               if (scanType === "enter") {
@@ -151,7 +153,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 } else if (res.exhibit_id === exhibit_id) {
                   // すでに入室中の場合
                   setScanStatus("error");
-                  setMessage(
+                  setAlertMessage(
                     "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
                   );
                   setAlertStatus(true);
@@ -175,13 +177,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     .then(() => {
                       setDeviceState(true);
                       setScanStatus("success");
-                      setMessage(
+                      setAlertMessage(
                         "前の展示で退室処理が行われていなかったため退室処理しました。"
                       );
                       setAlertStatus(true);
                     })
                     .catch(() => {
-                      setMessage(
+                      setAlertMessage(
                         "前の展示の退場処理に際し何らかのエラーが発生しました。"
                       );
                       setAlertStatus(true);
@@ -198,7 +200,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   setScanStatus("success");
                 } else if (res.exhibit_id === "") {
                   setScanStatus("error");
-                  setMessage(
+                  setAlertMessage(
                     "このゲストは現在どの展示にも入室していません。入室スキャンと間違えていませんか？"
                   );
                   setAlertStatus(true);
@@ -209,7 +211,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   });
                 } else {
                   setScanStatus("success");
-                  setMessage("このゲストは他の展示に入室中です。");
+                  setAlertMessage("このゲストは他の展示に入室中です。");
                   setAlertStatus(true);
                   ReactGA.event({
                     category: "scan",
@@ -224,7 +226,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           .catch((err: AxiosError) => {
             console.log(err);
             setScanStatus("error");
-            setMessage("予期せぬエラーが発生しました。");
+            setAlertMessage("予期せぬエラーが発生しました。");
             setAlertStatus(true);
             ReactGA.event({
               category: "scan",
@@ -238,7 +240,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           });
       } else {
         setScanStatus("error");
-        setMessage("このゲストは存在しません。");
+        setAlertMessage("このゲストは存在しません。");
         setAlertStatus(true);
         setSmDrawerStatus(true);
       }
@@ -248,7 +250,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const retry = () => {
     setDeviceState(true);
     setText("");
-    setMessage("");
+    setAlertMessage("");
     setSnackbar({ status: false, message: "", severity: "success" });
     setScanStatus("waiting");
     setAlertStatus(false);
@@ -299,7 +301,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               }
               setDeviceState(true);
               setText("");
-              setMessage("");
+              setAlertMessage("");
               setAlertStatus(true);
               setScanStatus("waiting");
               setSmDrawerStatus(false);
@@ -338,7 +340,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               </Button>
             }
           >
-            {message}
+            {alertMessage}
           </Alert>
         )}
         {scanStatus === "success" && guestInfo && (

@@ -87,7 +87,6 @@ const ReserveCheck = () => {
             headers: { Authorization: "Bearer " + token },
           })
           .then((res) => {
-            console.log(res);
             setLoading(false);
             setReservation(res);
             if (res.available) {
@@ -169,7 +168,7 @@ const ReserveCheck = () => {
         )}
         {reservation && scanStatus === "success" && (
           <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h4">ゲスト情報</Typography>
+            <Typography variant="h4">予約情報</Typography>
             <List dense>
               <ListItem>
                 <ListItemIcon>
@@ -317,7 +316,7 @@ const ReserveCheck = () => {
               <SwipeableDrawer
                 anchor="bottom"
                 open={smDrawerOpen}
-                onClose={() => retry()}
+                onClose={retry}
                 onOpen={() => setSmDrawerStatus(true)}
               >
                 <ReservationInfoCard />

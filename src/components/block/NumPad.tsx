@@ -26,7 +26,7 @@ const NumPad = ({
   const [id, setId] = useState<number[]>([]);
 
   const theme = useTheme();
-  const md = useMediaQuery(theme.breakpoints.down("md"));
+  const smallerThanMD = useMediaQuery(theme.breakpoints.down("md"));
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const openNumPad = () => {
     setOpen(true);
@@ -68,7 +68,7 @@ const NumPad = ({
         open={open}
         onClose={() => handleClose(id)}
         maxWidth="xs"
-        fullScreen={md}
+        fullScreen={smallerThanMD}
       >
         <Box
           sx={{
@@ -138,6 +138,13 @@ const NumPad = ({
               </Grid>
             </Grid>
             <DialogActions>
+              <Button
+                onClick={() => setId([])}
+                color="error"
+                disabled={id.length === 0}
+              >
+                リセット
+              </Button>
               <Button onClick={() => handleClose(id)}>閉じる</Button>
             </DialogActions>
           </DialogContent>
