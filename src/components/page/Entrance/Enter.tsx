@@ -25,6 +25,7 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Alert,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -59,6 +60,8 @@ const EntranceEnter = () => {
   const [guestList, setGuest] = useState<string[]>([]);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
+
+  const [infoMessage, setInfoMessage] = useState("1枚目のリストバンドを登録してください。");
 
   const setDeviceState = useSetRecoilState(deviceState);
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -280,6 +283,9 @@ const EntranceEnter = () => {
               <NumPad scanType="guest" onClose={onNumPadClose} />
             </Grid>
           </Grid>
+        </Grid>
+        <Grid item xs={12}>
+          <Alert severity="info">{infoMessage}</Alert>
         </Grid>
         <Grid item xs={12} md={6}>
           <Scanner handleScan={handleScan} />
