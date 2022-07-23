@@ -87,7 +87,6 @@ const ReserveCheck = () => {
             headers: { Authorization: "Bearer " + token },
           })
           .then((res) => {
-            console.log(res);
             setLoading(false);
             setReservation(res);
             if (res.available) {
@@ -317,7 +316,7 @@ const ReserveCheck = () => {
               <SwipeableDrawer
                 anchor="bottom"
                 open={smDrawerOpen}
-                onClose={() => retry()}
+                onClose={retry}
                 onOpen={() => setSmDrawerStatus(true)}
               >
                 <ReservationInfoCard />
