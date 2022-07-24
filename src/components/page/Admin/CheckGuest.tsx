@@ -159,7 +159,7 @@ const AdminCheckGuest = () => {
         <Box sx={{ width: "100%", textAlign: "right" }}>
           <Button
             onClick={searchGuest}
-            disabled={loading || guestId === ""}
+            disabled={loading || !guestIdValidation(guestId)}
             variant="contained"
             startIcon={loading && <CircularProgress size={24} />}
           >

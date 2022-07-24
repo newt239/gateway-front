@@ -118,7 +118,7 @@ const LostWristband = () => {
                 )}
                 <Button
                   onClick={checkReservation}
-                  disabled={loading || reservationId === ""}
+                  disabled={loading || !reservationIdValidation(reservationId)}
                   variant="contained"
                 >
                   予約を検索
