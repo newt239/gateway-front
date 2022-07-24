@@ -9,6 +9,8 @@ import Version from "#/components/block/Version";
 
 import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 
+import GatewayThumbnail from "#/asset/gateway-hero.jpg";
+
 const Home = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {
@@ -21,7 +23,7 @@ const Home = () => {
         <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
           <Box sx={{ textAlign: "center" }}>
             <img
-              src={`${process.env.PUBLIC_URL}/gateway-ogp.webp`}
+              src={GatewayThumbnail}
               style={{
                 width: "100%",
                 height: "35vh",
