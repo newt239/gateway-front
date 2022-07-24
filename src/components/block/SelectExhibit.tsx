@@ -8,6 +8,8 @@ import {
   Select,
   SelectChangeEvent,
   MenuItem,
+  CircularProgress,
+  Grid,
 } from "@mui/material";
 import { profileState, tokenState } from "#/recoil/user";
 import { currentExhibitState } from "#/recoil/exhibit";
@@ -23,12 +25,14 @@ const SelectExhibit: React.FunctionComponent<{
 }> = ({ disabled }) => {
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
+  const [loading, setLoading] = useState(true);
   const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
   const [currentExhibit, setCurrentExhibit] =
     useRecoilState(currentExhibitState);
 
   useEffect(() => {
     if (token && profile) {
+      setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .exhibit.list.$get({
           headers: {
@@ -49,6 +53,8 @@ const SelectExhibit: React.FunctionComponent<{
         })
         .catch((err: AxiosError) => {
           console.log(err);
+        }).finally(() => {
+          setLoading(false);
         });
     }
   }, [profile]);
@@ -65,22 +71,31 @@ const SelectExhibit: React.FunctionComponent<{
   };
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 200 }}>
-      <Select
-        disabled={disabled}
-        size="small"
-        value={currentExhibit}
-        onChange={handleChange}
-      >
-        {exhibitList.map((v) => {
-          return (
-            <MenuItem value={v.exhibit_id} key={v.exhibit_id}>
-              {v.group_name}
-            </MenuItem>
-          );
-        })}
-      </Select>
-    </FormControl>
+    <Grid container sx={{ alignItems: "center" }}>
+      <Grid item>
+        <FormControl sx={{ m: 1, minWidth: 200 }}>
+          <Select
+            disabled={disabled}
+            size="small"
+            value={currentExhibit}
+            onChange={handleChange}
+          >
+            {exhibitList.map((v) => {
+              return (
+                <MenuItem value={v.exhibit_id} key={v.exhibit_id}>
+                  {v.group_name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      </Grid>
+      {loading && (
+        <Grid item>
+          <CircularProgress size={30} thickness={6} />
+        </Grid>
+      )}
+    </Grid>
   );
 };
 
