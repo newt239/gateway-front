@@ -32,6 +32,8 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
+import { getTimePart, guestIdValidation } from "#/components/lib/commonFunction";
+
 type exhibitProp = {
   exhibit_id: string;
   group_name: string;
@@ -77,56 +79,58 @@ const AdminCheckGuest = () => {
   const [guestActivity, setGuestActivity] = useState<guestActivityParams>([]);
 
   const searchGuest = () => {
-    if (token && profile && !loading && guestId !== "") {
-      setLoading(true);
-      apiClient(process.env.REACT_APP_API_BASE_URL)
-        .guest.info._guest_id(guestId)
-        .$get({
-          headers: { Authorization: "Bearer " + token },
-        })
-        .then((res) => {
-          setGuestInfo(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      apiClient(process.env.REACT_APP_API_BASE_URL)
-        .guest.activity._guest_id(guestId)
-        .$get({
-          headers: { Authorization: "Bearer " + token },
-        })
-        .then((res) => {
-          const guestActivityList = [];
-          console.log(res);
-          for (const eachSession of res) {
-            guestActivityList.push({
-              datetime: eachSession.enter_at,
-              exhibit_id: eachSession.exhibit_id,
-              activity_type: "enter",
-            });
-            if (eachSession.exit_at !== "current") {
-              guestActivityList.push({
-                datetime: eachSession.exit_at,
-                exhibit_id: eachSession.exhibit_id,
-                activity_type: "exit",
-              });
-            }
-          }
-          setGuestActivity(
-            guestActivityList.sort((a, b) => (a.datetime < b.datetime ? -1 : 1))
-          );
-        })
-        .catch((err) => {
-          console.log(err);
-        })
-        .finally(() => {
-          ReactGA.event({
-            category: "info",
-            action: "guest_activity_request",
-            label: profile.user_id,
+    if (token && profile && !loading) {
+      if (guestIdValidation(guestId)) {
+        setLoading(true);
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .guest.info._guest_id(guestId)
+          .$get({
+            headers: { Authorization: "Bearer " + token },
+          })
+          .then((res) => {
+            setGuestInfo(res);
+          })
+          .catch((err) => {
+            console.log(err);
           });
-        });
-      setLoading(false);
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .guest.activity._guest_id(guestId)
+          .$get({
+            headers: { Authorization: "Bearer " + token },
+          })
+          .then((res) => {
+            const guestActivityList = [];
+            console.log(res);
+            for (const eachSession of res) {
+              guestActivityList.push({
+                datetime: eachSession.enter_at,
+                exhibit_id: eachSession.exhibit_id,
+                activity_type: "enter",
+              });
+              if (eachSession.exit_at !== "current") {
+                guestActivityList.push({
+                  datetime: eachSession.exit_at,
+                  exhibit_id: eachSession.exhibit_id,
+                  activity_type: "exit",
+                });
+              }
+            }
+            setGuestActivity(
+              guestActivityList.sort((a, b) => (a.datetime < b.datetime ? -1 : 1))
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          })
+          .finally(() => {
+            ReactGA.event({
+              category: "info",
+              action: "guest_activity_request",
+              label: profile.user_id,
+            });
+          });
+        setLoading(false);
+      }
     }
   };
 
@@ -173,7 +177,7 @@ const AdminCheckGuest = () => {
                   return (
                     <TimelineItem key={i}>
                       <TimelineOppositeContent color="text.secondary">
-                        {moment(v.datetime).format("HH:mm:ss")}
+                        {moment(v.datetime).format("MM/DD hh:mm:ss")}
                       </TimelineOppositeContent>
                       <TimelineSeparator>
                         <TimelineDot color="primary" />
@@ -204,25 +208,35 @@ const AdminCheckGuest = () => {
                   <ListItemIcon>
                     <PersonRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary={guestInfo.guest_id} />
+                  <ListItemText>
+                    {guestInfo.guest_id}
+                  </ListItemText>
                 </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <AssignmentIndRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={guestInfo.reservation_id} />
-                </ListItem>
+                {guestInfo.guest_type === "family" && (
+                  <ListItem>
+                    <ListItemIcon>
+                      <AssignmentIndRoundedIcon />
+                    </ListItemIcon>
+                    <ListItemText>
+                      {guestInfo.reservation_id}
+                    </ListItemText>
+                  </ListItem>
+                )}
                 <ListItem>
                   <ListItemIcon>
                     <PeopleRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary={guestInfo.guest_type} />
+                  <ListItemText>
+                    {guestInfo.guest_type === "family" ? "保護者" : guestInfo.guest_type === "student" ? "生徒" : guestInfo.guest_type === "teacher" ? "教員" : "その他"}
+                  </ListItemText>
                 </ListItem>
                 <ListItem>
                   <ListItemIcon>
                     <AccessTimeRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary={guestInfo.part} />
+                  <ListItemText>
+                    {getTimePart(guestInfo.part).part_name}
+                  </ListItemText>
                 </ListItem>
               </List>
             </Card>
