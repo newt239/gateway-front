@@ -13,7 +13,7 @@ const NotFound = (props: extraProp) => {
 
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {
-    setPageInfo({ title: "ホーム" });
+    setPageInfo({ title: "エラー" });
   }, []);
 
   return (

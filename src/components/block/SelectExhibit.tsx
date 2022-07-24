@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -48,6 +49,11 @@ const SelectExhibit = () => {
             setExhibitList(res);
             setCurrentExhibit(res[0].exhibit_id);
           }
+          ReactGA.event({
+            category: "exhibit",
+            action: "exhibit_list_request",
+            label: profile.user_id,
+          });
         })
         .catch((err: AxiosError) => {
           console.log(err);
