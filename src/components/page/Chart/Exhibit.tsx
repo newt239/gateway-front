@@ -5,7 +5,7 @@ import { profileState, tokenState } from "#/recoil/user";
 import { pageStateSelector } from "#/recoil/page";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
-import { Grid, Card, Button, Typography } from "@mui/material";
+import { Grid, Button, Typography } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 
 import ExhibitEnterCountBarChart from "../../block/ExhibitEnterCountBarChart";
@@ -77,17 +77,13 @@ const ChartExhibit = () => {
                 </Button>
               </Grid>
             )}
-            <Grid item xs={12} md={6}>
-              <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-                <Typography variant="h3">現在滞在中のゲスト一覧</Typography>
-                <ExhibitCurrentGuestList exhibit_id={exhibit_id} />
-              </Card>
+            <Grid item xs={12} lg={6}>
+              <Typography variant="h3">現在滞在中のゲスト一覧</Typography>
+              <ExhibitCurrentGuestList exhibit_id={exhibit_id} />
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-                <Typography variant="h3">時間帯別入場者数</Typography>
-                <ExhibitEnterCountBarChart exhibit_id={exhibit_id} />
-              </Card>
+            <Grid item xs={12} lg={6}>
+              <Typography variant="h3">時間帯別入場者数</Typography>
+              <ExhibitEnterCountBarChart exhibit_id={exhibit_id} />
             </Grid>
           </Grid>
         ) : (
