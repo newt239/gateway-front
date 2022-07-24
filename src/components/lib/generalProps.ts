@@ -2,6 +2,7 @@ const generalProps = {
   reservation: {
     guest_type: {
       student: "生徒",
+      teacher: "教員",
       family: "保護者",
       other: "その他",
     },
@@ -9,6 +10,7 @@ const generalProps = {
   guest: {
     guest_type: {
       student: "生徒",
+      teacher: "教員",
       family: "保護者",
       other: "その他",
     },

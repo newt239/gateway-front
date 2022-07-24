@@ -29,7 +29,7 @@ export interface guestsInfoSuccessProp {
 
 export type exhibitCurrentGuestProp = {
   id: string;
-  guest_type: "student" | "family" | "other";
+  guest_type: "student" | "teacher" | "family" | "other";
   enter_at: string;
 };
 

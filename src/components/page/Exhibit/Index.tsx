@@ -23,6 +23,7 @@ const ExhibitIndex = () => {
     const currentExhibit = useRecoilValue(currentExhibitState);
     return (
       <Button
+        disabled={!currentExhibit}
         onClick={() => currentExhibit && navigate(`${currentExhibit}/${type}`)}
         variant="outlined"
       >
@@ -44,7 +45,7 @@ const ExhibitIndex = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid item xs={12} md={6}>
           <Card variant="outlined" sx={{ p: 2 }}>
             <Typography variant="h3">入室処理</Typography>
             <Typography>展示への入室を記録します。</Typography>
@@ -55,7 +56,7 @@ const ExhibitIndex = () => {
             </Box>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6} lg={4}>
+        <Grid item xs={12} md={6}>
           <Card variant="outlined" sx={{ p: 2 }}>
             <Typography variant="h3">退室処理</Typography>
             <Typography>展示からの退室を記録します。</Typography>

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue } from "recoil";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -8,6 +9,8 @@ import {
   Select,
   SelectChangeEvent,
   MenuItem,
+  CircularProgress,
+  Grid,
 } from "@mui/material";
 import { profileState, tokenState } from "#/recoil/user";
 import { currentExhibitState } from "#/recoil/exhibit";
@@ -18,17 +21,17 @@ type exhibitProp = {
   exhibit_type: string;
 };
 
-const SelectExhibit: React.FunctionComponent<{
-  disabled?: boolean | false;
-}> = ({ disabled }) => {
+const SelectExhibit = () => {
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
+  const [loading, setLoading] = useState(true);
   const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
   const [currentExhibit, setCurrentExhibit] =
     useRecoilState(currentExhibitState);
 
   useEffect(() => {
     if (token && profile) {
+      setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .exhibit.list.$get({
           headers: {
@@ -46,9 +49,17 @@ const SelectExhibit: React.FunctionComponent<{
             setExhibitList(res);
             setCurrentExhibit(res[0].exhibit_id);
           }
+          ReactGA.event({
+            category: "exhibit",
+            action: "exhibit_list_request",
+            label: profile.user_id,
+          });
         })
         .catch((err: AxiosError) => {
           console.log(err);
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   }, [profile]);
@@ -65,22 +76,31 @@ const SelectExhibit: React.FunctionComponent<{
   };
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 200 }}>
-      <Select
-        disabled={disabled}
-        size="small"
-        value={currentExhibit}
-        onChange={handleChange}
-      >
-        {exhibitList.map((v) => {
-          return (
-            <MenuItem value={v.exhibit_id} key={v.exhibit_id}>
-              {v.group_name}
-            </MenuItem>
-          );
-        })}
-      </Select>
-    </FormControl>
+    <Grid container sx={{ alignItems: "center", gap: ".5rem" }}>
+      <Grid item>
+        <FormControl sx={{ m: 1, minWidth: 200 }}>
+          <Select
+            disabled={loading}
+            size="small"
+            value={currentExhibit}
+            onChange={handleChange}
+          >
+            {exhibitList.map((v) => {
+              return (
+                <MenuItem value={v.exhibit_id} key={v.exhibit_id}>
+                  {v.group_name}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </FormControl>
+      </Grid>
+      {loading && (
+        <Grid item>
+          <CircularProgress size={30} thickness={6} />
+        </Grid>
+      )}
+    </Grid>
   );
 };
 
