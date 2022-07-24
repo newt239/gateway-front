@@ -14,7 +14,7 @@ const AllAreaPieChart = () => {
   const [allAreaTotalCount, setAllAreaTotalCount] = useState<number>(0);
   const [allAreaChartCategories, setAllAreaChartCategories] = useState<
     string[]
-  >(["保護者", "生徒"]);
+  >(["保護者", "生徒", "教員"]);
   const [allAreaChartSeries, setAllAreaChartSeries] = useState<number[]>([0]);
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const AllAreaPieChart = () => {
         .then((res) => {
           setAllAreaTotalCount(res.reduce((a, c) => a + c.count, 0));
           setAllAreaChartCategories(
-            res.map((v) => (v.guest_type === "student" ? "生徒" : "保護者"))
+            res.map((v) => (v.guest_type === "student" ? "生徒" : v.guest_type === "teacher" ? "教員" : v.guest_type === "family" ? "保護者" : "その他"))
           );
           setAllAreaChartSeries(res.map((v) => v.count));
         })

@@ -42,9 +42,11 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
               guest_type:
                 v.guest_type === "student"
                   ? "生徒"
-                  : v.guest_type === "family"
-                    ? "保護者"
-                    : "その他",
+                  : v.guest_type === "teacher"
+                    ? "教員"
+                    : v.guest_type === "family"
+                      ? "保護者"
+                      : "その他",
               enter_at: moment(v.enter_at).format("MM/DD hh:mm:ss"),
             };
           });

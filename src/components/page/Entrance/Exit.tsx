@@ -198,9 +198,11 @@ const EntranceExit = () => {
                   primary={
                     guestInfo.guest_type === "student"
                       ? "生徒"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                      : guestInfo.guest_type === "teacher"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
