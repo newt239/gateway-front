@@ -3,8 +3,8 @@ import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import apiClient from "#/axios-config";
 
-import { Box } from "@mui/material";
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
+import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
 import { AxiosError } from "axios";
 import moment from "moment";
 
@@ -23,10 +23,12 @@ type exhibitCurrentGuestTableListProp = {
 const ExhibitCurrentGuestList: React.FunctionComponent<{
   exhibit_id: string;
 }> = ({ exhibit_id }) => {
-  const [rows, setRows] = useState<exhibitCurrentGuestTableListProp>([]);
   const token = useRecoilValue(tokenState);
+  const [rows, setRows] = useState<exhibitCurrentGuestTableListProp>([]);
+  const [selectedGuestList, setSelectedGuestList] = useState<GridRowId[]>([]);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
-  useEffect(() => {
+  const getCurrentGuestList = () => {
     if (token && exhibit_id !== "") {
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .exhibit.current._exhibit_id(exhibit_id)
@@ -52,21 +54,91 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
           console.log(err);
         });
     }
+  }
+
+  useEffect(() => {
+    getCurrentGuestList();
   }, [exhibit_id]);
 
+  const leaveGuest = () => {
+    if (token && exhibit_id) {
+      for (const guest of selectedGuestList) {
+        if (typeof guest == "string") {
+          const payload = {
+            guest_id: guest,
+            exhibit_id: exhibit_id,
+          };
+          apiClient(process.env.REACT_APP_API_BASE_URL)
+            .activity.exit.$post({
+              headers: { Authorization: "Bearer " + token },
+              body: payload,
+            })
+            .then(() => {
+              getCurrentGuestList();
+              setDialogOpen(false);
+            })
+            .catch((err: AxiosError) => {
+              console.log(err);
+            });
+        }
+      }
+    }
+  }
+
+  const ConfirmDialog = () => {
+    const onClose = () => {
+      setDialogOpen(false);
+    }
+    return (
+      <Dialog open={dialogOpen} onClose={onClose}>
+        <DialogTitle>一括退室処理</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{selectedGuestList.join(", ")}</DialogContentText>
+          <DialogContentText>上記ゲスト{selectedGuestList.length}名に退室処理を行います。</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose}>閉じる</Button>
+          <Button onClick={leaveGuest} color="error">実行</Button>
+        </DialogActions>
+      </Dialog>
+    )
+  }
+
   return (
-    <Box sx={{ height: "60vh", width: "100%", pt: 2 }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        rowHeight={50}
-        hideFooter
-        checkboxSelection
-        localeText={{
-          noRowsLabel: "現在この展示に滞在中のゲストはいません",
-        }}
-      />
-    </Box>
+    <Grid container spacing={1} sx={{ width: "100%" }}>
+      <Grid item xs={12}>
+        <Typography variant="h3">現在滞在中のゲスト一覧</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Box sx={{ width: "100%", textAlign: "right" }}>
+          <Button
+            disabled={selectedGuestList.length === 0}
+            variant="outlined"
+            color="error"
+            onClick={() => setDialogOpen(true)}
+          >
+            選択中のゲストを退室処理
+          </Button>
+        </Box>
+        <ConfirmDialog />
+      </Grid>
+      <Grid item xs={12} sx={{ height: "100%" }}>
+        <DataGrid
+          autoHeight
+          rows={rows}
+          columns={columns}
+          rowHeight={50}
+          checkboxSelection
+          hideFooter
+          onSelectionModelChange={(newSelection) => {
+            setSelectedGuestList(newSelection);
+          }}
+          localeText={{
+            noRowsLabel: "現在この展示に滞在中のゲストはいません",
+          }}
+        />
+      </Grid>
+    </Grid>
   );
 };
 

@@ -78,7 +78,6 @@ const ChartExhibit = () => {
               </Grid>
             )}
             <Grid item xs={12} lg={6}>
-              <Typography variant="h3">現在滞在中のゲスト一覧</Typography>
               <ExhibitCurrentGuestList exhibit_id={exhibit_id} />
             </Grid>
             <Grid item xs={12} lg={6}>
