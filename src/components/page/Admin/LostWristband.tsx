@@ -7,10 +7,17 @@ import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
 import {
+  getTimePart,
   guestIdValidation, reservationIdValidation
 } from "#/components/lib/commonFunction";
 
-import { Grid, TextField, Box, Button, CircularProgress, FormControl, InputLabel, Select, MenuItem, Typography, Card } from "@mui/material";
+import { Grid, TextField, Box, Button, CircularProgress, FormControl, InputLabel, Select, MenuItem, Typography, Card, List, ListItem, ListItemIcon, ListItemText, Divider } from "@mui/material";
+
+import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
+import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
+import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
+import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
 import MessageDialog from "#/components/block/MessageDialog";
 
@@ -120,7 +127,60 @@ const LostWristband = () => {
             </Grid>
             {reservation && reservationId === reservation.reservation_id && (
               <Grid item xs={12}>
-                <p>{reservation.reservation_id}は存在します。</p>
+                <Card variant="outlined" sx={{ p: 2 }}>
+                  <Typography variant="h4">予約情報</Typography>
+                  <List dense>
+                    <ListItem>
+                      <ListItemIcon>
+                        <AssignmentIndRoundedIcon />
+                      </ListItemIcon>
+                      <ListItemText>{reservation.reservation_id}</ListItemText>
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <GroupWorkRoundedIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={
+                          reservation.guest_type === "family" ? "保護者" : "その他"
+                        }
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <AccessTimeRoundedIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary={getTimePart(reservation.part).part_name}
+                      />
+                    </ListItem>
+                    <ListItem>
+                      <ListItemIcon>
+                        <PeopleRoundedIcon />
+                      </ListItemIcon>
+                      <ListItemText>
+                        {reservation.count}人
+                        {reservation.count !== reservation.registered.length && (
+                          <span>
+                            （残り：
+                            {reservation.count - reservation.registered.length}人）
+                          </span>
+                        )}
+                      </ListItemText>
+                    </ListItem>
+                    <Divider />
+                    {reservation.registered.map(guest => (
+                      <ListItem
+                        key={guest.guest_id}
+                      >
+                        <ListItemIcon>
+                          <PersonRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText>{guest.guest_id}{guest.is_spare === 1 && (<span>(スペア)</span>)}</ListItemText>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Card>
               </Grid>
             )}
           </Grid>
@@ -130,7 +190,7 @@ const LostWristband = () => {
             <Card variant="outlined" sx={{ p: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <Typography variant="h3">{reservation.reservation_id}</Typography>
+                  <Typography variant="h4">{reservation.reservation_id}へのゲストの登録と失効</Typography>
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
