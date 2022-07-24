@@ -20,9 +20,7 @@ type exhibitProp = {
   exhibit_type: string;
 };
 
-const SelectExhibit: React.FunctionComponent<{
-  disabled?: boolean | false;
-}> = ({ disabled }) => {
+const SelectExhibit = () => {
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
   const [loading, setLoading] = useState(true);
@@ -71,11 +69,11 @@ const SelectExhibit: React.FunctionComponent<{
   };
 
   return (
-    <Grid container sx={{ alignItems: "center" }}>
+    <Grid container sx={{ alignItems: "center", gap: ".5rem" }}>
       <Grid item>
         <FormControl sx={{ m: 1, minWidth: 200 }}>
           <Select
-            disabled={disabled}
+            disabled={loading}
             size="small"
             value={currentExhibit}
             onChange={handleChange}
