@@ -57,7 +57,8 @@ const SelectExhibit = () => {
         })
         .catch((err: AxiosError) => {
           console.log(err);
-        }).finally(() => {
+        })
+        .finally(() => {
           setLoading(false);
         });
     }

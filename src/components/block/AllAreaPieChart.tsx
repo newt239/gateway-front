@@ -26,7 +26,15 @@ const AllAreaPieChart = () => {
         .then((res) => {
           setAllAreaTotalCount(res.reduce((a, c) => a + c.count, 0));
           setAllAreaChartCategories(
-            res.map((v) => (v.guest_type === "student" ? "生徒" : v.guest_type === "teacher" ? "教員" : v.guest_type === "family" ? "保護者" : "その他"))
+            res.map((v) =>
+              v.guest_type === "student"
+                ? "生徒"
+                : v.guest_type === "teacher"
+                ? "教員"
+                : v.guest_type === "family"
+                ? "保護者"
+                : "その他"
+            )
           );
           setAllAreaChartSeries(res.map((v) => v.count));
         })

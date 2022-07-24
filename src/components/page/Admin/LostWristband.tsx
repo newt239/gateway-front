@@ -8,10 +8,28 @@ import apiClient from "#/axios-config";
 
 import {
   getTimePart,
-  guestIdValidation, reservationIdValidation
+  guestIdValidation,
+  reservationIdValidation,
 } from "#/components/lib/commonFunction";
 
-import { Grid, TextField, Box, Button, CircularProgress, FormControl, InputLabel, Select, MenuItem, Typography, Card, List, ListItem, ListItemIcon, ListItemText, Divider } from "@mui/material";
+import {
+  Grid,
+  TextField,
+  Box,
+  Button,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Typography,
+  Card,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+} from "@mui/material";
 
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
@@ -113,9 +131,7 @@ const LostWristband = () => {
             </Grid>
             <Grid item xs={12}>
               <Box sx={{ width: "100%", textAlign: "right" }}>
-                {loading && (
-                  <CircularProgress size={24} />
-                )}
+                {loading && <CircularProgress size={24} />}
                 <Button
                   onClick={checkReservation}
                   disabled={loading || !reservationIdValidation(reservationId)}
@@ -142,7 +158,9 @@ const LostWristband = () => {
                       </ListItemIcon>
                       <ListItemText
                         primary={
-                          reservation.guest_type === "family" ? "保護者" : "その他"
+                          reservation.guest_type === "family"
+                            ? "保護者"
+                            : "その他"
                         }
                       />
                     </ListItem>
@@ -160,23 +178,26 @@ const LostWristband = () => {
                       </ListItemIcon>
                       <ListItemText>
                         {reservation.count}人
-                        {reservation.count !== reservation.registered.length && (
+                        {reservation.count !==
+                          reservation.registered.length && (
                           <span>
                             （残り：
-                            {reservation.count - reservation.registered.length}人）
+                            {reservation.count - reservation.registered.length}
+                            人）
                           </span>
                         )}
                       </ListItemText>
                     </ListItem>
                     <Divider />
-                    {reservation.registered.map(guest => (
-                      <ListItem
-                        key={guest.guest_id}
-                      >
+                    {reservation.registered.map((guest) => (
+                      <ListItem key={guest.guest_id}>
                         <ListItemIcon>
                           <PersonRoundedIcon />
                         </ListItemIcon>
-                        <ListItemText>{guest.guest_id}{guest.is_spare === 1 && (<span>(スペア)</span>)}</ListItemText>
+                        <ListItemText>
+                          {guest.guest_id}
+                          {guest.is_spare === 1 && <span>(スペア)</span>}
+                        </ListItemText>
                       </ListItem>
                     ))}
                   </List>
@@ -190,7 +211,9 @@ const LostWristband = () => {
             <Card variant="outlined" sx={{ p: 2 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
-                  <Typography variant="h4">{reservation.reservation_id}へのゲストの登録と失効</Typography>
+                  <Typography variant="h4">
+                    {reservation.reservation_id}へのゲストの登録と失効
+                  </Typography>
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
@@ -205,7 +228,9 @@ const LostWristband = () => {
                 </Grid>
                 <Grid item xs={12}>
                   <FormControl fullWidth>
-                    <InputLabel id="old-guest-label">紛失したゲストID(省略可)</InputLabel>
+                    <InputLabel id="old-guest-label">
+                      紛失したゲストID(省略可)
+                    </InputLabel>
                     <Select
                       labelId="old-guest-label"
                       id="oldGuestId"
@@ -215,9 +240,16 @@ const LostWristband = () => {
                       onChange={(e) => setOldGuestId(e.target.value)}
                     >
                       <MenuItem value="not-set">未選択</MenuItem>
-                      {reservation && (
-                        reservation.registered.map(guestId => (<MenuItem key={guestId.guest_id} value={guestId.guest_id}>{guestId.guest_id} {guestId.is_spare === 1 && (<span>(スペア)</span>)}</MenuItem>))
-                      )}
+                      {reservation &&
+                        reservation.registered.map((guestId) => (
+                          <MenuItem
+                            key={guestId.guest_id}
+                            value={guestId.guest_id}
+                          >
+                            {guestId.guest_id}{" "}
+                            {guestId.is_spare === 1 && <span>(スペア)</span>}
+                          </MenuItem>
+                        ))}
                     </Select>
                   </FormControl>
                 </Grid>

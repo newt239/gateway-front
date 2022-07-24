@@ -24,7 +24,12 @@ const Home = () => {
           <Box sx={{ textAlign: "center" }}>
             <img
               src={GatewayThumbnail}
-              style={{ width: "100%", height: "35vh", maxWidth: "750px", objectFit: "cover" }}
+              style={{
+                width: "100%",
+                height: "35vh",
+                maxWidth: "750px",
+                objectFit: "cover",
+              }}
             />
           </Box>
         </Card>

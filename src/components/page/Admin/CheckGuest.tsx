@@ -32,7 +32,10 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
-import { getTimePart, guestIdValidation } from "#/components/lib/commonFunction";
+import {
+  getTimePart,
+  guestIdValidation,
+} from "#/components/lib/commonFunction";
 
 type exhibitProp = {
   exhibit_id: string;
@@ -116,7 +119,9 @@ const AdminCheckGuest = () => {
               }
             }
             setGuestActivity(
-              guestActivityList.sort((a, b) => (a.datetime < b.datetime ? -1 : 1))
+              guestActivityList.sort((a, b) =>
+                a.datetime < b.datetime ? -1 : 1
+              )
             );
           })
           .catch((err) => {
@@ -208,18 +213,14 @@ const AdminCheckGuest = () => {
                   <ListItemIcon>
                     <PersonRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText>
-                    {guestInfo.guest_id}
-                  </ListItemText>
+                  <ListItemText>{guestInfo.guest_id}</ListItemText>
                 </ListItem>
                 {guestInfo.guest_type === "family" && (
                   <ListItem>
                     <ListItemIcon>
                       <AssignmentIndRoundedIcon />
                     </ListItemIcon>
-                    <ListItemText>
-                      {guestInfo.reservation_id}
-                    </ListItemText>
+                    <ListItemText>{guestInfo.reservation_id}</ListItemText>
                   </ListItem>
                 )}
                 <ListItem>
@@ -227,7 +228,13 @@ const AdminCheckGuest = () => {
                     <PeopleRoundedIcon />
                   </ListItemIcon>
                   <ListItemText>
-                    {guestInfo.guest_type === "family" ? "保護者" : guestInfo.guest_type === "student" ? "生徒" : guestInfo.guest_type === "teacher" ? "教員" : "その他"}
+                    {guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : guestInfo.guest_type === "student"
+                      ? "生徒"
+                      : guestInfo.guest_type === "teacher"
+                      ? "教員"
+                      : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>

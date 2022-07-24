@@ -3,7 +3,17 @@ import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import apiClient from "#/axios-config";
 
-import { Box, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Typography,
+} from "@mui/material";
 import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
 import { AxiosError } from "axios";
 import moment from "moment";
@@ -43,10 +53,10 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                    ? "教員"
-                    : v.guest_type === "family"
-                      ? "保護者"
-                      : "その他",
+                  ? "教員"
+                  : v.guest_type === "family"
+                  ? "保護者"
+                  : "その他",
               enter_at: moment(v.enter_at).format("MM/DD hh:mm:ss"),
             };
           });
@@ -56,7 +66,7 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
           console.log(err);
         });
     }
-  }
+  };
 
   useEffect(() => {
     getCurrentGuestList();
@@ -85,26 +95,30 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
         }
       }
     }
-  }
+  };
 
   const ConfirmDialog = () => {
     const onClose = () => {
       setDialogOpen(false);
-    }
+    };
     return (
       <Dialog open={dialogOpen} onClose={onClose}>
         <DialogTitle>一括退室処理</DialogTitle>
         <DialogContent>
           <DialogContentText>{selectedGuestList.join(", ")}</DialogContentText>
-          <DialogContentText>上記ゲスト{selectedGuestList.length}名に退室処理を行います。</DialogContentText>
+          <DialogContentText>
+            上記ゲスト{selectedGuestList.length}名に退室処理を行います。
+          </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>閉じる</Button>
-          <Button onClick={leaveGuest} color="error">実行</Button>
+          <Button onClick={leaveGuest} color="error">
+            実行
+          </Button>
         </DialogActions>
       </Dialog>
-    )
-  }
+    );
+  };
 
   return (
     <Grid container spacing={1} sx={{ width: "100%" }}>
