@@ -79,7 +79,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     severity: "success" | "error";
   }>({ status: false, message: "", severity: "success" });
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-  const [showScanGuide, setShowScanGuide] = useState(false);
+  const [showScanGuide, setShowScanGuide] = useState(true);
 
   const setDeviceState = useSetRecoilState(deviceState);
 
@@ -126,6 +126,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const handleScan = (scanText: string | null) => {
     if (scanText && token && profile && exhibit_id) {
       setText(scanText);
+      setShowScanGuide(false);
       if (guestIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
@@ -257,6 +258,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setScanStatus("waiting");
     setAlertStatus(false);
     setSmDrawerStatus(false);
+    setShowScanGuide(true);
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -307,6 +309,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               setAlertStatus(true);
               setScanStatus("waiting");
               setSmDrawerStatus(false);
+              setShowScanGuide(true);
             })
             .catch((err: AxiosError) => {
               console.log(err.message);
@@ -507,7 +510,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               {largerThanMD && (
                 <Grid item>
                   <Alert severity="info">
-                    QRコードをカメラに水平にかざして下さい。
+                    QRコードをカメラに水平にかざしてください
                   </Alert>
                 </Grid>
               )}
