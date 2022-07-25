@@ -5,6 +5,7 @@ import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -173,6 +174,13 @@ const EntranceEnter = () => {
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
+      if (profile) {
+        ReactGA.event({
+          category: "numpad",
+          action: "entrance_enter_use_numpad",
+          label: profile.user_id,
+        });
+      }
     }
   };
 

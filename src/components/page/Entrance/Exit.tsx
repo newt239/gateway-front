@@ -3,6 +3,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -168,6 +169,13 @@ const EntranceExit = () => {
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
+      if (profile) {
+        ReactGA.event({
+          category: "numpad",
+          action: "entrance_exit_use_numpad",
+          label: profile.user_id,
+        });
+      }
     }
   };
 
@@ -206,10 +214,10 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>

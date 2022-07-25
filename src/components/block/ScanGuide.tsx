@@ -1,12 +1,24 @@
-import { Box, Fade, IconButton, Typography } from "@mui/material";
 import React, { useState } from "react";
+import { useRecoilValue } from "recoil";
+import { profileState } from "#/recoil/user";
+import ReactGA from "react-ga4";
+
+import { Box, Fade, IconButton, Typography } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const ScanGuide = ({ show }: { show: boolean }) => {
+  const profile = useRecoilValue(profileState);
   const [close, setClose] = useState(false);
 
   const closeGuide = () => {
     setClose(true);
+    if (profile) {
+      ReactGA.event({
+        category: "guide",
+        action: "scan_guide_close",
+        label: profile.user_id,
+      });
+    }
   };
 
   return (

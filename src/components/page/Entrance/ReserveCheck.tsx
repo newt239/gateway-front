@@ -6,7 +6,7 @@ import {
   useSetRecoilState,
   useResetRecoilState,
 } from "recoil";
-import { tokenState } from "#/recoil/user";
+import { profileState, tokenState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
@@ -54,6 +54,7 @@ const ReserveCheck = () => {
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
+  const profile = useRecoilValue(profileState);
   const [reservation, setReservation] = useRecoilState(reservationState);
   const resetReservation = useResetRecoilState(reservationState);
   const [snackbar, setSnackbar] = useState<{
@@ -151,6 +152,13 @@ const ReserveCheck = () => {
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("R" + num.map((n) => String(n)).join(""));
+      if (profile) {
+        ReactGA.event({
+          category: "numpad",
+          action: "entrance_reserve_use_numpad",
+          label: profile.user_id,
+        });
+      }
     }
   };
 

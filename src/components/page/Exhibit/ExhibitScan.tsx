@@ -265,6 +265,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
+      if (profile) {
+        ReactGA.event({
+          category: "numpad",
+          action: "exhibit_use_numpad",
+          label: profile.user_id,
+        });
+      }
     }
   };
 
@@ -370,10 +377,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -441,8 +448,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${
-                        scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
