@@ -38,6 +38,7 @@ import {
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
+import ScanGuide from "#/components/block/ScanGuide";
 import { guestInfoProp } from "#/types/global";
 
 const EntranceExit = () => {
@@ -58,6 +59,7 @@ const EntranceExit = () => {
     severity: "success" | "error";
   }>({ status: false, message: "", severity: "success" });
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+  const [showScanGuide, setShowScanGuide] = useState(true);
 
   const setDeviceState = useSetRecoilState(deviceState);
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -69,6 +71,7 @@ const EntranceExit = () => {
   const handleScan = (scanText: string | null) => {
     if (token && scanText) {
       setText(scanText);
+      setShowScanGuide(false);
       if (guestIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
@@ -147,6 +150,8 @@ const EntranceExit = () => {
           setText("");
           setDeviceState(true);
           setSmDrawerStatus(false);
+        }).finally(() => {
+          setShowScanGuide(true);
         });
     }
   };
@@ -156,6 +161,7 @@ const EntranceExit = () => {
     setText("");
     setGuestInfo(null);
     setDeviceState(true);
+    setShowScanGuide(true);
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -199,10 +205,10 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -334,6 +340,7 @@ const EntranceExit = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
+      <ScanGuide show={showScanGuide} />
     </>
   );
 };

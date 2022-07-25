@@ -121,6 +121,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setAlertMessage("");
     setAlertStatus(false);
     updateExhibitInfo();
+    setShowScanGuide(true);
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
@@ -309,7 +310,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               setAlertStatus(true);
               setScanStatus("waiting");
               setSmDrawerStatus(false);
-              setShowScanGuide(true);
             })
             .catch((err: AxiosError) => {
               console.log(err.message);
@@ -322,6 +322,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               setText("");
               setDeviceState(true);
               setSmDrawerStatus(false);
+            }).finally(() => {
+              setShowScanGuide(true);
             });
         }
       }
