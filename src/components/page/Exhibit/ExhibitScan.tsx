@@ -457,7 +457,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
                 </Button>
               </Grid>
-              {profile && profile.user_type === "exhibit" && (
+              {profile && ["moderator", "exhibit"].includes(profile.user_type) && (
                 <Grid item>
                   <Button
                     size="small"
@@ -472,7 +472,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   </Button>
                 </Grid>
               )}
-              {profile && profile.user_type !== "exhibit" && (
+              {profile && ["moderator", "executive"].includes(profile.user_type) && (
                 <Grid item>
                   <Button
                     size="small"

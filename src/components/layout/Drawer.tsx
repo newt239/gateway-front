@@ -145,10 +145,6 @@ const DrawerLeft = () => {
                   <ListItemText primary="展示選択" />
                 </StyledListItemButton>
               </List>
-            </>
-          )}
-          {["moderator", "executive"].includes(profile.user_type) && (
-            <>
               <List subheader={<ListSubheader>エントランス</ListSubheader>}>
                 <StyledListItemButton
                   selected={path === `/entrance/reserve-check`}
@@ -193,10 +189,6 @@ const DrawerLeft = () => {
                   <ListItemText primary="展示一覧" />
                 </StyledListItemButton>
               </List>
-            </>
-          )}
-          {["moderator"].includes(profile.user_type) && (
-            <>
               <List subheader={<ListSubheader>管理用操作</ListSubheader>}>
                 <StyledListItemButton
                   selected={path === `/admin/guest`}
