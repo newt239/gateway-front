@@ -4,7 +4,7 @@ import { Box, Typography } from "@mui/material";
 const Version = () => {
   return (
     <Box>
-      <Typography variant="caption">ver. 1.7.4 (22/07/24)</Typography>
+      <Typography variant="caption">ver. 1.8.0 (22/07/25)</Typography>
       <br />
       <Typography variant="caption">© 栄東祭実行委員会 技術部</Typography>
     </Box>
