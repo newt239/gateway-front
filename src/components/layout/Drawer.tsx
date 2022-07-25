@@ -118,10 +118,13 @@ const DrawerLeft = () => {
                 </StyledListItemButton>
                 <StyledListItemButton
                   selected={
-                    path === `/analytics/exhibit/${profile.user_id || "unknown"}`
+                    path ===
+                    `/analytics/exhibit/${profile.user_id || "unknown"}`
                   }
                   onClick={() =>
-                    navigate(`/analytics/exhibit/${profile.user_id || "unknown"}`)
+                    navigate(
+                      `/analytics/exhibit/${profile.user_id || "unknown"}`
+                    )
                   }
                 >
                   <ListItemIcon>

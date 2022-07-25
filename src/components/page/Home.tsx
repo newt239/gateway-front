@@ -28,7 +28,7 @@ const Home = () => {
                 width: "100%",
                 maxWidth: "750px",
                 maxHeight: "50vh",
-                objectFit: "cover"
+                objectFit: "cover",
               }}
             />
           </Box>

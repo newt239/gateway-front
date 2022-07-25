@@ -377,10 +377,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -448,7 +448,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${
+                        scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
@@ -472,17 +473,18 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   </Button>
                 </Grid>
               )}
-              {profile && ["moderator", "executive"].includes(profile.user_type) && (
-                <Grid item>
-                  <Button
-                    size="small"
-                    startIcon={<ArrowBackIosNewRoundedIcon />}
-                    onClick={() => navigate("/exhibit", { replace: true })}
-                  >
-                    一覧に戻る
-                  </Button>
-                </Grid>
-              )}
+              {profile &&
+                ["moderator", "executive"].includes(profile.user_type) && (
+                  <Grid item>
+                    <Button
+                      size="small"
+                      startIcon={<ArrowBackIosNewRoundedIcon />}
+                      onClick={() => navigate("/exhibit", { replace: true })}
+                    >
+                      一覧に戻る
+                    </Button>
+                  </Grid>
+                )}
             </Grid>
           </Grid>
           <Grid item xs={12}>
