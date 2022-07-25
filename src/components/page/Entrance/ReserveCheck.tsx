@@ -47,6 +47,7 @@ import {
   reservationIdValidation,
 } from "#/components/lib/commonFunction";
 import NumPad from "#/components/block/NumPad";
+import ScanGuide from "#/components/block/ScanGuide";
 
 const ReserveCheck = () => {
   const theme = useTheme();
@@ -67,6 +68,7 @@ const ReserveCheck = () => {
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+  const [showScanGuide, setShowScanGuide] = useState(true);
 
   const setDeviceState = useSetRecoilState(deviceState);
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -78,6 +80,7 @@ const ReserveCheck = () => {
   const handleScan = (scanText: string | null) => {
     if (scanText && token) {
       setText(scanText);
+      setShowScanGuide(false);
       if (reservationIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
@@ -142,6 +145,7 @@ const ReserveCheck = () => {
     setText("");
     resetReservation();
     setDeviceState(true);
+    setShowScanGuide(true);
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -333,6 +337,7 @@ const ReserveCheck = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
+      <ScanGuide show={showScanGuide} />
     </>
   );
 };
