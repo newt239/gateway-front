@@ -8,6 +8,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const ScanGuide = ({ show }: { show: boolean }) => {
   const profile = useRecoilValue(profileState);
+  const guideShow = localStorage.getItem("guideShow") || "yes";
   const [close, setClose] = useState(false);
 
   const closeGuide = () => {
@@ -23,7 +24,7 @@ const ScanGuide = ({ show }: { show: boolean }) => {
 
   return (
     <>
-      <Fade in={show && !close} timeout={1000}>
+      <Fade in={show && !close && guideShow !== "no"} timeout={1000}>
         <Box
           sx={{
             position: "fixed",
@@ -58,7 +59,7 @@ const ScanGuide = ({ show }: { show: boolean }) => {
           </IconButton>
         </Box>
       </Fade>
-      <Fade in={show && !close} timeout={1000}>
+      <Fade in={show && !close && guideShow !== "no"} timeout={1000}>
         <Box
           sx={{
             position: "fixed",
