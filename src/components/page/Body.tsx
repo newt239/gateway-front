@@ -178,7 +178,7 @@ const Body = () => {
             <Route path="*" element={<Extra type="404" />} />
           </>
         ) : (
-          <Route path="*" element={<Login />} />
+          <Route path="*" element={<Extra type="loading" />} />
         )}
       </Routes>
       <MessageDialog

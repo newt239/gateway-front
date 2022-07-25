@@ -6,14 +6,18 @@ import { pageStateSelector } from "#/recoil/page";
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 
 type extraProp = {
-  type: "404" | "401";
+  type: "404" | "401" | "loading";
 };
 const NotFound = (props: extraProp) => {
   const navigate = useNavigate();
 
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {
-    setPageInfo({ title: "エラー" });
+    if (props.type === "loading") {
+      setPageInfo({ title: "Gateway - 栄東祭2022滞在状況記録システム" });
+    } else {
+      setPageInfo({ title: "エラー" });
+    }
   }, []);
 
   return (
@@ -25,6 +29,8 @@ const NotFound = (props: extraProp) => {
               <Typography>お探しのページは見つかりませんでした。</Typography>
             ) : props.type === "401" ? (
               <Typography>このページを表示する権限がありません。</Typography>
+            ) : props.type === "loading" ? (
+              <Typography>ログインセッションの検証中...</Typography>
             ) : (
               <Typography>何らかのエラーが発生しました。</Typography>
             )}
