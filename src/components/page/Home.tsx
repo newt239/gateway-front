@@ -26,9 +26,9 @@ const Home = () => {
               src={GatewayThumbnail}
               style={{
                 width: "100%",
-                height: "35vh",
                 maxWidth: "750px",
-                objectFit: "cover",
+                maxHeight: "50vh",
+                objectFit: "cover"
               }}
             />
           </Box>
