@@ -11,9 +11,9 @@ import Home from "#/components/page/Home";
 import Login from "#/components/page/Login";
 import ExhibitIndex from "#/components/page/Exhibit/Index";
 import ExhibitScan from "#/components/page/Exhibit/ExhibitScan";
-import ChartIndex from "#/components/page/Chart/Index";
-import ChartExhibit from "#/components/page/Chart/Exhibit";
-import Summary from "#/components/page/Chart/Summary";
+import AnalyticsIndex from "#/components/page/Analytics/Index";
+import AnalyticsExhibit from "#/components/page/Analytics/Exhibit";
+import AnalyticsSummary from "#/components/page/Analytics/Summary";
 import Entrance from "#/components/page/Entrance/Index";
 import ReserveCheck from "#/components/page/Entrance/ReserveCheck";
 import EntranceEnter from "#/components/page/Entrance/Enter";
@@ -140,21 +140,21 @@ const Body = () => {
                   <Route path="*" element={<Extra type="401" />} />
                 )}
               </Route>
-              <Route path="chart">
-                {["moderator", "analysis"].includes(profile.user_type) ? (
+              <Route path="analytics">
+                {["moderator"].includes(profile.user_type) ? (
                   <>
-                    <Route index element={<ChartIndex />} />
+                    <Route index element={<AnalyticsIndex />} />
                     <Route
                       path="exhibit/:exhibit_id"
-                      element={<ChartExhibit />}
+                      element={<AnalyticsExhibit />}
                     />
-                    <Route path="summary" element={<Summary />} />
+                    <Route path="summary" element={<AnalyticsSummary />} />
                   </>
                 ) : ["exhibit"].includes(profile.user_type) ? (
                   <>
                     <Route
                       path={`exhibit/${profile.user_id}`}
-                      element={<ChartExhibit />}
+                      element={<AnalyticsExhibit />}
                     />
                   </>
                 ) : (

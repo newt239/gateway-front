@@ -463,7 +463,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     size="small"
                     startIcon={<BarChartRoundedIcon />}
                     onClick={() =>
-                      navigate(`/chart/exhibit/${exhibit_id}`, {
+                      navigate(`/analytics/exhibit/${exhibit_id}`, {
                         replace: true,
                       })
                     }

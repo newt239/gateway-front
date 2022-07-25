@@ -24,12 +24,12 @@ const SimpleBottomNavigation = () => {
   useEffect(() => {
     if (path === "/") {
       setValue("");
-    } else if (/exhibit/.test(path) && !/chart\/exhibit/.test(path)) {
+    } else if (/exhibit/.test(path) && !/analytics\/exhibit/.test(path)) {
       setValue("exhibit");
     } else if (/entrance/.test(path)) {
       setValue("entrance");
-    } else if (/chart/.test(path)) {
-      setValue("chart");
+    } else if (/analytics/.test(path)) {
+      setValue("analytics");
     } else {
       setValue("other");
     }
@@ -68,7 +68,7 @@ const SimpleBottomNavigation = () => {
               />
               <BottomNavigationAction
                 label="滞在状況"
-                value="chart"
+                value="analytics"
                 icon={<AutoGraphRoundedIcon />}
               />
             </BottomNavigation>
@@ -92,7 +92,7 @@ const SimpleBottomNavigation = () => {
               />
               <BottomNavigationAction
                 label="滞在状況"
-                value={`chart/exhibit/${profile.user_id}`}
+                value={`analytics/exhibit/${profile.user_id}`}
                 icon={<AutoGraphRoundedIcon />}
               />
             </BottomNavigation>
