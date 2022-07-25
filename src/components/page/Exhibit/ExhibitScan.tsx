@@ -48,6 +48,7 @@ import {
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
 import NumPad from "#/components/block/NumPad";
+import ScanGuide from "#/components/block/ScanGuide";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -78,6 +79,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     severity: "success" | "error";
   }>({ status: false, message: "", severity: "success" });
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+  const [showScanGuide, setShowScanGuide] = useState(false);
 
   const setDeviceState = useSetRecoilState(deviceState);
 
@@ -362,10 +364,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -433,8 +435,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${
-                        scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )
@@ -600,6 +601,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Snackbar>
         </Grid>
       )}
+      <ScanGuide show={showScanGuide} />
     </>
   );
 };
