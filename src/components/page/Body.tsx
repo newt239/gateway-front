@@ -105,81 +105,84 @@ const Body = () => {
   return (
     <>
       <Routes>
-        {profile ? (
-          <>
-            <Route index element={<Home />} />
-            <Route path="login" element={<Login />} />
-            <Route path="docs/:doc_id" element={<DocsMarkdown />} />
-            <Route path="exhibit">
-              <Route index element={<ExhibitIndex />} />
-              {["moderator", "executive", "exhibit"].includes(
-                profile.user_type
-              ) ? (
-                <Route path=":exhibit_id">
-                  <Route
-                    path="enter"
-                    element={<ExhibitScan scanType="enter" />}
-                  />
-                  <Route
-                    path="exit"
-                    element={<ExhibitScan scanType="exit" />}
-                  />
-                </Route>
-              ) : (
-                <Route path="*" element={<Extra type="401" />} />
-              )}
-            </Route>
-            <Route path="entrance">
-              {["moderator", "executive"].includes(profile.user_type) ? (
-                <>
-                  <Route index element={<Entrance />} />
-                  <Route path="reserve-check" element={<ReserveCheck />} />
-                  <Route path="enter" element={<EntranceEnter />} />
-                  <Route path="exit" element={<EntranceExit />} />
-                </>
-              ) : (
-                <Route path="*" element={<Extra type="401" />} />
-              )}
-            </Route>
-            <Route path="chart">
-              {["moderator", "analysis"].includes(profile.user_type) ? (
-                <>
-                  <Route index element={<ChartIndex />} />
-                  <Route
-                    path="exhibit/:exhibit_id"
-                    element={<ChartExhibit />}
-                  />
-                  <Route path="summary" element={<Summary />} />
-                </>
-              ) : ["exhibit"].includes(profile.user_type) ? (
-                <>
-                  <Route
-                    path={`exhibit/${profile.user_id}`}
-                    element={<ChartExhibit />}
-                  />
-                </>
-              ) : (
-                <Route path="*" element={<Extra type="401" />} />
-              )}
-            </Route>
-            <Route path="admin">
-              {["moderator"].includes(profile.user_type) ? (
-                <>
-                  <Route path="guest" element={<AdminCheckGuest />} />
-                  <Route
-                    path="lost-wristband"
-                    element={<AdminLostWristband />}
-                  />
-                </>
-              ) : (
-                <Route path="*" element={<Extra type="401" />} />
-              )}
-            </Route>
-            <Route path="*" element={<Extra type="404" />} />
-          </>
-        ) : (
-          <Route path="*" element={<Extra type="loading" />} />
-        )}
+        <>
+          <Route path="login" element={<Login />} />
+          {profile ? (
+            <>
+              <Route index element={<Home />} />
+
+              <Route path="docs/:doc_id" element={<DocsMarkdown />} />
+              <Route path="exhibit">
+                <Route index element={<ExhibitIndex />} />
+                {["moderator", "executive", "exhibit"].includes(
+                  profile.user_type
+                ) ? (
+                  <Route path=":exhibit_id">
+                    <Route
+                      path="enter"
+                      element={<ExhibitScan scanType="enter" />}
+                    />
+                    <Route
+                      path="exit"
+                      element={<ExhibitScan scanType="exit" />}
+                    />
+                  </Route>
+                ) : (
+                  <Route path="*" element={<Extra type="401" />} />
+                )}
+              </Route>
+              <Route path="entrance">
+                {["moderator", "executive"].includes(profile.user_type) ? (
+                  <>
+                    <Route index element={<Entrance />} />
+                    <Route path="reserve-check" element={<ReserveCheck />} />
+                    <Route path="enter" element={<EntranceEnter />} />
+                    <Route path="exit" element={<EntranceExit />} />
+                  </>
+                ) : (
+                  <Route path="*" element={<Extra type="401" />} />
+                )}
+              </Route>
+              <Route path="chart">
+                {["moderator", "analysis"].includes(profile.user_type) ? (
+                  <>
+                    <Route index element={<ChartIndex />} />
+                    <Route
+                      path="exhibit/:exhibit_id"
+                      element={<ChartExhibit />}
+                    />
+                    <Route path="summary" element={<Summary />} />
+                  </>
+                ) : ["exhibit"].includes(profile.user_type) ? (
+                  <>
+                    <Route
+                      path={`exhibit/${profile.user_id}`}
+                      element={<ChartExhibit />}
+                    />
+                  </>
+                ) : (
+                  <Route path="*" element={<Extra type="401" />} />
+                )}
+              </Route>
+              <Route path="admin">
+                {["moderator"].includes(profile.user_type) ? (
+                  <>
+                    <Route path="guest" element={<AdminCheckGuest />} />
+                    <Route
+                      path="lost-wristband"
+                      element={<AdminLostWristband />}
+                    />
+                  </>
+                ) : (
+                  <Route path="*" element={<Extra type="401" />} />
+                )}
+              </Route>
+              <Route path="*" element={<Extra type="404" />} />
+            </>
+          ) : (
+            <Route path="*" element={<Extra type="loading" />} />
+          )}
+        </>
       </Routes>
       <MessageDialog
         open={showMessageDialog}
