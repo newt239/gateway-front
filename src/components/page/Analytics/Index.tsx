@@ -4,7 +4,7 @@ import { pageStateSelector } from "#/recoil/page";
 import AllAreaPieChart from "#/components/block/AllAreaPieChart";
 import { Grid } from "@mui/material";
 
-const ChartIndex = () => {
+const AnalyticsIndex = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {
     setPageInfo({ title: "滞在状況" });
@@ -23,4 +23,4 @@ const ChartIndex = () => {
   );
 };
 
-export default ChartIndex;
+export default AnalyticsIndex;

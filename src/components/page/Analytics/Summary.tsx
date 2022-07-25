@@ -20,7 +20,7 @@ import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
 
-const Summary = () => {
+const AnalyticsSummary = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {
     setPageInfo({ title: "展示一覧" });
@@ -107,7 +107,7 @@ const Summary = () => {
               secondaryTypographyProps={{ sx: { p: 0 } }}
             >
               <Link
-                to={`/chart/exhibit/${exhibit.id}`}
+                to={`/analytics/exhibit/${exhibit.id}`}
                 style={{ color: "black", textDecoration: "none" }}
               >
                 {exhibit.exhibit_name}
@@ -189,4 +189,4 @@ const Summary = () => {
   );
 };
 
-export default Summary;
+export default AnalyticsSummary;

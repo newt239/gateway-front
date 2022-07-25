@@ -6,7 +6,7 @@ import {
   useSetRecoilState,
   useResetRecoilState,
 } from "recoil";
-import { tokenState } from "#/recoil/user";
+import { profileState, tokenState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
@@ -47,12 +47,14 @@ import {
   reservationIdValidation,
 } from "#/components/lib/commonFunction";
 import NumPad from "#/components/block/NumPad";
+import ScanGuide from "#/components/block/ScanGuide";
 
 const ReserveCheck = () => {
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
+  const profile = useRecoilValue(profileState);
   const [reservation, setReservation] = useRecoilState(reservationState);
   const resetReservation = useResetRecoilState(reservationState);
   const [snackbar, setSnackbar] = useState<{
@@ -67,6 +69,7 @@ const ReserveCheck = () => {
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+  const [showScanGuide, setShowScanGuide] = useState(true);
 
   const setDeviceState = useSetRecoilState(deviceState);
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -78,6 +81,7 @@ const ReserveCheck = () => {
   const handleScan = (scanText: string | null) => {
     if (scanText && token) {
       setText(scanText);
+      setShowScanGuide(false);
       if (reservationIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
@@ -142,11 +146,19 @@ const ReserveCheck = () => {
     setText("");
     resetReservation();
     setDeviceState(true);
+    setShowScanGuide(true);
   };
 
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("R" + num.map((n) => String(n)).join(""));
+      if (profile) {
+        ReactGA.event({
+          category: "numpad",
+          action: "entrance_reserve_use_numpad",
+          label: profile.user_id,
+        });
+      }
     }
   };
 
@@ -333,6 +345,7 @@ const ReserveCheck = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
+      <ScanGuide show={showScanGuide} />
     </>
   );
 };

@@ -48,6 +48,7 @@ import {
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/types/global";
 import NumPad from "#/components/block/NumPad";
+import ScanGuide from "#/components/block/ScanGuide";
 
 type ExhibitScanProps = {
   scanType: "enter" | "exit";
@@ -78,6 +79,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     severity: "success" | "error";
   }>({ status: false, message: "", severity: "success" });
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+  const [showScanGuide, setShowScanGuide] = useState(true);
 
   const setDeviceState = useSetRecoilState(deviceState);
 
@@ -119,11 +121,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setAlertMessage("");
     setAlertStatus(false);
     updateExhibitInfo();
+    setShowScanGuide(true);
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
     if (scanText && token && profile && exhibit_id) {
       setText(scanText);
+      setShowScanGuide(false);
       if (guestIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
@@ -255,11 +259,19 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setScanStatus("waiting");
     setAlertStatus(false);
     setSmDrawerStatus(false);
+    setShowScanGuide(true);
   };
 
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
+      if (profile) {
+        ReactGA.event({
+          category: "numpad",
+          action: "exhibit_use_numpad",
+          label: profile.user_id,
+        });
+      }
     }
   };
 
@@ -317,6 +329,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               setText("");
               setDeviceState(true);
               setSmDrawerStatus(false);
+            })
+            .finally(() => {
+              setShowScanGuide(true);
             });
         }
       }
@@ -443,13 +458,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
                 </Button>
               </Grid>
-              {profile && profile.user_type === "exhibit" && (
+              {profile && ["moderator", "exhibit"].includes(profile.user_type) && (
                 <Grid item>
                   <Button
                     size="small"
                     startIcon={<BarChartRoundedIcon />}
                     onClick={() =>
-                      navigate(`/chart/exhibit/${exhibit_id}`, {
+                      navigate(`/analytics/exhibit/${exhibit_id}`, {
                         replace: true,
                       })
                     }
@@ -458,17 +473,18 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   </Button>
                 </Grid>
               )}
-              {profile && profile.user_type !== "exhibit" && (
-                <Grid item>
-                  <Button
-                    size="small"
-                    startIcon={<ArrowBackIosNewRoundedIcon />}
-                    onClick={() => navigate("/exhibit", { replace: true })}
-                  >
-                    一覧に戻る
-                  </Button>
-                </Grid>
-              )}
+              {profile &&
+                ["moderator", "executive"].includes(profile.user_type) && (
+                  <Grid item>
+                    <Button
+                      size="small"
+                      startIcon={<ArrowBackIosNewRoundedIcon />}
+                      onClick={() => navigate("/exhibit", { replace: true })}
+                    >
+                      一覧に戻る
+                    </Button>
+                  </Grid>
+                )}
             </Grid>
           </Grid>
           <Grid item xs={12}>
@@ -506,7 +522,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               {largerThanMD && (
                 <Grid item>
                   <Alert severity="info">
-                    QRコードをカメラに水平にかざして下さい。
+                    QRコードをカメラに水平にかざしてください
                   </Alert>
                 </Grid>
               )}
@@ -600,6 +616,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Snackbar>
         </Grid>
       )}
+      <ScanGuide show={showScanGuide} />
     </>
   );
 };

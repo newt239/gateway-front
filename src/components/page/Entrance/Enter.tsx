@@ -5,6 +5,7 @@ import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -44,6 +45,7 @@ import {
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import MessageDialog from "#/components/block/MessageDialog";
+import ScanGuide from "#/components/block/ScanGuide";
 
 const EntranceEnter = () => {
   const navigate = useNavigate();
@@ -59,6 +61,7 @@ const EntranceEnter = () => {
   const resetReservation = useResetRecoilState(reservationState);
   const [guestList, setGuest] = useState<string[]>([]);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+  const [showScanGuide, setShowScanGuide] = useState(true);
 
   const [infoMessage, setInfoMessage] = useState("");
 
@@ -107,7 +110,11 @@ const EntranceEnter = () => {
         if (guestIdValidation(scanText)) {
           if (!guestList.includes(scanText)) {
             setSmDrawerStatus(true);
-            setGuest([...guestList, scanText]);
+            const newGuestList = [...guestList, scanText];
+            setGuest(newGuestList);
+            if (reservation.count <= newGuestList.length) {
+              setShowScanGuide(false);
+            }
           } else {
             setAlertMessage(`${scanText}は登録済みです。`);
             setAlertStatus(true);
@@ -149,12 +156,14 @@ const EntranceEnter = () => {
         })
         .finally(() => {
           setLoading(false);
+          setShowScanGuide(true);
         });
     }
   };
 
   const reset = (target: number) => {
     setGuest(guestList.splice(target - 1, 1));
+    setShowScanGuide(true);
   };
 
   const closeAlert = () => {
@@ -165,6 +174,13 @@ const EntranceEnter = () => {
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
+      if (profile) {
+        ReactGA.event({
+          category: "numpad",
+          action: "entrance_enter_use_numpad",
+          label: profile.user_id,
+        });
+      }
     }
   };
 
@@ -295,102 +311,105 @@ const EntranceEnter = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12}>
-        <Grid
-          container
-          sx={{
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "nowrap",
-          }}
-        >
-          <Grid item>
-            <Typography variant="h3">リストバンド登録</Typography>
-            <Typography variant="body1">
-              登録するリストバンドのQRコードをスキャンしてください。
-            </Typography>
-          </Grid>
-          <Grid item>
-            <NumPad scanType="guest" onClose={onNumPadClose} />
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Alert severity="info">{infoMessage}</Alert>
-          </Grid>
-          <Grid item xs={12}>
-            <Scanner handleScan={handleScan} />
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
-            ゲストID:
-          </Typography>
-          <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
-            <OutlinedInput
-              type="text"
-              size="small"
-              value={text}
-              onChange={(e) => setText(e.target.value)}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="ゲストIDをコピー"
-                    onClick={() => {
-                      if (text !== "") {
-                        navigator.clipboard
-                          .writeText(text)
-                          .catch((e) => console.log(e));
-                      }
-                    }}
-                    edge="end"
-                  >
-                    <ContentCopyRoundedIcon />
-                  </IconButton>
-                </InputAdornment>
-              }
-              disabled
-              fullWidth
-            />
-          </FormControl>
-        </Box>
-        {loading && (
-          <Box sx={{ width: "100%" }}>
-            <LinearProgress />
-          </Box>
-        )}
-        {largerThanSM ? (
-          <ReservationInfoCard />
-        ) : (
-          <SwipeableDrawer
-            anchor="bottom"
-            open={smDrawerOpen}
-            onClose={() => reset(0)}
-            onOpen={() => setSmDrawerStatus(true)}
+    <>
+      <Grid container spacing={2} sx={{ p: 2 }}>
+        <Grid item xs={12}>
+          <Grid
+            container
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "nowrap",
+            }}
           >
+            <Grid item>
+              <Typography variant="h3">リストバンド登録</Typography>
+              <Typography variant="body1">
+                登録するリストバンドのQRコードをスキャンしてください。
+              </Typography>
+            </Grid>
+            <Grid item>
+              <NumPad scanType="guest" onClose={onNumPadClose} />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Alert severity="info">{infoMessage}</Alert>
+            </Grid>
+            <Grid item xs={12}>
+              <Scanner handleScan={handleScan} />
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
+              ゲストID:
+            </Typography>
+            <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
+              <OutlinedInput
+                type="text"
+                size="small"
+                value={text}
+                onChange={(e) => setText(e.target.value)}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="ゲストIDをコピー"
+                      onClick={() => {
+                        if (text !== "") {
+                          navigator.clipboard
+                            .writeText(text)
+                            .catch((e) => console.log(e));
+                        }
+                      }}
+                      edge="end"
+                    >
+                      <ContentCopyRoundedIcon />
+                    </IconButton>
+                  </InputAdornment>
+                }
+                disabled
+                fullWidth
+              />
+            </FormControl>
+          </Box>
+          {loading && (
+            <Box sx={{ width: "100%" }}>
+              <LinearProgress />
+            </Box>
+          )}
+          {largerThanSM ? (
             <ReservationInfoCard />
-          </SwipeableDrawer>
-        )}
+          ) : (
+            <SwipeableDrawer
+              anchor="bottom"
+              open={smDrawerOpen}
+              onClose={() => reset(0)}
+              onOpen={() => setSmDrawerStatus(true)}
+            >
+              <ReservationInfoCard />
+            </SwipeableDrawer>
+          )}
+        </Grid>
+        <MessageDialog
+          open={dialogOpen}
+          type="success"
+          title="処理が完了しました"
+          message={[dialogMessage]}
+          onClose={onDialogClose}
+        />
       </Grid>
-      <MessageDialog
-        open={dialogOpen}
-        type="success"
-        title="処理が完了しました"
-        message={[dialogMessage]}
-        onClose={onDialogClose}
-      />
-    </Grid>
+      <ScanGuide show={showScanGuide} />
+    </>
   );
 };
 

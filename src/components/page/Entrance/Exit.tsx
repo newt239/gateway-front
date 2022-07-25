@@ -3,6 +3,7 @@ import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
 import { pageStateSelector } from "#/recoil/page";
+import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -38,6 +39,7 @@ import {
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
+import ScanGuide from "#/components/block/ScanGuide";
 import { guestInfoProp } from "#/types/global";
 
 const EntranceExit = () => {
@@ -58,6 +60,7 @@ const EntranceExit = () => {
     severity: "success" | "error";
   }>({ status: false, message: "", severity: "success" });
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
+  const [showScanGuide, setShowScanGuide] = useState(true);
 
   const setDeviceState = useSetRecoilState(deviceState);
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -69,6 +72,7 @@ const EntranceExit = () => {
   const handleScan = (scanText: string | null) => {
     if (token && scanText) {
       setText(scanText);
+      setShowScanGuide(false);
       if (guestIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
@@ -147,6 +151,9 @@ const EntranceExit = () => {
           setText("");
           setDeviceState(true);
           setSmDrawerStatus(false);
+        })
+        .finally(() => {
+          setShowScanGuide(true);
         });
     }
   };
@@ -156,11 +163,19 @@ const EntranceExit = () => {
     setText("");
     setGuestInfo(null);
     setDeviceState(true);
+    setShowScanGuide(true);
   };
 
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
+      if (profile) {
+        ReactGA.event({
+          category: "numpad",
+          action: "entrance_exit_use_numpad",
+          label: profile.user_id,
+        });
+      }
     }
   };
 
@@ -334,6 +349,7 @@ const EntranceExit = () => {
           <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
         </Snackbar>
       </Grid>
+      <ScanGuide show={showScanGuide} />
     </>
   );
 };

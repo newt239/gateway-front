@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useRecoilValue } from "recoil";
-import { tokenState } from "#/recoil/user";
+import { tokenState, profileState } from "#/recoil/user";
+import ReactGA from "react-ga4";
 import apiClient from "#/axios-config";
 
 import {
@@ -34,6 +35,7 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
   exhibit_id: string;
 }> = ({ exhibit_id }) => {
   const token = useRecoilValue(tokenState);
+  const profile = useRecoilValue(profileState);
   const [rows, setRows] = useState<exhibitCurrentGuestTableListProp>([]);
   const [selectedGuestList, setSelectedGuestList] = useState<GridRowId[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -73,7 +75,7 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
   }, [exhibit_id]);
 
   const leaveGuest = () => {
-    if (token && exhibit_id) {
+    if (token && profile && exhibit_id) {
       for (const guest of selectedGuestList) {
         if (typeof guest == "string") {
           const payload = {
@@ -88,6 +90,11 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
             .then(() => {
               getCurrentGuestList();
               setDialogOpen(false);
+              ReactGA.event({
+                category: "exhibit",
+                action: "leave_some_guest",
+                label: profile.user_id,
+              });
             })
             .catch((err: AxiosError) => {
               console.log(err);

@@ -118,10 +118,13 @@ const DrawerLeft = () => {
                 </StyledListItemButton>
                 <StyledListItemButton
                   selected={
-                    path === `/chart/exhibit/${profile.user_id || "unknown"}`
+                    path ===
+                    `/analytics/exhibit/${profile.user_id || "unknown"}`
                   }
                   onClick={() =>
-                    navigate(`/chart/exhibit/${profile.user_id || "unknown"}`)
+                    navigate(
+                      `/analytics/exhibit/${profile.user_id || "unknown"}`
+                    )
                   }
                 >
                   <ListItemIcon>
@@ -145,10 +148,6 @@ const DrawerLeft = () => {
                   <ListItemText primary="展示選択" />
                 </StyledListItemButton>
               </List>
-            </>
-          )}
-          {["moderator", "executive"].includes(profile.user_type) && (
-            <>
               <List subheader={<ListSubheader>エントランス</ListSubheader>}>
                 <StyledListItemButton
                   selected={path === `/entrance/reserve-check`}
@@ -171,12 +170,12 @@ const DrawerLeft = () => {
               </List>
             </>
           )}
-          {["moderator", "analysis"].includes(profile.user_type) && (
+          {["moderator"].includes(profile.user_type) && (
             <>
               <List subheader={<ListSubheader>データ</ListSubheader>}>
                 <StyledListItemButton
-                  selected={path === `/chart`}
-                  onClick={() => navigate("/chart")}
+                  selected={path === `/analytics`}
+                  onClick={() => navigate("/analytics")}
                 >
                   <ListItemIcon>
                     <TableChartRoundedIcon />
@@ -184,8 +183,8 @@ const DrawerLeft = () => {
                   <ListItemText primary="全体概況" />
                 </StyledListItemButton>
                 <StyledListItemButton
-                  selected={path === `/chart/summary`}
-                  onClick={() => navigate("/chart/summary")}
+                  selected={path === `/analytics/summary`}
+                  onClick={() => navigate("/analytics/summary")}
                 >
                   <ListItemIcon>
                     <MapRoundedIcon />
@@ -193,10 +192,6 @@ const DrawerLeft = () => {
                   <ListItemText primary="展示一覧" />
                 </StyledListItemButton>
               </List>
-            </>
-          )}
-          {["moderator"].includes(profile.user_type) && (
-            <>
               <List subheader={<ListSubheader>管理用操作</ListSubheader>}>
                 <StyledListItemButton
                   selected={path === `/admin/guest`}

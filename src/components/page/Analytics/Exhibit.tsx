@@ -11,7 +11,7 @@ import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRound
 import ExhibitEnterCountBarChart from "../../block/ExhibitEnterCountBarChart";
 import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList";
 
-const ChartExhibit = () => {
+const AnalyticsExhibit = () => {
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
@@ -53,7 +53,7 @@ const ChartExhibit = () => {
     useEffect(() => {
       if (profile) {
         if (exhibit_id === "") {
-          navigate("/chart/summary", { replace: true });
+          navigate("/analytics/summary", { replace: true });
         } else {
           setStatus({ status: true, message: "" });
         }
@@ -66,12 +66,14 @@ const ChartExhibit = () => {
       <>
         {status.status ? (
           <Grid container spacing={2} sx={{ p: 2 }}>
-            {profile.user_type !== "exhibit" && (
+            {["moderator", "executive"].includes(profile.user_type) && (
               <Grid item xs={12}>
                 <Button
                   variant="text"
                   startIcon={<ArrowBackIosNewRoundedIcon />}
-                  onClick={() => navigate("/chart/summary", { replace: true })}
+                  onClick={() =>
+                    navigate("/analytics/summary", { replace: true })
+                  }
                 >
                   一覧に戻る
                 </Button>
@@ -95,4 +97,4 @@ const ChartExhibit = () => {
   }
 };
 
-export default ChartExhibit;
+export default AnalyticsExhibit;

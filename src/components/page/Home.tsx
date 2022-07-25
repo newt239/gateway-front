@@ -9,7 +9,7 @@ import Version from "#/components/block/Version";
 
 import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 
-import GatewayThumbnail from "#/asset/gateway-home-thumbnail.webp";
+import GatewayThumbnail from "#/asset/gateway-hero.jpg";
 
 const Home = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
@@ -26,8 +26,8 @@ const Home = () => {
               src={GatewayThumbnail}
               style={{
                 width: "100%",
-                height: "35vh",
                 maxWidth: "750px",
+                maxHeight: "50vh",
                 objectFit: "cover",
               }}
             />
