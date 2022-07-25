@@ -18,7 +18,6 @@ import Entrance from "#/components/page/Entrance/Index";
 import ReserveCheck from "#/components/page/Entrance/ReserveCheck";
 import EntranceEnter from "#/components/page/Entrance/Enter";
 import EntranceExit from "#/components/page/Entrance/Exit";
-import DocsMarkdown from "#/components/page/Docs/Markdown";
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminLostWristband from "#/components/page/Admin/LostWristband";
 import Extra from "#/components/page/Extra";
@@ -110,8 +109,6 @@ const Body = () => {
           {profile ? (
             <>
               <Route index element={<Home />} />
-
-              <Route path="docs/:doc_id" element={<DocsMarkdown />} />
               <Route path="exhibit">
                 <Route index element={<ExhibitIndex />} />
                 {["moderator", "executive", "exhibit"].includes(
