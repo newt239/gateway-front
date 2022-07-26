@@ -71,6 +71,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [currentCount, setCurrentCount] = useState<number>(0);
   const [exhibitName, setExhibitName] = useState("");
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
+  const [exhibitInfoLoading, setExhibitInfoLoading] = useState(true);
   const [alertStatus, setAlertStatus] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [snackbar, setSnackbar] = useState<{
@@ -91,6 +92,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
         scanStatus === "success" ||
         moment().diff(lastUpdate) > 10000
       ) {
+        setExhibitInfoLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.info._exhibit_id(exhibit_id)
           .$get({
@@ -112,6 +114,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           })
           .catch((err) => {
             console.log(err);
+          })
+          .finally(() => {
+            setExhibitInfoLoading(false);
           });
       }
     }
@@ -459,7 +464,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 </Button>
               </Grid>
               {profile && ["moderator", "exhibit"].includes(profile.user_type) && (
-                <Grid item>
+                <Grid item sx={{ pr: 2 }}>
                   <Button
                     size="small"
                     startIcon={<BarChartRoundedIcon />}
@@ -509,6 +514,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                           size="small"
                           color="primary"
                           onClick={updateExhibitInfo}
+                          disabled={exhibitInfoLoading}
                         >
                           <ReplayRoundedIcon />
                         </IconButton>

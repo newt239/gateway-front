@@ -6,6 +6,7 @@ import { Grid, Card, Box, Typography, Button } from "@mui/material";
 
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";
+import Settings from "#/components/block/Settings";
 
 import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 
@@ -70,6 +71,12 @@ const Home = () => {
               </Button>
             </Box>
           </Grid>
+        </Card>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+          <Typography variant="h3">アプリ設定</Typography>
+          <Settings />
         </Card>
       </Grid>
     </Grid>

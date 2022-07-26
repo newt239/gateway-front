@@ -3,13 +3,18 @@ import { useRecoilValue } from "recoil";
 import { profileState } from "#/recoil/user";
 import ReactGA from "react-ga4";
 
-import { Box, Fade, IconButton, Typography } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { Box, Fade, IconButton, Tooltip, Typography } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const ScanGuide = ({ show }: { show: boolean }) => {
   const profile = useRecoilValue(profileState);
   const guideShow = localStorage.getItem("guideShow") || "yes";
   const [close, setClose] = useState(false);
+
+  const theme = useTheme();
+  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
 
   const closeGuide = () => {
     setClose(true);
@@ -23,15 +28,17 @@ const ScanGuide = ({ show }: { show: boolean }) => {
   };
 
   return (
-    <>
-      <Fade in={show && !close && guideShow !== "no"} timeout={1000}>
+    <Fade
+      in={show && !close && guideShow !== "no" && largerThanMD}
+      timeout={1000}
+    >
+      <Box sx={{ zIndex: 100000 }}>
         <Box
           sx={{
             position: "fixed",
             top: 30,
             left: "50%",
             transform: "translateX(-50%)",
-            zIndex: 100000,
             backgroundColor: "error.main",
             padding: "1rem",
             borderRadius: "1rem",
@@ -49,24 +56,23 @@ const ScanGuide = ({ show }: { show: boolean }) => {
           >
             QRコードを水平にかざしてください
           </Typography>
-          <IconButton
-            color="inherit"
-            sx={{ color: "white" }}
-            component="span"
-            onClick={closeGuide}
-          >
-            <CloseRoundedIcon />
-          </IconButton>
+          <Tooltip title="ホーム画面の設定から非表示にできます">
+            <IconButton
+              color="inherit"
+              sx={{ color: "white" }}
+              component="span"
+              onClick={closeGuide}
+            >
+              <CloseRoundedIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
-      </Fade>
-      <Fade in={show && !close && guideShow !== "no"} timeout={1000}>
         <Box
           sx={{
             position: "fixed",
             top: 0,
             left: "50%",
             height: 0,
-            zIndex: 100000,
             transform: "translateX(-50%)",
             borderLeft: "30px solid transparent",
             borderRight: "30px solid transparent",
@@ -74,8 +80,8 @@ const ScanGuide = ({ show }: { show: boolean }) => {
             borderBottomColor: "error.main",
           }}
         ></Box>
-      </Fade>
-    </>
+      </Box>
+    </Fade>
   );
 };
 
