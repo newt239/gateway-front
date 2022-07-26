@@ -45,7 +45,6 @@ import {
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import MessageDialog from "#/components/block/MessageDialog";
-import ScanGuide from "#/components/block/ScanGuide";
 
 const EntranceEnter = () => {
   const navigate = useNavigate();
@@ -61,7 +60,6 @@ const EntranceEnter = () => {
   const resetReservation = useResetRecoilState(reservationState);
   const [guestList, setGuest] = useState<string[]>([]);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-  const [showScanGuide, setShowScanGuide] = useState(true);
 
   const [infoMessage, setInfoMessage] = useState("");
 
@@ -112,9 +110,6 @@ const EntranceEnter = () => {
             setSmDrawerStatus(true);
             const newGuestList = [...guestList, scanText];
             setGuest(newGuestList);
-            if (reservation.count <= newGuestList.length) {
-              setShowScanGuide(false);
-            }
           } else {
             setAlertMessage(`${scanText}は登録済みです。`);
             setAlertStatus(true);
@@ -156,14 +151,12 @@ const EntranceEnter = () => {
         })
         .finally(() => {
           setLoading(false);
-          setShowScanGuide(true);
         });
     }
   };
 
   const reset = (target: number) => {
     setGuest(guestList.splice(target - 1, 1));
-    setShowScanGuide(true);
   };
 
   const closeAlert = () => {
@@ -408,7 +401,6 @@ const EntranceEnter = () => {
           onClose={onDialogClose}
         />
       </Grid>
-      <ScanGuide show={showScanGuide} />
     </>
   );
 };
