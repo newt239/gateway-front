@@ -5,7 +5,7 @@ import ReactGA from "react-ga4";
 
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Box, Fade, IconButton, Typography } from "@mui/material";
+import { Box, Fade, IconButton, Tooltip, Typography } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const ScanGuide = ({ show }: { show: boolean }) => {
@@ -53,14 +53,16 @@ const ScanGuide = ({ show }: { show: boolean }) => {
           >
             QRコードを水平にかざしてください
           </Typography>
-          <IconButton
-            color="inherit"
-            sx={{ color: "white" }}
-            component="span"
-            onClick={closeGuide}
-          >
-            <CloseRoundedIcon />
-          </IconButton>
+          <Tooltip title="ホーム画面の設定から非表示にできます">
+            <IconButton
+              color="inherit"
+              sx={{ color: "white" }}
+              component="span"
+              onClick={closeGuide}
+            >
+              <CloseRoundedIcon />
+            </IconButton>
+          </Tooltip>
         </Box>
         <Box
           sx={{
