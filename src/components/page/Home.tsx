@@ -12,7 +12,6 @@ import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 
 import GatewayThumbnail from "#/asset/gateway-hero.jpg";
 
-
 const Home = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);
   useEffect(() => {

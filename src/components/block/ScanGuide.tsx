@@ -28,7 +28,10 @@ const ScanGuide = ({ show }: { show: boolean }) => {
   };
 
   return (
-    <Fade in={show && !close && guideShow !== "no" && largerThanMD} timeout={1000}>
+    <Fade
+      in={show && !close && guideShow !== "no" && largerThanMD}
+      timeout={1000}
+    >
       <Box sx={{ zIndex: 100000 }}>
         <Box
           sx={{

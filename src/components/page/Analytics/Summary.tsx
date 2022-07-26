@@ -85,7 +85,8 @@ const AnalyticsSummary = () => {
         })
         .catch((err: AxiosError) => {
           console.log(err);
-        }).finally(() => {
+        })
+        .finally(() => {
           setLoading(false);
         });
     }
@@ -154,17 +155,37 @@ const AnalyticsSummary = () => {
 
   return (
     <Grid container spacing={2} sx={{ pt: 2 }}>
-      <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+      <Grid
+        item
+        xs={12}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Typography>滞在者数の多い順に表示しています。 </Typography>
-        <Typography variant="h2">{lastUpdate.format("HH:mm:ss")} 現在</Typography>
-        <Button onClick={getNowAllExhibit} disabled={loading} startIcon={<ReplayRoundedIcon />}>再読み込み</Button>
+        <Typography variant="h2">
+          {lastUpdate.format("HH:mm:ss")} 現在
+        </Typography>
+        <Button
+          onClick={getNowAllExhibit}
+          disabled={loading}
+          startIcon={<ReplayRoundedIcon />}
+        >
+          再読み込み
+        </Button>
       </Grid>
       <Grid item xs={12} md={4}>
         <Typography variant="h3">部活動</Typography>
         <List>
           {clubList.length === 0 ? (
             <>
-              <Skeleton variant="rectangular" height="90vh" sx={{ borderRadius: ".5rem" }} />
+              <Skeleton
+                variant="rectangular"
+                height="90vh"
+                sx={{ borderRadius: ".5rem" }}
+              />
             </>
           ) : (
             <>
@@ -180,7 +201,11 @@ const AnalyticsSummary = () => {
         <List>
           {classList.length === 0 ? (
             <>
-              <Skeleton variant="rectangular" height="90vh" sx={{ borderRadius: ".5rem" }} />
+              <Skeleton
+                variant="rectangular"
+                height="90vh"
+                sx={{ borderRadius: ".5rem" }}
+              />
             </>
           ) : (
             <>
@@ -198,7 +223,11 @@ const AnalyticsSummary = () => {
             <List>
               {stageList.length === 0 ? (
                 <>
-                  <Skeleton variant="rectangular" height="30vh" sx={{ borderRadius: ".5rem" }} />
+                  <Skeleton
+                    variant="rectangular"
+                    height="30vh"
+                    sx={{ borderRadius: ".5rem" }}
+                  />
                 </>
               ) : (
                 <>
@@ -214,7 +243,11 @@ const AnalyticsSummary = () => {
             <List>
               {otherList.length === 0 ? (
                 <>
-                  <Skeleton variant="rectangular" height="50vh" sx={{ borderRadius: ".5rem" }} />
+                  <Skeleton
+                    variant="rectangular"
+                    height="50vh"
+                    sx={{ borderRadius: ".5rem" }}
+                  />
                 </>
               ) : (
                 <>
@@ -227,7 +260,7 @@ const AnalyticsSummary = () => {
           </Grid>
         </Grid>
       </Grid>
-    </Grid >
+    </Grid>
   );
 };
 
