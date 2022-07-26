@@ -52,6 +52,7 @@ const Body = () => {
           if (err.response) {
             if (err.response.status === 401) {
               setErrorDialogTitle("セッションがタイムアウトしました");
+              setShowMessageDialog(true);
               setMessageDialogMessage([
                 "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。",
               ]);
@@ -71,6 +72,7 @@ const Body = () => {
           } else {
             if (err.message === "Network Error") {
               setErrorDialogTitle("サーバーが起動していません");
+              setShowMessageDialog(true);
               setMessageDialogMessage([
                 "コストカットのため必要時以外はサーバーを停止させています。",
               ]);
@@ -89,6 +91,7 @@ const Body = () => {
               });
             }
           }
+          navigate("/login", { replace: true });
         });
     } else {
       // 未ログイン時ログインページへ遷移
