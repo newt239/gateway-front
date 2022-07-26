@@ -5,11 +5,12 @@ import { pageStateSelector } from "#/recoil/page";
 import { tokenState } from "#/recoil/user";
 
 import {
+  Button,
   Grid,
-  IconButton,
   List,
   ListItem,
   ListItemText,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
@@ -44,6 +45,7 @@ const AnalyticsSummary = () => {
   const [stageList, setStageList] = useState<exhibitProp[]>([]);
   const [otherList, setOtherList] = useState<exhibitProp[]>([]);
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
+  const [loading, setLoading] = useState(true);
 
   const sortExhibitByCount = (a: exhibitProp, b: exhibitProp) => {
     if (a.count > b.count) return -1;
@@ -53,6 +55,7 @@ const AnalyticsSummary = () => {
 
   const getNowAllExhibit = () => {
     if (token) {
+      setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .exhibit.current.$get({
           headers: { Authorization: `Bearer ${token}` },
@@ -82,13 +85,22 @@ const AnalyticsSummary = () => {
         })
         .catch((err: AxiosError) => {
           console.log(err);
+        }).finally(() => {
+          setLoading(false);
         });
     }
   };
 
+  // 1分ごとに自動で取得
   useEffect(() => {
     getNowAllExhibit();
-  }, [token]);
+    const intervalId = setInterval(() => {
+      getNowAllExhibit();
+    }, 1 * 60 * 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, []);
 
   const ExhibitListBlock = ({ exhibit }: { exhibit: exhibitProp }) => {
     return (
@@ -142,27 +154,41 @@ const AnalyticsSummary = () => {
 
   return (
     <Grid container spacing={2} sx={{ pt: 2 }}>
-      <Grid item xs={12}>
-        滞在者数の多い順に表示しています。 最終更新：
-        {lastUpdate.format("HH:mm:ss")}
-        <IconButton size="small" color="primary" onClick={getNowAllExhibit}>
-          <ReplayRoundedIcon />
-        </IconButton>
+      <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Typography>滞在者数の多い順に表示しています。 </Typography>
+        <Typography variant="h2">{lastUpdate.format("HH:mm:ss")} 現在</Typography>
+        <Button onClick={getNowAllExhibit} disabled={loading} startIcon={<ReplayRoundedIcon />}>再読み込み</Button>
       </Grid>
       <Grid item xs={12} md={4}>
         <Typography variant="h3">部活動</Typography>
         <List>
-          {clubList.map((exhibit) => (
-            <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
-          ))}
+          {clubList.length === 0 ? (
+            <>
+              <Skeleton variant="rectangular" height="90vh" sx={{ borderRadius: ".5rem" }} />
+            </>
+          ) : (
+            <>
+              {clubList.map((exhibit) => (
+                <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
+              ))}
+            </>
+          )}
         </List>
       </Grid>
       <Grid item xs={12} md={4}>
         <Typography variant="h3">クラス</Typography>
         <List>
-          {classList.map((exhibit) => (
-            <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
-          ))}
+          {classList.length === 0 ? (
+            <>
+              <Skeleton variant="rectangular" height="90vh" sx={{ borderRadius: ".5rem" }} />
+            </>
+          ) : (
+            <>
+              {classList.map((exhibit) => (
+                <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
+              ))}
+            </>
+          )}
         </List>
       </Grid>
       <Grid item xs={12} md={4}>
@@ -170,22 +196,38 @@ const AnalyticsSummary = () => {
           <Grid item xs={12}>
             <Typography variant="h3">ステージ</Typography>
             <List>
-              {stageList.map((exhibit) => (
-                <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
-              ))}
+              {stageList.length === 0 ? (
+                <>
+                  <Skeleton variant="rectangular" height="30vh" sx={{ borderRadius: ".5rem" }} />
+                </>
+              ) : (
+                <>
+                  {stageList.map((exhibit) => (
+                    <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
+                  ))}
+                </>
+              )}
             </List>
           </Grid>
           <Grid item xs={12}>
             <Typography variant="h3">その他</Typography>
             <List>
-              {otherList.map((exhibit) => (
-                <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
-              ))}
+              {otherList.length === 0 ? (
+                <>
+                  <Skeleton variant="rectangular" height="50vh" sx={{ borderRadius: ".5rem" }} />
+                </>
+              ) : (
+                <>
+                  {otherList.map((exhibit) => (
+                    <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
+                  ))}
+                </>
+              )}
             </List>
           </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </Grid >
   );
 };
 
