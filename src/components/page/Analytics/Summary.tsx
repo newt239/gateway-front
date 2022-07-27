@@ -164,7 +164,6 @@ const AnalyticsSummary = () => {
           justifyContent: "space-between",
         }}
       >
-        <Typography>滞在者数の多い順に表示しています。 </Typography>
         <Typography variant="h2">
           {lastUpdate.format("HH:mm:ss")} 現在
         </Typography>
