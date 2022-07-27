@@ -2,6 +2,8 @@ import React, { useEffect, Suspense } from "react";
 import { useSetRecoilState } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
 
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 
 import UserInfo from "#/components/block/UserInfo";
@@ -17,6 +19,9 @@ const Home = () => {
   useEffect(() => {
     setPageInfo({ title: "ホーム" });
   }, []);
+
+  const theme = useTheme();
+  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
 
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
@@ -73,12 +78,14 @@ const Home = () => {
           </Grid>
         </Card>
       </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-          <Typography variant="h3">アプリ設定</Typography>
-          <Settings />
-        </Card>
-      </Grid>
+      {largerThanMD && (
+        <Grid item xs={12} md={6} lg={4}>
+          <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+            <Typography variant="h3">アプリ設定</Typography>
+            <Settings />
+          </Card>
+        </Grid>
+      )}
     </Grid>
   );
 };
