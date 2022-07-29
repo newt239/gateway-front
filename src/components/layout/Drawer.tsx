@@ -180,7 +180,7 @@ const DrawerLeft = () => {
                   <ListItemIcon>
                     <TableChartRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="全体概況" />
+                  <ListItemText primary="滞在状況" />
                 </StyledListItemButton>
                 <StyledListItemButton
                   selected={path === `/analytics/summary`}

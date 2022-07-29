@@ -13,11 +13,11 @@ const AnalyticsIndex = () => {
 
   return (
     <Grid container spacing={2} sx={{ p: 2 }}>
-      <Grid item xs={12} md={6}>
-        <AllAreaPieChart />
-      </Grid>
-      <Grid item xs={12} md={6}>
+      <Grid item xs={12} md={8}>
         <RealtimeLog />
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <AllAreaPieChart />
       </Grid>
     </Grid>
   );

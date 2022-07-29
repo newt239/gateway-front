@@ -30,10 +30,10 @@ const AllAreaPieChart = () => {
               v.guest_type === "student"
                 ? "生徒"
                 : v.guest_type === "teacher"
-                ? "教員"
-                : v.guest_type === "family"
-                ? "保護者"
-                : "その他"
+                  ? "教員"
+                  : v.guest_type === "family"
+                    ? "保護者"
+                    : "その他"
             )
           );
           setAllAreaChartSeries(res.map((v) => v.count));
@@ -47,6 +47,8 @@ const AllAreaPieChart = () => {
   const options: ApexOptions = {
     chart: {
       type: "pie",
+      width: "100%",
+      height: "50vh"
     },
     labels: allAreaChartCategories,
     responsive: [
@@ -65,7 +67,7 @@ const AllAreaPieChart = () => {
   };
 
   return (
-    <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+    <Card variant="outlined" sx={{ p: 1 }}>
       <Typography variant="h3">全体の滞在状況</Typography>
       {allAreaTotalCount ? (
         <>
