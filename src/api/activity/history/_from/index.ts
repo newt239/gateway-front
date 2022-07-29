@@ -9,15 +9,18 @@ export type Methods = {
 
     /** 正常レスポンス */
     resBody: {
-      reservation_id: string
-      guest_type: string
-      part: number
-      count: number
-      registered: {
+      enter: {
+        session_id: string
         guest_id: string
-        is_spare: number
+        exhibit_id: string
+        timestamp: string
       }[]
-      available: number
+      exit: {
+        session_id: string
+        guest_id: string
+        exhibit_id: string
+        timestamp: string
+      }[]
     }
   }
 }

@@ -1,12 +1,12 @@
 import React, { useEffect, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
+import { useRecoilValue, useSetRecoilState } from "recoil";
+import { pageStateSelector } from "#/recoil/page";
 import { currentExhibitState } from "#/recoil/exhibit";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 import SelectExhibit from "#/components/block/SelectExhibit";
-import { pageStateSelector } from "#/recoil/page";
-import { useSetRecoilState } from "recoil";
+
 
 const ExhibitIndex = () => {
   const navigate = useNavigate();
