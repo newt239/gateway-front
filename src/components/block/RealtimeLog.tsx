@@ -6,7 +6,6 @@ import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
 
 import {
-  Card,
   CircularProgress,
   Grid,
   List,
@@ -108,7 +107,7 @@ const RealtimeLog = () => {
   return (
     <>
       {exhibitList.length !== 0 && activityList.length !== 0 && (
-        <Card variant="outlined" sx={{ p: 1 }}>
+        <>
           <Grid container>
             <Grid item xs={12}>
               <Grid container sx={{ alignItems: "center", justifyContent: "space-between", height: 30 }}>
@@ -151,7 +150,7 @@ const RealtimeLog = () => {
               </List>
             </Grid>
           </Grid>
-        </Card>
+        </>
       )}
     </>
   );

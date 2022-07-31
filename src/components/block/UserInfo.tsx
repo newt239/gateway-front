@@ -2,7 +2,6 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
-// @ts-ignore
 import Identicon from "boring-avatars";
 
 import { Button, Box, Typography, Tooltip } from "@mui/material";

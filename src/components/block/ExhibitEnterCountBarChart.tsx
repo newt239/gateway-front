@@ -4,9 +4,7 @@ import { tokenState } from "#/recoil/user";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment from "moment";
-// @ts-ignore
-import Chart from "react-apexcharts";
-// https://github.com/apexcharts/react-apexcharts/issues/368#issuecomment-1003686683
+import ReacrApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
 import { TextField } from "@mui/material";
@@ -109,7 +107,7 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
         onChange={(e) => setDay(e.target.value)}
         margin="normal"
       />
-      <Chart options={options} series={series} width="100%" type="bar" />
+      <ReacrApexChart options={options} series={series} width="100%" type="bar" />
     </>
   );
 };
