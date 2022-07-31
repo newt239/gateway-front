@@ -3,8 +3,6 @@ import { useLocation } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import {
   deviceState,
-  currentDeviceState,
-  deviceListState,
 } from "#/recoil/scan";
 import QrReader from "react-qr-reader";
 
@@ -36,8 +34,21 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const [scannerStatus, setScannerStatus] = useState<
     "loading" | "waiting" | "error"
   >("loading");
-  const [currentDevice, setCurrentDevice] = useRecoilState(currentDeviceState);
-  const [deviceList, setDeviceList] = useRecoilState(deviceListState);
+  type deviceProp = {
+    deviceId: string;
+    label: string;
+  }
+  const getDeviceIdFromStorage = () => {
+    const savedCurrentCameraDeviceId = localStorage.getItem(
+      "currentCameraDeviceId"
+    );
+    if (savedCurrentCameraDeviceId) {
+      return savedCurrentCameraDeviceId
+    }
+    return ""
+  }
+  const [currentDeviceId, setCurrentDeviceId] = useState<string>(getDeviceIdFromStorage());
+  const [deviceList, setDeviceList] = useState<deviceProp[]>([]);
   const [selectCameraModalOpen, setSelectCameraModalOpen] = useState(false);
   const [errorDialogOpen, setMessageDialogOpen] = useState(false);
   const [errorDialogTitle, setMessageDialogTitle] = useState("");
@@ -58,20 +69,6 @@ const Scanner = ({ handleScan }: ScannerProps) => {
       )
       .then((devices) => {
         setDeviceList(devices);
-        const savedCurrentCameraDeviceId = localStorage.getItem(
-          "currentCameraDeviceId"
-        );
-        if (savedCurrentCameraDeviceId) {
-          const device = devices.find((v) => {
-            if (v.deviceId === savedCurrentCameraDeviceId) {
-              return v;
-            }
-          });
-          if (device) {
-            return setCurrentDevice(device);
-          }
-        }
-        return setCurrentDevice(devices[0]);
       })
       .catch((err) => {
         console.log(err);
@@ -108,14 +105,14 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   }, [refreshQrReader]);
 
   const changeCamera = (event: SelectChangeEvent) => {
-    const newCurrenDevice = deviceList.find((v) => {
+    const newCurrentDevice = deviceList.find((v) => {
       if (v.deviceId === event.target.value) {
         return v;
       }
     });
-    if (newCurrenDevice) {
-      localStorage.setItem("currentCameraDeviceId", newCurrenDevice.deviceId);
-      setCurrentDevice(newCurrenDevice);
+    if (newCurrentDevice) {
+      localStorage.setItem("currentCameraDeviceId", newCurrentDevice.deviceId);
+      setCurrentDeviceId(newCurrentDevice.deviceId);
       setRefreshQrReader(false);
     }
   };
@@ -195,7 +192,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
               // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-qr-reader/index.d.ts
               // @types/react-qr-readerがv2.1.0用でv2.1.1に追加されたconstraints propの型定義に対応していなかったためsrc直下にオリジナルの型定義ファイルを配置
               constraints={{
-                deviceId: currentDevice.deviceId,
+                deviceId: currentDeviceId,
                 facingMode: "environment",
               }}
               className="qrcode"
@@ -218,7 +215,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
                 <FormControl sx={{ m: 1, minWidth: 200 }}>
                   <Select
                     size="small"
-                    value={currentDevice.deviceId}
+                    value={currentDeviceId}
                     onChange={changeCamera}
                   >
                     {deviceList.map((v) => {
