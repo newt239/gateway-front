@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { profileState } from "#/recoil/user";
+
 import {
   Drawer,
   Box,
@@ -13,11 +14,10 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import ListItemButton, {
   ListItemButtonProps,
 } from "@mui/material/ListItemButton";
-
-import { styled } from "@mui/material/styles";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";

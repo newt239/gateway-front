@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { pageStateSelector } from "#/recoil/page";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
-import { pageStateSelector } from "#/recoil/page";
-import { useSetRecoilState } from "recoil";
 
 const Entrance = () => {
   const navigate = useNavigate();

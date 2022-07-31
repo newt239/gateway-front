@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
+import { AxiosError } from "axios";
+import apiClient from "#/axios-config";
+import moment from "moment";
 // @ts-ignore
 import Chart from "react-apexcharts";
 // https://github.com/apexcharts/react-apexcharts/issues/368#issuecomment-1003686683
 import { ApexOptions } from "apexcharts";
-import moment from "moment";
-import apiClient from "#/axios-config";
 
 import { TextField } from "@mui/material";
 
@@ -46,7 +47,7 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
               setData(countList);
             }
           })
-          .catch((err) => {
+          .catch((err: AxiosError) => {
             console.log(err);
           });
       }

@@ -2,15 +2,14 @@ import React, { useEffect, Suspense } from "react";
 import { useSetRecoilState } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
 
+import { Grid, Card, Box, Typography, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Grid, Card, Box, Typography, Button } from "@mui/material";
+import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";
 import Settings from "#/components/block/Settings";
-
-import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 
 import GatewayThumbnail from "#/asset/gateway-hero.jpg";
 

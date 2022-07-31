@@ -5,8 +5,8 @@ import { pageStateSelector } from "#/recoil/page";
 import { currentExhibitState } from "#/recoil/exhibit";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
-import SelectExhibit from "#/components/block/SelectExhibit";
 
+import SelectExhibit from "#/components/block/SelectExhibit";
 
 const ExhibitIndex = () => {
   const navigate = useNavigate();

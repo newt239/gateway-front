@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { useSetRecoilState, useRecoilValue } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
 import { tokenState } from "#/recoil/user";
+import { AxiosError } from "axios";
+import apiClient from "#/axios-config";
+import moment, { Moment } from "moment";
 
 import {
   Button,
@@ -13,13 +16,10 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
-import { AxiosError } from "axios";
-import apiClient from "#/axios-config";
-import moment, { Moment } from "moment";
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 const AnalyticsSummary = () => {
   const setPageInfo = useSetRecoilState(pageStateSelector);

@@ -3,9 +3,9 @@ import { useRecoilValue } from "recoil";
 import { profileState } from "#/recoil/user";
 import ReactGA from "react-ga4";
 
+import { Box, Fade, IconButton, Tooltip, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { Box, Fade, IconButton, Tooltip, Typography } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 const ScanGuide = ({ show }: { show: boolean }) => {

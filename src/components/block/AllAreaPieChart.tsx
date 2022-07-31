@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
-
-import { Card, Typography, Box } from "@mui/material";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 // @ts-ignore
 import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
+
+import { Card, Typography, Box } from "@mui/material";
 
 const AllAreaPieChart = () => {
   const token = useRecoilValue(tokenState);
