@@ -154,7 +154,7 @@ const AnalyticsSummary = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ pt: 2 }}>
+    <Grid container spacing={2} sx={{ py: 2 }}>
       <Grid
         item
         xs={12}

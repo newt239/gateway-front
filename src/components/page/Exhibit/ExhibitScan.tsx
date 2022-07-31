@@ -382,10 +382,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -421,7 +421,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <>
       {!exhibit_id ? (
-        <Grid container spacing={2} sx={{ p: 2 }}>
+        <Grid container spacing={2} sx={{ py: 2 }}>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{ p: 2 }}>
               展示IDが正しくありません。
@@ -431,7 +431,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       ) : profile &&
         profile.user_type === "exhibit" &&
         profile.user_id !== exhibit_id ? (
-        <Grid container spacing={2} sx={{ p: 2 }}>
+        <Grid container spacing={2} sx={{ py: 2 }}>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{ p: 2 }}>
               このページを表示する権限がありません。
@@ -439,7 +439,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Grid>
         </Grid>
       ) : (
-        <Grid container spacing={2} sx={{ p: 2 }}>
+        <Grid container spacing={2} sx={{ py: 2 }}>
           <Grid item xs={12}>
             <Grid container sx={{ alignItems: "center" }}>
               <Grid item sx={{ pr: 4 }} xs={12} sm lg={2}>
@@ -453,8 +453,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${
-                        scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )

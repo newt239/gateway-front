@@ -248,7 +248,7 @@ const ReserveCheck = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid container spacing={2} sx={{ py: 2 }}>
         <Grid item xs={12}>
           <Grid
             container

@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
@@ -34,14 +34,12 @@ const ExhibitIndex = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid container spacing={2} sx={{ py: 2 }}>
         <Grid item xs={12}>
-          <Grid container sx={{ p: 2, alignItems: "center" }}>
-            <Grid item>スキャンする展示：</Grid>
-            <Grid item>
-              <Suspense fallback={<div>読み込み中...</div>}>
-                <SelectExhibit />
-              </Suspense>
+          <Grid container sx={{ pl: 2, alignItems: "center" }}>
+            <Grid item xs={12} md="auto">スキャンする展示：</Grid>
+            <Grid item xs={12} md={6}>
+              <SelectExhibit />
             </Grid>
           </Grid>
         </Grid>
@@ -50,9 +48,7 @@ const ExhibitIndex = () => {
             <Typography variant="h3">入室処理</Typography>
             <Typography>展示への入室を記録します。</Typography>
             <Box sx={{ width: "100%", textAlign: "right" }}>
-              <Suspense fallback={<div>読み込み中...</div>}>
-                <MoveButton type="enter" />
-              </Suspense>
+              <MoveButton type="enter" />
             </Box>
           </Card>
         </Grid>
@@ -61,9 +57,7 @@ const ExhibitIndex = () => {
             <Typography variant="h3">退室処理</Typography>
             <Typography>展示からの退室を記録します。</Typography>
             <Box sx={{ width: "100%", textAlign: "right" }}>
-              <Suspense fallback={<div>読み込み中...</div>}>
-                <MoveButton type="exit" />
-              </Suspense>
+              <MoveButton type="exit" />
             </Box>
           </Card>
         </Grid>

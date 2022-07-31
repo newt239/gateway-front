@@ -65,7 +65,7 @@ const AnalyticsExhibit = () => {
     return (
       <>
         {status.status ? (
-          <Grid container spacing={2} sx={{ p: 2 }}>
+          <Grid container spacing={2} sx={{ py: 2 }}>
             {["moderator", "executive"].includes(profile.user_type) && (
               <Grid item xs={12}>
                 <Button
