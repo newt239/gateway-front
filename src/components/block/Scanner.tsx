@@ -52,7 +52,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const [selectCameraModalOpen, setSelectCameraModalOpen] = useState(false);
   const [errorDialogOpen, setMessageDialogOpen] = useState(false);
   const [errorDialogTitle, setMessageDialogTitle] = useState("");
-  const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
+  const [errorDialogMessage, setMessageDialogMessage] = useState<string>("");
 
   const getCameraDeviceList = () => {
     navigator.mediaDevices
@@ -121,30 +121,24 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const handleError = (err: unknown) => {
     setScannerStatus("error");
     setMessageDialogTitle("カメラ起動失敗");
-    let reason: string[];
+    let reason: string;
     if (isDOMException(err)) {
       console.error(err.name, err.message);
       switch (err.name) {
         case "NotReadableError":
-          reason = [
-            "カメラが他のアプリケーションで使用されています。",
-            "カメラアプリやビデオ通話を開いていたり、フラッシュライトが点灯していたりしませんか？",
-          ];
+          reason = "カメラが他のアプリケーションで使用されています。カメラアプリやビデオ通話を開いていたり、フラッシュライトが点灯していたりしませんか？";
           break;
         case "NotAllowedError":
-          reason = [
-            "カメラを使用する権限がありません。",
-            "お使いのブラウザの設定を確認してください。",
-          ];
+          reason = "カメラを使用する権限がありません。お使いのブラウザの設定を確認してください。";
           break;
         default:
-          reason = ["原因不明のエラーです。"];
+          reason = "原因不明のエラーです。";
           break;
       }
-      reason = [...reason, `[${err.name}]`, err.message];
+      reason += `[${err.name}] ${err.message}`;
       setMessageDialogMessage(reason);
     } else {
-      setMessageDialogMessage(["原因不明のエラーです。"]);
+      setMessageDialogMessage("原因不明のエラーです。");
     }
     setMessageDialogOpen(true);
   };

@@ -54,7 +54,7 @@ const LostWristband = () => {
   const [loading, setLoading] = useState(false);
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState<string[]>([]);
+  const [dialogMessage, setDialogMessage] = useState<string>("");
 
   const checkReservation = () => {
     if (token) {
@@ -97,7 +97,7 @@ const LostWristband = () => {
           .then((res) => {
             console.log(res);
             setDialogOpen(true);
-            setDialogMessage([`スペアの登録が完了しました`]);
+            setDialogMessage("スペアの登録が完了しました。");
           })
           .catch((err: AxiosError) => {
             console.log(err);
@@ -111,7 +111,7 @@ const LostWristband = () => {
 
   const handleClose = () => {
     setDialogOpen(false);
-    setDialogMessage([]);
+    setDialogMessage("");
   };
 
   return (

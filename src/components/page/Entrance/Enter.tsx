@@ -397,7 +397,7 @@ const EntranceEnter = () => {
           open={dialogOpen}
           type="success"
           title="処理が完了しました"
-          message={[dialogMessage]}
+          message={dialogMessage}
           onClose={onDialogClose}
         />
       </Grid>

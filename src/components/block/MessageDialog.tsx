@@ -15,7 +15,7 @@ type errorDialogProps = {
   open: boolean;
   type: "success" | "error";
   title?: string;
-  message: string[];
+  message: string;
   onClose: () => void;
 };
 
