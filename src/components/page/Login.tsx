@@ -15,6 +15,7 @@ import {
   LinearProgress,
   Typography,
   Card,
+  Link,
 } from "@mui/material";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -179,40 +180,40 @@ const Login = () => {
                 ユーザーIDとパスワードが間違っていないかもう一度確認してください。
               </li>
               <li>
-                「サーバーからの応答がありません」というエラーが発生した場合、サーバーが停止している可能性があります。サーバーが稼働中かどうかは
-                <a
+                「サーバーからの応答がありません」というエラーが表示された場合、端末のネットワークの設定を確認した上で<Link
                   href={process.env.REACT_APP_STATUS_URL || "/"}
                   target="_blank"
-                >
-                  こちら
-                </a>
-                から確認できます。
+                  underline="hover">
+                    サーバーステータス
+                </Link>
+                に異常がないか確認してください。
               </li>
               <li>
-                ログイン状態は一定の時間が経過するとセッションが無効となり自動ログインが行われなくなります。この際エラーが表示されることがありますが、ユーザーIDとパスワードを入力し、再度ログインしてください。
+                ログイン状態は一定の時間が経過するとログアウトされます。
               </li>
             </ol>
           </Card>
         </Grid>
+        {!window.matchMedia('(display-mode: standalone)').matches && (
         <Grid item xs={12} md={6}>
           <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-            <Typography variant="h2">このアプリのインストール方法</Typography>
+            <Typography variant="h2">アプリのインストール方法</Typography>
             <ol>
               <li>
-                Chromebookやパソコン・AndroidのGoogle
-                Chromeを利用している場合、右上の <MoreVertIcon />{" "}
+                右上の <MoreVertIcon sx={{ verticalAlign: -5}}/>{" "}
                 から『「Gateway」をインストール』をクリック
               </li>
               <li>
-                Safariを利用している場合 <IosShareIcon />{" "}
+                Safariを利用している場合 <IosShareIcon sx={{ verticalAlign: -5 }} />{" "}
                 から「ホーム画面に追加」をタップ
               </li>
               <li>
-                ホーム画面に追加された「Gateway」というアイコンをタップして起動
+                ホーム画面に追加された「Gateway」アイコンをタップして起動
               </li>
             </ol>
           </Card>
         </Grid>
+        )}
       </Grid>
     </>
   );
