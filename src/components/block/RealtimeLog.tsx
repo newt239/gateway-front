@@ -106,52 +106,50 @@ const RealtimeLog = () => {
 
   return (
     <>
-      {exhibitList.length !== 0 && activityList.length !== 0 && (
-        <>
-          <Grid container>
-            <Grid item xs={12}>
-              <Grid container sx={{ alignItems: "center", justifyContent: "space-between", height: 30 }}>
-                <Grid item><Tooltip title="10秒更新"><Typography variant="h3">リアルタイムログ</Typography></Tooltip></Grid>
-                <Grid item>{loading && (<CircularProgress size={25} thickness={6} />)}</Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <List>
-                {activityList.map(v => (
-                  <ListItem divider disablePadding key={`${v.session_id}-${v.activity_type}`}>
-                    <Grid container sx={{ alignItems: "center" }}>
-                      <Grid item xs={2.5}>
-                        <ListItemText>
-                          {moment(v.timestamp).format("hh:mm:ss")}
-                        </ListItemText>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <ListItemText secondary={v.guest_id} secondaryTypographyProps={{ sx: { p: 0 } }}>
-                          {v.session_id}
-                        </ListItemText>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <ListItemText>
-                          {exhibitList.filter(x => {
-                            return x.exhibit_id === v.exhibit_id
-                          }).map(l => {
-                            return <span key={l.exhibit_id}>{l.exhibit_name}</span>
-                          })}
-                        </ListItemText>
-                      </Grid>
-                      <Grid item xs={1.5}>
-                        <ListItemText>
-                          {v.activity_type === "enter" ? "入室" : "退室"}
-                        </ListItemText>
-                      </Grid>
-                    </Grid>
-                  </ListItem>
-                ))}
-              </List>
-            </Grid>
+      <Grid container>
+        <Grid item xs={12}>
+          <Grid container sx={{ alignItems: "center", justifyContent: "space-between", height: 30 }}>
+            <Grid item><Tooltip title="10秒更新"><Typography variant="h3">リアルタイムログ</Typography></Tooltip></Grid>
+            <Grid item>{loading && (<CircularProgress size={25} thickness={6} />)}</Grid>
           </Grid>
-        </>
-      )}
+        </Grid>
+        {exhibitList.length !== 0 && activityList.length !== 0 && (
+          <Grid item xs={12}>
+            <List>
+              {activityList.map(v => (
+                <ListItem divider disablePadding key={`${v.session_id}-${v.activity_type}`}>
+                  <Grid container sx={{ alignItems: "center" }}>
+                    <Grid item xs={2.5}>
+                      <ListItemText>
+                        {moment(v.timestamp).format("hh:mm:ss")}
+                      </ListItemText>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <ListItemText secondary={v.guest_id} secondaryTypographyProps={{ sx: { p: 0 } }}>
+                        {v.session_id}
+                      </ListItemText>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <ListItemText>
+                        {exhibitList.filter(x => {
+                          return x.exhibit_id === v.exhibit_id
+                        }).map(l => {
+                          return <span key={l.exhibit_id}>{l.exhibit_name}</span>
+                        })}
+                      </ListItemText>
+                    </Grid>
+                    <Grid item xs={1.5}>
+                      <ListItemText>
+                        {v.activity_type === "enter" ? "入室" : "退室"}
+                      </ListItemText>
+                    </Grid>
+                  </Grid>
+                </ListItem>
+              ))}
+            </List>
+          </Grid>
+        )}
+      </Grid>
     </>
   );
 };
