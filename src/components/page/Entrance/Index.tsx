@@ -1,16 +1,16 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { pageStateSelector } from "#/recoil/page";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 
 const Entrance = () => {
   const navigate = useNavigate();
-  const setPageInfo = useSetRecoilState(pageStateSelector);
 
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "エントランス" });
+    setPageTitle("エントランス");
   }, []);
 
   return (

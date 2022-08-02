@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSetRecoilState, useRecoilValue } from "recoil";
-import { pageStateSelector } from "#/recoil/page";
+import { useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
@@ -22,9 +23,9 @@ import LinearProgress, {
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 const AnalyticsSummary = () => {
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "展示一覧" });
+    setPageTitle("展示一覧");
   }, []);
 
   const token = useRecoilValue(tokenState);

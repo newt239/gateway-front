@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
-import { pageStateSelector } from "#/recoil/page";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -63,10 +64,10 @@ const EntranceExit = () => {
   const [showScanGuide, setShowScanGuide] = useState(true);
 
   const setDeviceState = useSetRecoilState(deviceState);
-  const setPageInfo = useSetRecoilState(pageStateSelector);
 
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "エントランス" });
+    setPageTitle("エントランス");
   }, []);
 
   const handleScan = (scanText: string | null) => {

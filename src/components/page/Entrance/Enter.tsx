@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
-import { pageStateSelector } from "#/recoil/page";
 import { reservationState } from "#/recoil/reservation";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -64,10 +65,10 @@ const EntranceEnter = () => {
   const [infoMessage, setInfoMessage] = useState("");
 
   const setDeviceState = useSetRecoilState(deviceState);
-  const setPageInfo = useSetRecoilState(pageStateSelector);
 
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "エントランス入場処理" });
+    setPageTitle("エントランス入場処理");
   }, []);
 
   useEffect(() => {

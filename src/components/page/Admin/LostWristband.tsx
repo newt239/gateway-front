@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { tokenState } from "#/recoil/user";
 import { reservationState } from "#/recoil/reservation";
-import { pageStateSelector } from "#/recoil/page";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -40,9 +41,9 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import MessageDialog from "#/components/block/MessageDialog";
 
 const LostWristband = () => {
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "リストバンド紛失" });
+    setPageTitle("リストバンド紛失");
   }, []);
 
   const token = useRecoilValue(tokenState);
@@ -180,12 +181,12 @@ const LostWristband = () => {
                         {reservation.count}人
                         {reservation.count !==
                           reservation.registered.length && (
-                          <span>
-                            （残り：
-                            {reservation.count - reservation.registered.length}
-                            人）
-                          </span>
-                        )}
+                            <span>
+                              （残り：
+                              {reservation.count - reservation.registered.length}
+                              人）
+                            </span>
+                          )}
                       </ListItemText>
                     </ListItem>
                     <Divider />

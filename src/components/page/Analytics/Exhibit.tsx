@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { profileState, tokenState } from "#/recoil/user";
-import { pageStateSelector } from "#/recoil/page";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import { Grid, Button, Typography } from "@mui/material";
@@ -25,8 +26,7 @@ const AnalyticsExhibit = () => {
       message: "読込中...",
     });
 
-    const setPageInfo = useSetRecoilState(pageStateSelector);
-
+    const setPageTitle = useSetAtom(pageTitleAtom);
     useEffect(() => {
       if (token && profile) {
         apiClient(process.env.REACT_APP_API_BASE_URL)
@@ -38,14 +38,12 @@ const AnalyticsExhibit = () => {
           .then((res) => {
             const currentExhibit = res.find((v) => v.exhibit_id === exhibit_id);
             if (currentExhibit) {
-              setPageInfo({
-                title: `${currentExhibit.exhibit_name} - 現在の滞在状況`,
-              });
+              setPageTitle(`${currentExhibit.exhibit_name} - 現在の滞在状況`);
             }
           })
           .catch((err: AxiosError) => {
             console.log(err);
-            setPageInfo({ title: `${exhibit_id} - 現在の滞在状況` });
+            setPageTitle(`${exhibit_id} - 現在の滞在状況`);
           });
       }
     }, []);

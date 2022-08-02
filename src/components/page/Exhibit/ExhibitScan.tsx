@@ -3,7 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
 import { deviceState } from "#/recoil/scan";
-import { pageStateSelector } from "#/recoil/page";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -84,7 +85,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   const setDeviceState = useSetRecoilState(deviceState);
 
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
       if (
@@ -101,7 +102,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             },
           })
           .then((res) => {
-            setPageInfo({ title: `${res.exhibit_name} - ${res.room_name}` });
+            setPageTitle(`${res.exhibit_name} - ${res.room_name}`);
             setCapacity(res.capacity);
             setCurrentCount(res.current);
             setExhibitName(res.exhibit_name);
