@@ -12,4 +12,6 @@ export const pageTitleAtom = atom(
     }
     set(pageAtom, action);
   }
-)
+);
+
+export const deviceStateAtom = atom(false);

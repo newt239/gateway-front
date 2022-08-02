@@ -3,14 +3,12 @@ import { useNavigate } from "react-router-dom";
 import {
   useRecoilState,
   useRecoilValue,
-  useSetRecoilState,
   useResetRecoilState,
 } from "recoil";
 import { profileState, tokenState } from "#/recoil/user";
-import { deviceState } from "#/recoil/scan";
 import { reservationState } from "#/recoil/reservation";
 import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import { pageTitleAtom, deviceStateAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -72,7 +70,7 @@ const ReserveCheck = () => {
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
   const [showScanGuide, setShowScanGuide] = useState(true);
 
-  const setDeviceState = useSetRecoilState(deviceState);
+  const setDeviceState = useSetAtom(deviceStateAtom);
 
   const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {

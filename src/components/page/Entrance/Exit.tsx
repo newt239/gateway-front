@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
-import { deviceState } from "#/recoil/scan";
 import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import { pageTitleAtom, deviceStateAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -63,7 +62,7 @@ const EntranceExit = () => {
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
   const [showScanGuide, setShowScanGuide] = useState(true);
 
-  const setDeviceState = useSetRecoilState(deviceState);
+  const setDeviceState = useSetAtom(deviceStateAtom);
 
   const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
