@@ -39,7 +39,7 @@ const AnalyticsExhibit = () => {
             const currentExhibit = res.find((v) => v.exhibit_id === exhibit_id);
             if (currentExhibit) {
               setPageInfo({
-                title: `${currentExhibit.group_name} - 現在の滞在状況`,
+                title: `${currentExhibit.exhibit_name} - 現在の滞在状況`,
               });
             }
           })
