@@ -509,14 +509,16 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       <Tooltip
                         title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}
                       >
-                        <IconButton
-                          size="small"
-                          color="primary"
-                          onClick={updateExhibitInfo}
-                          disabled={exhibitInfoLoading}
-                        >
-                          <ReplayRoundedIcon />
-                        </IconButton>
+                        <span>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={updateExhibitInfo}
+                            disabled={exhibitInfoLoading}
+                          >
+                            <ReplayRoundedIcon />
+                          </IconButton>
+                        </span>
                       </Tooltip>
                     </Grid>
                   </Grid>
