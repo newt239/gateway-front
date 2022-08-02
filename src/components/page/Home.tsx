@@ -1,6 +1,6 @@
 import React, { useEffect, Suspense } from "react";
-import { useSetRecoilState } from "recoil";
-import { pageStateSelector } from "#/recoil/page";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
@@ -14,9 +14,9 @@ import Settings from "#/components/block/Settings";
 import GatewayThumbnail from "#/asset/gateway-hero.jpg";
 
 const Home = () => {
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "ホーム" });
+    setPageTitle("ホーム");
   }, []);
 
   const theme = useTheme();

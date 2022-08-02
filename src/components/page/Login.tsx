@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useSetRecoilState } from "recoil";
 import ReactGA from "react-ga4";
 import { tokenState, profileState } from "#/recoil/user";
-import { pageStateSelector } from "#/recoil/page";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -30,9 +31,9 @@ interface messageType {
 const Login = () => {
   const setToken = useSetRecoilState(tokenState);
   const setProfile = useSetRecoilState(profileState);
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "ログイン" });
+    setPageTitle("ログイン");
   }, []);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -184,7 +185,7 @@ const Login = () => {
                   href={process.env.REACT_APP_STATUS_URL || "/"}
                   target="_blank"
                   underline="hover">
-                    サーバーステータス
+                  サーバーステータス
                 </Link>
                 に異常がないか確認してください。
               </li>
@@ -195,24 +196,24 @@ const Login = () => {
           </Card>
         </Grid>
         {!window.matchMedia('(display-mode: standalone)').matches && (
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-            <Typography variant="h2">アプリのインストール方法</Typography>
-            <ol>
-              <li>
-                右上の <MoreVertIcon sx={{ verticalAlign: -5}}/>{" "}
-                から『「Gateway」をインストール』をクリック
-              </li>
-              <li>
-                Safariを利用している場合 <IosShareIcon sx={{ verticalAlign: -5 }} />{" "}
-                から「ホーム画面に追加」をタップ
-              </li>
-              <li>
-                ホーム画面に追加された「Gateway」アイコンをタップして起動
-              </li>
-            </ol>
-          </Card>
-        </Grid>
+          <Grid item xs={12} md={6}>
+            <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+              <Typography variant="h2">アプリのインストール方法</Typography>
+              <ol>
+                <li>
+                  右上の <MoreVertIcon sx={{ verticalAlign: -5 }} />{" "}
+                  から『「Gateway」をインストール』をクリック
+                </li>
+                <li>
+                  Safariを利用している場合 <IosShareIcon sx={{ verticalAlign: -5 }} />{" "}
+                  から「ホーム画面に追加」をタップ
+                </li>
+                <li>
+                  ホーム画面に追加された「Gateway」アイコンをタップして起動
+                </li>
+              </ol>
+            </Card>
+          </Grid>
         )}
       </Grid>
     </>
