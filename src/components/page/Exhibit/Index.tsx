@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
+import { useSetRecoilState } from "recoil";
 import { pageStateSelector } from "#/recoil/page";
-import { currentExhibitState } from "#/recoil/exhibit";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 
@@ -11,16 +10,16 @@ import SelectExhibit from "#/components/block/SelectExhibit";
 const ExhibitIndex = () => {
   const navigate = useNavigate();
   const setPageInfo = useSetRecoilState(pageStateSelector);
-
   useEffect(() => {
     setPageInfo({ title: "展示選択" });
   }, []);
+
+  const [currentExhibit, setCurrentExhibit] = useState<string>("");
 
   type moveButtonProp = {
     type: "enter" | "exit";
   };
   const MoveButton = ({ type }: moveButtonProp) => {
-    const currentExhibit = useRecoilValue(currentExhibitState);
     return (
       <Button
         disabled={!currentExhibit}
@@ -39,7 +38,7 @@ const ExhibitIndex = () => {
           <Grid container sx={{ pl: 2, alignItems: "center" }}>
             <Grid item xs={12} md="auto">スキャンする展示：</Grid>
             <Grid item xs={12} md={6}>
-              <SelectExhibit />
+              <SelectExhibit currentExhibit={currentExhibit} setCurrentExhibit={setCurrentExhibit} />
             </Grid>
           </Grid>
         </Grid>

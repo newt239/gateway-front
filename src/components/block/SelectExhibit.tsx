@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
+import { useRecoilValue } from "recoil";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -13,21 +13,21 @@ import {
   Grid,
 } from "@mui/material";
 import { profileState, tokenState } from "#/recoil/user";
-import { currentExhibitState } from "#/recoil/exhibit";
 
-type exhibitProp = {
-  exhibit_id: string;
-  group_name: string;
-  exhibit_type: string;
-};
-
-const SelectExhibit = () => {
+type SelectExhibitProp = {
+  currentExhibit: string;
+  setCurrentExhibit: Dispatch<SetStateAction<string>>;
+}
+const SelectExhibit = ({ currentExhibit, setCurrentExhibit }: SelectExhibitProp) => {
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
   const [loading, setLoading] = useState(true);
+  type exhibitProp = {
+    exhibit_id: string;
+    group_name: string;
+    exhibit_type: string;
+  };
   const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
-  const [currentExhibit, setCurrentExhibit] =
-    useRecoilState(currentExhibitState);
 
   useEffect(() => {
     if (token && profile) {
