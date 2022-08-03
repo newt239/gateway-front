@@ -401,7 +401,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 gap: "1rem",
               }}
             >
-              <Button variant="outlined" onClick={retry}>
+              <Button variant="outlined" color="error" onClick={retry} startIcon={<ReplayRoundedIcon />}>
                 スキャンし直す
               </Button>
               <Button variant="contained" onClick={registerSession}>

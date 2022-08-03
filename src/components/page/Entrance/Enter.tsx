@@ -219,7 +219,7 @@ const EntranceEnter = () => {
                           aria-label="delete"
                           onClick={() => reset(index)}
                         >
-                          <DeleteIcon />
+                          <DeleteIcon color="error" />
                         </IconButton>
                       )
                     }

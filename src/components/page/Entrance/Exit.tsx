@@ -27,6 +27,7 @@ import { useTheme } from "@mui/material/styles";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
 
 import {
   getTimePart,
@@ -232,7 +233,7 @@ const EntranceExit = () => {
                 gap: "1rem",
               }}
             >
-              <Button variant="outlined" onClick={retry}>
+              <Button variant="outlined" color="error" onClick={retry} startIcon={<ReplayRoundedIcon />}>
                 スキャンし直す
               </Button>
               <Button variant="contained" onClick={registerSession}>

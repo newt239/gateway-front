@@ -29,6 +29,7 @@ import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
+import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
 
 import Scanner from "#/components/block/Scanner";
 import {
@@ -218,14 +219,14 @@ const ReserveCheck = () => {
                 gap: "1rem",
               }}
             >
-              <Button variant="outlined" onClick={retry}>
+              <Button variant="outlined" color="error" onClick={retry} startIcon={<ReplayRoundedIcon />}>
                 スキャンし直す
               </Button>
               <Button
                 variant="contained"
                 onClick={() => navigate("/entrance/enter", { replace: true })}
               >
-                リストバンドの登録
+                登録
               </Button>
             </Box>
           </Card>
