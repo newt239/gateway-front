@@ -1,4 +1,5 @@
 import { atom } from 'jotai'
+import { reservationInfoProp } from '#/types/global';
 
 const initialPageAtomValue = "ホーム";
 const pageAtom = atom(initialPageAtomValue);
@@ -15,3 +16,5 @@ export const pageTitleAtom = atom(
 );
 
 export const deviceStateAtom = atom(false);
+
+export const reservationAtom = atom<reservationInfoProp | null>(null);

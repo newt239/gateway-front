@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useResetRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { tokenState, profileState } from "#/recoil/user";
-import { reservationState } from "#/recoil/reservation";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom, deviceStateAtom } from "#/components/lib/jotai";
+import { useAtom, useSetAtom } from "jotai";
+import { pageTitleAtom, deviceStateAtom, reservationAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -56,8 +55,7 @@ const EntranceEnter = () => {
   const [alertStatus, setAlertStatus] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const reservation = useRecoilValue(reservationState);
-  const resetReservation = useResetRecoilState(reservationState);
+  const [reservation, setReservation] = useAtom(reservationAtom);
   const [guestList, setGuest] = useState<string[]>([]);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
@@ -136,7 +134,7 @@ const EntranceEnter = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => {
-          resetReservation();
+          setReservation(null);
           setDeviceState(true);
           setText("");
           setSmDrawerStatus(false);

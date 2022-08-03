@@ -1,14 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  useRecoilState,
-  useRecoilValue,
-  useResetRecoilState,
-} from "recoil";
+import { useRecoilValue } from "recoil";
 import { profileState, tokenState } from "#/recoil/user";
-import { reservationState } from "#/recoil/reservation";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom, deviceStateAtom } from "#/components/lib/jotai";
+import { useAtom, useSetAtom } from "jotai";
+import { pageTitleAtom, deviceStateAtom, reservationAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -54,8 +49,7 @@ const ReserveCheck = () => {
   const navigate = useNavigate();
   const token = useRecoilValue(tokenState);
   const profile = useRecoilValue(profileState);
-  const [reservation, setReservation] = useRecoilState(reservationState);
-  const resetReservation = useResetRecoilState(reservationState);
+  const [reservation, setReservation] = useAtom(reservationAtom);
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
     message: string;
@@ -143,7 +137,7 @@ const ReserveCheck = () => {
   const retry = () => {
     setScanStatus("waiting");
     setText("");
-    resetReservation();
+    setReservation(null);
     setDeviceState(true);
     setShowScanGuide(true);
   };

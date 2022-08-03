@@ -9,6 +9,18 @@ export interface profileProp {
   note?: string;
 }
 
+export interface reservationInfoProp {
+  reservation_id: string;
+  guest_type: string;
+  part: number;
+  count: number;
+  registered: {
+    guest_id: string;
+    is_spare: number;
+  }[];
+  available: number;
+}
+
 export interface exhibitProp {
   exhibit_id: string;
   exhibit_name: string;
