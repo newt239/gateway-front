@@ -67,6 +67,9 @@ const Scanner = ({ handleScan }: ScannerProps) => {
       )
       .then((devices) => {
         setDeviceList(devices);
+        if (currentDeviceId === "") {
+          setCurrentDeviceId(devices[0].deviceId);
+        }
       })
       .catch((err) => {
         console.log(err);
