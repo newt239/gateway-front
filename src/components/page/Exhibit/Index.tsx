@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useSetAtom } from "jotai";
 import { pageTitleAtom } from "#/components/lib/jotai";
 
-import { Grid, Card, Box, Typography, Button } from "@mui/material";
+import { Grid, Card, Typography, CardActionArea, CardContent } from "@mui/material";
 
 import SelectExhibit from "#/components/block/SelectExhibit";
 
@@ -16,21 +16,6 @@ const ExhibitIndex = () => {
 
   const [currentExhibit, setCurrentExhibit] = useState<string>("");
 
-  type moveButtonProp = {
-    type: "enter" | "exit";
-  };
-  const MoveButton = ({ type }: moveButtonProp) => {
-    return (
-      <Button
-        disabled={!currentExhibit}
-        onClick={() => currentExhibit && navigate(`${currentExhibit}/${type}`)}
-        variant="outlined"
-      >
-        開く
-      </Button>
-    );
-  };
-
   return (
     <>
       <Grid container spacing={2} sx={{ py: 2 }}>
@@ -42,22 +27,24 @@ const ExhibitIndex = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h3">入室処理</Typography>
-            <Typography>展示への入室を記録します。</Typography>
-            <Box sx={{ width: "100%", textAlign: "right" }}>
-              <MoveButton type="enter" />
-            </Box>
+        <Grid item xs={12} md={6} lg={4}>
+          <Card variant="outlined">
+            <CardActionArea onClick={() => currentExhibit && navigate(`${currentExhibit}/enter`)}>
+              <CardContent sx={{ p: 2 }}>
+                <Typography variant="h3">入室処理</Typography>
+                <Typography variant="body1" sx={{ p: 1 }}>展示への入室を記録します。</Typography>
+              </CardContent>
+            </CardActionArea>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h3">退室処理</Typography>
-            <Typography>展示からの退室を記録します。</Typography>
-            <Box sx={{ width: "100%", textAlign: "right" }}>
-              <MoveButton type="exit" />
-            </Box>
+        <Grid item xs={12} md={6} lg={4}>
+          <Card variant="outlined">
+            <CardActionArea onClick={() => currentExhibit && navigate(`${currentExhibit}/exit`)}>
+              <CardContent sx={{ p: 2 }}>
+                <Typography variant="h3">退室処理</Typography>
+                <Typography variant="body1" sx={{ p: 1 }}>展示からの退室を記録します。</Typography>
+              </CardContent>
+            </CardActionArea>
           </Card>
         </Grid>
       </Grid>
