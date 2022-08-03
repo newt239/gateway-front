@@ -33,7 +33,6 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import {
   getTimePart,
@@ -349,23 +348,7 @@ const EntranceEnter = () => {
                 size="small"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="ゲストIDをコピー"
-                      onClick={() => {
-                        if (text !== "") {
-                          navigator.clipboard
-                            .writeText(text)
-                            .catch((e) => console.log(e));
-                        }
-                      }}
-                      edge="end"
-                    >
-                      <ContentCopyRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
+                startAdornment={<InputAdornment position="start">予約ID</InputAdornment>}
                 disabled
                 fullWidth
               />

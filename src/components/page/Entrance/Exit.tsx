@@ -12,8 +12,6 @@ import {
   Typography,
   Button,
   FormControl,
-  IconButton,
-  InputAdornment,
   OutlinedInput,
   Box,
   LinearProgress,
@@ -29,7 +27,6 @@ import { useTheme } from "@mui/material/styles";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import {
   getTimePart,
@@ -291,28 +288,6 @@ const EntranceExit = () => {
                 size="small"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="ゲストIDをコピー"
-                      onClick={() => {
-                        if (text !== "") {
-                          navigator.clipboard
-                            .writeText(text)
-                            .catch((e) => console.log(e));
-                          setSnackbar({
-                            status: true,
-                            message: "コピーしました",
-                            severity: "success",
-                          });
-                        }
-                      }}
-                      edge="end"
-                    >
-                      <ContentCopyRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
                 disabled
                 fullWidth
               />

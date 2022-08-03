@@ -15,7 +15,6 @@ import {
   Button,
   FormControl,
   IconButton,
-  InputAdornment,
   OutlinedInput,
   Box,
   LinearProgress,
@@ -33,7 +32,6 @@ import { useTheme } from "@mui/material/styles";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
@@ -556,28 +554,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   size="small"
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="ゲストIDをコピー"
-                        onClick={() => {
-                          if (text !== "") {
-                            navigator.clipboard
-                              .writeText(text)
-                              .catch((e) => console.log(e));
-                            setSnackbar({
-                              status: true,
-                              message: "コピーしました",
-                              severity: "success",
-                            });
-                          }
-                        }}
-                        edge="end"
-                      >
-                        <ContentCopyRoundedIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  }
                   disabled
                   fullWidth
                 />

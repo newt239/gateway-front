@@ -13,8 +13,6 @@ import {
   Typography,
   Button,
   FormControl,
-  IconButton,
-  InputAdornment,
   OutlinedInput,
   Box,
   LinearProgress,
@@ -31,7 +29,6 @@ import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 
 import Scanner from "#/components/block/Scanner";
 import {
@@ -280,28 +277,6 @@ const ReserveCheck = () => {
                 size="small"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="予約IDをコピー"
-                      onClick={() => {
-                        if (text !== "") {
-                          navigator.clipboard
-                            .writeText(text)
-                            .catch((e) => console.log(e));
-                          setSnackbar({
-                            status: true,
-                            message: "コピーしました",
-                            severity: "success",
-                          });
-                        }
-                      }}
-                      edge="end"
-                    >
-                      <ContentCopyRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
                 disabled
                 fullWidth
               />
