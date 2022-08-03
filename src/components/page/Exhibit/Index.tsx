@@ -28,7 +28,7 @@ const ExhibitIndex = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
-          <Card variant="outlined">
+          <Card variant="outlined" sx={{ height: "100%" }}>
             <CardActionArea onClick={() => currentExhibit && navigate(`${currentExhibit}/enter`)}>
               <CardContent sx={{ p: 2 }}>
                 <Typography variant="h3">入室処理</Typography>
@@ -38,8 +38,8 @@ const ExhibitIndex = () => {
           </Card>
         </Grid>
         <Grid item xs={12} md={6} lg={4}>
-          <Card variant="outlined">
-            <CardActionArea onClick={() => currentExhibit && navigate(`${currentExhibit}/exit`)}>
+          <Card variant="outlined" sx={{ height: "100%" }}>
+            <CardActionArea onClick={() => currentExhibit && navigate(`${currentExhibit}/exit`)} >
               <CardContent sx={{ p: 2 }}>
                 <Typography variant="h3">退室処理</Typography>
                 <Typography variant="body1" sx={{ p: 1 }}>展示からの退室を記録します。</Typography>
