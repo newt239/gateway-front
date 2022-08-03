@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { tokenState } from "#/recoil/user";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import { useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
@@ -28,7 +26,7 @@ const AnalyticsSummary = () => {
     setPageTitle("展示一覧");
   }, []);
 
-  const token = useRecoilValue(tokenState);
+  const token = useAtomValue(tokenAtom);
 
   type exhibitProp = {
     id: string;

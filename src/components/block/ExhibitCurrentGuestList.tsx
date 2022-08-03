@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
+import { useAtomValue } from "jotai";
+import { tokenAtom, profileAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment from "moment";
@@ -34,8 +34,8 @@ type exhibitCurrentGuestTableListProp = {
 const ExhibitCurrentGuestList: React.FunctionComponent<{
   exhibit_id: string;
 }> = ({ exhibit_id }) => {
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
   const [rows, setRows] = useState<exhibitCurrentGuestTableListProp>([]);
   const [selectedGuestList, setSelectedGuestList] = useState<GridRowId[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);

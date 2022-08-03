@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import ReactGA from "react-ga4";
-import { tokenState, profileState } from "#/recoil/user";
 import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
+import ReactGA from "react-ga4";
 
 import {
   Grid,
@@ -29,8 +27,8 @@ interface messageType {
 }
 
 const Login = () => {
-  const setToken = useSetRecoilState(tokenState);
-  const setProfile = useSetRecoilState(profileState);
+  const setToken = useSetAtom(tokenAtom);
+  const setProfile = useSetAtom(profileAtom);
   const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
     setPageTitle("ログイン");

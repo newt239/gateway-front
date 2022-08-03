@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { profileState, tokenState } from "#/recoil/user";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import { useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import { Grid, Button, Typography } from "@mui/material";
@@ -14,8 +12,8 @@ import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList"
 
 const AnalyticsExhibit = () => {
   const navigate = useNavigate();
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
   if (profile) {
     const exhibit_id =
       useParams<{ exhibit_id: string }>().exhibit_id ||

@@ -1,5 +1,10 @@
 import { atom } from 'jotai'
-import { reservationInfoProp } from '#/types/global';
+import { profileProp, reservationInfoProp } from '#/types/global';
+
+
+export const tokenAtom = atom<string | null>(localStorage.getItem("gatewayApiToken"));
+
+export const profileAtom = atom<profileProp | null>(null);
 
 const initialPageAtomValue = "ホーム";
 const pageAtom = atom(initialPageAtomValue);

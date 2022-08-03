@@ -1,9 +1,7 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom, deviceStateAtom } from "#/components/lib/jotai";
+import { useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, profileAtom, pageTitleAtom, deviceStateAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -59,8 +57,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
-  const profile = useRecoilValue(profileState);
-  const token = useRecoilValue(tokenState);
+  const profile = useAtomValue(profileAtom);
+  const token = useAtomValue(tokenAtom);
   const [text, setText] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"

@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { tokenState } from "#/recoil/user";
-import { reservationState } from "#/recoil/reservation";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import { useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -39,6 +36,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
 import MessageDialog from "#/components/block/MessageDialog";
+import { reservationInfoProp } from "#/types/global";
 
 const LostWristband = () => {
   const setPageTitle = useSetAtom(pageTitleAtom);
@@ -46,10 +44,10 @@ const LostWristband = () => {
     setPageTitle("リストバンド紛失");
   }, []);
 
-  const token = useRecoilValue(tokenState);
+  const token = useAtomValue(tokenAtom);
 
   const [reservationId, setReservationId] = useState("");
-  const [reservation, setReservation] = useRecoilState(reservationState);
+  const [reservation, setReservation] = useState<reservationInfoProp | null>(null);
   const [newGuestId, setNewGuestId] = useState("");
   const [oldGuestId, setOldGuestId] = useState("not-set");
   const [loading, setLoading] = useState(false);

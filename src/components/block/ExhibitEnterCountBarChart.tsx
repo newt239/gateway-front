@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { tokenState } from "#/recoil/user";
+import { useAtomValue } from "jotai";
+import { tokenAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment from "moment";
@@ -12,7 +12,7 @@ import { TextField } from "@mui/material";
 const ExhibitEnterCountBarChart: React.FunctionComponent<{
   exhibit_id: string;
 }> = ({ exhibit_id }) => {
-  const token = useRecoilValue(tokenState);
+  const token = useAtomValue(tokenAtom);
   const [categories, setCategories] = useState<string[]>([]);
   const [data, setData] = useState<number[]>([]);
   const [day, setDay] = useState(moment().format("YYYY-MM-DD"));

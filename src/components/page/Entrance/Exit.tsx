@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom, deviceStateAtom } from "#/components/lib/jotai";
+import React, { useEffect, useState } from "react"
+import { useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, profileAtom, pageTitleAtom, deviceStateAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -45,8 +43,8 @@ import { guestInfoProp } from "#/types/global";
 const EntranceExit = () => {
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"

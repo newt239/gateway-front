@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
-import { useAtom, useSetAtom } from "jotai";
-import { pageTitleAtom, deviceStateAtom, reservationAtom } from "#/components/lib/jotai";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, profileAtom, pageTitleAtom, deviceStateAtom, reservationAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -49,8 +47,8 @@ const EntranceEnter = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
   const [alertStatus, setAlertStatus] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");

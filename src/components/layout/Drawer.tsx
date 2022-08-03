@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { profileState } from "#/recoil/user";
+import { useAtomValue } from "jotai";
+import { profileAtom } from "#/components/lib/jotai";
 
 import {
   Drawer,
@@ -36,7 +36,7 @@ const drawerWidth = 250;
 const DrawerLeft = () => {
   const path = useLocation().pathname;
   const navigate = useNavigate();
-  const profile = useRecoilValue(profileState);
+  const profile = useAtomValue(profileAtom);
 
   const StyledListItemButton = styled(ListItemButton)<ListItemButtonProps>(
     () => ({

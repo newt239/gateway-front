@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
+import { useAtomValue } from "jotai";
+import { tokenAtom, profileAtom } from "#/components/lib/jotai";
 import { useSetAtom } from "jotai";
 import { pageTitleAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
@@ -50,8 +50,8 @@ const AdminCheckGuest = () => {
     setPageTitle("ゲスト照会");
   }, []);
 
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
 
   const [guestId, setGuestId] = useState("");
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
