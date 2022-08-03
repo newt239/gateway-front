@@ -86,7 +86,7 @@ const EntranceEnter = () => {
     if (reservation) {
       if (guestList.length < reservation.count) {
         setInfoMessage(
-          `${guestList.length + 1}枚目のリストバンドを登録してください`
+          `${guestList.length + 1}枚目のリストバンドをスキャンしてください`
         );
       } else {
         setInfoMessage(
@@ -131,9 +131,7 @@ const EntranceEnter = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => {
-          setReservation(null);
           setDeviceState(true);
-          setText("");
           setSmDrawerStatus(false);
           setDialogOpen(true);
           setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
@@ -175,6 +173,8 @@ const EntranceEnter = () => {
   const onDialogClose = () => {
     setDialogOpen(false);
     setDialogMessage("");
+    setText("");
+    setReservation(null);
     navigate("/entrance/reserve-check", { replace: true });
   };
 
@@ -239,14 +239,6 @@ const EntranceEnter = () => {
                       gap: "1rem",
                     }}
                   >
-                    <Button
-                      variant="outlined"
-                      onClick={() =>
-                        navigate("/entrance/reserve-check", { replace: true })
-                      }
-                    >
-                      リセット
-                    </Button>
                     <Button
                       variant="contained"
                       onClick={registerWristband}
