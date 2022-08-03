@@ -33,6 +33,7 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
+import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
 
 import {
   getTimePart,
@@ -201,90 +202,112 @@ const EntranceEnter = () => {
           </Alert>
         )}
         {reservation && (
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h4">予約情報</Typography>
-            <List dense>
-              {guestList.map((guest, index) => (
-                <ListItem
-                  key={guest}
-                  secondaryAction={
-                    !reservation.registered
-                      .filter((guest) => guest.is_spare === 0)
-                      .map((guest) => guest.guest_id)
-                      .includes(guest) && (
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => reset(index)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    )
-                  }
-                >
-                  <ListItemIcon>
-                    <PersonRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText>{guest}</ListItemText>
-                </ListItem>
-              ))}
-              {guestList.length !== 0 && (
-                <>
-                  <Box
-                    m={1}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "flex-end",
-                      gap: "1rem",
-                    }}
-                  >
-                    <Button
-                      variant="contained"
-                      onClick={registerWristband}
-                      disabled={reservation.registered
+          <>
+            <Card variant="outlined" sx={{ p: 2 }}>
+              <Typography variant="h4">予約情報</Typography>
+              <List dense>
+                {guestList.map((guest, index) => (
+                  <ListItem
+                    key={guest}
+                    secondaryAction={
+                      !reservation.registered
                         .filter((guest) => guest.is_spare === 0)
                         .map((guest) => guest.guest_id)
-                        .includes(guestList[guestList.length - 1])}
+                        .includes(guest) && (
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => reset(index)}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      )
+                    }
+                  >
+                    <ListItemIcon>
+                      <PersonRoundedIcon />
+                    </ListItemIcon>
+                    <ListItemText>{guest}</ListItemText>
+                  </ListItem>
+                ))}
+                {guestList.length !== 0 && (
+                  <>
+                    <Box
+                      m={1}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        alignItems: "flex-end",
+                        gap: "1rem",
+                      }}
                     >
-                      登録
-                    </Button>
-                  </Box>
-                  <Divider />
-                </>
-              )}
-              <ListItem>
-                <ListItemIcon>
-                  <AssignmentIndRoundedIcon />
-                </ListItemIcon>
-                <ListItemText>{reservation.reservation_id}</ListItemText>
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <GroupWorkRoundedIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    reservation.guest_type === "family" ? "保護者" : "その他"
-                  }
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <AccessTimeRoundedIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={getTimePart(reservation.part).part_name}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <PeopleRoundedIcon />
-                </ListItemIcon>
-                <ListItemText>{reservation.count}人</ListItemText>
-              </ListItem>
-            </List>
-          </Card>
+                      <Button
+                        variant="contained"
+                        onClick={registerWristband}
+                        disabled={reservation.registered
+                          .filter((guest) => guest.is_spare === 0)
+                          .map((guest) => guest.guest_id)
+                          .includes(guestList[guestList.length - 1])}
+                      >
+                        登録
+                      </Button>
+                    </Box>
+                    <Divider />
+                  </>
+                )}
+                <ListItem>
+                  <ListItemIcon>
+                    <AssignmentIndRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText>{reservation.reservation_id}</ListItemText>
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <GroupWorkRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      reservation.guest_type === "family" ? "保護者" : "その他"
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <AccessTimeRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={getTimePart(reservation.part).part_name}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <PeopleRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText>{reservation.count}人</ListItemText>
+                </ListItem>
+              </List>
+            </Card>
+            <Box
+              m={1}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+                gap: "1rem",
+              }}
+            >
+              <Button
+                variant="outlined"
+                color="error"
+                startIcon={<ReplayRoundedIcon />}
+                onClick={() =>
+                  navigate("/entrance/reserve-check", { replace: true })
+                }
+              >
+                最初からやり直す
+              </Button>
+            </Box>
+          </>
         )}
       </>
     );
