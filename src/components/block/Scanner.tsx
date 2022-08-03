@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import {
-  deviceState,
-} from "#/recoil/scan";
+import { useAtom } from "jotai";
+import { deviceStateAtom } from "#/components/lib/jotai";
 import QrReader from "react-qr-reader";
 
 import {
@@ -30,7 +28,7 @@ type ScannerProps = {
 
 const Scanner = ({ handleScan }: ScannerProps) => {
   const location = useLocation();
-  const [qrReaderIsShow, setQrReaderIsShow] = useRecoilState(deviceState);
+  const [qrReaderIsShow, setQrReaderIsShow] = useAtom(deviceStateAtom);
   const [scannerStatus, setScannerStatus] = useState<
     "loading" | "waiting" | "error"
   >("loading");

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { tokenState } from "#/recoil/user";
+import { useAtomValue } from "jotai";
+import { tokenAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
@@ -17,7 +17,7 @@ import {
 
 
 const RealtimeLog = () => {
-  const token = useRecoilValue(tokenState);
+  const token = useAtomValue(tokenAtom);
 
   type exhibitProp = {
     exhibit_id: string;

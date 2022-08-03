@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { tokenState } from "#/recoil/user";
-import { reservationState } from "#/recoil/reservation";
-import { pageStateSelector } from "#/recoil/page";
+import { useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -38,17 +36,18 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
 import MessageDialog from "#/components/block/MessageDialog";
+import { reservationInfoProp } from "#/types/global";
 
 const LostWristband = () => {
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "リストバンド紛失" });
+    setPageTitle("リストバンド紛失");
   }, []);
 
-  const token = useRecoilValue(tokenState);
+  const token = useAtomValue(tokenAtom);
 
   const [reservationId, setReservationId] = useState("");
-  const [reservation, setReservation] = useRecoilState(reservationState);
+  const [reservation, setReservation] = useState<reservationInfoProp | null>(null);
   const [newGuestId, setNewGuestId] = useState("");
   const [oldGuestId, setOldGuestId] = useState("not-set");
   const [loading, setLoading] = useState(false);
@@ -180,12 +179,12 @@ const LostWristband = () => {
                         {reservation.count}人
                         {reservation.count !==
                           reservation.registered.length && (
-                          <span>
-                            （残り：
-                            {reservation.count - reservation.registered.length}
-                            人）
-                          </span>
-                        )}
+                            <span>
+                              （残り：
+                              {reservation.count - reservation.registered.length}
+                              人）
+                            </span>
+                          )}
                       </ListItemText>
                     </ListItem>
                     <Divider />

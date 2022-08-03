@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
-import { pageStateSelector } from "#/recoil/page";
+import { useAtomValue } from "jotai";
+import { tokenAtom, profileAtom } from "#/components/lib/jotai";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -44,13 +45,13 @@ type exhibitProp = {
 };
 
 const AdminCheckGuest = () => {
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "ゲスト照会" });
+    setPageTitle("ゲスト照会");
   }, []);
 
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
 
   const [guestId, setGuestId] = useState("");
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
@@ -231,10 +232,10 @@ const AdminCheckGuest = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                      ? "生徒"
-                      : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : "その他"}
+                        ? "生徒"
+                        : guestInfo.guest_type === "teacher"
+                          ? "教員"
+                          : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>

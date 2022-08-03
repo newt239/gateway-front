@@ -1,10 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
-import { deviceState } from "#/recoil/scan";
-import { pageStateSelector } from "#/recoil/page";
-import { reservationState } from "#/recoil/reservation";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, profileAtom, pageTitleAtom, deviceStateAtom, reservationAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -50,24 +47,23 @@ const EntranceEnter = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
   const [alertStatus, setAlertStatus] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const reservation = useRecoilValue(reservationState);
-  const resetReservation = useResetRecoilState(reservationState);
+  const [reservation, setReservation] = useAtom(reservationAtom);
   const [guestList, setGuest] = useState<string[]>([]);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
   const [infoMessage, setInfoMessage] = useState("");
 
-  const setDeviceState = useSetRecoilState(deviceState);
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setDeviceState = useSetAtom(deviceStateAtom);
 
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "エントランス入場処理" });
+    setPageTitle("エントランス入場処理");
   }, []);
 
   useEffect(() => {
@@ -136,7 +132,7 @@ const EntranceEnter = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => {
-          resetReservation();
+          setReservation(null);
           setDeviceState(true);
           setText("");
           setSmDrawerStatus(false);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { pageStateSelector } from "#/recoil/page";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 
@@ -9,9 +9,9 @@ import SelectExhibit from "#/components/block/SelectExhibit";
 
 const ExhibitIndex = () => {
   const navigate = useNavigate();
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "展示選択" });
+    setPageTitle("展示選択");
   }, []);
 
   const [currentExhibit, setCurrentExhibit] = useState<string>("");

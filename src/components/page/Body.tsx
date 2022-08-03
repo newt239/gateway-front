@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
+import { useAtom, useAtomValue } from "jotai";
+import { tokenAtom, profileAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -24,8 +24,8 @@ import Extra from "#/components/page/Extra";
 
 const Body = () => {
   const navigate = useNavigate();
-  const token = useRecoilValue(tokenState);
-  const [profile, setProfile] = useRecoilState(profileState);
+  const token = useAtomValue(tokenAtom);
+  const [profile, setProfile] = useAtom(profileAtom);
 
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState("");

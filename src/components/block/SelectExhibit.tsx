@@ -1,5 +1,6 @@
 import React, { useEffect, useState, Dispatch, SetStateAction } from "react";
-import { useRecoilValue } from "recoil";
+import { useAtomValue } from "jotai";
+import { tokenAtom, profileAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -12,15 +13,14 @@ import {
   CircularProgress,
   Grid,
 } from "@mui/material";
-import { profileState, tokenState } from "#/recoil/user";
 
 type SelectExhibitProp = {
   currentExhibit: string;
   setCurrentExhibit: Dispatch<SetStateAction<string>>;
 }
 const SelectExhibit = ({ currentExhibit, setCurrentExhibit }: SelectExhibitProp) => {
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
   const [loading, setLoading] = useState(true);
   type exhibitProp = {
     exhibit_id: string;

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetRecoilState } from "recoil";
-import { pageStateSelector } from "#/recoil/page";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 
@@ -10,13 +10,12 @@ type extraProp = {
 };
 const NotFound = (props: extraProp) => {
   const navigate = useNavigate();
-
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
     if (props.type === "loading") {
-      setPageInfo({ title: "Gateway - 栄東祭2022滞在状況記録システム" });
+      setPageTitle("Gateway - 栄東祭2022滞在状況記録システム");
     } else {
-      setPageInfo({ title: "エラー" });
+      setPageTitle("エラー");
     }
   }, []);
 

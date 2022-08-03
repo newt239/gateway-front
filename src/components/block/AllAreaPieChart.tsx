@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { tokenState } from "#/recoil/user";
+import { useAtomValue } from "jotai";
+import { tokenAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import ReactApexChart from "react-apexcharts";
@@ -9,7 +9,7 @@ import { ApexOptions } from "apexcharts";
 import { Typography, Box } from "@mui/material";
 
 const AllAreaPieChart = () => {
-  const token = useRecoilValue(tokenState);
+  const token = useAtomValue(tokenAtom);
   const [allAreaTotalCount, setAllAreaTotalCount] = useState<number>(0);
   const [allAreaChartCategories, setAllAreaChartCategories] = useState<
     string[]
