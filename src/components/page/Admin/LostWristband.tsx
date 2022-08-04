@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
-import { tokenState } from "#/recoil/user";
-import { reservationState } from "#/recoil/reservation";
-import { pageStateSelector } from "#/recoil/page";
+import { useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -38,23 +36,26 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
 import MessageDialog from "#/components/block/MessageDialog";
+import { reservationInfoProp } from "#/types/global";
 
 const LostWristband = () => {
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "リストバンド紛失" });
+    setPageTitle("リストバンド紛失");
   }, []);
 
-  const token = useRecoilValue(tokenState);
+  const token = useAtomValue(tokenAtom);
 
   const [reservationId, setReservationId] = useState("");
-  const [reservation, setReservation] = useRecoilState(reservationState);
+  const [reservation, setReservation] = useState<reservationInfoProp | null>(
+    null
+  );
   const [newGuestId, setNewGuestId] = useState("");
   const [oldGuestId, setOldGuestId] = useState("not-set");
   const [loading, setLoading] = useState(false);
 
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState<string[]>([]);
+  const [dialogMessage, setDialogMessage] = useState<string>("");
 
   const checkReservation = () => {
     if (token) {
@@ -97,7 +98,7 @@ const LostWristband = () => {
           .then((res) => {
             console.log(res);
             setDialogOpen(true);
-            setDialogMessage([`スペアの登録が完了しました`]);
+            setDialogMessage("スペアの登録が完了しました。");
           })
           .catch((err: AxiosError) => {
             console.log(err);
@@ -111,7 +112,7 @@ const LostWristband = () => {
 
   const handleClose = () => {
     setDialogOpen(false);
-    setDialogMessage([]);
+    setDialogMessage("");
   };
 
   return (

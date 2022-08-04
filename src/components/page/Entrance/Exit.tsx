@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
-import { deviceState } from "#/recoil/scan";
-import { pageStateSelector } from "#/recoil/page";
+import { useAtomValue, useSetAtom } from "jotai";
+import {
+  tokenAtom,
+  profileAtom,
+  pageTitleAtom,
+  deviceStateAtom,
+} from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -14,8 +17,6 @@ import {
   Typography,
   Button,
   FormControl,
-  IconButton,
-  InputAdornment,
   OutlinedInput,
   Box,
   LinearProgress,
@@ -31,7 +32,7 @@ import { useTheme } from "@mui/material/styles";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 import {
   getTimePart,
@@ -45,8 +46,8 @@ import { guestInfoProp } from "#/types/global";
 const EntranceExit = () => {
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
@@ -62,11 +63,11 @@ const EntranceExit = () => {
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
   const [showScanGuide, setShowScanGuide] = useState(true);
 
-  const setDeviceState = useSetRecoilState(deviceState);
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setDeviceState = useSetAtom(deviceStateAtom);
 
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "エントランス" });
+    setPageTitle("エントランス");
   }, []);
 
   const handleScan = (scanText: string | null) => {
@@ -237,7 +238,12 @@ const EntranceExit = () => {
                 gap: "1rem",
               }}
             >
-              <Button variant="outlined" onClick={retry}>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={retry}
+                startIcon={<ReplayRoundedIcon />}
+              >
                 スキャンし直す
               </Button>
               <Button variant="contained" onClick={registerSession}>
@@ -252,7 +258,7 @@ const EntranceExit = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid container spacing={2} sx={{ py: 2 }}>
         <Grid item xs={12}>
           <Grid
             container
@@ -293,28 +299,6 @@ const EntranceExit = () => {
                 size="small"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="ゲストIDをコピー"
-                      onClick={() => {
-                        if (text !== "") {
-                          navigator.clipboard
-                            .writeText(text)
-                            .catch((e) => console.log(e));
-                          setSnackbar({
-                            status: true,
-                            message: "コピーしました",
-                            severity: "success",
-                          });
-                        }
-                      }}
-                      edge="end"
-                    >
-                      <ContentCopyRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
                 disabled
                 fullWidth
               />

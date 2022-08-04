@@ -1,6 +1,6 @@
 import React from "react";
-import { useRecoilValue } from "recoil";
-import { pageStateSelector } from "#/recoil/page";
+import { useAtomValue } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 
 import {
   Container,
@@ -14,7 +14,7 @@ import {
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 
 const TopBar = () => {
-  const pageProps = useRecoilValue(pageStateSelector);
+  const pageTitle = useAtomValue(pageTitleAtom);
 
   return (
     <AppBar
@@ -28,7 +28,7 @@ const TopBar = () => {
           sx={{ display: "flex", justifyContent: "space-between" }}
         >
           <Typography variant="h2" noWrap>
-            {pageProps.title}
+            {pageTitle}
           </Typography>
           <Box sx={{ display: "flex" }}>
             <Tooltip title="マニュアルを確認する">

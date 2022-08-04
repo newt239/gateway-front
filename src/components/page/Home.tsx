@@ -1,25 +1,29 @@
 import React, { useEffect, Suspense } from "react";
-import { useSetRecoilState } from "recoil";
-import { pageStateSelector } from "#/recoil/page";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";
 import Settings from "#/components/block/Settings";
 
-import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
-
 import GatewayThumbnail from "#/asset/gateway-hero.jpg";
 
 const Home = () => {
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "ホーム" });
+    setPageTitle("ホーム");
   }, []);
 
+  const theme = useTheme();
+  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
+
   return (
-    <Grid container spacing={2} sx={{ p: 2 }}>
+    <Grid container spacing={2} sx={{ py: 2 }}>
       <Grid item xs={12}>
         <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
           <Box sx={{ textAlign: "center" }}>
@@ -73,12 +77,14 @@ const Home = () => {
           </Grid>
         </Card>
       </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-          <Typography variant="h3">アプリ設定</Typography>
-          <Settings />
-        </Card>
-      </Grid>
+      {largerThanMD && (
+        <Grid item xs={12} md={6} lg={4}>
+          <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+            <Typography variant="h3">アプリ設定</Typography>
+            <Settings />
+          </Card>
+        </Grid>
+      )}
     </Grid>
   );
 };

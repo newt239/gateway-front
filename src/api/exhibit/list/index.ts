@@ -11,8 +11,9 @@ export type Methods = {
     /** 正常レスポンス */
     resBody: {
       exhibit_id: string;
-      group_name: string;
+      exhibit_name: string;
       exhibit_type: string;
+      group_name: string;
     }[];
   };
 };

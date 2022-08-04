@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilState, useSetRecoilState } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
-// @ts-ignore
+import { useAtom, useSetAtom } from "jotai";
+import { tokenAtom, profileAtom } from "#/components/lib/jotai";
 import Identicon from "boring-avatars";
+
 import { Button, Box, Typography, Tooltip } from "@mui/material";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
@@ -13,8 +13,8 @@ import NoAccountsIcon from "@mui/icons-material/NoAccounts";
 
 const UserInfo = () => {
   const navigate = useNavigate();
-  const [profile, setProfile] = useRecoilState(profileState);
-  const setToken = useSetRecoilState(tokenState);
+  const [profile, setProfile] = useAtom(profileAtom);
+  const setToken = useSetAtom(tokenAtom);
 
   const logout = () => {
     setToken(null);

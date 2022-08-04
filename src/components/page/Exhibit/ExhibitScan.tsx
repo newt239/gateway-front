@@ -1,9 +1,12 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
-import { deviceState } from "#/recoil/scan";
-import { pageStateSelector } from "#/recoil/page";
+import { useAtomValue, useSetAtom } from "jotai";
+import {
+  tokenAtom,
+  profileAtom,
+  pageTitleAtom,
+  deviceStateAtom,
+} from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -17,7 +20,6 @@ import {
   Button,
   FormControl,
   IconButton,
-  InputAdornment,
   OutlinedInput,
   Box,
   LinearProgress,
@@ -35,7 +37,6 @@ import { useTheme } from "@mui/material/styles";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import PublishedWithChangesRoundedIcon from "@mui/icons-material/PublishedWithChangesRounded";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
@@ -59,8 +60,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
-  const profile = useRecoilValue(profileState);
-  const token = useRecoilValue(tokenState);
+  const profile = useAtomValue(profileAtom);
+  const token = useAtomValue(tokenAtom);
   const [text, setText] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
@@ -82,9 +83,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
   const [showScanGuide, setShowScanGuide] = useState(true);
 
-  const setDeviceState = useSetRecoilState(deviceState);
+  const setDeviceState = useSetAtom(deviceStateAtom);
 
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
       if (
@@ -101,7 +102,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             },
           })
           .then((res) => {
-            setPageInfo({ title: `${res.exhibit_name} - ${res.room_name}` });
+            setPageTitle(`${res.exhibit_name} - ${res.room_name}`);
             setCapacity(res.capacity);
             setCurrentCount(res.current);
             setExhibitName(res.exhibit_name);
@@ -405,7 +406,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 gap: "1rem",
               }}
             >
-              <Button variant="outlined" onClick={retry}>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={retry}
+                startIcon={<ReplayRoundedIcon />}
+              >
                 スキャンし直す
               </Button>
               <Button variant="contained" onClick={registerSession}>
@@ -421,7 +427,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <>
       {!exhibit_id ? (
-        <Grid container spacing={2} sx={{ p: 2 }}>
+        <Grid container spacing={2} sx={{ py: 2 }}>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{ p: 2 }}>
               展示IDが正しくありません。
@@ -431,7 +437,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       ) : profile &&
         profile.user_type === "exhibit" &&
         profile.user_id !== exhibit_id ? (
-        <Grid container spacing={2} sx={{ p: 2 }}>
+        <Grid container spacing={2} sx={{ py: 2 }}>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{ p: 2 }}>
               このページを表示する権限がありません。
@@ -439,7 +445,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Grid>
         </Grid>
       ) : (
-        <Grid container spacing={2} sx={{ p: 2 }}>
+        <Grid container spacing={2} sx={{ py: 2 }}>
           <Grid item xs={12}>
             <Grid container sx={{ alignItems: "center" }}>
               <Grid item sx={{ pr: 4 }} xs={12} sm lg={2}>
@@ -510,14 +516,16 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       <Tooltip
                         title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}
                       >
-                        <IconButton
-                          size="small"
-                          color="primary"
-                          onClick={updateExhibitInfo}
-                          disabled={exhibitInfoLoading}
-                        >
-                          <ReplayRoundedIcon />
-                        </IconButton>
+                        <span>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={updateExhibitInfo}
+                            disabled={exhibitInfoLoading}
+                          >
+                            <ReplayRoundedIcon />
+                          </IconButton>
+                        </span>
                       </Tooltip>
                     </Grid>
                   </Grid>
@@ -557,28 +565,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   size="small"
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="ゲストIDをコピー"
-                        onClick={() => {
-                          if (text !== "") {
-                            navigator.clipboard
-                              .writeText(text)
-                              .catch((e) => console.log(e));
-                            setSnackbar({
-                              status: true,
-                              message: "コピーしました",
-                              severity: "success",
-                            });
-                          }
-                        }}
-                        edge="end"
-                      >
-                        <ContentCopyRoundedIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  }
                   disabled
                   fullWidth
                 />

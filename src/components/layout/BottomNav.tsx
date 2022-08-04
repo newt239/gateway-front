@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { profileState } from "#/recoil/user";
+import { useAtomValue } from "jotai";
+import { profileAtom } from "#/components/lib/jotai";
 
 import {
   Paper,
@@ -16,7 +16,7 @@ import CelebrationRoundedIcon from "@mui/icons-material/CelebrationRounded";
 import AutoGraphRoundedIcon from "@mui/icons-material/AutoGraphRounded";
 
 const SimpleBottomNavigation = () => {
-  const profile = useRecoilValue(profileState);
+  const profile = useAtomValue(profileAtom);
   const path = useLocation().pathname;
   const [value, setValue] = React.useState("other");
   const navigate = useNavigate();

@@ -1,19 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { tokenState } from "#/recoil/user";
-// @ts-ignore
-import Chart from "react-apexcharts";
-// https://github.com/apexcharts/react-apexcharts/issues/368#issuecomment-1003686683
-import { ApexOptions } from "apexcharts";
-import moment from "moment";
+import { useAtomValue } from "jotai";
+import { tokenAtom } from "#/components/lib/jotai";
+import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
+import moment from "moment";
+import ReacrApexChart from "react-apexcharts";
+import { ApexOptions } from "apexcharts";
 
 import { TextField } from "@mui/material";
 
 const ExhibitEnterCountBarChart: React.FunctionComponent<{
   exhibit_id: string;
 }> = ({ exhibit_id }) => {
-  const token = useRecoilValue(tokenState);
+  const token = useAtomValue(tokenAtom);
   const [categories, setCategories] = useState<string[]>([]);
   const [data, setData] = useState<number[]>([]);
   const [day, setDay] = useState(moment().format("YYYY-MM-DD"));
@@ -46,7 +45,7 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
               setData(countList);
             }
           })
-          .catch((err) => {
+          .catch((err: AxiosError) => {
             console.log(err);
           });
       }
@@ -108,7 +107,12 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
         onChange={(e) => setDay(e.target.value)}
         margin="normal"
       />
-      <Chart options={options} series={series} width="100%" type="bar" />
+      <ReacrApexChart
+        options={options}
+        series={series}
+        width="100%"
+        type="bar"
+      />
     </>
   );
 };

@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue, useSetRecoilState, useResetRecoilState } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
-import { deviceState } from "#/recoil/scan";
-import { pageStateSelector } from "#/recoil/page";
-import { reservationState } from "#/recoil/reservation";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import {
+  tokenAtom,
+  profileAtom,
+  pageTitleAtom,
+  deviceStateAtom,
+  reservationAtom,
+} from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -36,7 +39,7 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 import {
   getTimePart,
@@ -50,24 +53,23 @@ const EntranceEnter = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
   const [alertStatus, setAlertStatus] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
-  const reservation = useRecoilValue(reservationState);
-  const resetReservation = useResetRecoilState(reservationState);
+  const [reservation, setReservation] = useAtom(reservationAtom);
   const [guestList, setGuest] = useState<string[]>([]);
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
 
   const [infoMessage, setInfoMessage] = useState("");
 
-  const setDeviceState = useSetRecoilState(deviceState);
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setDeviceState = useSetAtom(deviceStateAtom);
 
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "エントランス入場処理" });
+    setPageTitle("エントランス入場処理");
   }, []);
 
   useEffect(() => {
@@ -91,7 +93,7 @@ const EntranceEnter = () => {
     if (reservation) {
       if (guestList.length < reservation.count) {
         setInfoMessage(
-          `${guestList.length + 1}枚目のリストバンドを登録してください`
+          `${guestList.length + 1}枚目のリストバンドをスキャンしてください`
         );
       } else {
         setInfoMessage(
@@ -136,9 +138,7 @@ const EntranceEnter = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then(() => {
-          resetReservation();
           setDeviceState(true);
-          setText("");
           setSmDrawerStatus(false);
           setDialogOpen(true);
           setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
@@ -180,6 +180,8 @@ const EntranceEnter = () => {
   const onDialogClose = () => {
     setDialogOpen(false);
     setDialogMessage("");
+    setText("");
+    setReservation(null);
     navigate("/entrance/reserve-check", { replace: true });
   };
 
@@ -206,98 +208,112 @@ const EntranceEnter = () => {
           </Alert>
         )}
         {reservation && (
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h4">予約情報</Typography>
-            <List dense>
-              {guestList.map((guest, index) => (
-                <ListItem
-                  key={guest}
-                  secondaryAction={
-                    !reservation.registered
-                      .filter((guest) => guest.is_spare === 0)
-                      .map((guest) => guest.guest_id)
-                      .includes(guest) && (
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => reset(index)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    )
-                  }
-                >
-                  <ListItemIcon>
-                    <PersonRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText>{guest}</ListItemText>
-                </ListItem>
-              ))}
-              {guestList.length !== 0 && (
-                <>
-                  <Box
-                    m={1}
-                    sx={{
-                      display: "flex",
-                      justifyContent: "flex-end",
-                      alignItems: "flex-end",
-                      gap: "1rem",
-                    }}
-                  >
-                    <Button
-                      variant="outlined"
-                      onClick={() =>
-                        navigate("/entrance/reserve-check", { replace: true })
-                      }
-                    >
-                      リセット
-                    </Button>
-                    <Button
-                      variant="contained"
-                      onClick={registerWristband}
-                      disabled={reservation.registered
+          <>
+            <Card variant="outlined" sx={{ p: 2 }}>
+              <Typography variant="h4">予約情報</Typography>
+              <List dense>
+                {guestList.map((guest, index) => (
+                  <ListItem
+                    key={guest}
+                    secondaryAction={
+                      !reservation.registered
                         .filter((guest) => guest.is_spare === 0)
                         .map((guest) => guest.guest_id)
-                        .includes(guestList[guestList.length - 1])}
+                        .includes(guest) && (
+                        <IconButton
+                          edge="end"
+                          aria-label="delete"
+                          onClick={() => reset(index)}
+                        >
+                          <DeleteIcon color="error" />
+                        </IconButton>
+                      )
+                    }
+                  >
+                    <ListItemIcon>
+                      <PersonRoundedIcon />
+                    </ListItemIcon>
+                    <ListItemText>{guest}</ListItemText>
+                  </ListItem>
+                ))}
+                {guestList.length !== 0 && (
+                  <>
+                    <Box
+                      m={1}
+                      sx={{
+                        display: "flex",
+                        justifyContent: "flex-end",
+                        alignItems: "flex-end",
+                        gap: "1rem",
+                      }}
                     >
-                      登録
-                    </Button>
-                  </Box>
-                  <Divider />
-                </>
-              )}
-              <ListItem>
-                <ListItemIcon>
-                  <AssignmentIndRoundedIcon />
-                </ListItemIcon>
-                <ListItemText>{reservation.reservation_id}</ListItemText>
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <GroupWorkRoundedIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    reservation.guest_type === "family" ? "保護者" : "その他"
-                  }
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <AccessTimeRoundedIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={getTimePart(reservation.part).part_name}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <PeopleRoundedIcon />
-                </ListItemIcon>
-                <ListItemText>{reservation.count}人</ListItemText>
-              </ListItem>
-            </List>
-          </Card>
+                      <Button
+                        variant="contained"
+                        onClick={registerWristband}
+                        disabled={reservation.registered
+                          .filter((guest) => guest.is_spare === 0)
+                          .map((guest) => guest.guest_id)
+                          .includes(guestList[guestList.length - 1])}
+                      >
+                        登録
+                      </Button>
+                    </Box>
+                    <Divider />
+                  </>
+                )}
+                <ListItem>
+                  <ListItemIcon>
+                    <AssignmentIndRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText>{reservation.reservation_id}</ListItemText>
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <GroupWorkRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      reservation.guest_type === "family" ? "保護者" : "その他"
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <AccessTimeRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={getTimePart(reservation.part).part_name}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <PeopleRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText>{reservation.count}人</ListItemText>
+                </ListItem>
+              </List>
+            </Card>
+            <Box
+              m={1}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                alignItems: "flex-end",
+                gap: "1rem",
+              }}
+            >
+              <Button
+                variant="outlined"
+                color="error"
+                startIcon={<ReplayRoundedIcon />}
+                onClick={() =>
+                  navigate("/entrance/reserve-check", { replace: true })
+                }
+              >
+                最初からやり直す
+              </Button>
+            </Box>
+          </>
         )}
       </>
     );
@@ -305,7 +321,7 @@ const EntranceEnter = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid container spacing={2} sx={{ py: 2 }}>
         <Grid item xs={12}>
           <Grid
             container
@@ -353,22 +369,8 @@ const EntranceEnter = () => {
                 size="small"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="ゲストIDをコピー"
-                      onClick={() => {
-                        if (text !== "") {
-                          navigator.clipboard
-                            .writeText(text)
-                            .catch((e) => console.log(e));
-                        }
-                      }}
-                      edge="end"
-                    >
-                      <ContentCopyRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
+                startAdornment={
+                  <InputAdornment position="start">予約ID</InputAdornment>
                 }
                 disabled
                 fullWidth
@@ -397,7 +399,7 @@ const EntranceEnter = () => {
           open={dialogOpen}
           type="success"
           title="処理が完了しました"
-          message={[dialogMessage]}
+          message={dialogMessage}
           onClose={onDialogClose}
         />
       </Grid>

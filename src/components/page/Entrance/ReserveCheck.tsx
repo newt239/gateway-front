@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
-  useRecoilState,
-  useRecoilValue,
-  useSetRecoilState,
-  useResetRecoilState,
-} from "recoil";
-import { profileState, tokenState } from "#/recoil/user";
-import { deviceState } from "#/recoil/scan";
-import { pageStateSelector } from "#/recoil/page";
-import { reservationState } from "#/recoil/reservation";
+  tokenAtom,
+  profileAtom,
+  pageTitleAtom,
+  deviceStateAtom,
+  reservationAtom,
+} from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -21,8 +19,6 @@ import {
   Typography,
   Button,
   FormControl,
-  IconButton,
-  InputAdornment,
   OutlinedInput,
   Box,
   LinearProgress,
@@ -39,7 +35,7 @@ import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import ContentCopyRoundedIcon from "@mui/icons-material/ContentCopyRounded";
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 import Scanner from "#/components/block/Scanner";
 import {
@@ -53,10 +49,9 @@ const ReserveCheck = () => {
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const navigate = useNavigate();
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
-  const [reservation, setReservation] = useRecoilState(reservationState);
-  const resetReservation = useResetRecoilState(reservationState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
+  const [reservation, setReservation] = useAtom(reservationAtom);
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
     message: string;
@@ -71,11 +66,11 @@ const ReserveCheck = () => {
   const [smDrawerOpen, setSmDrawerStatus] = useState(false);
   const [showScanGuide, setShowScanGuide] = useState(true);
 
-  const setDeviceState = useSetRecoilState(deviceState);
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setDeviceState = useSetAtom(deviceStateAtom);
 
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "エントランス入場処理" });
+    setPageTitle("エントランス入場処理");
   }, []);
 
   const handleScan = (scanText: string | null) => {
@@ -144,7 +139,7 @@ const ReserveCheck = () => {
   const retry = () => {
     setScanStatus("waiting");
     setText("");
-    resetReservation();
+    setReservation(null);
     setDeviceState(true);
     setShowScanGuide(true);
   };
@@ -230,14 +225,19 @@ const ReserveCheck = () => {
                 gap: "1rem",
               }}
             >
-              <Button variant="outlined" onClick={retry}>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={retry}
+                startIcon={<ReplayRoundedIcon />}
+              >
                 スキャンし直す
               </Button>
               <Button
                 variant="contained"
                 onClick={() => navigate("/entrance/enter", { replace: true })}
               >
-                リストバンドの登録
+                登録
               </Button>
             </Box>
           </Card>
@@ -248,7 +248,7 @@ const ReserveCheck = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid container spacing={2} sx={{ py: 2 }}>
         <Grid item xs={12}>
           <Grid
             container
@@ -289,28 +289,6 @@ const ReserveCheck = () => {
                 size="small"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                endAdornment={
-                  <InputAdornment position="end">
-                    <IconButton
-                      aria-label="予約IDをコピー"
-                      onClick={() => {
-                        if (text !== "") {
-                          navigator.clipboard
-                            .writeText(text)
-                            .catch((e) => console.log(e));
-                          setSnackbar({
-                            status: true,
-                            message: "コピーしました",
-                            severity: "success",
-                          });
-                        }
-                      }}
-                      edge="end"
-                    >
-                      <ContentCopyRoundedIcon />
-                    </IconButton>
-                  </InputAdornment>
-                }
                 disabled
                 fullWidth
               />

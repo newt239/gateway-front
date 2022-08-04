@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
-import { useRecoilState } from "recoil";
-import {
-  deviceState,
-  currentDeviceState,
-  deviceListState,
-} from "#/recoil/scan";
+import { useAtom } from "jotai";
+import { deviceStateAtom } from "#/components/lib/jotai";
 import QrReader from "react-qr-reader";
 
 import {
@@ -32,16 +28,31 @@ type ScannerProps = {
 
 const Scanner = ({ handleScan }: ScannerProps) => {
   const location = useLocation();
-  const [qrReaderIsShow, setQrReaderIsShow] = useRecoilState(deviceState);
+  const [qrReaderIsShow, setQrReaderIsShow] = useAtom(deviceStateAtom);
   const [scannerStatus, setScannerStatus] = useState<
     "loading" | "waiting" | "error"
   >("loading");
-  const [currentDevice, setCurrentDevice] = useRecoilState(currentDeviceState);
-  const [deviceList, setDeviceList] = useRecoilState(deviceListState);
+  type deviceProp = {
+    deviceId: string;
+    label: string;
+  };
+  const getDeviceIdFromStorage = () => {
+    const savedCurrentCameraDeviceId = localStorage.getItem(
+      "currentCameraDeviceId"
+    );
+    if (savedCurrentCameraDeviceId) {
+      return savedCurrentCameraDeviceId;
+    }
+    return "";
+  };
+  const [currentDeviceId, setCurrentDeviceId] = useState<string>(
+    getDeviceIdFromStorage()
+  );
+  const [deviceList, setDeviceList] = useState<deviceProp[]>([]);
   const [selectCameraModalOpen, setSelectCameraModalOpen] = useState(false);
   const [errorDialogOpen, setMessageDialogOpen] = useState(false);
   const [errorDialogTitle, setMessageDialogTitle] = useState("");
-  const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
+  const [errorDialogMessage, setMessageDialogMessage] = useState<string>("");
 
   const getCameraDeviceList = () => {
     navigator.mediaDevices
@@ -58,20 +69,9 @@ const Scanner = ({ handleScan }: ScannerProps) => {
       )
       .then((devices) => {
         setDeviceList(devices);
-        const savedCurrentCameraDeviceId = localStorage.getItem(
-          "currentCameraDeviceId"
-        );
-        if (savedCurrentCameraDeviceId) {
-          const device = devices.find((v) => {
-            if (v.deviceId === savedCurrentCameraDeviceId) {
-              return v;
-            }
-          });
-          if (device) {
-            return setCurrentDevice(device);
-          }
+        if (currentDeviceId === "") {
+          setCurrentDeviceId(devices[0].deviceId);
         }
-        return setCurrentDevice(devices[0]);
       })
       .catch((err) => {
         console.log(err);
@@ -108,14 +108,14 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   }, [refreshQrReader]);
 
   const changeCamera = (event: SelectChangeEvent) => {
-    const newCurrenDevice = deviceList.find((v) => {
+    const newCurrentDevice = deviceList.find((v) => {
       if (v.deviceId === event.target.value) {
         return v;
       }
     });
-    if (newCurrenDevice) {
-      localStorage.setItem("currentCameraDeviceId", newCurrenDevice.deviceId);
-      setCurrentDevice(newCurrenDevice);
+    if (newCurrentDevice) {
+      localStorage.setItem("currentCameraDeviceId", newCurrentDevice.deviceId);
+      setCurrentDeviceId(newCurrentDevice.deviceId);
       setRefreshQrReader(false);
     }
   };
@@ -124,30 +124,26 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const handleError = (err: unknown) => {
     setScannerStatus("error");
     setMessageDialogTitle("カメラ起動失敗");
-    let reason: string[];
+    let reason: string;
     if (isDOMException(err)) {
       console.error(err.name, err.message);
       switch (err.name) {
         case "NotReadableError":
-          reason = [
-            "カメラが他のアプリケーションで使用されています。",
-            "カメラアプリやビデオ通話を開いていたり、フラッシュライトが点灯していたりしませんか？",
-          ];
+          reason =
+            "カメラが他のアプリケーションで使用されています。カメラアプリやビデオ通話を開いていたり、フラッシュライトが点灯していたりしませんか？";
           break;
         case "NotAllowedError":
-          reason = [
-            "カメラを使用する権限がありません。",
-            "お使いのブラウザの設定を確認してください。",
-          ];
+          reason =
+            "カメラを使用する権限がありません。お使いのブラウザの設定を確認してください。";
           break;
         default:
-          reason = ["原因不明のエラーです。"];
+          reason = "原因不明のエラーです。";
           break;
       }
-      reason = [...reason, `[${err.name}]`, err.message];
+      reason += `[${err.name}] ${err.message}`;
       setMessageDialogMessage(reason);
     } else {
-      setMessageDialogMessage(["原因不明のエラーです。"]);
+      setMessageDialogMessage("原因不明のエラーです。");
     }
     setMessageDialogOpen(true);
   };
@@ -195,7 +191,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
               // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-qr-reader/index.d.ts
               // @types/react-qr-readerがv2.1.0用でv2.1.1に追加されたconstraints propの型定義に対応していなかったためsrc直下にオリジナルの型定義ファイルを配置
               constraints={{
-                deviceId: currentDevice.deviceId,
+                deviceId: currentDeviceId,
                 facingMode: "environment",
               }}
               className="qrcode"
@@ -218,7 +214,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
                 <FormControl sx={{ m: 1, minWidth: 200 }}>
                   <Select
                     size="small"
-                    value={currentDevice.deviceId}
+                    value={currentDeviceId}
                     onChange={changeCamera}
                   >
                     {deviceList.map((v) => {

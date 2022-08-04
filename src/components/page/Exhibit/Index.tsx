@@ -1,70 +1,73 @@
-import React, { useEffect, Suspense } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { currentExhibitState } from "#/recoil/exhibit";
+import { useSetAtom } from "jotai";
+import { pageTitleAtom } from "#/components/lib/jotai";
 
-import { Grid, Card, Box, Typography, Button } from "@mui/material";
+import {
+  Grid,
+  Card,
+  Typography,
+  CardActionArea,
+  CardContent,
+} from "@mui/material";
+
 import SelectExhibit from "#/components/block/SelectExhibit";
-import { pageStateSelector } from "#/recoil/page";
-import { useSetRecoilState } from "recoil";
 
 const ExhibitIndex = () => {
   const navigate = useNavigate();
-  const setPageInfo = useSetRecoilState(pageStateSelector);
-
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "展示選択" });
+    setPageTitle("展示選択");
   }, []);
 
-  type moveButtonProp = {
-    type: "enter" | "exit";
-  };
-  const MoveButton = ({ type }: moveButtonProp) => {
-    const currentExhibit = useRecoilValue(currentExhibitState);
-    return (
-      <Button
-        disabled={!currentExhibit}
-        onClick={() => currentExhibit && navigate(`${currentExhibit}/${type}`)}
-        variant="outlined"
-      >
-        開く
-      </Button>
-    );
-  };
+  const [currentExhibit, setCurrentExhibit] = useState<string>("");
 
   return (
     <>
-      <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid container spacing={2} sx={{ py: 2 }}>
         <Grid item xs={12}>
-          <Grid container sx={{ p: 2, alignItems: "center" }}>
-            <Grid item>スキャンする展示：</Grid>
-            <Grid item>
-              <Suspense fallback={<div>読み込み中...</div>}>
-                <SelectExhibit />
-              </Suspense>
+          <Grid container sx={{ pl: 2, alignItems: "center" }}>
+            <Grid item xs={12} md="auto">
+              スキャンする展示：
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <SelectExhibit
+                currentExhibit={currentExhibit}
+                setCurrentExhibit={setCurrentExhibit}
+              />
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h3">入室処理</Typography>
-            <Typography>展示への入室を記録します。</Typography>
-            <Box sx={{ width: "100%", textAlign: "right" }}>
-              <Suspense fallback={<div>読み込み中...</div>}>
-                <MoveButton type="enter" />
-              </Suspense>
-            </Box>
+        <Grid item xs={12} md={6} lg={4}>
+          <Card variant="outlined" sx={{ height: "100%" }}>
+            <CardActionArea
+              onClick={() =>
+                currentExhibit && navigate(`${currentExhibit}/enter`)
+              }
+            >
+              <CardContent sx={{ p: 2 }}>
+                <Typography variant="h3">入室処理</Typography>
+                <Typography variant="body1" sx={{ p: 1 }}>
+                  展示への入室を記録します。
+                </Typography>
+              </CardContent>
+            </CardActionArea>
           </Card>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h3">退室処理</Typography>
-            <Typography>展示からの退室を記録します。</Typography>
-            <Box sx={{ width: "100%", textAlign: "right" }}>
-              <Suspense fallback={<div>読み込み中...</div>}>
-                <MoveButton type="exit" />
-              </Suspense>
-            </Box>
+        <Grid item xs={12} md={6} lg={4}>
+          <Card variant="outlined" sx={{ height: "100%" }}>
+            <CardActionArea
+              onClick={() =>
+                currentExhibit && navigate(`${currentExhibit}/exit`)
+              }
+            >
+              <CardContent sx={{ p: 2 }}>
+                <Typography variant="h3">退室処理</Typography>
+                <Typography variant="body1" sx={{ p: 1 }}>
+                  展示からの退室を記録します。
+                </Typography>
+              </CardContent>
+            </CardActionArea>
           </Card>
         </Grid>
       </Grid>

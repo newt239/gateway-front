@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useSetRecoilState, useRecoilValue } from "recoil";
-import { pageStateSelector } from "#/recoil/page";
-import { tokenState } from "#/recoil/user";
+import { useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, pageTitleAtom } from "#/components/lib/jotai";
+import { AxiosError } from "axios";
+import apiClient from "#/axios-config";
+import moment, { Moment } from "moment";
 
 import {
   Button,
@@ -13,21 +15,18 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
-import { AxiosError } from "axios";
-import apiClient from "#/axios-config";
-import moment, { Moment } from "moment";
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 const AnalyticsSummary = () => {
-  const setPageInfo = useSetRecoilState(pageStateSelector);
+  const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
-    setPageInfo({ title: "展示一覧" });
+    setPageTitle("展示一覧");
   }, []);
 
-  const token = useRecoilValue(tokenState);
+  const token = useAtomValue(tokenAtom);
 
   type exhibitProp = {
     id: string;
@@ -154,7 +153,7 @@ const AnalyticsSummary = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ pt: 2 }}>
+    <Grid container spacing={2} sx={{ py: 2 }}>
       <Grid
         item
         xs={12}
@@ -164,7 +163,6 @@ const AnalyticsSummary = () => {
           justifyContent: "space-between",
         }}
       >
-        <Typography>滞在者数の多い順に表示しています。 </Typography>
         <Typography variant="h2">
           {lastUpdate.format("HH:mm:ss")} 現在
         </Typography>

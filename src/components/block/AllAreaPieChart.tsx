@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { useRecoilValue } from "recoil";
-import { tokenState } from "#/recoil/user";
-
-import { Card, Typography, Box } from "@mui/material";
+import { useAtomValue } from "jotai";
+import { tokenAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
-// @ts-ignore
-import Chart from "react-apexcharts";
+import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
+import { Typography, Box } from "@mui/material";
+
 const AllAreaPieChart = () => {
-  const token = useRecoilValue(tokenState);
+  const token = useAtomValue(tokenAtom);
   const [allAreaTotalCount, setAllAreaTotalCount] = useState<number>(0);
   const [allAreaChartCategories, setAllAreaChartCategories] = useState<
     string[]
@@ -47,6 +46,8 @@ const AllAreaPieChart = () => {
   const options: ApexOptions = {
     chart: {
       type: "pie",
+      width: "100%",
+      height: "50vh",
     },
     labels: allAreaChartCategories,
     responsive: [
@@ -65,7 +66,7 @@ const AllAreaPieChart = () => {
   };
 
   return (
-    <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+    <>
       <Typography variant="h3">全体の滞在状況</Typography>
       {allAreaTotalCount ? (
         <>
@@ -73,13 +74,17 @@ const AllAreaPieChart = () => {
             校内滞在者数 {allAreaTotalCount}人
           </Typography>
           <Box sx={{ margin: "auto", width: "100%" }}>
-            <Chart options={options} series={allAreaChartSeries} type="pie" />
+            <ReactApexChart
+              options={options}
+              series={allAreaChartSeries}
+              type="pie"
+            />
           </Box>
         </>
       ) : (
         <Typography sx={{ pt: 2 }}>読み込み中...</Typography>
       )}
-    </Card>
+    </>
   );
 };
 export default AllAreaPieChart;

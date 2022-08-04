@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { useRecoilState, useRecoilValue } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
+import { useAtom, useAtomValue } from "jotai";
+import { tokenAtom, profileAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -24,12 +24,12 @@ import Extra from "#/components/page/Extra";
 
 const Body = () => {
   const navigate = useNavigate();
-  const token = useRecoilValue(tokenState);
-  const [profile, setProfile] = useRecoilState(profileState);
+  const token = useAtomValue(tokenAtom);
+  const [profile, setProfile] = useAtom(profileAtom);
 
   const [showMessageDialog, setShowMessageDialog] = useState(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState("");
-  const [errorDialogMessage, setMessageDialogMessage] = useState<string[]>([]);
+  const [errorDialogMessage, setMessageDialogMessage] = useState<string>("");
 
   useEffect(() => {
     if (token) {
@@ -53,16 +53,16 @@ const Body = () => {
             if (err.response.status === 401) {
               setErrorDialogTitle("セッションがタイムアウトしました");
               setShowMessageDialog(true);
-              setMessageDialogMessage([
-                "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。",
-              ]);
+              setMessageDialogMessage(
+                "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。"
+              );
               ReactGA.event({
                 category: "login",
                 action: "session_timeout",
                 label: err.message,
               });
             } else {
-              setMessageDialogMessage([err.response.statusText]);
+              setMessageDialogMessage(err.response.statusText);
               ReactGA.event({
                 category: "login",
                 action: "unknown_error",
@@ -71,18 +71,18 @@ const Body = () => {
             }
           } else {
             if (err.message === "Network Error") {
-              setErrorDialogTitle("サーバーが起動していません");
+              setErrorDialogTitle("サーバーからの応答がありません");
               setShowMessageDialog(true);
-              setMessageDialogMessage([
-                "コストカットのため必要時以外はサーバーを停止させています。",
-              ]);
+              setMessageDialogMessage(
+                "端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。"
+              );
               ReactGA.event({
                 category: "login",
                 action: "network_error",
                 label: err.message,
               });
             } else {
-              setMessageDialogMessage([err.message]);
+              setMessageDialogMessage(err.message);
               setShowMessageDialog(true);
               ReactGA.event({
                 category: "login",
@@ -101,7 +101,7 @@ const Body = () => {
 
   const handleClose = () => {
     setShowMessageDialog(false);
-    setMessageDialogMessage([]);
+    setMessageDialogMessage("");
   };
 
   return (

@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   Button,
   Dialog,
@@ -7,7 +8,6 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
-
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 
@@ -15,7 +15,7 @@ type errorDialogProps = {
   open: boolean;
   type: "success" | "error";
   title?: string;
-  message: string[];
+  message: string;
   onClose: () => void;
 };
 

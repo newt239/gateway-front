@@ -1,7 +1,8 @@
 import React, { Suspense } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { profileState } from "#/recoil/user";
+import { useAtomValue } from "jotai";
+import { profileAtom } from "#/components/lib/jotai";
+
 import {
   Drawer,
   Box,
@@ -13,11 +14,10 @@ import {
   ListItemText,
   Typography,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
 import ListItemButton, {
   ListItemButtonProps,
 } from "@mui/material/ListItemButton";
-
-import { styled } from "@mui/material/styles";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
@@ -36,7 +36,7 @@ const drawerWidth = 250;
 const DrawerLeft = () => {
   const path = useLocation().pathname;
   const navigate = useNavigate();
-  const profile = useRecoilValue(profileState);
+  const profile = useAtomValue(profileAtom);
 
   const StyledListItemButton = styled(ListItemButton)<ListItemButtonProps>(
     () => ({
@@ -180,7 +180,7 @@ const DrawerLeft = () => {
                   <ListItemIcon>
                     <TableChartRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="全体概況" />
+                  <ListItemText primary="滞在状況" />
                 </StyledListItemButton>
                 <StyledListItemButton
                   selected={path === `/analytics/summary`}

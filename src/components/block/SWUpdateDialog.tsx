@@ -1,5 +1,5 @@
-import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 import React, { useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 
 export const SWUpdateDialog: React.FC<{
   registration: ServiceWorkerRegistration;

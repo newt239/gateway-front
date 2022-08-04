@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useRecoilValue } from "recoil";
-import { tokenState, profileState } from "#/recoil/user";
-import ReactGA from "react-ga4";
+import { useAtomValue } from "jotai";
+import { tokenAtom, profileAtom } from "#/components/lib/jotai";
+import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
+import moment from "moment";
+import ReactGA from "react-ga4";
 
 import {
   Box,
@@ -16,8 +18,6 @@ import {
   Typography,
 } from "@mui/material";
 import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
-import { AxiosError } from "axios";
-import moment from "moment";
 
 const columns: GridColDef[] = [
   { field: "id", headerName: "ゲストID" },
@@ -34,8 +34,8 @@ type exhibitCurrentGuestTableListProp = {
 const ExhibitCurrentGuestList: React.FunctionComponent<{
   exhibit_id: string;
 }> = ({ exhibit_id }) => {
-  const token = useRecoilValue(tokenState);
-  const profile = useRecoilValue(profileState);
+  const token = useAtomValue(tokenAtom);
+  const profile = useAtomValue(profileAtom);
   const [rows, setRows] = useState<exhibitCurrentGuestTableListProp>([]);
   const [selectedGuestList, setSelectedGuestList] = useState<GridRowId[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);

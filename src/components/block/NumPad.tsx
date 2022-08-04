@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   Box,
   Button,
@@ -119,7 +120,7 @@ const NumPad = ({
                     <Button
                       variant="outlined"
                       onClick={() => onNumClick(n)}
-                      sx={{ p: 1 }}
+                      sx={{ py: 2 }}
                     >
                       {n}
                     </Button>
