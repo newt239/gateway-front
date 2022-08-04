@@ -179,21 +179,21 @@ const Login = () => {
                 ユーザーIDとパスワードが間違っていないかもう一度確認してください。
               </li>
               <li>
-                「サーバーからの応答がありません」というエラーが表示された場合、端末のネットワークの設定を確認した上で<Link
+                「サーバーからの応答がありません」というエラーが表示された場合、端末のネットワークの設定を確認した上で
+                <Link
                   href={process.env.REACT_APP_STATUS_URL || "/"}
                   target="_blank"
-                  underline="hover">
+                  underline="hover"
+                >
                   サーバーステータス
                 </Link>
                 に異常がないか確認してください。
               </li>
-              <li>
-                ログイン状態は一定の時間が経過するとログアウトされます。
-              </li>
+              <li>ログイン状態は一定の時間が経過するとログアウトされます。</li>
             </ol>
           </Card>
         </Grid>
-        {!window.matchMedia('(display-mode: standalone)').matches && (
+        {!window.matchMedia("(display-mode: standalone)").matches && (
           <Grid item xs={12} md={6}>
             <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
               <Typography variant="h2">アプリのインストール方法</Typography>
@@ -203,7 +203,8 @@ const Login = () => {
                   から『「Gateway」をインストール』をクリック
                 </li>
                 <li>
-                  Safariを利用している場合 <IosShareIcon sx={{ verticalAlign: -5 }} />{" "}
+                  Safariを利用している場合{" "}
+                  <IosShareIcon sx={{ verticalAlign: -5 }} />{" "}
                   から「ホーム画面に追加」をタップ
                 </li>
                 <li>

@@ -15,7 +15,6 @@ import {
   Typography,
 } from "@mui/material";
 
-
 const RealtimeLog = () => {
   const token = useAtomValue(tokenAtom);
 
@@ -51,30 +50,35 @@ const RealtimeLog = () => {
     timestamp: string;
   };
   const [activityList, setActivityList] = useState<activityProp[]>([]);
-  const [lastUpdate, setLastUpdate] = useState<Moment>(moment().subtract(1, "weeks"));
+  const [lastUpdate, setLastUpdate] = useState<Moment>(
+    moment().subtract(1, "weeks")
+  );
   const [loading, setLoading] = useState(true);
 
   const getActivityHistory = (from: Moment) => {
     if (token && exhibitList) {
       setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
-        .activity.history._from(moment(from).format()).$get({
+        .activity.history._from(moment(from).format())
+        .$get({
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          const enterActivityList = res.enter.map(v => {
-            return { ...v, activity_type: "enter" }
+          const enterActivityList = res.enter.map((v) => {
+            return { ...v, activity_type: "enter" };
           });
-          const exitActivityList = res.exit.map(v => {
-            return { ...v, activity_type: "exit" }
+          const exitActivityList = res.exit.map((v) => {
+            return { ...v, activity_type: "exit" };
           });
-          const newActivityList = enterActivityList.concat(exitActivityList).sort((a, b) => {
-            if (a.timestamp < b.timestamp) {
-              return 1
-            } else {
-              return -1
-            }
-          });
+          const newActivityList = enterActivityList
+            .concat(exitActivityList)
+            .sort((a, b) => {
+              if (a.timestamp < b.timestamp) {
+                return 1;
+              } else {
+                return -1;
+              }
+            });
           console.log(newActivityList);
           setActivityList([...newActivityList, ...activityList]);
           setLastUpdate(moment());
@@ -108,16 +112,33 @@ const RealtimeLog = () => {
     <>
       <Grid container>
         <Grid item xs={12}>
-          <Grid container sx={{ alignItems: "center", justifyContent: "space-between", height: 30 }}>
-            <Grid item><Tooltip title="10秒更新"><Typography variant="h3">リアルタイムログ</Typography></Tooltip></Grid>
-            <Grid item>{loading && (<CircularProgress size={25} thickness={6} />)}</Grid>
+          <Grid
+            container
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              height: 30,
+            }}
+          >
+            <Grid item>
+              <Tooltip title="10秒更新">
+                <Typography variant="h3">リアルタイムログ</Typography>
+              </Tooltip>
+            </Grid>
+            <Grid item>
+              {loading && <CircularProgress size={25} thickness={6} />}
+            </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12}>
-          {(exhibitList.length !== 0 && activityList.length !== 0) ? (
+          {exhibitList.length !== 0 && activityList.length !== 0 ? (
             <List>
-              {activityList.map(v => (
-                <ListItem divider disablePadding key={`${v.session_id}-${v.activity_type}`}>
+              {activityList.map((v) => (
+                <ListItem
+                  divider
+                  disablePadding
+                  key={`${v.session_id}-${v.activity_type}`}
+                >
                   <Grid container sx={{ alignItems: "center" }}>
                     <Grid item xs={2.5}>
                       <ListItemText>
@@ -125,17 +146,24 @@ const RealtimeLog = () => {
                       </ListItemText>
                     </Grid>
                     <Grid item xs={4}>
-                      <ListItemText secondary={v.guest_id} secondaryTypographyProps={{ sx: { p: 0 } }}>
+                      <ListItemText
+                        secondary={v.guest_id}
+                        secondaryTypographyProps={{ sx: { p: 0 } }}
+                      >
                         {v.session_id}
                       </ListItemText>
                     </Grid>
                     <Grid item xs={4}>
                       <ListItemText>
-                        {exhibitList.filter(x => {
-                          return x.exhibit_id === v.exhibit_id
-                        }).map(l => {
-                          return <span key={l.exhibit_id}>{l.exhibit_name}</span>
-                        })}
+                        {exhibitList
+                          .filter((x) => {
+                            return x.exhibit_id === v.exhibit_id;
+                          })
+                          .map((l) => {
+                            return (
+                              <span key={l.exhibit_id}>{l.exhibit_name}</span>
+                            );
+                          })}
                       </ListItemText>
                     </Grid>
                     <Grid item xs={1.5}>
@@ -148,7 +176,9 @@ const RealtimeLog = () => {
               ))}
             </List>
           ) : (
-            <Typography variant="body1" sx={{ p: 2 }}>データがありません。</Typography>
+            <Typography variant="body1" sx={{ p: 2 }}>
+              データがありません。
+            </Typography>
           )}
         </Grid>
       </Grid>

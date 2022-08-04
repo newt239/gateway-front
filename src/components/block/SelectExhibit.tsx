@@ -17,8 +17,11 @@ import {
 type SelectExhibitProp = {
   currentExhibit: string;
   setCurrentExhibit: Dispatch<SetStateAction<string>>;
-}
-const SelectExhibit = ({ currentExhibit, setCurrentExhibit }: SelectExhibitProp) => {
+};
+const SelectExhibit = ({
+  currentExhibit,
+  setCurrentExhibit,
+}: SelectExhibitProp) => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [loading, setLoading] = useState(true);

@@ -1,8 +1,9 @@
-import { atom } from 'jotai'
-import { profileProp, reservationInfoProp } from '#/types/global';
+import { atom } from "jotai";
+import { profileProp, reservationInfoProp } from "#/types/global";
 
-
-export const tokenAtom = atom<string | null>(localStorage.getItem("gatewayApiToken"));
+export const tokenAtom = atom<string | null>(
+  localStorage.getItem("gatewayApiToken")
+);
 
 export const profileAtom = atom<profileProp | null>(null);
 

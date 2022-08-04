@@ -107,7 +107,12 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
         onChange={(e) => setDay(e.target.value)}
         margin="normal"
       />
-      <ReacrApexChart options={options} series={series} width="100%" type="bar" />
+      <ReacrApexChart
+        options={options}
+        series={series}
+        width="100%"
+        type="bar"
+      />
     </>
   );
 };

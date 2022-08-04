@@ -29,10 +29,10 @@ const AllAreaPieChart = () => {
               v.guest_type === "student"
                 ? "生徒"
                 : v.guest_type === "teacher"
-                  ? "教員"
-                  : v.guest_type === "family"
-                    ? "保護者"
-                    : "その他"
+                ? "教員"
+                : v.guest_type === "family"
+                ? "保護者"
+                : "その他"
             )
           );
           setAllAreaChartSeries(res.map((v) => v.count));
@@ -47,7 +47,7 @@ const AllAreaPieChart = () => {
     chart: {
       type: "pie",
       width: "100%",
-      height: "50vh"
+      height: "50vh",
     },
     labels: allAreaChartCategories,
     responsive: [
@@ -74,7 +74,11 @@ const AllAreaPieChart = () => {
             校内滞在者数 {allAreaTotalCount}人
           </Typography>
           <Box sx={{ margin: "auto", width: "100%" }}>
-            <ReactApexChart options={options} series={allAreaChartSeries} type="pie" />
+            <ReactApexChart
+              options={options}
+              series={allAreaChartSeries}
+              type="pie"
+            />
           </Box>
         </>
       ) : (

@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, profileAtom, pageTitleAtom, deviceStateAtom, reservationAtom } from "#/components/lib/jotai";
+import {
+  tokenAtom,
+  profileAtom,
+  pageTitleAtom,
+  deviceStateAtom,
+  reservationAtom,
+} from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -33,7 +39,7 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
-import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 import {
   getTimePart,
@@ -363,7 +369,9 @@ const EntranceEnter = () => {
                 size="small"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                startAdornment={<InputAdornment position="start">予約ID</InputAdornment>}
+                startAdornment={
+                  <InputAdornment position="start">予約ID</InputAdornment>
+                }
                 disabled
                 fullWidth
               />

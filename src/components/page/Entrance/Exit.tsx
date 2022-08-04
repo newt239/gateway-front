@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, profileAtom, pageTitleAtom, deviceStateAtom } from "#/components/lib/jotai";
+import {
+  tokenAtom,
+  profileAtom,
+  pageTitleAtom,
+  deviceStateAtom,
+} from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -27,7 +32,7 @@ import { useTheme } from "@mui/material/styles";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 import {
   getTimePart,
@@ -210,10 +215,10 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -233,7 +238,12 @@ const EntranceExit = () => {
                 gap: "1rem",
               }}
             >
-              <Button variant="outlined" color="error" onClick={retry} startIcon={<ReplayRoundedIcon />}>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={retry}
+                startIcon={<ReplayRoundedIcon />}
+              >
                 スキャンし直す
               </Button>
               <Button variant="contained" onClick={registerSession}>

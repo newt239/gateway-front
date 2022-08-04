@@ -53,7 +53,9 @@ const Body = () => {
             if (err.response.status === 401) {
               setErrorDialogTitle("セッションがタイムアウトしました");
               setShowMessageDialog(true);
-              setMessageDialogMessage("最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。");
+              setMessageDialogMessage(
+                "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。"
+              );
               ReactGA.event({
                 category: "login",
                 action: "session_timeout",
@@ -71,7 +73,9 @@ const Body = () => {
             if (err.message === "Network Error") {
               setErrorDialogTitle("サーバーからの応答がありません");
               setShowMessageDialog(true);
-              setMessageDialogMessage("端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。");
+              setMessageDialogMessage(
+                "端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。"
+              );
               ReactGA.event({
                 category: "login",
                 action: "network_error",

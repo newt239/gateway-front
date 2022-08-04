@@ -35,17 +35,19 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   type deviceProp = {
     deviceId: string;
     label: string;
-  }
+  };
   const getDeviceIdFromStorage = () => {
     const savedCurrentCameraDeviceId = localStorage.getItem(
       "currentCameraDeviceId"
     );
     if (savedCurrentCameraDeviceId) {
-      return savedCurrentCameraDeviceId
+      return savedCurrentCameraDeviceId;
     }
-    return ""
-  }
-  const [currentDeviceId, setCurrentDeviceId] = useState<string>(getDeviceIdFromStorage());
+    return "";
+  };
+  const [currentDeviceId, setCurrentDeviceId] = useState<string>(
+    getDeviceIdFromStorage()
+  );
   const [deviceList, setDeviceList] = useState<deviceProp[]>([]);
   const [selectCameraModalOpen, setSelectCameraModalOpen] = useState(false);
   const [errorDialogOpen, setMessageDialogOpen] = useState(false);
@@ -127,10 +129,12 @@ const Scanner = ({ handleScan }: ScannerProps) => {
       console.error(err.name, err.message);
       switch (err.name) {
         case "NotReadableError":
-          reason = "カメラが他のアプリケーションで使用されています。カメラアプリやビデオ通話を開いていたり、フラッシュライトが点灯していたりしませんか？";
+          reason =
+            "カメラが他のアプリケーションで使用されています。カメラアプリやビデオ通話を開いていたり、フラッシュライトが点灯していたりしませんか？";
           break;
         case "NotAllowedError":
-          reason = "カメラを使用する権限がありません。お使いのブラウザの設定を確認してください。";
+          reason =
+            "カメラを使用する権限がありません。お使いのブラウザの設定を確認してください。";
           break;
         default:
           reason = "原因不明のエラーです。";

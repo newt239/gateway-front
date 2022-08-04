@@ -1,7 +1,12 @@
 import React, { useState, useEffect, Suspense } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, profileAtom, pageTitleAtom, deviceStateAtom } from "#/components/lib/jotai";
+import {
+  tokenAtom,
+  profileAtom,
+  pageTitleAtom,
+  deviceStateAtom,
+} from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -378,10 +383,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -401,7 +406,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 gap: "1rem",
               }}
             >
-              <Button variant="outlined" color="error" onClick={retry} startIcon={<ReplayRoundedIcon />}>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={retry}
+                startIcon={<ReplayRoundedIcon />}
+              >
                 スキャンし直す
               </Button>
               <Button variant="contained" onClick={registerSession}>
@@ -449,7 +459,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${
+                        scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )

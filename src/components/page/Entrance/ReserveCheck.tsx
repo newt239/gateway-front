@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, profileAtom, pageTitleAtom, deviceStateAtom, reservationAtom } from "#/components/lib/jotai";
+import {
+  tokenAtom,
+  profileAtom,
+  pageTitleAtom,
+  deviceStateAtom,
+  reservationAtom,
+} from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -29,7 +35,7 @@ import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
-import ReplayRoundedIcon from '@mui/icons-material/ReplayRounded';
+import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 import Scanner from "#/components/block/Scanner";
 import {
@@ -219,7 +225,12 @@ const ReserveCheck = () => {
                 gap: "1rem",
               }}
             >
-              <Button variant="outlined" color="error" onClick={retry} startIcon={<ReplayRoundedIcon />}>
+              <Button
+                variant="outlined"
+                color="error"
+                onClick={retry}
+                startIcon={<ReplayRoundedIcon />}
+              >
                 スキャンし直す
               </Button>
               <Button
