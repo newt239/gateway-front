@@ -113,8 +113,8 @@ const RealtimeLog = () => {
             <Grid item>{loading && (<CircularProgress size={25} thickness={6} />)}</Grid>
           </Grid>
         </Grid>
-        {exhibitList.length !== 0 && activityList.length !== 0 && (
-          <Grid item xs={12}>
+        <Grid item xs={12}>
+          {(exhibitList.length !== 0 && activityList.length !== 0) ? (
             <List>
               {activityList.map(v => (
                 <ListItem divider disablePadding key={`${v.session_id}-${v.activity_type}`}>
@@ -147,8 +147,10 @@ const RealtimeLog = () => {
                 </ListItem>
               ))}
             </List>
-          </Grid>
-        )}
+          ) : (
+            <Typography variant="body1" sx={{ p: 2 }}>データがありません。</Typography>
+          )}
+        </Grid>
       </Grid>
     </>
   );
