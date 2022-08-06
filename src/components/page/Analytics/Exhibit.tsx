@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
 import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
-import { Grid, Button, Typography } from "@mui/material";
+import { Grid, Button, Typography, CircularProgress } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 
 import ExhibitEnterCountBarChart from "../../block/ExhibitEnterCountBarChart";
@@ -15,17 +15,12 @@ const AnalyticsExhibit = () => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   if (profile) {
-    const exhibit_id =
-      useParams<{ exhibit_id: string }>().exhibit_id ||
-      profile.user_id ||
-      "unknown";
-    const [status, setStatus] = useState<{ status: boolean; message: string }>({
-      status: false,
-      message: "読込中...",
-    });
+    const exhibit_id = useParams().exhibit_id || profile.user_id;
 
     const setPageTitle = useSetAtom(pageTitleAtom);
+
     useEffect(() => {
+      setPageTitle(`${exhibit_id} - 現在の滞在状況`);
       if (token && profile) {
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.list.$get({
@@ -41,55 +36,55 @@ const AnalyticsExhibit = () => {
           })
           .catch((err: AxiosError) => {
             console.log(err);
-            setPageTitle(`${exhibit_id} - 現在の滞在状況`);
           });
       }
     }, []);
 
     useEffect(() => {
-      if (profile) {
-        if (exhibit_id === "") {
+      if (profile && exhibit_id === "") {
+        if (profile.user_type === "moderator") {
           navigate("/analytics/summary", { replace: true });
         } else {
-          setStatus({ status: true, message: "" });
+          navigate("/", { replace: true });
         }
-      } else {
-        setStatus({ status: false, message: "読込中..." });
       }
     }, [profile]);
 
     return (
-      <>
-        {status.status ? (
-          <Grid container spacing={2} sx={{ py: 2 }}>
-            {["moderator", "executive"].includes(profile.user_type) && (
-              <Grid item xs={12}>
-                <Button
-                  variant="text"
-                  startIcon={<ArrowBackIosNewRoundedIcon />}
-                  onClick={() =>
-                    navigate("/analytics/summary", { replace: true })
-                  }
-                >
-                  一覧に戻る
-                </Button>
-              </Grid>
-            )}
-            <Grid item xs={12} lg={6}>
-              <ExhibitCurrentGuestList exhibit_id={exhibit_id} />
-            </Grid>
-            <Grid item xs={12} lg={6}>
-              <Typography variant="h3">時間帯別入場者数</Typography>
-              <ExhibitEnterCountBarChart exhibit_id={exhibit_id} />
-            </Grid>
+      <Grid container spacing={2} sx={{ py: 2 }}>
+        {["moderator", "executive"].includes(profile.user_type) && (
+          <Grid item xs={12}>
+            <Button
+              variant="text"
+              startIcon={<ArrowBackIosNewRoundedIcon />}
+              onClick={() =>
+                navigate("/analytics/summary", { replace: true })
+              }
+            >
+              一覧に戻る
+            </Button>
           </Grid>
-        ) : (
-          <>{status.message}</>
         )}
-      </>
+        <Grid item xs={12} lg={6}>
+          <ExhibitCurrentGuestList exhibit_id={exhibit_id} />
+        </Grid>
+        <Grid item xs={12} lg={6}>
+          <Typography variant="h3">時間帯別入場者数</Typography>
+          <ExhibitEnterCountBarChart exhibit_id={exhibit_id} />
+        </Grid>
+      </Grid>
     );
   } else {
-    return <></>;
+    return (
+      <Grid container spacing={2} sx={{ py: 2, alignItems: "center" }}>
+        <Grid item>
+          <CircularProgress />
+        </Grid>
+        <Grid item>
+          <Typography variant="body1">セッション状態を確認中...</Typography>
+        </Grid>
+      </Grid>
+    );
   }
 };
 

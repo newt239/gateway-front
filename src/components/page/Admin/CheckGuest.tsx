@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useAtomValue } from "jotai";
-import { tokenAtom, profileAtom } from "#/components/lib/jotai";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import { useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment from "moment";
+
 import {
   Grid,
   Card,
@@ -20,19 +19,13 @@ import {
   ListItemText,
   ListItemIcon,
 } from "@mui/material";
-import { guestInfoProp } from "#/components/lib/types";
-import Timeline from "@mui/lab/Timeline";
-import TimelineItem from "@mui/lab/TimelineItem";
-import TimelineSeparator from "@mui/lab/TimelineSeparator";
-import TimelineConnector from "@mui/lab/TimelineConnector";
-import TimelineContent from "@mui/lab/TimelineContent";
-import TimelineDot from "@mui/lab/TimelineDot";
-import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
+import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from "@mui/lab";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
+import { guestInfoProp } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
