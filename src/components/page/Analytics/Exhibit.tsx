@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
 import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
@@ -15,7 +15,8 @@ const AnalyticsExhibit = () => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   if (profile) {
-    const exhibit_id = useParams().exhibit_id || profile.user_id;
+    const pathMatchResult = useLocation().pathname.match(/analytics\/(.*)\//);
+    const exhibit_id = pathMatchResult ? pathMatchResult[1] : "";
 
     const setPageTitle = useSetAtom(pageTitleAtom);
 

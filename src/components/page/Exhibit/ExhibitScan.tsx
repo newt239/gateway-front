@@ -1,5 +1,5 @@
 import React, { useState, useEffect, Suspense } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
@@ -56,7 +56,8 @@ type ExhibitScanProps = {
 };
 
 const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
-  const { exhibit_id } = useParams<{ exhibit_id: string }>();
+  const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)\//);
+  const exhibit_id = pathMatchResult && pathMatchResult[1];
   const navigate = useNavigate();
   const theme = useTheme();
   const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
@@ -87,6 +88,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   const setPageTitle = useSetAtom(pageTitleAtom);
   const updateExhibitInfo = () => {
+    setPageTitle("入退室スキャン");
     if (token && profile && exhibit_id) {
       if (
         !exhibitName ||
