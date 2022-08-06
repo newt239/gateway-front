@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { profileProp, reservationInfoProp } from "#/types/global";
+import { profileProp, reservationInfoProp } from "#/components/lib/types";
 
 export const tokenAtom = atom<string | null>(
   localStorage.getItem("gatewayApiToken")

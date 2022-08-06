@@ -41,7 +41,7 @@ import {
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
-import { guestInfoProp } from "#/types/global";
+import { guestInfoProp } from "#/components/lib/types";
 
 const EntranceExit = () => {
   const theme = useTheme();
@@ -215,10 +215,10 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>

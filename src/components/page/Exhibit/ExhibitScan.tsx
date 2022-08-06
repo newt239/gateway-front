@@ -47,7 +47,7 @@ import {
   guestIdValidation,
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp } from "#/types/global";
+import { guestInfoProp } from "#/components/lib/types";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
@@ -383,10 +383,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -459,8 +459,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${
-                        scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                       }`,
                       { replace: true }
                     )

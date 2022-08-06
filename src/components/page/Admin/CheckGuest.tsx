@@ -20,7 +20,7 @@ import {
   ListItemText,
   ListItemIcon,
 } from "@mui/material";
-import { guestInfoProp } from "#/types/global";
+import { guestInfoProp } from "#/components/lib/types";
 import Timeline from "@mui/lab/Timeline";
 import TimelineItem from "@mui/lab/TimelineItem";
 import TimelineSeparator from "@mui/lab/TimelineSeparator";
@@ -232,10 +232,10 @@ const AdminCheckGuest = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                      ? "生徒"
-                      : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : "その他"}
+                        ? "生徒"
+                        : guestInfo.guest_type === "teacher"
+                          ? "教員"
+                          : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>

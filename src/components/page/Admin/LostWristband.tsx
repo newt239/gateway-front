@@ -36,7 +36,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
 import MessageDialog from "#/components/block/MessageDialog";
-import { reservationInfoProp } from "#/types/global";
+import { reservationInfoProp } from "#/components/lib/types";
 
 const LostWristband = () => {
   const setPageTitle = useSetAtom(pageTitleAtom);
@@ -181,12 +181,12 @@ const LostWristband = () => {
                         {reservation.count}人
                         {reservation.count !==
                           reservation.registered.length && (
-                          <span>
-                            （残り：
-                            {reservation.count - reservation.registered.length}
-                            人）
-                          </span>
-                        )}
+                            <span>
+                              （残り：
+                              {reservation.count - reservation.registered.length}
+                              人）
+                            </span>
+                          )}
                       </ListItemText>
                     </ListItem>
                     <Divider />
