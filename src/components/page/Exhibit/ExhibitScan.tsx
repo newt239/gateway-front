@@ -69,21 +69,19 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
-  const [capacity, setCapacity] = useState(0);
+  const [capacity, setCapacity] = useState<number>(0);
   const [currentCount, setCurrentCount] = useState<number>(0);
-  const [exhibitName, setExhibitName] = useState("");
+  const [exhibitName, setExhibitName] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
-  const [exhibitInfoLoading, setExhibitInfoLoading] = useState(true);
-  const [alertStatus, setAlertStatus] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [exhibitInfoLoading, setExhibitInfoLoading] = useState<boolean>(true);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
     message: string;
     severity: "success" | "error";
   }>({ status: false, message: "", severity: "success" });
-  const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-  const [showScanGuide, setShowScanGuide] = useState(true);
-
+  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
   const setDeviceState = useSetAtom(deviceStateAtom);
 
   const setPageTitle = useSetAtom(pageTitleAtom);
@@ -126,8 +124,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   };
 
   useEffect(() => {
-    setAlertMessage("");
-    setAlertStatus(false);
+    setAlertMessage(null);
     updateExhibitInfo();
     setShowScanGuide(true);
   }, [scanType]);
@@ -152,7 +149,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             if (!res.available) {
               setScanStatus("error");
               setAlertMessage("このゲストは無効です。");
-              setAlertStatus(true);
             } else {
               if (scanType === "enter") {
                 if (res.exhibit_id === "") {
@@ -168,7 +164,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   setAlertMessage(
                     "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
                   );
-                  setAlertStatus(true);
                   ReactGA.event({
                     category: "scan",
                     action: "exhibit_enter_already",
@@ -192,13 +187,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       setAlertMessage(
                         "前の展示で退室処理が行われていなかったため退室処理しました。"
                       );
-                      setAlertStatus(true);
                     })
                     .catch(() => {
                       setAlertMessage(
                         "前の展示の退場処理に際し何らかのエラーが発生しました。"
                       );
-                      setAlertStatus(true);
                       ReactGA.event({
                         category: "scan",
                         action: "exhibit_enter_reject",
@@ -206,6 +199,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       });
                       setDeviceState(true);
                     });
+                }
+                if (scanType === "enter" && currentCount >= capacity) {
+                  // すでにエラーメッセージがある場合はそのメッセージの後ろに追記
+                  setAlertMessage((message) => message ? message : "" + "滞在者数が上限に達しています。");
                 }
               } else if (scanType === "exit") {
                 if (res.exhibit_id === exhibit_id) {
@@ -215,7 +212,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   setAlertMessage(
                     "このゲストは現在どの展示にも入室していません。入室スキャンと間違えていませんか？"
                   );
-                  setAlertStatus(true);
                   ReactGA.event({
                     category: "scan",
                     action: "exhibit_exit_reject",
@@ -224,7 +220,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 } else {
                   setScanStatus("success");
                   setAlertMessage("このゲストは他の展示に入室中です。");
-                  setAlertStatus(true);
                   ReactGA.event({
                     category: "scan",
                     action: "exhibit_exit_already_other",
@@ -239,7 +234,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             console.log(err);
             setScanStatus("error");
             setAlertMessage("予期せぬエラーが発生しました。");
-            setAlertStatus(true);
             ReactGA.event({
               category: "scan",
               action: "exhibit_unknown_error",
@@ -253,7 +247,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       } else {
         setScanStatus("error");
         setAlertMessage("このゲストは存在しません。");
-        setAlertStatus(true);
         setSmDrawerStatus(true);
       }
     }
@@ -262,10 +255,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const retry = () => {
     setDeviceState(true);
     setText("");
-    setAlertMessage("");
+    setAlertMessage(null);
     setSnackbar({ status: false, message: "", severity: "success" });
     setScanStatus("waiting");
-    setAlertStatus(false);
     setSmDrawerStatus(false);
     setShowScanGuide(true);
   };
@@ -290,67 +282,53 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           guest_id: text,
           exhibit_id: exhibit_id,
         };
-        if (scanType === "enter" && currentCount >= capacity) {
-          setSnackbar({
-            status: true,
-            message: "滞在者数が上限に達しています。",
-            severity: "error",
-          });
-          setAlertStatus(true);
-        } else {
-          apiClient(process.env.REACT_APP_API_BASE_URL)
-            .activity[scanType].$post({
-              headers: { Authorization: "Bearer " + token },
-              body: payload,
-            })
-            .then(() => {
-              if (scanType === "enter") {
-                setCurrentCount(currentCount + 1);
-                setSnackbar({
-                  status: true,
-                  message: "入室処理が完了しました。",
-                  severity: "success",
-                });
-              } else if (scanType === "exit") {
-                setCurrentCount(currentCount - 1);
-                setSnackbar({
-                  status: true,
-                  message: "退室処理が完了しました。",
-                  severity: "success",
-                });
-              }
-              setDeviceState(true);
-              setText("");
-              setAlertMessage("");
-              setAlertStatus(true);
-              setScanStatus("waiting");
-              setSmDrawerStatus(false);
-            })
-            .catch((err: AxiosError) => {
-              console.log(err.message);
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .activity[scanType].$post({
+            headers: { Authorization: "Bearer " + token },
+            body: payload,
+          })
+          .then(() => {
+            if (scanType === "enter") {
+              setCurrentCount(currentCount + 1);
               setSnackbar({
                 status: true,
-                message: "何らかのエラーが発生しました。",
-                severity: "error",
+                message: "入室処理が完了しました。",
+                severity: "success",
               });
-              setAlertStatus(true);
-              setText("");
-              setDeviceState(true);
-              setSmDrawerStatus(false);
-            })
-            .finally(() => {
-              setShowScanGuide(true);
-            });
-        }
+            } else if (scanType === "exit") {
+              setCurrentCount(currentCount - 1);
+              setSnackbar({
+                status: true,
+                message: "退室処理が完了しました。",
+                severity: "success",
+              });
+            }
+            setDeviceState(true);
+            setText("");
+            setAlertMessage(null);
+            setScanStatus("waiting");
+            setSmDrawerStatus(false);
+          })
+          .catch((err: AxiosError) => {
+            console.log(err.message);
+            setAlertMessage(`何らかのエラーが発生しました。${err.message}`);
+            setText("");
+            setDeviceState(true);
+            setSmDrawerStatus(false);
+          })
+          .finally(() => {
+            setShowScanGuide(true);
+          });
       }
     };
 
     return (
       <>
-        {alertStatus && (
+        {alertMessage && (
           <Alert
             variant="filled"
             severity="error"
+            sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
             action={
               <Button
                 color="inherit"
