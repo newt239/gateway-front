@@ -86,7 +86,7 @@ const AllAreaPieChart = () => {
           </Box>
         </>
       ) : (
-        <Typography sx={{ pt: 2 }}>読み込み中...</Typography>
+        <Typography sx={{ pt: 2 }}>現在校内に来場者はいません。</Typography>
       )}
     </>
   );
