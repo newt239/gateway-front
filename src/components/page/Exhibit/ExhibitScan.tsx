@@ -74,6 +74,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [exhibitName, setExhibitName] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [exhibitInfoLoading, setExhibitInfoLoading] = useState<boolean>(true);
+  const [guideMessage, setGuideMessage] = useState<string>("来場者のQRコードをカメラに水平にかざしてください");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [snackbar, setSnackbar] = useState<{
     status: boolean;
@@ -127,6 +128,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setAlertMessage(null);
     updateExhibitInfo();
     setShowScanGuide(true);
+    setGuideMessage("来場者のQRコードを水平にかざしてください");
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
@@ -252,6 +254,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     }
   };
 
+  useEffect(() => {
+    if (scanStatus === "success") {
+      setGuideMessage(`情報を確認し、問題がなければ${scanType === "enter" ? "入室記録" : "退室記録"}を押してください`);
+    }
+  }, [scanStatus]);
+
   const retry = () => {
     setDeviceState(true);
     setText("");
@@ -308,6 +316,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setAlertMessage(null);
             setScanStatus("waiting");
             setSmDrawerStatus(false);
+            setGuideMessage("処理が完了しました。次の来場者のスキャンができます");
           })
           .catch((err: AxiosError) => {
             console.log(err.message);
@@ -315,6 +324,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setText("");
             setDeviceState(true);
             setSmDrawerStatus(false);
+            setGuideMessage("来場者のQRコードを水平にかざしてください");
           })
           .finally(() => {
             setShowScanGuide(true);
@@ -439,8 +449,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
-                      }`,
+                      `/ exhibit / ${exhibit_id || "unknown"} /${scanType === "enter" ? "exit" : "enter"
+                      } `,
                       { replace: true }
                     )
                   }
@@ -454,7 +464,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     size="small"
                     startIcon={<BarChartRoundedIcon />}
                     onClick={() =>
-                      navigate(`/analytics/exhibit/${exhibit_id}`, {
+                      navigate(`/ analytics / exhibit / ${exhibit_id} `, {
                         replace: true,
                       })
                     }
@@ -480,20 +490,20 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           <Grid item xs={12}>
             <Grid
               container
-              sx={{ justifyContent: "space-between", alignItems: "center" }}
+              sx={{ justifyContent: "space-between", alignItems: "center", flexWrap: "nowrap" }}
             >
               <Grid item>
                 {capacity ? (
-                  <Grid container spacing={2} sx={{ alignItems: "end" }}>
+                  <Grid container spacing={2} sx={{ alignItems: "end", flexWrap: "nowrap" }}>
                     <Grid item>
-                      <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+                      <span style={{ fontSize: "2rem", fontWeight: 800, color: currentCount >= capacity ? "red" : "black" }}>
                         {currentCount}
                       </span>
                       <span> / {capacity} 人</span>
                     </Grid>
                     <Grid item>
                       <Tooltip
-                        title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}
+                        title={`最終更新: ${lastUpdate.format("HH:mm:ss")} `}
                       >
                         <span>
                           <IconButton
@@ -513,9 +523,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 )}
               </Grid>
               {largerThanMD && (
-                <Grid item>
+                <Grid item sx={{ maxWidth: "70%" }}>
                   <Alert severity="info">
-                    QRコードをカメラに水平にかざしてください
+                    {guideMessage}
                   </Alert>
                 </Grid>
               )}
