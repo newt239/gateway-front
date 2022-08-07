@@ -79,7 +79,6 @@ const RealtimeLog = () => {
                 return -1;
               }
             });
-          console.log(newActivityList);
           setActivityList([...newActivityList, ...activityList]);
           setLastUpdate(moment());
         })
@@ -155,15 +154,10 @@ const RealtimeLog = () => {
                     </Grid>
                     <Grid item xs={4}>
                       <ListItemText>
-                        {exhibitList
+                        {exhibitList && exhibitList
                           .filter((x) => {
                             return x.exhibit_id === v.exhibit_id;
-                          })
-                          .map((l) => {
-                            return (
-                              <span key={l.exhibit_id}>{l.exhibit_name}</span>
-                            );
-                          })}
+                          })[0]?.exhibit_name || "エントランス"}
                       </ListItemText>
                     </Grid>
                     <Grid item xs={1.5}>
