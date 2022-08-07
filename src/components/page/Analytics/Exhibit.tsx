@@ -15,11 +15,10 @@ const AnalyticsExhibit = () => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   if (profile) {
-    const pathMatchResult = useLocation().pathname.match(/analytics\/(.*)\//);
+    const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)/);
     const exhibit_id = pathMatchResult ? pathMatchResult[1] : "";
 
     const setPageTitle = useSetAtom(pageTitleAtom);
-
     useEffect(() => {
       setPageTitle(`${exhibit_id} - 現在の滞在状況`);
       if (token && profile) {
