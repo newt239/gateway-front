@@ -48,6 +48,7 @@ import ScanGuide from "#/components/block/ScanGuide";
 const ReserveCheck = () => {
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
@@ -248,8 +249,8 @@ const ReserveCheck = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ py: 2 }}>
-        <Grid item xs={12}>
+      <Grid container spacing={2} sx={{ py: 2, justifyContent: "space-evenly" }}>
+        <Grid item xs={12} sx={{ mb: largerThanMD ? 5 : 0 }}>
           <Grid
             container
             sx={{
@@ -269,7 +270,7 @@ const ReserveCheck = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md="auto">
           <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>

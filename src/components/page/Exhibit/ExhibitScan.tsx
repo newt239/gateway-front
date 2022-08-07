@@ -435,7 +435,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Grid>
         </Grid>
       ) : (
-        <Grid container spacing={2} sx={{ py: 2 }}>
+        <Grid container spacing={2} sx={{ py: 2, justifyContent: "space-evenly" }}>
           <Grid item xs={12}>
             <Grid container sx={{ alignItems: "center", gap: "1rem" }}>
               <Grid item sx={{ pr: 4 }} xs={12} sm lg={2}>
@@ -445,6 +445,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               </Grid>
               <Grid item>
                 <Button
+                  size="small"
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
@@ -458,8 +459,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 </Button>
               </Grid>
               {profile && ["moderator", "exhibit"].includes(profile.user_type) && (
-                <Grid item >
+                <Grid item>
                   <Button
+                    size="small"
                     startIcon={<BarChartRoundedIcon />}
                     onClick={() =>
                       navigate(`/analytics/exhibit/${exhibit_id}`, {
@@ -475,6 +477,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 ["moderator", "executive"].includes(profile.user_type) && (
                   <Grid item>
                     <Button
+                      size="small"
                       startIcon={<ArrowBackIosNewRoundedIcon />}
                       onClick={() => navigate("/exhibit", { replace: true })}
                     >
@@ -484,7 +487,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 )}
             </Grid>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
             <Grid
               container
               sx={{ justifyContent: "space-between", alignItems: "center", flexWrap: "nowrap" }}
@@ -531,10 +534,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md="auto">
             <Scanner handleScan={handleScan} />
           </Grid>
-          <Grid item xs={12} md={7} xl={5}>
+          <Grid item xs={12} md={6}>
             <Box
               sx={{
                 display: "flex",

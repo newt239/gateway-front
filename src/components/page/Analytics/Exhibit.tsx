@@ -58,7 +58,7 @@ const AnalyticsExhibit = () => {
         <Grid item xs={12}>
           {["moderator"].includes(profile.user_type) && (
             <Button
-              variant="text"
+              size="small"
               startIcon={<ArrowBackIosNewRoundedIcon />}
               sx={{ mr: 2 }}
               onClick={() =>
@@ -69,7 +69,7 @@ const AnalyticsExhibit = () => {
             </Button>
           )}
           <Button
-            variant="text"
+            size="small"
             startIcon={<LoginRoundedIcon />}
             sx={{ mr: 2 }}
             onClick={() =>
@@ -79,7 +79,7 @@ const AnalyticsExhibit = () => {
             入室スキャン
           </Button>
           <Button
-            variant="text"
+            size="small"
             startIcon={<LogoutRoundedIcon />}
             onClick={() =>
               navigate(`/exhibit/${exhibit_id}/exit`, { replace: true })

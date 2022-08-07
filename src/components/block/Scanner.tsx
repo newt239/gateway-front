@@ -170,7 +170,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
         sx={{
           position: "relative",
           margin: "auto",
-          width: "100%",
+          width: "100vw",
           maxWidth: "50vh",
           aspectRatio: "1 / 1",
           backgroundColor: "black",
