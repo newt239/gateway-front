@@ -449,7 +449,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/ exhibit / ${exhibit_id || "unknown"} /${scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                       } `,
                       { replace: true }
                     )
@@ -464,7 +464,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     size="small"
                     startIcon={<BarChartRoundedIcon />}
                     onClick={() =>
-                      navigate(`/ analytics / exhibit / ${exhibit_id} `, {
+                      navigate(`/analytics/exhibit/${exhibit_id}`, {
                         replace: true,
                       })
                     }
