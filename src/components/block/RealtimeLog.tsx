@@ -11,6 +11,7 @@ import {
   List,
   ListItem,
   ListItemText,
+  Switch,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -54,12 +55,13 @@ const RealtimeLog = () => {
     moment().subtract(1, "weeks")
   );
   const [loading, setLoading] = useState(true);
+  const [maskId, setMaskId] = useState(true);
 
-  const getActivityHistory = (from: Moment) => {
+  const getActivityHistory = () => {
     if (token && exhibitList) {
       setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
-        .activity.history._from(moment(from).format())
+        .activity.history._from(moment(lastUpdate).format())
         .$get({
           headers: { Authorization: `Bearer ${token}` },
         })
@@ -79,7 +81,7 @@ const RealtimeLog = () => {
                 return -1;
               }
             });
-          setActivityList([...newActivityList, ...activityList]);
+          setActivityList([...activityList, ...newActivityList, ...activityList]);
           setLastUpdate(moment());
         })
         .catch((err: AxiosError) => {
@@ -94,10 +96,9 @@ const RealtimeLog = () => {
   // 10秒ごとに自動で取得
   useEffect(() => {
     if (exhibitList.length !== 0) {
-      getActivityHistory(lastUpdate);
-      console.log(exhibitList);
+      getActivityHistory();
       const intervalId = setInterval(() => {
-        getActivityHistory(lastUpdate);
+        getActivityHistory();
       }, 1 * 10 * 1000);
       return () => {
         clearInterval(intervalId);
@@ -108,75 +109,82 @@ const RealtimeLog = () => {
   }, [exhibitList]);
 
   return (
-    <>
-      <Grid container>
-        <Grid item xs={12}>
-          <Grid
-            container
-            sx={{
-              alignItems: "center",
-              justifyContent: "space-between",
-              height: 30,
-            }}
-          >
-            <Grid item>
-              <Tooltip title="10秒更新">
-                <Typography variant="h3">リアルタイムログ</Typography>
-              </Tooltip>
-            </Grid>
-            <Grid item>
-              {loading && <CircularProgress size={25} thickness={6} />}
-            </Grid>
+    <Grid container>
+      <Grid item xs={12}>
+        <Grid
+          container
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            height: 30,
+          }}
+        >
+          <Grid item>
+            <Tooltip title="10秒更新">
+              <Typography variant="h3">リアルタイムログ</Typography>
+            </Tooltip>
+          </Grid>
+          <Grid item>
+            {loading && <CircularProgress size={25} thickness={6} />}
           </Grid>
         </Grid>
-        <Grid item xs={12}>
-          {exhibitList.length !== 0 && activityList.length !== 0 ? (
-            <List>
-              {activityList.map((v) => (
-                <ListItem
-                  divider
-                  disablePadding
-                  key={`${v.session_id}-${v.activity_type}`}
-                >
-                  <Grid container sx={{ alignItems: "center" }}>
-                    <Grid item xs={2.5}>
-                      <ListItemText>
-                        {moment(v.timestamp).format("hh:mm:ss")}
-                      </ListItemText>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <ListItemText
-                        secondary={v.guest_id}
-                        secondaryTypographyProps={{ sx: { p: 0 } }}
-                      >
-                        {v.session_id}
-                      </ListItemText>
-                    </Grid>
-                    <Grid item xs={4}>
-                      <ListItemText>
-                        {exhibitList && exhibitList
-                          .filter((x) => {
-                            return x.exhibit_id === v.exhibit_id;
-                          })[0]?.exhibit_name || "エントランス"}
-                      </ListItemText>
-                    </Grid>
-                    <Grid item xs={1.5}>
-                      <ListItemText>
-                        {v.activity_type === "enter" ? "入室" : "退室"}
-                      </ListItemText>
-                    </Grid>
-                  </Grid>
-                </ListItem>
-              ))}
-            </List>
-          ) : (
-            <Typography variant="body1" sx={{ p: 2 }}>
-              データがありません。
-            </Typography>
-          )}
+      </Grid>
+      <Grid item xs={12}>
+        <Grid container sx={{
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+        >
+          <Grid item>
+            <ListItem sx={{ p: 0 }}>
+              <Switch edge="end" onChange={() => setMaskId(maskId => !maskId)} checked={maskId} />
+              <ListItemText>ゲストIDを隠す</ListItemText>
+            </ListItem>
+          </Grid>
+          <Grid item>{lastUpdate.format("hh:mm:ss")}</Grid>
         </Grid>
       </Grid>
-    </>
+      <Grid item xs={12}>
+        <List>
+          {activityList.map((v) => (
+            <ListItem
+              key={`${v.session_id}-${v.activity_type}`}
+              divider
+              disablePadding
+            >
+              <Grid container sx={{ alignItems: "center" }}>
+                <Grid item xs={2.5}>
+                  <ListItemText>
+                    {moment(v.timestamp).format("hh:mm:ss")}
+                  </ListItemText>
+                </Grid>
+                <Grid item xs={4}>
+                  <ListItemText
+                    secondary={maskId ? v.guest_id.slice(0, 6) + "____" : v.guest_id}
+                    secondaryTypographyProps={{ sx: { p: 0 } }}
+                  >
+                    {v.session_id}
+                  </ListItemText>
+                </Grid>
+                <Grid item xs={4}>
+                  <ListItemText>
+                    {exhibitList && exhibitList
+                      .filter((x) => {
+                        return x.exhibit_id === v.exhibit_id;
+                      })[0]?.exhibit_name || "エントランス"}
+                  </ListItemText>
+                </Grid>
+                <Grid item xs={1.5}>
+                  <ListItemText>
+                    {v.activity_type === "enter" ? "入室" : "退室"}
+                  </ListItemText>
+                </Grid>
+              </Grid>
+            </ListItem>
+          ))}
+        </List>
+      </Grid>
+    </Grid>
   );
 };
 
