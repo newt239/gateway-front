@@ -437,15 +437,14 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       ) : (
         <Grid container spacing={2} sx={{ py: 2 }}>
           <Grid item xs={12}>
-            <Grid container sx={{ alignItems: "center" }}>
+            <Grid container sx={{ alignItems: "center", gap: "1rem" }}>
               <Grid item sx={{ pr: 4 }} xs={12} sm lg={2}>
                 <Typography variant="h3">
                   {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
                 </Typography>
               </Grid>
-              <Grid item sx={{ pr: 2 }}>
+              <Grid item>
                 <Button
-                  size="small"
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
@@ -459,9 +458,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 </Button>
               </Grid>
               {profile && ["moderator", "exhibit"].includes(profile.user_type) && (
-                <Grid item sx={{ pr: 2 }}>
+                <Grid item >
                   <Button
-                    size="small"
                     startIcon={<BarChartRoundedIcon />}
                     onClick={() =>
                       navigate(`/analytics/exhibit/${exhibit_id}`, {
@@ -477,7 +475,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 ["moderator", "executive"].includes(profile.user_type) && (
                   <Grid item>
                     <Button
-                      size="small"
                       startIcon={<ArrowBackIosNewRoundedIcon />}
                       onClick={() => navigate("/exhibit", { replace: true })}
                     >

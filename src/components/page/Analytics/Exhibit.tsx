@@ -4,8 +4,11 @@ import { useAtomValue, useSetAtom } from "jotai";
 import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
+
 import { Grid, Button, Typography, CircularProgress } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
+import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 import ExhibitEnterCountBarChart from "../../block/ExhibitEnterCountBarChart";
 import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList";
@@ -52,19 +55,39 @@ const AnalyticsExhibit = () => {
 
     return (
       <Grid container spacing={2} sx={{ py: 2 }}>
-        {["moderator", "executive"].includes(profile.user_type) && (
-          <Grid item xs={12}>
+        <Grid item xs={12}>
+          {["moderator"].includes(profile.user_type) && (
             <Button
               variant="text"
               startIcon={<ArrowBackIosNewRoundedIcon />}
+              sx={{ mr: 2 }}
               onClick={() =>
                 navigate("/analytics/summary", { replace: true })
               }
             >
               一覧に戻る
             </Button>
-          </Grid>
-        )}
+          )}
+          <Button
+            variant="text"
+            startIcon={<LoginRoundedIcon />}
+            sx={{ mr: 2 }}
+            onClick={() =>
+              navigate(`/exhibit/${exhibit_id}/enter`, { replace: true })
+            }
+          >
+            入室スキャン
+          </Button>
+          <Button
+            variant="text"
+            startIcon={<LogoutRoundedIcon />}
+            onClick={() =>
+              navigate(`/exhibit/${exhibit_id}/exit`, { replace: true })
+            }
+          >
+            退室スキャン
+          </Button>
+        </Grid>
         <Grid item xs={12} lg={6}>
           <ExhibitCurrentGuestList exhibit_id={exhibit_id} />
         </Grid>
