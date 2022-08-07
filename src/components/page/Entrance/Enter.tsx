@@ -27,7 +27,6 @@ import {
   Alert,
   Divider,
   FormControl,
-  InputAdornment,
   OutlinedInput,
   Button,
 } from "@mui/material";
@@ -157,6 +156,7 @@ const EntranceEnter = () => {
 
   const reset = (target: number) => {
     setGuest(guestList.splice(target - 1, 1));
+    setText("");
   };
 
   const closeAlert = () => {
@@ -255,7 +255,7 @@ const EntranceEnter = () => {
                           .map((guest) => guest.guest_id)
                           .includes(guestList[guestList.length - 1])}
                       >
-                        登録
+                        すべて登録
                       </Button>
                     </Box>
                     <Divider />
@@ -334,7 +334,7 @@ const EntranceEnter = () => {
             <Grid item>
               <Typography variant="h3">リストバンド登録</Typography>
               <Typography variant="body1">
-                登録するリストバンドのQRコードをスキャンしてください。
+                予約情報とリストバンドの紐づけを行います。
               </Typography>
             </Grid>
             <Grid item>
@@ -369,9 +369,6 @@ const EntranceEnter = () => {
                 size="small"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                startAdornment={
-                  <InputAdornment position="start">予約ID</InputAdornment>
-                }
                 disabled
                 fullWidth
               />

@@ -238,7 +238,7 @@ const ReserveCheck = () => {
                 variant="contained"
                 onClick={() => navigate("/entrance/enter", { replace: true })}
               >
-                登録
+                登録開始
               </Button>
             </Box>
           </Card>
