@@ -49,9 +49,10 @@ const Scanner = ({ handleScan }: ScannerProps) => {
     getDeviceIdFromStorage()
   );
   const [deviceList, setDeviceList] = useState<deviceProp[]>([]);
-  const [selectCameraModalOpen, setSelectCameraModalOpen] = useState(false);
-  const [errorDialogOpen, setMessageDialogOpen] = useState(false);
-  const [errorDialogTitle, setMessageDialogTitle] = useState("");
+  const [selectCameraModalOpen, setSelectCameraModalOpen] =
+    useState<boolean>(false);
+  const [errorDialogOpen, setMessageDialogOpen] = useState<boolean>(false);
+  const [errorDialogTitle, setMessageDialogTitle] = useState<string>("");
   const [errorDialogMessage, setMessageDialogMessage] = useState<string>("");
 
   const getCameraDeviceList = () => {
@@ -170,7 +171,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
         sx={{
           position: "relative",
           margin: "auto",
-          width: "100%",
+          width: "100vw",
           maxWidth: "50vh",
           aspectRatio: "1 / 1",
           backgroundColor: "black",

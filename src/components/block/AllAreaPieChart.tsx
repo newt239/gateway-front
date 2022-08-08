@@ -25,15 +25,18 @@ const AllAreaPieChart = () => {
         .then((res) => {
           setAllAreaTotalCount(res.reduce((a, c) => a + c.count, 0));
           setAllAreaChartCategories(
-            res.map((v) =>
-              v.guest_type === "student"
-                ? "生徒"
-                : v.guest_type === "teacher"
-                ? "教員"
-                : v.guest_type === "family"
-                ? "保護者"
-                : "その他"
-            )
+            res.map((v) => {
+              switch (v.guest_type) {
+                case "student":
+                  return "生徒";
+                case "teacher":
+                  return "教員";
+                case "family":
+                  return "保護者";
+                default:
+                  return "その他";
+              }
+            })
           );
           setAllAreaChartSeries(res.map((v) => v.count));
         })
@@ -50,16 +53,6 @@ const AllAreaPieChart = () => {
       height: "50vh",
     },
     labels: allAreaChartCategories,
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          legend: {
-            position: "bottom",
-          },
-        },
-      },
-    ],
     noData: {
       text: "表示できるデータがありません",
     },
@@ -70,10 +63,10 @@ const AllAreaPieChart = () => {
       <Typography variant="h3">全体の滞在状況</Typography>
       {allAreaTotalCount ? (
         <>
-          <Typography sx={{ pt: 2 }}>
+          <Typography sx={{ p: 2 }}>
             校内滞在者数 {allAreaTotalCount}人
           </Typography>
-          <Box sx={{ margin: "auto", width: "100%" }}>
+          <Box sx={{ margin: "auto" }}>
             <ReactApexChart
               options={options}
               series={allAreaChartSeries}
@@ -82,7 +75,7 @@ const AllAreaPieChart = () => {
           </Box>
         </>
       ) : (
-        <Typography sx={{ pt: 2 }}>読み込み中...</Typography>
+        <Typography sx={{ p: 2 }}>現在校内に来場者はいません。</Typography>
       )}
     </>
   );

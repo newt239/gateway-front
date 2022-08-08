@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { useSetAtom } from "jotai";
 import { pageTitleAtom } from "#/components/lib/jotai";
+
 import { Grid } from "@mui/material";
 import AllAreaPieChart from "#/components/block/AllAreaPieChart";
+
 import RealtimeLog from "#/components/block/RealtimeLog";
 
 const AnalyticsIndex = () => {

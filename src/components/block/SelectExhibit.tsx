@@ -18,6 +18,7 @@ type SelectExhibitProp = {
   currentExhibit: string;
   setCurrentExhibit: Dispatch<SetStateAction<string>>;
 };
+
 const SelectExhibit = ({
   currentExhibit,
   setCurrentExhibit,
@@ -44,7 +45,7 @@ const SelectExhibit = ({
         .then((res) => {
           if (profile.user_type === "executive") {
             const executiveExhibitList = res.filter(
-              (v) => v.exhibit_type === "stage" || v.exhibit_type === "special"
+              (v) => v.exhibit_type === "stage" || v.exhibit_type === "other"
             );
             setExhibitList(executiveExhibitList);
             setCurrentExhibit(executiveExhibitList[0].exhibit_id);

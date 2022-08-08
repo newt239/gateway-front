@@ -27,7 +27,6 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Snackbar,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -37,34 +36,30 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
-import Scanner from "#/components/block/Scanner";
 import {
   getTimePart,
   reservationIdValidation,
 } from "#/components/lib/commonFunction";
+import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
 const ReserveCheck = () => {
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [reservation, setReservation] = useAtom(reservationAtom);
-  const [snackbar, setSnackbar] = useState<{
-    status: boolean;
-    message: string;
-    severity: "success" | "error";
-  }>({ status: false, message: "", severity: "success" });
-  const [text, setText] = useState("");
+  const [text, setText] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-  const [showScanGuide, setShowScanGuide] = useState(true);
+  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
 
   const setDeviceState = useSetAtom(deviceStateAtom);
 
@@ -237,7 +232,7 @@ const ReserveCheck = () => {
                 variant="contained"
                 onClick={() => navigate("/entrance/enter", { replace: true })}
               >
-                登録
+                登録開始
               </Button>
             </Box>
           </Card>
@@ -248,8 +243,12 @@ const ReserveCheck = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ py: 2 }}>
-        <Grid item xs={12}>
+      <Grid
+        container
+        spacing={2}
+        sx={{ py: 2, justifyContent: "space-evenly" }}
+      >
+        <Grid item xs={12} sx={{ mb: largerThanMD ? 5 : 0 }}>
           <Grid
             container
             sx={{
@@ -269,7 +268,7 @@ const ReserveCheck = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md="auto">
           <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>
@@ -313,15 +312,6 @@ const ReserveCheck = () => {
               </SwipeableDrawer>
             ))}
         </Grid>
-        <Snackbar
-          open={snackbar.status}
-          autoHideDuration={6000}
-          onClose={() =>
-            setSnackbar({ status: false, message: "", severity: "success" })
-          }
-        >
-          <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
-        </Snackbar>
       </Grid>
       <ScanGuide show={showScanGuide} />
     </>

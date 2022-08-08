@@ -1,5 +1,5 @@
-import React, { useState, useEffect, Suspense } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
@@ -47,7 +47,7 @@ import {
   guestIdValidation,
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp } from "#/types/global";
+import { guestInfoProp } from "#/components/lib/types";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
@@ -56,7 +56,8 @@ type ExhibitScanProps = {
 };
 
 const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
-  const { exhibit_id } = useParams<{ exhibit_id: string }>();
+  const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)\//);
+  const exhibit_id = pathMatchResult && pathMatchResult[1];
   const navigate = useNavigate();
   const theme = useTheme();
   const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
@@ -68,25 +69,23 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   );
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
-  const [capacity, setCapacity] = useState(0);
+  const [capacity, setCapacity] = useState<number>(0);
   const [currentCount, setCurrentCount] = useState<number>(0);
-  const [exhibitName, setExhibitName] = useState("");
+  const [exhibitName, setExhibitName] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
-  const [exhibitInfoLoading, setExhibitInfoLoading] = useState(true);
-  const [alertStatus, setAlertStatus] = useState(false);
-  const [alertMessage, setAlertMessage] = useState<string>("");
-  const [snackbar, setSnackbar] = useState<{
-    status: boolean;
-    message: string;
-    severity: "success" | "error";
-  }>({ status: false, message: "", severity: "success" });
-  const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-  const [showScanGuide, setShowScanGuide] = useState(true);
-
+  const [exhibitInfoLoading, setExhibitInfoLoading] = useState<boolean>(true);
+  const [guideMessage, setGuideMessage] = useState<string>(
+    "来場者のQRコードをカメラに水平にかざしてください"
+  );
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
+  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
   const setDeviceState = useSetAtom(deviceStateAtom);
 
   const setPageTitle = useSetAtom(pageTitleAtom);
   const updateExhibitInfo = () => {
+    setPageTitle("入退室スキャン");
     if (token && profile && exhibit_id) {
       if (
         !exhibitName ||
@@ -124,10 +123,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   };
 
   useEffect(() => {
-    setAlertMessage("");
-    setAlertStatus(false);
+    setAlertMessage(null);
     updateExhibitInfo();
     setShowScanGuide(true);
+    setGuideMessage("来場者のQRコードを水平にかざしてください");
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
@@ -150,7 +149,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             if (!res.available) {
               setScanStatus("error");
               setAlertMessage("このゲストは無効です。");
-              setAlertStatus(true);
             } else {
               if (scanType === "enter") {
                 if (res.exhibit_id === "") {
@@ -166,7 +164,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   setAlertMessage(
                     "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
                   );
-                  setAlertStatus(true);
                   ReactGA.event({
                     category: "scan",
                     action: "exhibit_enter_already",
@@ -190,13 +187,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       setAlertMessage(
                         "前の展示で退室処理が行われていなかったため退室処理しました。"
                       );
-                      setAlertStatus(true);
                     })
                     .catch(() => {
                       setAlertMessage(
                         "前の展示の退場処理に際し何らかのエラーが発生しました。"
                       );
-                      setAlertStatus(true);
                       ReactGA.event({
                         category: "scan",
                         action: "exhibit_enter_reject",
@@ -204,6 +199,17 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       });
                       setDeviceState(true);
                     });
+                }
+                if (scanType === "enter" && currentCount >= capacity) {
+                  // すでにエラーメッセージがある場合はそのメッセージの後ろに追記
+                  setAlertMessage((message) =>
+                    message ? message : "" + "滞在者数が上限に達しています。"
+                  );
+                  ReactGA.event({
+                    category: "scan",
+                    action: "reach_capacity",
+                    label: profile.user_id,
+                  });
                 }
               } else if (scanType === "exit") {
                 if (res.exhibit_id === exhibit_id) {
@@ -213,7 +219,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   setAlertMessage(
                     "このゲストは現在どの展示にも入室していません。入室スキャンと間違えていませんか？"
                   );
-                  setAlertStatus(true);
                   ReactGA.event({
                     category: "scan",
                     action: "exhibit_exit_reject",
@@ -222,7 +227,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 } else {
                   setScanStatus("success");
                   setAlertMessage("このゲストは他の展示に入室中です。");
-                  setAlertStatus(true);
                   ReactGA.event({
                     category: "scan",
                     action: "exhibit_exit_already_other",
@@ -237,7 +241,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             console.log(err);
             setScanStatus("error");
             setAlertMessage("予期せぬエラーが発生しました。");
-            setAlertStatus(true);
             ReactGA.event({
               category: "scan",
               action: "exhibit_unknown_error",
@@ -251,19 +254,27 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       } else {
         setScanStatus("error");
         setAlertMessage("このゲストは存在しません。");
-        setAlertStatus(true);
         setSmDrawerStatus(true);
       }
     }
   };
 
+  useEffect(() => {
+    if (scanStatus === "success") {
+      setGuideMessage(
+        `情報を確認し、問題がなければ${
+          scanType === "enter" ? "入室記録" : "退室記録"
+        }を押してください`
+      );
+    }
+  }, [scanStatus]);
+
   const retry = () => {
     setDeviceState(true);
     setText("");
-    setAlertMessage("");
-    setSnackbar({ status: false, message: "", severity: "success" });
+    setAlertMessage(null);
+    setSnackbarMessage(null);
     setScanStatus("waiting");
-    setAlertStatus(false);
     setSmDrawerStatus(false);
     setShowScanGuide(true);
   };
@@ -288,67 +299,49 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           guest_id: text,
           exhibit_id: exhibit_id,
         };
-        if (scanType === "enter" && currentCount >= capacity) {
-          setSnackbar({
-            status: true,
-            message: "滞在者数が上限に達しています。",
-            severity: "error",
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .activity[scanType].$post({
+            headers: { Authorization: "Bearer " + token },
+            body: payload,
+          })
+          .then(() => {
+            if (scanType === "enter") {
+              setCurrentCount(currentCount + 1);
+              setSnackbarMessage("入室処理が完了しました。");
+            } else if (scanType === "exit") {
+              setCurrentCount(currentCount - 1);
+              setSnackbarMessage("退室処理が完了しました。");
+            }
+            setDeviceState(true);
+            setText("");
+            setAlertMessage(null);
+            setScanStatus("waiting");
+            setSmDrawerStatus(false);
+            setGuideMessage(
+              "処理が完了しました。次の来場者のスキャンができます"
+            );
+          })
+          .catch((err: AxiosError) => {
+            console.log(err.message);
+            setAlertMessage(`何らかのエラーが発生しました。${err.message}`);
+            setText("");
+            setDeviceState(true);
+            setSmDrawerStatus(false);
+            setGuideMessage("来場者のQRコードを水平にかざしてください");
+          })
+          .finally(() => {
+            setShowScanGuide(true);
           });
-          setAlertStatus(true);
-        } else {
-          apiClient(process.env.REACT_APP_API_BASE_URL)
-            .activity[scanType].$post({
-              headers: { Authorization: "Bearer " + token },
-              body: payload,
-            })
-            .then(() => {
-              if (scanType === "enter") {
-                setCurrentCount(currentCount + 1);
-                setSnackbar({
-                  status: true,
-                  message: "入室処理が完了しました。",
-                  severity: "success",
-                });
-              } else if (scanType === "exit") {
-                setCurrentCount(currentCount - 1);
-                setSnackbar({
-                  status: true,
-                  message: "退室処理が完了しました。",
-                  severity: "success",
-                });
-              }
-              setDeviceState(true);
-              setText("");
-              setAlertMessage("");
-              setAlertStatus(true);
-              setScanStatus("waiting");
-              setSmDrawerStatus(false);
-            })
-            .catch((err: AxiosError) => {
-              console.log(err.message);
-              setSnackbar({
-                status: true,
-                message: "何らかのエラーが発生しました。",
-                severity: "error",
-              });
-              setAlertStatus(true);
-              setText("");
-              setDeviceState(true);
-              setSmDrawerStatus(false);
-            })
-            .finally(() => {
-              setShowScanGuide(true);
-            });
-        }
       }
     };
 
     return (
       <>
-        {alertStatus && (
+        {alertMessage && (
           <Alert
             variant="filled"
             severity="error"
+            sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
             action={
               <Button
                 color="inherit"
@@ -445,15 +438,19 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Grid>
         </Grid>
       ) : (
-        <Grid container spacing={2} sx={{ py: 2 }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ py: 2, justifyContent: "space-evenly" }}
+        >
           <Grid item xs={12}>
-            <Grid container sx={{ alignItems: "center" }}>
+            <Grid container sx={{ alignItems: "center", gap: "1rem" }}>
               <Grid item sx={{ pr: 4 }} xs={12} sm lg={2}>
                 <Typography variant="h3">
                   {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
                 </Typography>
               </Grid>
-              <Grid item sx={{ pr: 2 }}>
+              <Grid item>
                 <Button
                   size="small"
                   startIcon={<PublishedWithChangesRoundedIcon />}
@@ -461,7 +458,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     navigate(
                       `/exhibit/${exhibit_id || "unknown"}/${
                         scanType === "enter" ? "exit" : "enter"
-                      }`,
+                      } `,
                       { replace: true }
                     )
                   }
@@ -470,7 +467,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 </Button>
               </Grid>
               {profile && ["moderator", "exhibit"].includes(profile.user_type) && (
-                <Grid item sx={{ pr: 2 }}>
+                <Grid item>
                   <Button
                     size="small"
                     startIcon={<BarChartRoundedIcon />}
@@ -498,23 +495,37 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 )}
             </Grid>
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
             <Grid
               container
-              sx={{ justifyContent: "space-between", alignItems: "center" }}
+              sx={{
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "nowrap",
+              }}
             >
               <Grid item>
                 {capacity ? (
-                  <Grid container spacing={2} sx={{ alignItems: "end" }}>
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{ alignItems: "end", flexWrap: "nowrap" }}
+                  >
                     <Grid item>
-                      <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+                      <span
+                        style={{
+                          fontSize: "2rem",
+                          fontWeight: 800,
+                          color: currentCount >= capacity ? "red" : "black",
+                        }}
+                      >
                         {currentCount}
                       </span>
                       <span> / {capacity} 人</span>
                     </Grid>
                     <Grid item>
                       <Tooltip
-                        title={`最終更新: ${lastUpdate.format("HH:mm:ss")}`}
+                        title={`最終更新: ${lastUpdate.format("HH:mm:ss")} `}
                       >
                         <span>
                           <IconButton
@@ -534,10 +545,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 )}
               </Grid>
               {largerThanMD && (
-                <Grid item>
-                  <Alert severity="info">
-                    QRコードをカメラに水平にかざしてください
-                  </Alert>
+                <Grid item sx={{ maxWidth: "70%" }}>
+                  <Alert severity="info">{guideMessage}</Alert>
                 </Grid>
               )}
               <Grid item>
@@ -545,10 +554,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               </Grid>
             </Grid>
           </Grid>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md="auto">
             <Scanner handleScan={handleScan} />
           </Grid>
-          <Grid item xs={12} md={7} xl={5}>
+          <Grid item xs={12} md={6}>
             <Box
               sx={{
                 display: "flex",
@@ -570,44 +579,40 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 />
               </FormControl>
             </Box>
-            <Suspense fallback={<p>読込中...</p>}>
-              {loading && (
-                <Box sx={{ width: "100%" }}>
-                  <LinearProgress />
-                </Box>
-              )}
-              {scanStatus !== "waiting" &&
-                (largerThanMD ? (
+            {loading && (
+              <Box sx={{ width: "100%" }}>
+                <LinearProgress />
+              </Box>
+            )}
+            {scanStatus !== "waiting" &&
+              (largerThanMD ? (
+                <GuestInfoCard />
+              ) : (
+                <SwipeableDrawer
+                  anchor="bottom"
+                  open={smDrawerOpen}
+                  onClose={retry}
+                  onOpen={() => setSmDrawerStatus(true)}
+                >
                   <GuestInfoCard />
-                ) : (
-                  <SwipeableDrawer
-                    anchor="bottom"
-                    open={smDrawerOpen}
-                    onClose={() => retry()}
-                    onOpen={() => setSmDrawerStatus(true)}
-                  >
-                    <GuestInfoCard />
-                  </SwipeableDrawer>
-                ))}
-            </Suspense>
+                </SwipeableDrawer>
+              ))}
           </Grid>
-          <Snackbar
-            open={snackbar.status}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            autoHideDuration={6000}
-            onClose={() =>
-              setSnackbar({ status: false, message: "", severity: "success" })
-            }
-          >
-            <Alert variant="filled" severity={snackbar.severity}>
-              {snackbar.message}
-            </Alert>
-          </Snackbar>
         </Grid>
       )}
+      <Snackbar
+        open={snackbarMessage !== null}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarMessage(null)}
+      >
+        <Alert variant="filled" severity="success">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       <ScanGuide show={showScanGuide} />
     </>
   );

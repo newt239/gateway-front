@@ -5,12 +5,6 @@ import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
 import {
-  getTimePart,
-  guestIdValidation,
-  reservationIdValidation,
-} from "#/components/lib/commonFunction";
-
-import {
   Grid,
   TextField,
   Box,
@@ -28,15 +22,19 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
-
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
+import { reservationInfoProp } from "#/components/lib/types";
+import {
+  getTimePart,
+  guestIdValidation,
+  reservationIdValidation,
+} from "#/components/lib/commonFunction";
 import MessageDialog from "#/components/block/MessageDialog";
-import { reservationInfoProp } from "#/types/global";
 
 const LostWristband = () => {
   const setPageTitle = useSetAtom(pageTitleAtom);

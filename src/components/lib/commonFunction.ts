@@ -1,6 +1,6 @@
 import generalProps from "./generalProps";
 
-export function getTimePart(part: number) {
+export const getTimePart = (part: number) => {
   const time_part = generalProps.time_part;
   if (part < time_part.length) {
     return time_part[part];
@@ -11,9 +11,9 @@ export function getTimePart(part: number) {
       end: "",
     };
   }
-}
+};
 
-export function guestIdValidation(guest_id: string) {
+export const guestIdValidation = (guest_id: string) => {
   if (guest_id.length === 10) {
     if (guest_id.startsWith("G")) {
       const guestIdNumberList = Array.from(guest_id.slice(1)).map((nstr) =>
@@ -32,9 +32,9 @@ export function guestIdValidation(guest_id: string) {
     }
   }
   return false;
-}
+};
 
-export function reservationIdValidation(reservation_id: string) {
+export const reservationIdValidation = (reservation_id: string) => {
   if (reservation_id.length === 7) {
     if (reservation_id.startsWith("R")) {
       const guestIdNumberList = Array.from(reservation_id.slice(1)).map(
@@ -46,4 +46,4 @@ export function reservationIdValidation(reservation_id: string) {
     }
   }
   return false;
-}
+};

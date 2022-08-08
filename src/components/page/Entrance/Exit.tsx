@@ -34,6 +34,7 @@ import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
+import { guestInfoProp } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
@@ -41,7 +42,6 @@ import {
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
-import { guestInfoProp } from "#/types/global";
 
 const EntranceExit = () => {
   const theme = useTheme();
@@ -52,16 +52,12 @@ const EntranceExit = () => {
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
-  const [message, setMessage] = useState<string>("");
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
-  const [snackbar, setSnackbar] = useState<{
-    status: boolean;
-    message: string;
-    severity: "success" | "error";
-  }>({ status: false, message: "", severity: "success" });
-  const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-  const [showScanGuide, setShowScanGuide] = useState(true);
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
+  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
 
   const setDeviceState = useSetAtom(deviceStateAtom);
 
@@ -90,23 +86,23 @@ const EntranceExit = () => {
               setSmDrawerStatus(true);
             } else {
               setScanStatus("error");
-              setMessage("このゲストは無効です。");
+              setAlertMessage("このゲストは無効です。");
               setSmDrawerStatus(true);
             }
           })
           .catch((err: AxiosError) => {
             setLoading(false);
             setScanStatus("error");
-            setMessage(err.message);
+            setAlertMessage(err.message);
             setSmDrawerStatus(true);
           });
       } else if (scanText.startsWith("R")) {
         setScanStatus("error");
-        setMessage("これは予約IDです。");
+        setAlertMessage("これは予約IDです。");
         setSmDrawerStatus(true);
       } else {
         setScanStatus("error");
-        setMessage("このゲストIDは存在しません。");
+        setAlertMessage("このゲストIDは存在しません。");
         setSmDrawerStatus(true);
       }
     }
@@ -125,30 +121,13 @@ const EntranceExit = () => {
         .then(() => {
           setDeviceState(true);
           setText("");
-          setMessage("");
-          setSnackbar({ status: false, message: "", severity: "success" });
+          setAlertMessage("");
           setScanStatus("waiting");
           setSmDrawerStatus(false);
-          setSnackbar({
-            status: true,
-            message: `${text}の退場処理に成功しました。`,
-            severity: "success",
-          });
+          setSnackbarMessage(`${text}の退場処理が完了しました。`);
         })
         .catch((err: AxiosError) => {
-          if (err.message) {
-            setSnackbar({
-              status: true,
-              message: err.message,
-              severity: "error",
-            });
-          } else {
-            setSnackbar({
-              status: true,
-              message: "何らかのエラーが発生しました。",
-              severity: "error",
-            });
-          }
+          setSnackbarMessage(`何らかのエラーが発生しました。${err.message}`);
           setText("");
           setDeviceState(true);
           setSmDrawerStatus(false);
@@ -162,6 +141,7 @@ const EntranceExit = () => {
   const retry = () => {
     setScanStatus("waiting");
     setText("");
+    setAlertMessage(null);
     setGuestInfo(null);
     setDeviceState(true);
     setShowScanGuide(true);
@@ -183,7 +163,7 @@ const EntranceExit = () => {
   const GuestInfoCard = () => {
     return (
       <>
-        {scanStatus === "error" && (
+        {alertMessage && (
           <Alert
             severity="error"
             variant="filled"
@@ -193,7 +173,7 @@ const EntranceExit = () => {
               </Button>
             }
           >
-            {message}
+            {alertMessage}
           </Alert>
         )}
         {scanStatus === "success" && guestInfo && (
@@ -258,7 +238,11 @@ const EntranceExit = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ py: 2 }}>
+      <Grid
+        container
+        spacing={2}
+        sx={{ py: 2, justifyContent: "space-evenly" }}
+      >
         <Grid item xs={12}>
           <Grid
             container
@@ -279,10 +263,10 @@ const EntranceExit = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md="auto">
           <Scanner handleScan={handleScan} />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={5}>
           <Box
             sx={{
               display: "flex",
@@ -316,7 +300,7 @@ const EntranceExit = () => {
               <SwipeableDrawer
                 anchor="bottom"
                 open={smDrawerOpen}
-                onClose={() => retry()}
+                onClose={retry}
                 onOpen={() => setSmDrawerStatus(true)}
               >
                 <GuestInfoCard />
@@ -324,13 +308,11 @@ const EntranceExit = () => {
             ))}
         </Grid>
         <Snackbar
-          open={snackbar.status}
+          open={snackbarMessage !== null}
           autoHideDuration={6000}
-          onClose={() =>
-            setSnackbar({ status: false, message: "", severity: "success" })
-          }
+          onClose={() => setSnackbarMessage(null)}
         >
-          <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+          <Alert severity="success">{snackbarMessage}</Alert>
         </Snackbar>
       </Grid>
       <ScanGuide show={showScanGuide} />

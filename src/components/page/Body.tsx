@@ -6,7 +6,6 @@ import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
-import MessageDialog from "#/components/block/MessageDialog";
 import Home from "#/components/page/Home";
 import Login from "#/components/page/Login";
 import ExhibitIndex from "#/components/page/Exhibit/Index";
@@ -14,13 +13,14 @@ import ExhibitScan from "#/components/page/Exhibit/ExhibitScan";
 import AnalyticsIndex from "#/components/page/Analytics/Index";
 import AnalyticsExhibit from "#/components/page/Analytics/Exhibit";
 import AnalyticsSummary from "#/components/page/Analytics/Summary";
-import Entrance from "#/components/page/Entrance/Index";
+import EntranceIndex from "#/components/page/Entrance/Index";
 import ReserveCheck from "#/components/page/Entrance/ReserveCheck";
 import EntranceEnter from "#/components/page/Entrance/Enter";
 import EntranceExit from "#/components/page/Entrance/Exit";
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminLostWristband from "#/components/page/Admin/LostWristband";
 import Extra from "#/components/page/Extra";
+import MessageDialog from "#/components/block/MessageDialog";
 
 const Body = () => {
   const navigate = useNavigate();
@@ -134,7 +134,7 @@ const Body = () => {
               <Route path="entrance">
                 {["moderator", "executive"].includes(profile.user_type) ? (
                   <>
-                    <Route index element={<Entrance />} />
+                    <Route index element={<EntranceIndex />} />
                     <Route path="reserve-check" element={<ReserveCheck />} />
                     <Route path="enter" element={<EntranceEnter />} />
                     <Route path="exit" element={<EntranceExit />} />

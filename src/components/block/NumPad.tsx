@@ -23,7 +23,7 @@ const NumPad = ({
   scanType: "reservation" | "guest";
   onClose: (num: number[]) => void;
 }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [id, setId] = useState<number[]>([]);
 
   const theme = useTheme();
@@ -79,66 +79,93 @@ const NumPad = ({
           }}
         >
           <DialogTitle>ID手動入力</DialogTitle>
-          <DialogContent>
-            <Box sx={{ textAlign: "center", fontWeight: 800 }}>
-              {scanType === "reservation" ? "R" : "G"}
-              <span style={{ padding: "0 .5rem" }}>-</span>
-              <ButtonGroup variant="outlined">
-                {(scanType === "reservation"
-                  ? [0, 1, 2, 3, 4, 5]
-                  : [0, 1, 2, 3, 4, 5, 6, 7, 8]
-                ).map((i) => {
-                  return (
-                    <Button
-                      disabled
-                      sx={{
-                        fontWeight: 800,
-                        p: 1,
-                        "&.Mui-disabled": { color: "black" },
-                      }}
-                      key={i}
-                    >
-                      {i < id.length ? id[i] : "_"}
-                    </Button>
-                  );
-                })}
-              </ButtonGroup>
-            </Box>
+          <DialogContent sx={{ p: 0, textAlign: "center", width: "100%" }}>
+            <ButtonGroup
+              variant="outlined"
+              sx={{
+                justifyContent: "center",
+                width: largerThanSM ? "90%" : "100%",
+              }}
+            >
+              <Button
+                disabled
+                sx={{
+                  fontWeight: 800,
+                  fontSize: "1.5rem",
+                  "&.Mui-disabled": { color: "black" },
+                }}
+              >
+                {scanType === "reservation" ? "R" : "G"}
+              </Button>
+              {(scanType === "reservation"
+                ? [0, 1, 2, 3, 4, 5]
+                : [0, 1, 2, 3, 4, 5, 6, 7, 8]
+              ).map((i) => {
+                return (
+                  <Button
+                    disabled
+                    sx={{
+                      fontWeight: 800,
+                      fontSize: "1.5rem",
+                      "&.Mui-disabled": { color: "black" },
+                    }}
+                    key={i}
+                  >
+                    {i < id.length ? id[i] : "_"}
+                  </Button>
+                );
+              })}
+            </ButtonGroup>
             <Grid
               container
               sx={{
-                padding: ".5rem",
                 width: 300,
-                margin: "1rem auto 0",
-                gap: "1rem",
+                margin: "2rem auto 0",
+                gap: ".5rem",
                 justifyContent: "space-between",
               }}
             >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((n) => {
                 return (
-                  <Grid item key={String(n)}>
+                  <Grid
+                    item
+                    key={String(n)}
+                    sx={{ width: "30%", aspectRatio: "1 / 1" }}
+                  >
                     <Button
                       variant="outlined"
                       onClick={() => onNumClick(n)}
-                      sx={{ py: 2 }}
+                      sx={{
+                        fontSize: "2rem",
+                        fontWeight: 800,
+                        width: "100%",
+                        height: "100%",
+                        borderRadius: "50%",
+                      }}
                     >
                       {n}
                     </Button>
                   </Grid>
                 );
               })}
-              <Grid item>
+              <Grid item sx={{ width: "30%", aspectRatio: "1 / 1" }}>
                 <Button
                   variant="outlined"
                   onClick={onDeleteNum}
                   disabled={id.length <= 0}
-                  sx={{ p: 1 }}
+                  sx={{
+                    fontSize: "2rem",
+                    fontWeight: 800,
+                    width: "100%",
+                    height: "100%",
+                    borderRadius: "50%",
+                  }}
                 >
                   <BackspaceRoundedIcon />
                 </Button>
               </Grid>
             </Grid>
-            <DialogActions>
+            <DialogActions sx={{ p: 2 }}>
               <Button
                 onClick={() => setId([])}
                 color="error"

@@ -27,7 +27,6 @@ import {
   Alert,
   Divider,
   FormControl,
-  InputAdornment,
   OutlinedInput,
   Button,
 } from "@mui/material";
@@ -56,15 +55,12 @@ const EntranceEnter = () => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
-  const [alertStatus, setAlertStatus] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [reservation, setReservation] = useAtom(reservationAtom);
   const [guestList, setGuest] = useState<string[]>([]);
-  const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-
-  const [infoMessage, setInfoMessage] = useState("");
-
+  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const setDeviceState = useSetAtom(deviceStateAtom);
 
   const setPageTitle = useSetAtom(pageTitleAtom);
@@ -114,11 +110,9 @@ const EntranceEnter = () => {
             setGuest(newGuestList);
           } else {
             setAlertMessage(`${scanText}は登録済みです。`);
-            setAlertStatus(true);
           }
         } else {
           setAlertMessage(`${scanText}というゲストは存在しません。`);
-          setAlertStatus(true);
         }
       }
     }
@@ -157,11 +151,11 @@ const EntranceEnter = () => {
 
   const reset = (target: number) => {
     setGuest(guestList.splice(target - 1, 1));
+    setText("");
   };
 
   const closeAlert = () => {
-    setAlertMessage("");
-    setAlertStatus(false);
+    setAlertMessage(null);
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -188,7 +182,7 @@ const EntranceEnter = () => {
   const ReservationInfoCard = () => {
     return (
       <>
-        {alertStatus && (
+        {alertMessage && (
           <Alert
             variant="filled"
             severity="error"
@@ -255,7 +249,7 @@ const EntranceEnter = () => {
                           .map((guest) => guest.guest_id)
                           .includes(guestList[guestList.length - 1])}
                       >
-                        登録
+                        すべて登録
                       </Button>
                     </Box>
                     <Divider />
@@ -321,7 +315,11 @@ const EntranceEnter = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ py: 2 }}>
+      <Grid
+        container
+        spacing={2}
+        sx={{ py: 2, justifyContent: "space-evenly" }}
+      >
         <Grid item xs={12}>
           <Grid
             container
@@ -334,7 +332,7 @@ const EntranceEnter = () => {
             <Grid item>
               <Typography variant="h3">リストバンド登録</Typography>
               <Typography variant="body1">
-                登録するリストバンドのQRコードをスキャンしてください。
+                予約情報とリストバンドの紐づけを行います。
               </Typography>
             </Grid>
             <Grid item>
@@ -369,9 +367,6 @@ const EntranceEnter = () => {
                 size="small"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                startAdornment={
-                  <InputAdornment position="start">予約ID</InputAdornment>
-                }
                 disabled
                 fullWidth
               />
@@ -395,14 +390,14 @@ const EntranceEnter = () => {
             </SwipeableDrawer>
           )}
         </Grid>
-        <MessageDialog
-          open={dialogOpen}
-          type="success"
-          title="処理が完了しました"
-          message={dialogMessage}
-          onClose={onDialogClose}
-        />
       </Grid>
+      <MessageDialog
+        open={dialogOpen}
+        type="success"
+        title="処理が完了しました"
+        message={dialogMessage}
+        onClose={onDialogClose}
+      />
     </>
   );
 };
