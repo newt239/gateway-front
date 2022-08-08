@@ -1,5 +1,5 @@
 import { createTheme } from "@mui/material/styles";
-import { blue } from "@mui/material/colors";
+import { blue, grey } from "@mui/material/colors";
 
 const theme = createTheme({
   palette: {
@@ -33,6 +33,21 @@ const theme = createTheme({
       padding: ".5rem 0",
     },
   },
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        ::-webkit-scrollbar {
+          width: .3rem;
+          height: .3rem;
+          z-index: 100000;
+        }
+        ::-webkit-scrollbar-thumb {
+          background-color: ${grey[500]};
+          border-radius: .1rem;
+        }
+      `
+    },
+  }
 });
 
 export default theme;

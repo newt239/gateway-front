@@ -70,7 +70,7 @@ const NumPad = ({
         maxWidth="xs"
         fullScreen={smallerThanMD}
       >
-        <DialogTitle sx={{ my: 1, px: 2, py: 0, textAlign: "center", overflowX: "scroll" }}>
+        <DialogTitle sx={{ my: 1, px: 2, pt: 0, pb: 1, textAlign: "center", overflowX: "scroll" }}>
           <ButtonGroup
             variant="outlined"
             sx={{
