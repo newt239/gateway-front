@@ -7,7 +7,7 @@ import moment from "moment";
 import ReacrApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-import { TextField } from "@mui/material";
+import { TextField, Typography } from "@mui/material";
 
 const ExhibitEnterCountBarChart: React.FunctionComponent<{
   exhibit_id: string;
@@ -16,6 +16,7 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
   const [categories, setCategories] = useState<string[]>([]);
   const [data, setData] = useState<number[]>([]);
   const [day, setDay] = useState(moment().format("YYYY-MM-DD"));
+
   useEffect(() => {
     const getApi = () => {
       if (token) {
@@ -29,17 +30,17 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
               const rawData: { time: string; count: number }[] = res;
               const timeList: string[] = [];
               const countList: number[] = [];
-              let ctime = moment(rawData[0].time);
-              // TODO: ツールチップに表示される時刻がUTC
-              for (const eachData of rawData) {
-                const eachTime = moment(eachData.time);
-                while (ctime < eachTime) {
-                  timeList.push(ctime.format("MM/DD HH:MM:SS"));
+              let ctime = moment(`${day} 00:00`);
+              let i = 0;
+              while (ctime < moment(`${day} 24:00`)) {
+                if (i < rawData.length && ctime.format("HH") == moment(rawData[i].time).format("HH")) {
+                  countList.push(rawData[i].count);
+                  i++;
+                } else {
                   countList.push(0);
-                  ctime = ctime.add(1, "hours");
                 }
-                timeList.push(eachTime.format("MM/DD HH:MM:SS"));
-                countList.push(eachData.count);
+                timeList.push(ctime.format("MM/DD HH:mm:ss"));
+                ctime = ctime.add(1, "hours");
               }
               setCategories(timeList);
               setData(countList);
@@ -52,17 +53,16 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
     };
     getApi();
   }, [day]);
+
   const options: ApexOptions = {
     chart: {
       type: "bar",
       height: 400,
-      zoom: {
-        enabled: true,
-      },
     },
     plotOptions: {
       bar: {
-        borderRadius: 2,
+        borderRadius: 3,
+        columnWidth: "70%",
       },
     },
     dataLabels: {
@@ -70,8 +70,12 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
     },
     xaxis: {
       type: "datetime",
+      tickPlacement: "on",
+      tickAmount: "dataPoints",
       categories: categories,
       labels: {
+        format: "HH:00",
+        showDuplicates: false,
         datetimeUTC: false,
       },
     },
@@ -97,8 +101,10 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
       data: data,
     },
   ];
+
   return (
     <>
+      <Typography variant="body1" sx={{ p: 2 }}>1時間ごとの入室者数を表示します。</Typography>
       <TextField
         id="date"
         label="選択中の日"
