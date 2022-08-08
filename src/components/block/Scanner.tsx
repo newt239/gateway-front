@@ -165,6 +165,25 @@ const Scanner = ({ handleScan }: ScannerProps) => {
     );
   };
 
+  const onClickChangeCameraIcon = () => {
+    setScannerStatus("loading");
+    getCameraDeviceList();
+    if (deviceList.length === 2) {
+      const newCurrentDevice = deviceList.find((v) => {
+        if (v.deviceId !== currentDeviceId) {
+          return v;
+        }
+      });
+      if (newCurrentDevice) {
+        localStorage.setItem("currentCameraDeviceId", newCurrentDevice.deviceId);
+        setCurrentDeviceId(newCurrentDevice.deviceId);
+        setRefreshQrReader(false);
+      }
+    } else {
+      setSelectCameraModalOpen(true);
+    }
+  }
+
   return (
     <>
       <Box
@@ -198,10 +217,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
               className="qrcode"
             />
             <IconButton
-              onClick={() => {
-                getCameraDeviceList();
-                setSelectCameraModalOpen(true);
-              }}
+              onClick={onClickChangeCameraIcon}
               sx={{ position: "absolute", color: "white", top: 0, left: 0 }}
             >
               <CameraswitchRoundedIcon />
