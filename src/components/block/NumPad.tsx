@@ -5,7 +5,6 @@ import {
   Button,
   Dialog,
   DialogContent,
-  DialogTitle,
   Fab,
   Grid,
   ButtonGroup,
@@ -63,7 +62,7 @@ const NumPad = ({
         color="primary"
       >
         <ModeEditRoundedIcon sx={{ mr: largerThanSM ? 1 : 0 }} />
-        {largerThanSM && <>直接入力</>}
+        {largerThanSM && "直接入力"}
       </Fab>
       <Dialog
         open={open}
@@ -78,8 +77,7 @@ const NumPad = ({
             height: "100%",
           }}
         >
-          <DialogTitle>ID手動入力</DialogTitle>
-          <DialogContent sx={{ p: 0, textAlign: "center", width: "100%" }}>
+          <DialogContent sx={{ my: 2, p: 0, textAlign: "center", width: "100%" }}>
             <ButtonGroup
               variant="outlined"
               sx={{
@@ -120,7 +118,7 @@ const NumPad = ({
               container
               sx={{
                 width: 300,
-                margin: "2rem auto 0",
+                margin: "1rem auto",
                 gap: ".5rem",
                 justifyContent: "space-between",
               }}
@@ -130,7 +128,7 @@ const NumPad = ({
                   <Grid
                     item
                     key={String(n)}
-                    sx={{ width: "30%", aspectRatio: "1 / 1" }}
+                    sx={{ width: "min(15vh,30%)", aspectRatio: "1 / 1" }}
                   >
                     <Button
                       variant="outlined"
@@ -148,7 +146,7 @@ const NumPad = ({
                   </Grid>
                 );
               })}
-              <Grid item sx={{ width: "30%", aspectRatio: "1 / 1" }}>
+              <Grid item sx={{ width: "min(15vh,30%)", aspectRatio: "1 / 1" }}>
                 <Button
                   variant="outlined"
                   onClick={onDeleteNum}
@@ -165,7 +163,7 @@ const NumPad = ({
                 </Button>
               </Grid>
             </Grid>
-            <DialogActions sx={{ p: 2 }}>
+            <DialogActions sx={{ py: 0, px: 2 }}>
               <Button
                 onClick={() => setId([])}
                 color="error"
