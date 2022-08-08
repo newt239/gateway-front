@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
@@ -76,11 +76,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [exhibitInfoLoading, setExhibitInfoLoading] = useState<boolean>(true);
   const [guideMessage, setGuideMessage] = useState<string>("来場者のQRコードをカメラに水平にかざしてください");
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-  const [snackbar, setSnackbar] = useState<{
-    status: boolean;
-    message: string;
-    severity: "success" | "error";
-  }>({ status: false, message: "", severity: "success" });
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
   const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
   const setDeviceState = useSetAtom(deviceStateAtom);
@@ -264,7 +260,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setDeviceState(true);
     setText("");
     setAlertMessage(null);
-    setSnackbar({ status: false, message: "", severity: "success" });
+    setSnackbarMessage(null);
     setScanStatus("waiting");
     setSmDrawerStatus(false);
     setShowScanGuide(true);
@@ -298,18 +294,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           .then(() => {
             if (scanType === "enter") {
               setCurrentCount(currentCount + 1);
-              setSnackbar({
-                status: true,
-                message: "入室処理が完了しました。",
-                severity: "success",
-              });
+              setSnackbarMessage("入室処理が完了しました。");
             } else if (scanType === "exit") {
               setCurrentCount(currentCount - 1);
-              setSnackbar({
-                status: true,
-                message: "退室処理が完了しました。",
-                severity: "success",
-              });
+              setSnackbarMessage("退室処理が完了しました。");
             }
             setDeviceState(true);
             setText("");
@@ -559,44 +547,40 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 />
               </FormControl>
             </Box>
-            <Suspense fallback={<p>読込中...</p>}>
-              {loading && (
-                <Box sx={{ width: "100%" }}>
-                  <LinearProgress />
-                </Box>
-              )}
-              {scanStatus !== "waiting" &&
-                (largerThanMD ? (
+            {loading && (
+              <Box sx={{ width: "100%" }}>
+                <LinearProgress />
+              </Box>
+            )}
+            {scanStatus !== "waiting" &&
+              (largerThanMD ? (
+                <GuestInfoCard />
+              ) : (
+                <SwipeableDrawer
+                  anchor="bottom"
+                  open={smDrawerOpen}
+                  onClose={retry}
+                  onOpen={() => setSmDrawerStatus(true)}
+                >
                   <GuestInfoCard />
-                ) : (
-                  <SwipeableDrawer
-                    anchor="bottom"
-                    open={smDrawerOpen}
-                    onClose={() => retry()}
-                    onOpen={() => setSmDrawerStatus(true)}
-                  >
-                    <GuestInfoCard />
-                  </SwipeableDrawer>
-                ))}
-            </Suspense>
+                </SwipeableDrawer>
+              ))}
           </Grid>
-          <Snackbar
-            open={snackbar.status}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            autoHideDuration={6000}
-            onClose={() =>
-              setSnackbar({ status: false, message: "", severity: "success" })
-            }
-          >
-            <Alert variant="filled" severity={snackbar.severity}>
-              {snackbar.message}
-            </Alert>
-          </Snackbar>
         </Grid>
       )}
+      <Snackbar
+        open={snackbarMessage !== null}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarMessage(null)}
+      >
+        <Alert variant="filled" severity="success">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
       <ScanGuide show={showScanGuide} />
     </>
   );

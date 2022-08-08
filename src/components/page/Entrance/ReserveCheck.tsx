@@ -27,7 +27,6 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Snackbar,
 } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
@@ -37,11 +36,11 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
-import Scanner from "#/components/block/Scanner";
 import {
   getTimePart,
   reservationIdValidation,
 } from "#/components/lib/commonFunction";
+import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
@@ -53,11 +52,6 @@ const ReserveCheck = () => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [reservation, setReservation] = useAtom(reservationAtom);
-  const [snackbar, setSnackbar] = useState<{
-    status: boolean;
-    message: string;
-    severity: "success" | "error";
-  }>({ status: false, message: "", severity: "success" });
   const [text, setText] = useState("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
@@ -314,15 +308,6 @@ const ReserveCheck = () => {
               </SwipeableDrawer>
             ))}
         </Grid>
-        <Snackbar
-          open={snackbar.status}
-          autoHideDuration={6000}
-          onClose={() =>
-            setSnackbar({ status: false, message: "", severity: "success" })
-          }
-        >
-          <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
-        </Snackbar>
       </Grid>
       <ScanGuide show={showScanGuide} />
     </>
