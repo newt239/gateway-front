@@ -201,6 +201,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 if (scanType === "enter" && currentCount >= capacity) {
                   // すでにエラーメッセージがある場合はそのメッセージの後ろに追記
                   setAlertMessage((message) => message ? message : "" + "滞在者数が上限に達しています。");
+                  ReactGA.event({
+                    category: "scan",
+                    action: "reach_capacity",
+                    label: profile.user_id,
+                  });
                 }
               } else if (scanType === "exit") {
                 if (res.exhibit_id === exhibit_id) {

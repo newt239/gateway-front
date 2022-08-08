@@ -54,8 +54,8 @@ const RealtimeLog = () => {
   const [lastUpdate, setLastUpdate] = useState<Moment>(
     moment().subtract(1, "weeks")
   );
-  const [loading, setLoading] = useState(true);
-  const [maskId, setMaskId] = useState(true);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [maskId, setMaskId] = useState<boolean>(true);
 
   const getActivityHistory = () => {
     if (token && exhibitList) {

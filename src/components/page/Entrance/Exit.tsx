@@ -34,6 +34,7 @@ import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
+import { guestInfoProp } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
@@ -41,7 +42,6 @@ import {
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
-import { guestInfoProp } from "#/components/lib/types";
 
 const EntranceExit = () => {
   const theme = useTheme();
@@ -56,8 +56,8 @@ const EntranceExit = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
-  const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-  const [showScanGuide, setShowScanGuide] = useState(true);
+  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
 
   const setDeviceState = useSetAtom(deviceStateAtom);
 

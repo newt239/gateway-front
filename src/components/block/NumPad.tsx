@@ -23,7 +23,7 @@ const NumPad = ({
   scanType: "reservation" | "guest";
   onClose: (num: number[]) => void;
 }) => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [id, setId] = useState<number[]>([]);
 
   const theme = useTheme();

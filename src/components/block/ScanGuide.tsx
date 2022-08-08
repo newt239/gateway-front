@@ -11,7 +11,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 const ScanGuide = ({ show }: { show: boolean }) => {
   const profile = useAtomValue(profileAtom);
   const guideShow = localStorage.getItem("guideShow") || "yes";
-  const [close, setClose] = useState(false);
+  const [close, setClose] = useState<boolean>(false);
 
   const theme = useTheme();
   const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));

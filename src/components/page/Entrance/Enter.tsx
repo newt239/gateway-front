@@ -55,15 +55,12 @@ const EntranceEnter = () => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
-  const [alertStatus, setAlertStatus] = useState(false);
-  const [alertMessage, setAlertMessage] = useState("");
+  const [infoMessage, setInfoMessage] = useState<string | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [reservation, setReservation] = useAtom(reservationAtom);
   const [guestList, setGuest] = useState<string[]>([]);
-  const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-
-  const [infoMessage, setInfoMessage] = useState("");
-
+  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const setDeviceState = useSetAtom(deviceStateAtom);
 
   const setPageTitle = useSetAtom(pageTitleAtom);
@@ -113,11 +110,9 @@ const EntranceEnter = () => {
             setGuest(newGuestList);
           } else {
             setAlertMessage(`${scanText}は登録済みです。`);
-            setAlertStatus(true);
           }
         } else {
           setAlertMessage(`${scanText}というゲストは存在しません。`);
-          setAlertStatus(true);
         }
       }
     }
@@ -160,8 +155,7 @@ const EntranceEnter = () => {
   };
 
   const closeAlert = () => {
-    setAlertMessage("");
-    setAlertStatus(false);
+    setAlertMessage(null);
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -188,7 +182,7 @@ const EntranceEnter = () => {
   const ReservationInfoCard = () => {
     return (
       <>
-        {alertStatus && (
+        {alertMessage && (
           <Alert
             variant="filled"
             severity="error"
@@ -392,14 +386,14 @@ const EntranceEnter = () => {
             </SwipeableDrawer>
           )}
         </Grid>
-        <MessageDialog
-          open={dialogOpen}
-          type="success"
-          title="処理が完了しました"
-          message={dialogMessage}
-          onClose={onDialogClose}
-        />
       </Grid>
+      <MessageDialog
+        open={dialogOpen}
+        type="success"
+        title="処理が完了しました"
+        message={dialogMessage}
+        onClose={onDialogClose}
+      />
     </>
   );
 };

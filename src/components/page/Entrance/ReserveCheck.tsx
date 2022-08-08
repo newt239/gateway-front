@@ -52,14 +52,14 @@ const ReserveCheck = () => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [reservation, setReservation] = useAtom(reservationAtom);
-  const [text, setText] = useState("");
+  const [text, setText] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  const [smDrawerOpen, setSmDrawerStatus] = useState(false);
-  const [showScanGuide, setShowScanGuide] = useState(true);
+  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
 
   const setDeviceState = useSetAtom(deviceStateAtom);
 
