@@ -25,7 +25,6 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
           ._day(day)
           .$get({ headers: { Authorization: `Bearer ${token}` } })
           .then((res) => {
-            console.log(res);
             if (res.length !== 0) {
               const rawData: { time: string; count: number }[] = res;
               const timeList: string[] = [];

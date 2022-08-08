@@ -54,16 +54,6 @@ const AllAreaPieChart = () => {
       height: "50vh",
     },
     labels: allAreaChartCategories,
-    responsive: [
-      {
-        breakpoint: 480,
-        options: {
-          legend: {
-            position: "bottom",
-          },
-        },
-      },
-    ],
     noData: {
       text: "表示できるデータがありません",
     },
@@ -74,10 +64,10 @@ const AllAreaPieChart = () => {
       <Typography variant="h3">全体の滞在状況</Typography>
       {allAreaTotalCount ? (
         <>
-          <Typography sx={{ pt: 2 }}>
+          <Typography sx={{ p: 2 }}>
             校内滞在者数 {allAreaTotalCount}人
           </Typography>
-          <Box sx={{ margin: "auto", width: "100%" }}>
+          <Box sx={{ margin: "auto" }}>
             <ReactApexChart
               options={options}
               series={allAreaChartSeries}
