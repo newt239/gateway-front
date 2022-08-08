@@ -8,6 +8,7 @@ import { Grid, Card, Box, Typography, Button } from "@mui/material";
 type extraProp = {
   type: "404" | "401" | "loading";
 };
+
 const NotFound = (props: extraProp) => {
   const navigate = useNavigate();
   const setPageTitle = useSetAtom(pageTitleAtom);

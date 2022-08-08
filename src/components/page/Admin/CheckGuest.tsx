@@ -46,9 +46,9 @@ const AdminCheckGuest = () => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
 
-  const [guestId, setGuestId] = useState("");
+  const [guestId, setGuestId] = useState<string>("");
   const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
 
   useEffect(() => {

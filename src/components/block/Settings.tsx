@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { List, ListItem, ListItemText, Switch, Tooltip } from "@mui/material";
 
 const Settings = () => {
-  const [guideShow, setGuideShow] = useState(
+  const [guideShow, setGuideShow] = useState<boolean>(
     localStorage.getItem("guideShow") !== "no" ? true : false
   );
 

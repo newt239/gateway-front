@@ -18,6 +18,7 @@ type SelectExhibitProp = {
   currentExhibit: string;
   setCurrentExhibit: Dispatch<SetStateAction<string>>;
 };
+
 const SelectExhibit = ({
   currentExhibit,
   setCurrentExhibit,

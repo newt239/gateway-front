@@ -1,20 +1,4 @@
 const generalProps = {
-  reservation: {
-    guest_type: {
-      student: "生徒",
-      teacher: "教員",
-      family: "保護者",
-      other: "その他",
-    },
-  },
-  guest: {
-    guest_type: {
-      student: "生徒",
-      teacher: "教員",
-      family: "保護者",
-      other: "その他",
-    },
-  },
   time_part: [
     {
       part_name: "全時間帯",
