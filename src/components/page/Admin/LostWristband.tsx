@@ -179,12 +179,12 @@ const LostWristband = () => {
                         {reservation.count}人
                         {reservation.count !==
                           reservation.registered.length && (
-                            <span>
-                              （残り：
-                              {reservation.count - reservation.registered.length}
-                              人）
-                            </span>
-                          )}
+                          <span>
+                            （残り：
+                            {reservation.count - reservation.registered.length}
+                            人）
+                          </span>
+                        )}
                       </ListItemText>
                     </ListItem>
                     <Divider />

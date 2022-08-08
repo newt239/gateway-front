@@ -11,7 +11,7 @@ export const getTimePart = (part: number) => {
       end: "",
     };
   }
-}
+};
 
 export const guestIdValidation = (guest_id: string) => {
   if (guest_id.length === 10) {
@@ -32,7 +32,7 @@ export const guestIdValidation = (guest_id: string) => {
     }
   }
   return false;
-}
+};
 
 export const reservationIdValidation = (reservation_id: string) => {
   if (reservation_id.length === 7) {
@@ -46,4 +46,4 @@ export const reservationIdValidation = (reservation_id: string) => {
     }
   }
   return false;
-}
+};

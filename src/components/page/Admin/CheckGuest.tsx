@@ -19,7 +19,15 @@ import {
   ListItemText,
   ListItemIcon,
 } from "@mui/material";
-import { Timeline, TimelineItem, TimelineSeparator, TimelineConnector, TimelineContent, TimelineDot, TimelineOppositeContent } from "@mui/lab";
+import {
+  Timeline,
+  TimelineItem,
+  TimelineSeparator,
+  TimelineConnector,
+  TimelineContent,
+  TimelineDot,
+  TimelineOppositeContent,
+} from "@mui/lab";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
@@ -225,10 +233,10 @@ const AdminCheckGuest = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                        ? "生徒"
-                        : guestInfo.guest_type === "teacher"
-                          ? "教員"
-                          : "その他"}
+                      ? "生徒"
+                      : guestInfo.guest_type === "teacher"
+                      ? "教員"
+                      : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>

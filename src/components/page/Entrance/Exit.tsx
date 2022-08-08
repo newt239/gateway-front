@@ -195,10 +195,10 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -238,7 +238,11 @@ const EntranceExit = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ py: 2, justifyContent: "space-evenly" }}>
+      <Grid
+        container
+        spacing={2}
+        sx={{ py: 2, justifyContent: "space-evenly" }}
+      >
         <Grid item xs={12}>
           <Grid
             container

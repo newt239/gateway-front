@@ -74,7 +74,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [exhibitName, setExhibitName] = useState<string | null>(null);
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [exhibitInfoLoading, setExhibitInfoLoading] = useState<boolean>(true);
-  const [guideMessage, setGuideMessage] = useState<string>("来場者のQRコードをカメラに水平にかざしてください");
+  const [guideMessage, setGuideMessage] = useState<string>(
+    "来場者のQRコードをカメラに水平にかざしてください"
+  );
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
   const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
@@ -200,7 +202,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 }
                 if (scanType === "enter" && currentCount >= capacity) {
                   // すでにエラーメッセージがある場合はそのメッセージの後ろに追記
-                  setAlertMessage((message) => message ? message : "" + "滞在者数が上限に達しています。");
+                  setAlertMessage((message) =>
+                    message ? message : "" + "滞在者数が上限に達しています。"
+                  );
                   ReactGA.event({
                     category: "scan",
                     action: "reach_capacity",
@@ -257,7 +261,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   useEffect(() => {
     if (scanStatus === "success") {
-      setGuideMessage(`情報を確認し、問題がなければ${scanType === "enter" ? "入室記録" : "退室記録"}を押してください`);
+      setGuideMessage(
+        `情報を確認し、問題がなければ${
+          scanType === "enter" ? "入室記録" : "退室記録"
+        }を押してください`
+      );
     }
   }, [scanStatus]);
 
@@ -309,7 +317,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setAlertMessage(null);
             setScanStatus("waiting");
             setSmDrawerStatus(false);
-            setGuideMessage("処理が完了しました。次の来場者のスキャンができます");
+            setGuideMessage(
+              "処理が完了しました。次の来場者のスキャンができます"
+            );
           })
           .catch((err: AxiosError) => {
             console.log(err.message);
@@ -366,10 +376,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -428,7 +438,11 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           </Grid>
         </Grid>
       ) : (
-        <Grid container spacing={2} sx={{ py: 2, justifyContent: "space-evenly" }}>
+        <Grid
+          container
+          spacing={2}
+          sx={{ py: 2, justifyContent: "space-evenly" }}
+        >
           <Grid item xs={12}>
             <Grid container sx={{ alignItems: "center", gap: "1rem" }}>
               <Grid item sx={{ pr: 4 }} xs={12} sm lg={2}>
@@ -442,7 +456,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${
+                        scanType === "enter" ? "exit" : "enter"
                       } `,
                       { replace: true }
                     )
@@ -483,13 +498,27 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
             <Grid
               container
-              sx={{ justifyContent: "space-between", alignItems: "center", flexWrap: "nowrap" }}
+              sx={{
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "nowrap",
+              }}
             >
               <Grid item>
                 {capacity ? (
-                  <Grid container spacing={2} sx={{ alignItems: "end", flexWrap: "nowrap" }}>
+                  <Grid
+                    container
+                    spacing={2}
+                    sx={{ alignItems: "end", flexWrap: "nowrap" }}
+                  >
                     <Grid item>
-                      <span style={{ fontSize: "2rem", fontWeight: 800, color: currentCount >= capacity ? "red" : "black" }}>
+                      <span
+                        style={{
+                          fontSize: "2rem",
+                          fontWeight: 800,
+                          color: currentCount >= capacity ? "red" : "black",
+                        }}
+                      >
                         {currentCount}
                       </span>
                       <span> / {capacity} 人</span>
@@ -517,9 +546,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               </Grid>
               {largerThanMD && (
                 <Grid item sx={{ maxWidth: "70%" }}>
-                  <Alert severity="info">
-                    {guideMessage}
-                  </Alert>
+                  <Alert severity="info">{guideMessage}</Alert>
                 </Grid>
               )}
               <Grid item>

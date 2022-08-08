@@ -28,16 +28,15 @@ const AllAreaPieChart = () => {
             res.map((v) => {
               switch (v.guest_type) {
                 case "student":
-                  return "生徒"
+                  return "生徒";
                 case "teacher":
-                  return "教員"
+                  return "教員";
                 case "family":
-                  return "保護者"
+                  return "保護者";
                 default:
-                  return "その他"
+                  return "その他";
               }
-            }
-            )
+            })
           );
           setAllAreaChartSeries(res.map((v) => v.count));
         })

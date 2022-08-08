@@ -32,7 +32,10 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
               let ctime = moment(`${day} 00:00`);
               let i = 0;
               while (ctime < moment(`${day} 24:00`)) {
-                if (i < rawData.length && ctime.format("HH") == moment(rawData[i].time).format("HH")) {
+                if (
+                  i < rawData.length &&
+                  ctime.format("HH") == moment(rawData[i].time).format("HH")
+                ) {
                   countList.push(rawData[i].count);
                   i++;
                 } else {
@@ -103,7 +106,9 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
 
   return (
     <>
-      <Typography variant="body1" sx={{ p: 2 }}>1時間ごとの入室者数を表示します。</Typography>
+      <Typography variant="body1" sx={{ p: 2 }}>
+        1時間ごとの入室者数を表示します。
+      </Typography>
       <TextField
         id="date"
         label="選択中の日"

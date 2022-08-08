@@ -80,12 +80,21 @@ const NumPad = ({
         >
           <DialogTitle>ID手動入力</DialogTitle>
           <DialogContent sx={{ p: 0, textAlign: "center", width: "100%" }}>
-            <ButtonGroup variant="outlined" sx={{ justifyContent: "center", width: largerThanSM ? "90%" : "100%" }}>
-              <Button disabled sx={{
-                fontWeight: 800,
-                fontSize: "1.5rem",
-                "&.Mui-disabled": { color: "black" },
-              }}>
+            <ButtonGroup
+              variant="outlined"
+              sx={{
+                justifyContent: "center",
+                width: largerThanSM ? "90%" : "100%",
+              }}
+            >
+              <Button
+                disabled
+                sx={{
+                  fontWeight: 800,
+                  fontSize: "1.5rem",
+                  "&.Mui-disabled": { color: "black" },
+                }}
+              >
                 {scanType === "reservation" ? "R" : "G"}
               </Button>
               {(scanType === "reservation"
@@ -118,7 +127,11 @@ const NumPad = ({
             >
               {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((n) => {
                 return (
-                  <Grid item key={String(n)} sx={{ width: "30%", aspectRatio: "1 / 1" }}>
+                  <Grid
+                    item
+                    key={String(n)}
+                    sx={{ width: "30%", aspectRatio: "1 / 1" }}
+                  >
                     <Button
                       variant="outlined"
                       onClick={() => onNumClick(n)}
@@ -127,7 +140,7 @@ const NumPad = ({
                         fontWeight: 800,
                         width: "100%",
                         height: "100%",
-                        borderRadius: "50%"
+                        borderRadius: "50%",
                       }}
                     >
                       {n}
@@ -145,7 +158,7 @@ const NumPad = ({
                     fontWeight: 800,
                     width: "100%",
                     height: "100%",
-                    borderRadius: "50%"
+                    borderRadius: "50%",
                   }}
                 >
                   <BackspaceRoundedIcon />

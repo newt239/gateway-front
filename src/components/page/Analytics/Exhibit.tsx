@@ -61,9 +61,7 @@ const AnalyticsExhibit = () => {
               size="small"
               startIcon={<ArrowBackIosNewRoundedIcon />}
               sx={{ mr: 2 }}
-              onClick={() =>
-                navigate("/analytics/summary", { replace: true })
-              }
+              onClick={() => navigate("/analytics/summary", { replace: true })}
             >
               一覧に戻る
             </Button>

@@ -81,7 +81,11 @@ const RealtimeLog = () => {
                 return -1;
               }
             });
-          setActivityList([...activityList, ...newActivityList, ...activityList]);
+          setActivityList([
+            ...activityList,
+            ...newActivityList,
+            ...activityList,
+          ]);
           setLastUpdate(moment());
         })
         .catch((err: AxiosError) => {
@@ -130,14 +134,20 @@ const RealtimeLog = () => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        <Grid container sx={{
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
+        <Grid
+          container
+          sx={{
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
         >
           <Grid item>
             <ListItem sx={{ p: 0 }}>
-              <Switch edge="end" onChange={() => setMaskId(maskId => !maskId)} checked={maskId} />
+              <Switch
+                edge="end"
+                onChange={() => setMaskId((maskId) => !maskId)}
+                checked={maskId}
+              />
               <ListItemText>ゲストIDを隠す</ListItemText>
             </ListItem>
           </Grid>
@@ -161,7 +171,9 @@ const RealtimeLog = () => {
                   </Grid>
                   <Grid item xs={4}>
                     <ListItemText
-                      secondary={maskId ? v.guest_id.slice(0, 6) + "____" : v.guest_id}
+                      secondary={
+                        maskId ? v.guest_id.slice(0, 6) + "____" : v.guest_id
+                      }
                       secondaryTypographyProps={{ sx: { p: 0 } }}
                     >
                       {v.session_id}
@@ -169,10 +181,11 @@ const RealtimeLog = () => {
                   </Grid>
                   <Grid item xs={4}>
                     <ListItemText>
-                      {exhibitList && exhibitList
-                        .filter((x) => {
+                      {(exhibitList &&
+                        exhibitList.filter((x) => {
                           return x.exhibit_id === v.exhibit_id;
-                        })[0]?.exhibit_name || "エントランス"}
+                        })[0]?.exhibit_name) ||
+                        "エントランス"}
                     </ListItemText>
                   </Grid>
                   <Grid item xs={1.5}>
@@ -185,7 +198,9 @@ const RealtimeLog = () => {
             ))}
           </List>
         ) : (
-          <Typography variant="body1" sx={{ p: 2 }}>データがありません。</Typography>
+          <Typography variant="body1" sx={{ p: 2 }}>
+            データがありません。
+          </Typography>
         )}
       </Grid>
     </Grid>

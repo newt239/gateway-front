@@ -315,7 +315,11 @@ const EntranceEnter = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ py: 2, justifyContent: "space-evenly" }}>
+      <Grid
+        container
+        spacing={2}
+        sx={{ py: 2, justifyContent: "space-evenly" }}
+      >
         <Grid item xs={12}>
           <Grid
             container
