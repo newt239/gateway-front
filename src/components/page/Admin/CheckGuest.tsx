@@ -184,7 +184,7 @@ const AdminCheckGuest = () => {
                   return (
                     <TimelineItem key={i}>
                       <TimelineOppositeContent color="text.secondary">
-                        {moment(v.datetime).format("MM/DD hh:mm:ss")}
+                        {moment(v.datetime).format("MM/DD HH:mm:ss")}
                       </TimelineOppositeContent>
                       <TimelineSeparator>
                         <TimelineDot color="primary" />
@@ -233,10 +233,10 @@ const AdminCheckGuest = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                      ? "生徒"
-                      : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : "その他"}
+                        ? "生徒"
+                        : guestInfo.guest_type === "teacher"
+                          ? "教員"
+                          : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>
