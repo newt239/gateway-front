@@ -5,8 +5,6 @@ export interface profileProp {
   display_name: string;
   user_type: string;
   available: number;
-  role: string;
-  note?: string;
 }
 
 export interface reservationInfoProp {
@@ -43,15 +41,6 @@ export type exhibitCurrentGuestProp = {
   id: string;
   guest_type: "student" | "teacher" | "family" | "other";
   enter_at: string;
-};
-
-export type profileStateProp = {
-  user_id: string;
-  display_name: string;
-  user_type: string;
-  role: string;
-  available: boolean;
-  note: string;
 };
 
 export type exhibitTypeProp = "class" | "club" | "stage" | "other";
