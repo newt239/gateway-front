@@ -46,6 +46,7 @@ import ScanGuide from "#/components/block/ScanGuide";
 const EntranceExit = () => {
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
@@ -195,10 +196,10 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -243,7 +244,7 @@ const EntranceExit = () => {
         spacing={2}
         sx={{ py: 2, justifyContent: "space-evenly" }}
       >
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
             container
             sx={{
@@ -266,7 +267,7 @@ const EntranceExit = () => {
         <Grid item xs={12} md="auto">
           <Scanner handleScan={handleScan} />
         </Grid>
-        <Grid item xs={12} md={5}>
+        <Grid item xs={12} md={6}>
           <Box
             sx={{
               display: "flex",

@@ -248,7 +248,7 @@ const ReserveCheck = () => {
         spacing={2}
         sx={{ py: 2, justifyContent: "space-evenly" }}
       >
-        <Grid item xs={12} sx={{ mb: largerThanMD ? 5 : 0 }}>
+        <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
             container
             sx={{

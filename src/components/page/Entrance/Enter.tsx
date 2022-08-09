@@ -52,6 +52,7 @@ const EntranceEnter = () => {
   const navigate = useNavigate();
   const theme = useTheme();
   const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
@@ -320,7 +321,7 @@ const EntranceEnter = () => {
         spacing={2}
         sx={{ py: 2, justifyContent: "space-evenly" }}
       >
-        <Grid item xs={12}>
+        <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
             container
             sx={{
