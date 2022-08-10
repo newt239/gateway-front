@@ -37,6 +37,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 import {
+  decodeReservationQRCode,
   getTimePart,
   reservationIdValidation,
 } from "#/components/lib/commonFunction";
@@ -69,6 +70,17 @@ const ReserveCheck = () => {
   }, []);
 
   const handleScan = (scanText: string | null) => {
+    if (scanText) {
+      const reservationId = decodeReservationQRCode(scanText);
+      if (reservationId) {
+        checkReservation(reservationId);
+      } else {
+        setMessage("このQRコードは使えません。");
+      }
+    }
+  };
+
+  const checkReservation = (scanText: string | null) => {
     if (scanText && token) {
       setText(scanText);
       setShowScanGuide(false);
@@ -141,7 +153,7 @@ const ReserveCheck = () => {
 
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
-      handleScan("R" + num.map((n) => String(n)).join(""));
+      checkReservation("R" + num.map((n) => String(n)).join(""));
       if (profile) {
         ReactGA.event({
           category: "numpad",

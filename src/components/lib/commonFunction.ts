@@ -46,7 +46,7 @@ export const decodeReservationQRCode = (token: string) => {
     let decoded: JwtPayloadType;
     try {
       decoded = jwt.verify(token, signature, { algorithms: ['RS256'] }) as JwtPayloadType;
-      return decoded
+      return decoded.reservation_id;
     } catch (e) {
       if (e instanceof jwt.TokenExpiredError) {
         console.error('トークンの有効期限が切れています。', e);
