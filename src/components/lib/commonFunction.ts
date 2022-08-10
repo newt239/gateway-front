@@ -39,8 +39,10 @@ export const guestIdValidation = (guest_id: string) => {
 export const decodeReservationQRCode = (token: string) => {
   const signature = process.env.REACT_APP_JWT_SIGNATURE;
   if (signature) {
-    const decoded = crypto.AES.decrypt(token, signature);
-    return decoded.toString()
+    // QRコードを生成する過程でプラスがスペースに変換されてしまうので元に戻す
+    const bytes = crypto.AES.decrypt(token.replace(/ /g, "+"), signature);
+    const originalText = bytes.toString(crypto.enc.Utf8);
+    return originalText;
   }
   return null;
 };

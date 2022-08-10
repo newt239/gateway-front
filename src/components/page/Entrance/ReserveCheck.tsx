@@ -54,6 +54,7 @@ const ReserveCheck = () => {
   const profile = useAtomValue(profileAtom);
   const [reservation, setReservation] = useAtom(reservationAtom);
   const [text, setText] = useState<string>("");
+  const [reservationId, setReservationId] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
@@ -71,24 +72,29 @@ const ReserveCheck = () => {
 
   const handleScan = (scanText: string | null) => {
     if (scanText) {
-      const reservationId = decodeReservationQRCode(scanText);
-      if (reservationId) {
-        checkReservation(reservationId);
-      } else {
-        setMessage("このQRコードは使えません。");
+      if (scanText !== text) {
+        setText(scanText);
+        const reservationId = decodeReservationQRCode(scanText);
+        console.log(reservationId);
+        if (reservationId && reservationId !== "") {
+          checkReservation(reservationId);
+        } else {
+          setScanStatus("error");
+          setMessage("このQRコードは使えません。");
+        }
       }
     }
   };
 
-  const checkReservation = (scanText: string | null) => {
-    if (scanText && token) {
-      setText(scanText);
+  const checkReservation = (reservationId: string) => {
+    if (reservationId && token) {
+      setReservationId(reservationId);
       setShowScanGuide(false);
-      if (reservationIdValidation(scanText)) {
+      if (reservationIdValidation(reservationId)) {
         setDeviceState(false);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
-          .reservation.info._reservation_id(scanText)
+          .reservation.info._reservation_id(reservationId)
           .$get({
             headers: { Authorization: "Bearer " + token },
           })
@@ -126,14 +132,14 @@ const ReserveCheck = () => {
             setMessage(err.message);
             setSmDrawerStatus(true);
           });
-      } else if (scanText.startsWith("G")) {
+      } else if (reservationId.startsWith("G")) {
         setScanStatus("error");
         setMessage("これはゲストIDです。予約IDをスキャンしてください。");
         setSmDrawerStatus(true);
         ReactGA.event({
           category: "scan",
           action: "entrance_is_guest_id",
-          label: scanText,
+          label: reservationId,
         });
       } else {
         setScanStatus("error");
@@ -146,6 +152,7 @@ const ReserveCheck = () => {
   const retry = () => {
     setScanStatus("waiting");
     setText("");
+    setReservationId("");
     setReservation(null);
     setDeviceState(true);
     setShowScanGuide(true);
@@ -188,7 +195,7 @@ const ReserveCheck = () => {
                 <ListItemIcon>
                   <AssignmentIndRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={reservationId} />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
@@ -298,8 +305,8 @@ const ReserveCheck = () => {
               <OutlinedInput
                 type="text"
                 size="small"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
+                value={reservationId}
+                onChange={(e) => setReservationId(e.target.value)}
                 disabled
                 fullWidth
               />
