@@ -1,3 +1,5 @@
+import * as jwt from 'jsonwebtoken';
+
 import generalProps from "./generalProps";
 
 export const getTimePart = (part: number) => {
@@ -34,9 +36,28 @@ export const guestIdValidation = (guest_id: string) => {
   return false;
 };
 
+type JwtPayloadType = {
+  reservation_id: string;
+}
 
 export const decodeReservationQRCode = (token: string) => {
-  return "";
+  const signature = process.env.REACT_APP_JWT_SIGNATURE;
+  if (signature) {
+    let decoded: JwtPayloadType;
+    try {
+      decoded = jwt.verify(token, signature, { algorithms: ['RS256'] }) as JwtPayloadType;
+      return decoded
+    } catch (e) {
+      if (e instanceof jwt.TokenExpiredError) {
+        console.error('トークンの有効期限が切れています。', e);
+      } else if (e instanceof jwt.JsonWebTokenError) {
+        console.error('トークンが不正です。', e);
+      } else {
+        console.error('トークンの検証でその他のエラーが発生しました。', e);
+      }
+    }
+  }
+  return null;
 };
 
 export const reservationIdValidation = (reservation_id: string) => {
