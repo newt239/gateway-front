@@ -56,6 +56,7 @@ const Body = () => {
               setMessageDialogMessage(
                 "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。"
               );
+              localStorage.removeItem("gatewayApiToken");
               ReactGA.event({
                 category: "login",
                 action: "session_timeout",
