@@ -34,6 +34,11 @@ export const guestIdValidation = (guest_id: string) => {
   return false;
 };
 
+
+export const decodeReservationQRCode = (token: string) => {
+  return "";
+};
+
 export const reservationIdValidation = (reservation_id: string) => {
   if (reservation_id.length === 7) {
     if (reservation_id.startsWith("R")) {
