@@ -75,7 +75,6 @@ const ReserveCheck = () => {
       if (scanText !== text) {
         setText(scanText);
         const reservationId = decodeReservationQRCode(scanText);
-        console.log(reservationId);
         if (reservationId && reservationId !== "") {
           checkReservation(reservationId);
         } else {
