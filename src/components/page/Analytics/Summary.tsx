@@ -103,50 +103,50 @@ const AnalyticsSummary = () => {
 
   const ExhibitListBlock = ({ exhibit }: { exhibit: exhibitProp }) => {
     return (
-      <ListItem divider sx={{ flexDirection: "column" }} disablePadding>
-        <Grid
-          container
-          sx={{
-            alignItems: "center",
-            justifyContent: "space-between",
-            flexWrap: "nowrap",
-          }}
+      <ListItem divider disablePadding>
+        <Link
+          to={`/analytics/exhibit/${exhibit.id}`}
+          style={{ width: "100%", color: "black", textDecoration: "none", flexDirection: "column" }}
         >
-          <Grid item>
-            <ListItemText
-              secondary={`${exhibit.group_name} ・ ${exhibit.room_name}`}
-              secondaryTypographyProps={{ sx: { p: 0 } }}
-            >
-              <Link
-                to={`/analytics/exhibit/${exhibit.id}`}
-                style={{ color: "black", textDecoration: "none" }}
+          <Grid
+            container
+            sx={{
+              alignItems: "center",
+              justifyContent: "space-between",
+              flexWrap: "nowrap",
+            }}
+          >
+            <Grid item>
+              <ListItemText
+                secondary={`${exhibit.group_name} ・ ${exhibit.room_name}`}
+                secondaryTypographyProps={{ sx: { p: 0 } }}
               >
                 {exhibit.exhibit_name}
-              </Link>
-            </ListItemText>
+              </ListItemText>
+            </Grid>
+            <Grid item>
+              <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+                {exhibit.count}
+              </span>{" "}
+              /{exhibit.capacity}
+            </Grid>
           </Grid>
-          <Grid item>
-            <span style={{ fontSize: "2rem", fontWeight: 800 }}>
-              {exhibit.count}
-            </span>{" "}
-            /{exhibit.capacity}
-          </Grid>
-        </Grid>
-        <LinearProgress
-          variant="determinate"
-          value={(exhibit.count / exhibit.capacity) * 100 || 1}
-          sx={{
-            width: "100%",
-            height: 10,
-            [`&.${linearProgressClasses.colorPrimary}`]: {
-              backgroundColor: "transparent",
-            },
-            [`& .${linearProgressClasses.bar}`]: {
-              borderRadius: 5,
-              backgroundColor: "#1a90ff",
-            },
-          }}
-        />
+          <LinearProgress
+            variant="determinate"
+            value={(exhibit.count / exhibit.capacity) * 100 || 1}
+            sx={{
+              width: "100%",
+              height: 10,
+              [`&.${linearProgressClasses.colorPrimary}`]: {
+                backgroundColor: "transparent",
+              },
+              [`& .${linearProgressClasses.bar}`]: {
+                borderRadius: 5,
+                backgroundColor: "#1a90ff",
+              },
+            }}
+          />
+        </Link>
       </ListItem>
     );
   };
