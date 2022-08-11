@@ -45,6 +45,13 @@ const theme = createTheme({
           background-color: ${grey[500]};
           border-radius: .1rem;
         }
+        .qrcode {
+          margin: auto;
+          width: 100%;
+        }
+        .qrcode section video {
+          border-radius: 1rem;
+        }
       `,
     },
   },

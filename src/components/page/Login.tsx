@@ -126,7 +126,7 @@ const Login = () => {
                   fullWidth
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ textAlign: "right" }}>
                 <Button
                   onClick={login}
                   onKeyPress={(e) => {

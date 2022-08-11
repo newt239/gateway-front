@@ -71,16 +71,14 @@ const ReserveCheck = () => {
   }, []);
 
   const handleScan = (scanText: string | null) => {
-    if (scanText) {
-      if (scanText !== text) {
-        setText(scanText);
-        const reservationId = decodeReservationQRCode(scanText);
-        if (reservationId && reservationId !== "") {
-          checkReservation(reservationId);
-        } else {
-          setScanStatus("error");
-          setMessage("このQRコードは使えません。");
-        }
+    if (scanText && scanText !== text) {
+      setText(scanText);
+      const reservationId = decodeReservationQRCode(scanText);
+      if (reservationId && reservationId !== "") {
+        checkReservation(reservationId);
+      } else {
+        setScanStatus("error");
+        setMessage("このQRコードは使えません。");
       }
     }
   };
