@@ -20,12 +20,6 @@ import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IosShareIcon from "@mui/icons-material/IosShare";
 
-interface messageType {
-  display: "none" | "block";
-  severity: "error" | "success";
-  message: string;
-}
-
 const Login = () => {
   const setToken = useSetAtom(tokenAtom);
   const setProfile = useSetAtom(profileAtom);
@@ -36,11 +30,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [inputValue, updateValue] = useState({ user_id: "", password: "" });
-  const [message, updateMessage] = useState<messageType>({
-    display: "none",
-    severity: "error",
-    message: "",
-  });
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const login = () => {
     if (inputValue.user_id !== "") {
@@ -59,11 +49,6 @@ const Login = () => {
               },
             })
             .then((meRes) => {
-              updateMessage({
-                display: "block",
-                severity: "success",
-                message: "ログインに成功しました。",
-              });
               setProfile(meRes);
               navigate("/", { replace: true });
               ReactGA.event({
@@ -74,28 +59,14 @@ const Login = () => {
             })
             .catch((err: AxiosError) => {
               console.log(err);
-              updateMessage({
-                display: "block",
-                severity: "error",
-                message: "ユーザー情報の取得に際しエラーが発生しました。",
-              });
+              setErrorMessage("ユーザー情報の取得に際しエラーが発生しました。");
             });
         })
         .catch((err: AxiosError) => {
           if (err.message === "Network Error") {
-            updateMessage({
-              display: "block",
-              severity: "error",
-              message:
-                "サーバーからの応答がありません。担当者に問い合わせてください。",
-            });
+            setErrorMessage("サーバーからの応答がありません。端末がネットワークに接続されているか確認してください。");
           } else {
-            updateMessage({
-              display: "block",
-              severity: "error",
-              message:
-                "エラーが発生しました。ユーザーidまたはパスワードが間違っている可能性があります。",
-            });
+            setErrorMessage("エラーが発生しました。ユーザーIDまたはパスワードが間違っている可能性があります。");
             ReactGA.event({
               category: "login",
               action: "unknown_error",
@@ -114,9 +85,11 @@ const Login = () => {
         <Grid item xs={12}>
           <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
             <Grid container spacing={2} sx={{ p: 2 }}>
-              <Grid item xs={12} sx={{ display: message.display }}>
-                <Alert severity={message.severity}>{message.message}</Alert>
-              </Grid>
+              {errorMessage && (
+                <Grid item xs={12}>
+                  <Alert severity="error" variant="filled">{errorMessage}</Alert>
+                </Grid>
+              )}
               <Grid item xs={12}>
                 {loading && <LinearProgress />}
               </Grid>
