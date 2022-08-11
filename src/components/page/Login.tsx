@@ -28,16 +28,20 @@ const Login = () => {
     setPageTitle("ログイン");
   }, []);
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const [inputValue, updateValue] = useState({ user_id: "", password: "" });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [userIdValue, setUserIdValue] = useState<string>("");
+  const [passwordValue, setPasswordValue] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const login = () => {
-    if (inputValue.user_id !== "") {
+    if (userIdValue !== "") {
       setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .auth.login.$post({
-          body: inputValue,
+          body: {
+            user_id: userIdValue,
+            password: passwordValue,
+          },
         })
         .then((loginRes) => {
           localStorage.setItem("gatewayApiToken", loginRes.token);
@@ -54,7 +58,7 @@ const Login = () => {
               ReactGA.event({
                 category: "login",
                 action: "success",
-                label: inputValue.user_id,
+                label: userIdValue,
               });
             })
             .catch((err: AxiosError) => {
@@ -70,7 +74,7 @@ const Login = () => {
             ReactGA.event({
               category: "login",
               action: "unknown_error",
-              label: inputValue.user_id,
+              label: userIdValue,
             });
           }
         })
@@ -99,10 +103,7 @@ const Login = () => {
                   label="ユーザーID"
                   type="text"
                   onChange={(event) =>
-                    updateValue({
-                      user_id: event.target.value,
-                      password: inputValue.password,
-                    })
+                    setUserIdValue(event.target.value)
                   }
                   fullWidth
                 />
@@ -113,10 +114,7 @@ const Login = () => {
                   label="パスワード"
                   type="password"
                   onChange={(event) =>
-                    updateValue({
-                      user_id: inputValue.user_id,
-                      password: event.target.value,
-                    })
+                    setPasswordValue(event.target.value)
                   }
                   onKeyPress={(e) => {
                     if (e.key === "Enter") {
