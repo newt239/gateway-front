@@ -67,10 +67,9 @@ const NumPad = ({
       <Dialog
         open={open}
         onClose={() => handleClose(id)}
-        maxWidth="xs"
         fullScreen={smallerThanMD}
       >
-        <DialogTitle sx={{ my: 1, px: 2, pt: 0, pb: 1, textAlign: "center", overflowX: "scroll" }}>
+        <DialogTitle sx={{ my: 0, px: 2, py: 2, textAlign: "center", overflowX: "scroll" }}>
           <ButtonGroup
             variant="outlined"
             sx={{
@@ -158,7 +157,7 @@ const NumPad = ({
             </Grid>
           </Grid>
         </DialogContent>
-        <DialogActions sx={{ my: 1, py: 0, px: 2 }}>
+        <DialogActions sx={{ my: 0, py: 2, px: 2 }}>
           <Button
             onClick={() => setId([])}
             color="error"
