@@ -15,7 +15,6 @@ export type Methods = {
       group_name: string;
       room_name: string;
       exhibit_type: string;
-      position: string;
       count: number;
       capacity: number;
     }[];

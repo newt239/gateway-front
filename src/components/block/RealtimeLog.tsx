@@ -151,7 +151,7 @@ const RealtimeLog = () => {
               <ListItemText>ゲストIDを隠す</ListItemText>
             </ListItem>
           </Grid>
-          <Grid item>{lastUpdate.format("hh:mm:ss")}</Grid>
+          <Grid item>{lastUpdate.format("HH:mm:ss")}</Grid>
         </Grid>
       </Grid>
       <Grid item xs={12}>
@@ -166,7 +166,7 @@ const RealtimeLog = () => {
                 <Grid container sx={{ alignItems: "center" }}>
                   <Grid item xs={2.5}>
                     <ListItemText>
-                      {moment(v.timestamp).format("hh:mm:ss")}
+                      {moment(v.timestamp).format("HH:mm:ss")}
                     </ListItemText>
                   </Grid>
                   <Grid item xs={4}>

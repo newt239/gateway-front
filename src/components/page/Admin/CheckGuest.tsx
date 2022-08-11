@@ -184,7 +184,7 @@ const AdminCheckGuest = () => {
                   return (
                     <TimelineItem key={i}>
                       <TimelineOppositeContent color="text.secondary">
-                        {moment(v.datetime).format("MM/DD hh:mm:ss")}
+                        {moment(v.datetime).format("MM/DD HH:mm:ss")}
                       </TimelineOppositeContent>
                       <TimelineSeparator>
                         <TimelineDot color="primary" />

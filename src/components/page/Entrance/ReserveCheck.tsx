@@ -37,6 +37,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 import {
+  decodeReservationQRCode,
   getTimePart,
   reservationIdValidation,
 } from "#/components/lib/commonFunction";
@@ -53,6 +54,7 @@ const ReserveCheck = () => {
   const profile = useAtomValue(profileAtom);
   const [reservation, setReservation] = useAtom(reservationAtom);
   const [text, setText] = useState<string>("");
+  const [reservationId, setReservationId] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
@@ -69,14 +71,27 @@ const ReserveCheck = () => {
   }, []);
 
   const handleScan = (scanText: string | null) => {
-    if (scanText && token) {
+    if (scanText && scanText !== text) {
       setText(scanText);
+      const reservationId = decodeReservationQRCode(scanText);
+      if (reservationId && reservationId !== "") {
+        checkReservation(reservationId);
+      } else {
+        setScanStatus("error");
+        setMessage("このQRコードは使えません。");
+      }
+    }
+  };
+
+  const checkReservation = (reservationId: string) => {
+    if (reservationId && token) {
+      setReservationId(reservationId);
       setShowScanGuide(false);
-      if (reservationIdValidation(scanText)) {
+      if (reservationIdValidation(reservationId)) {
         setDeviceState(false);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
-          .reservation.info._reservation_id(scanText)
+          .reservation.info._reservation_id(reservationId)
           .$get({
             headers: { Authorization: "Bearer " + token },
           })
@@ -114,14 +129,14 @@ const ReserveCheck = () => {
             setMessage(err.message);
             setSmDrawerStatus(true);
           });
-      } else if (scanText.startsWith("G")) {
+      } else if (reservationId.startsWith("G")) {
         setScanStatus("error");
         setMessage("これはゲストIDです。予約IDをスキャンしてください。");
         setSmDrawerStatus(true);
         ReactGA.event({
           category: "scan",
           action: "entrance_is_guest_id",
-          label: scanText,
+          label: reservationId,
         });
       } else {
         setScanStatus("error");
@@ -134,6 +149,7 @@ const ReserveCheck = () => {
   const retry = () => {
     setScanStatus("waiting");
     setText("");
+    setReservationId("");
     setReservation(null);
     setDeviceState(true);
     setShowScanGuide(true);
@@ -141,7 +157,7 @@ const ReserveCheck = () => {
 
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
-      handleScan("R" + num.map((n) => String(n)).join(""));
+      checkReservation("R" + num.map((n) => String(n)).join(""));
       if (profile) {
         ReactGA.event({
           category: "numpad",
@@ -176,7 +192,7 @@ const ReserveCheck = () => {
                 <ListItemIcon>
                   <AssignmentIndRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={reservationId} />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
@@ -248,7 +264,7 @@ const ReserveCheck = () => {
         spacing={2}
         sx={{ py: 2, justifyContent: "space-evenly" }}
       >
-        <Grid item xs={12} sx={{ mb: largerThanMD ? 5 : 0 }}>
+        <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
             container
             sx={{
@@ -286,8 +302,8 @@ const ReserveCheck = () => {
               <OutlinedInput
                 type="text"
                 size="small"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
+                value={reservationId}
+                onChange={(e) => setReservationId(e.target.value)}
                 disabled
                 fullWidth
               />

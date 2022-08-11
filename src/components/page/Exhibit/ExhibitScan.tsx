@@ -445,7 +445,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
         >
           <Grid item xs={12}>
             <Grid container sx={{ alignItems: "center", gap: "1rem" }}>
-              <Grid item sx={{ pr: 4 }} xs={12} sm lg={2}>
+              <Grid item sx={{ pr: 4 }} xs>
                 <Typography variant="h3">
                   {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
                 </Typography>

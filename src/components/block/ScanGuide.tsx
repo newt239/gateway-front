@@ -32,7 +32,7 @@ const ScanGuide = ({ show }: { show: boolean }) => {
       in={show && !close && guideShow !== "no" && largerThanMD}
       timeout={1000}
     >
-      <Box sx={{ zIndex: 100000 }}>
+      <Box sx={{ zIndex: 1100 }}>
         <Box
           sx={{
             position: "fixed",

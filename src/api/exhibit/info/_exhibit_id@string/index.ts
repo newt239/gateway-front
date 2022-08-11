@@ -17,7 +17,6 @@ export type Methods = {
       room_name: string;
       capacity: number;
       current: number;
-      status: number;
     };
   };
 };

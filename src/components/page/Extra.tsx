@@ -14,7 +14,7 @@ const NotFound = (props: extraProp) => {
   const setPageTitle = useSetAtom(pageTitleAtom);
   useEffect(() => {
     if (props.type === "loading") {
-      setPageTitle("Gateway - 栄東祭2022滞在状況記録システム");
+      setPageTitle("Gateway");
     } else {
       setPageTitle("エラー");
     }

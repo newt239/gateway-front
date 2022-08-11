@@ -1,15 +1,14 @@
 import React, { useState } from "react";
 
 import {
-  Box,
   Button,
   Dialog,
   DialogContent,
-  DialogTitle,
   Fab,
   Grid,
   ButtonGroup,
   DialogActions,
+  DialogTitle,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -63,120 +62,121 @@ const NumPad = ({
         color="primary"
       >
         <ModeEditRoundedIcon sx={{ mr: largerThanSM ? 1 : 0 }} />
-        {largerThanSM && <>直接入力</>}
+        {largerThanSM && "直接入力"}
       </Fab>
       <Dialog
         open={open}
         onClose={() => handleClose(id)}
-        maxWidth="xs"
         fullScreen={smallerThanMD}
       >
-        <Box
+        <DialogTitle
+          sx={{ my: 0, px: 2, py: 2, textAlign: "center", overflowX: "scroll" }}
+        >
+          <ButtonGroup
+            variant="outlined"
+            sx={{
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              disabled
+              sx={{
+                fontWeight: 800,
+                fontSize: "1.5rem",
+                "&.Mui-disabled": { color: "black" },
+              }}
+            >
+              {scanType === "reservation" ? "R" : "G"}
+            </Button>
+            {(scanType === "reservation"
+              ? [0, 1, 2, 3, 4, 5]
+              : [0, 1, 2, 3, 4, 5, 6, 7, 8]
+            ).map((i) => {
+              return (
+                <Button
+                  disabled
+                  sx={{
+                    fontWeight: 800,
+                    fontSize: "1.5rem",
+                    "&.Mui-disabled": { color: "black" },
+                  }}
+                  key={i}
+                >
+                  {i < id.length ? id[i] : "_"}
+                </Button>
+              );
+            })}
+          </ButtonGroup>
+        </DialogTitle>
+        <DialogContent
           sx={{
-            display: "grid",
-            alignContent: "space-between",
-            height: "100%",
+            p: 0,
+            textAlign: "center",
+            width: "100%",
+            display: "flex",
+            alignItems: "flex-end",
           }}
         >
-          <DialogTitle>ID手動入力</DialogTitle>
-          <DialogContent sx={{ p: 0, textAlign: "center", width: "100%" }}>
-            <ButtonGroup
-              variant="outlined"
-              sx={{
-                justifyContent: "center",
-                width: largerThanSM ? "90%" : "100%",
-              }}
-            >
+          <Grid
+            container
+            sx={{
+              width: 300,
+              margin: "1rem auto",
+              gap: ".5rem",
+              justifyContent: "space-between",
+            }}
+          >
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((n) => {
+              return (
+                <Grid
+                  item
+                  key={String(n)}
+                  sx={{ width: "min(13vh, 30%)", aspectRatio: "1 / 1" }}
+                >
+                  <Button
+                    variant="outlined"
+                    onClick={() => onNumClick(n)}
+                    sx={{
+                      fontSize: "2rem",
+                      fontWeight: 800,
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: "50%",
+                    }}
+                  >
+                    {n}
+                  </Button>
+                </Grid>
+              );
+            })}
+            <Grid item sx={{ width: "min(13vh, 30%)", aspectRatio: "1 / 1" }}>
               <Button
-                disabled
+                variant="outlined"
+                onClick={onDeleteNum}
+                disabled={id.length <= 0}
                 sx={{
+                  fontSize: "2rem",
                   fontWeight: 800,
-                  fontSize: "1.5rem",
-                  "&.Mui-disabled": { color: "black" },
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "50%",
                 }}
               >
-                {scanType === "reservation" ? "R" : "G"}
+                <BackspaceRoundedIcon />
               </Button>
-              {(scanType === "reservation"
-                ? [0, 1, 2, 3, 4, 5]
-                : [0, 1, 2, 3, 4, 5, 6, 7, 8]
-              ).map((i) => {
-                return (
-                  <Button
-                    disabled
-                    sx={{
-                      fontWeight: 800,
-                      fontSize: "1.5rem",
-                      "&.Mui-disabled": { color: "black" },
-                    }}
-                    key={i}
-                  >
-                    {i < id.length ? id[i] : "_"}
-                  </Button>
-                );
-              })}
-            </ButtonGroup>
-            <Grid
-              container
-              sx={{
-                width: 300,
-                margin: "2rem auto 0",
-                gap: ".5rem",
-                justifyContent: "space-between",
-              }}
-            >
-              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 0].map((n) => {
-                return (
-                  <Grid
-                    item
-                    key={String(n)}
-                    sx={{ width: "30%", aspectRatio: "1 / 1" }}
-                  >
-                    <Button
-                      variant="outlined"
-                      onClick={() => onNumClick(n)}
-                      sx={{
-                        fontSize: "2rem",
-                        fontWeight: 800,
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: "50%",
-                      }}
-                    >
-                      {n}
-                    </Button>
-                  </Grid>
-                );
-              })}
-              <Grid item sx={{ width: "30%", aspectRatio: "1 / 1" }}>
-                <Button
-                  variant="outlined"
-                  onClick={onDeleteNum}
-                  disabled={id.length <= 0}
-                  sx={{
-                    fontSize: "2rem",
-                    fontWeight: 800,
-                    width: "100%",
-                    height: "100%",
-                    borderRadius: "50%",
-                  }}
-                >
-                  <BackspaceRoundedIcon />
-                </Button>
-              </Grid>
             </Grid>
-            <DialogActions sx={{ p: 2 }}>
-              <Button
-                onClick={() => setId([])}
-                color="error"
-                disabled={id.length === 0}
-              >
-                リセット
-              </Button>
-              <Button onClick={() => handleClose(id)}>閉じる</Button>
-            </DialogActions>
-          </DialogContent>
-        </Box>
+          </Grid>
+        </DialogContent>
+        <DialogActions sx={{ my: 0, py: 2, px: 2 }}>
+          <Button
+            onClick={() => setId([])}
+            color="error"
+            disabled={id.length === 0}
+          >
+            リセット
+          </Button>
+          <Button onClick={() => handleClose(id)}>閉じる</Button>
+        </DialogActions>
       </Dialog>
     </>
   );

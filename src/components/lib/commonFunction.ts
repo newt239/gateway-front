@@ -1,3 +1,5 @@
+import crypto from "crypto-js";
+
 import generalProps from "./generalProps";
 
 export const getTimePart = (part: number) => {
@@ -32,6 +34,17 @@ export const guestIdValidation = (guest_id: string) => {
     }
   }
   return false;
+};
+
+export const decodeReservationQRCode = (token: string) => {
+  const signature = process.env.REACT_APP_JWT_SIGNATURE;
+  if (signature) {
+    // QRコードを生成する過程でプラスがスペースに変換されてしまうので元に戻す
+    const bytes = crypto.AES.decrypt(token.replace(/ /g, "+"), signature);
+    const originalText = bytes.toString(crypto.enc.Utf8);
+    return originalText;
+  }
+  return null;
 };
 
 export const reservationIdValidation = (reservation_id: string) => {
