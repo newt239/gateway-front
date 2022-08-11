@@ -45,9 +45,9 @@ const theme = createTheme({
           background-color: ${grey[500]};
           border-radius: .1rem;
         }
-      `
+      `,
     },
-  }
+  },
 });
 
 export default theme;

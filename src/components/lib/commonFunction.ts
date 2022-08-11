@@ -1,4 +1,4 @@
-import crypto from 'crypto-js'
+import crypto from "crypto-js";
 
 import generalProps from "./generalProps";
 

@@ -68,9 +68,13 @@ const Login = () => {
         })
         .catch((err: AxiosError) => {
           if (err.message === "Network Error") {
-            setErrorMessage("サーバーからの応答がありません。端末がネットワークに接続されているか確認してください。");
+            setErrorMessage(
+              "サーバーからの応答がありません。端末がネットワークに接続されているか確認してください。"
+            );
           } else {
-            setErrorMessage("エラーが発生しました。ユーザーIDまたはパスワードが間違っている可能性があります。");
+            setErrorMessage(
+              "エラーが発生しました。ユーザーIDまたはパスワードが間違っている可能性があります。"
+            );
             ReactGA.event({
               category: "login",
               action: "unknown_error",
@@ -91,7 +95,9 @@ const Login = () => {
             <Grid container spacing={2} sx={{ p: 2 }}>
               {errorMessage && (
                 <Grid item xs={12}>
-                  <Alert severity="error" variant="filled">{errorMessage}</Alert>
+                  <Alert severity="error" variant="filled">
+                    {errorMessage}
+                  </Alert>
                 </Grid>
               )}
               <Grid item xs={12}>
@@ -102,9 +108,7 @@ const Login = () => {
                   id="user_id"
                   label="ユーザーID"
                   type="text"
-                  onChange={(event) =>
-                    setUserIdValue(event.target.value)
-                  }
+                  onChange={(event) => setUserIdValue(event.target.value)}
                   fullWidth
                 />
               </Grid>
@@ -113,9 +117,7 @@ const Login = () => {
                   id="password"
                   label="パスワード"
                   type="password"
-                  onChange={(event) =>
-                    setPasswordValue(event.target.value)
-                  }
+                  onChange={(event) => setPasswordValue(event.target.value)}
                   onKeyPress={(e) => {
                     if (e.key === "Enter") {
                       login();

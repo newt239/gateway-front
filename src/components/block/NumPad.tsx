@@ -69,7 +69,9 @@ const NumPad = ({
         onClose={() => handleClose(id)}
         fullScreen={smallerThanMD}
       >
-        <DialogTitle sx={{ my: 0, px: 2, py: 2, textAlign: "center", overflowX: "scroll" }}>
+        <DialogTitle
+          sx={{ my: 0, px: 2, py: 2, textAlign: "center", overflowX: "scroll" }}
+        >
           <ButtonGroup
             variant="outlined"
             sx={{
@@ -106,7 +108,15 @@ const NumPad = ({
             })}
           </ButtonGroup>
         </DialogTitle>
-        <DialogContent sx={{ p: 0, textAlign: "center", width: "100%", display: "flex", alignItems: "flex-end" }}>
+        <DialogContent
+          sx={{
+            p: 0,
+            textAlign: "center",
+            width: "100%",
+            display: "flex",
+            alignItems: "flex-end",
+          }}
+        >
           <Grid
             container
             sx={{

@@ -262,7 +262,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   useEffect(() => {
     if (scanStatus === "success") {
       setGuideMessage(
-        `情報を確認し、問題がなければ${scanType === "enter" ? "入室記録" : "退室記録"
+        `情報を確認し、問題がなければ${
+          scanType === "enter" ? "入室記録" : "退室記録"
         }を押してください`
       );
     }
@@ -375,10 +376,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -455,7 +456,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   startIcon={<PublishedWithChangesRoundedIcon />}
                   onClick={() =>
                     navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                      `/exhibit/${exhibit_id || "unknown"}/${
+                        scanType === "enter" ? "exit" : "enter"
                       } `,
                       { replace: true }
                     )

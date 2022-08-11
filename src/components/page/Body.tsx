@@ -27,8 +27,8 @@ const Body = () => {
   const token = useAtomValue(tokenAtom);
   const [profile, setProfile] = useAtom(profileAtom);
 
-  const [showMessageDialog, setShowMessageDialog] = useState(false);
-  const [errorDialogTitle, setErrorDialogTitle] = useState("");
+  const [showMessageDialog, setShowMessageDialog] = useState<boolean>(false);
+  const [errorDialogTitle, setErrorDialogTitle] = useState<string>("");
   const [errorDialogMessage, setMessageDialogMessage] = useState<string>("");
 
   useEffect(() => {

@@ -175,14 +175,17 @@ const Scanner = ({ handleScan }: ScannerProps) => {
         }
       });
       if (newCurrentDevice) {
-        localStorage.setItem("currentCameraDeviceId", newCurrentDevice.deviceId);
+        localStorage.setItem(
+          "currentCameraDeviceId",
+          newCurrentDevice.deviceId
+        );
         setCurrentDeviceId(newCurrentDevice.deviceId);
         setRefreshQrReader(false);
       }
     } else {
       setSelectCameraModalOpen(true);
     }
-  }
+  };
 
   return (
     <>
