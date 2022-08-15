@@ -35,7 +35,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const [scannerStatus, setScannerStatus] = useState<
     "loading" | "waiting" | "error"
   >("loading");
-  const [reverseCamera, setReverseCamera] = useState<boolean>(true);
+  const [reverseCamera, setReverseCamera] = useState<boolean>(localStorage.getItem("reverseCamera") === "false" ? false : true);
   type deviceProp = {
     deviceId: string;
     label: string;
@@ -196,10 +196,16 @@ const Scanner = ({ handleScan }: ScannerProps) => {
     <Stack>
       <FormControlLabel
         control={
-          <Switch edge="end" onChange={() => setReverseCamera(state => !state)} checked={reverseCamera}
+          <Switch edge="end"
+            onChange={() => setReverseCamera(state => {
+              localStorage.setItem("reverseCamera", String(!state));
+              return !state;
+            })}
+            checked={reverseCamera}
             sx={{ mr: 1 }} />
         }
         label="カメラを反転"
+        sx={{ margin: "auto" }}
       />
       <Box
         sx={{
