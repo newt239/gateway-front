@@ -25,19 +25,17 @@ const Home = () => {
   return (
     <Grid container spacing={2} sx={{ py: 2 }}>
       <Grid item xs={12}>
-        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-          <Box sx={{ textAlign: "center" }}>
-            <img
-              src={GatewayThumbnail}
-              style={{
-                width: "100%",
-                maxWidth: "750px",
-                maxHeight: "50vh",
-                objectFit: "cover",
-              }}
-            />
-          </Box>
-        </Card>
+        <Box sx={{ textAlign: "center", p: 2, height: "100%" }}>
+          <img
+            src={GatewayThumbnail}
+            style={{
+              width: "100%",
+              maxWidth: "80vh",
+              maxHeight: "35vh",
+              objectFit: "cover",
+            }}
+          />
+        </Box>
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
