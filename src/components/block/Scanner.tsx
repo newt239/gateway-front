@@ -187,6 +187,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
         setRefreshQrReader(false);
       }
     } else {
+      setScannerStatus("waiting");
       setSelectCameraModalOpen(true);
     }
   };
@@ -195,7 +196,8 @@ const Scanner = ({ handleScan }: ScannerProps) => {
     <Stack>
       <FormControlLabel
         control={
-          <Switch edge="end" onChange={() => setReverseCamera(state => !state)} checked={reverseCamera} />
+          <Switch edge="end" onChange={() => setReverseCamera(state => !state)} checked={reverseCamera}
+            sx={{ mr: 1 }} />
         }
         label="カメラを反転"
       />
