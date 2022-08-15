@@ -17,9 +17,6 @@ import {
   DialogTitle,
   MenuItem,
   Switch,
-  ListItem,
-  ListItemText,
-  Tooltip,
   FormControlLabel,
   Stack,
 } from "@mui/material";
@@ -214,7 +211,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
         }}
       >
         {qrReaderIsShow && refreshQrReader && (
-          <div style={{ position: "relative" }}>
+          <div style={{ position: "relative", transform: reverseCamera ? "scale(-1, 1)" : "scale(1, 1)" }}>
             <QrReader
               onScan={(text: string | null) => handleScan(text)}
               onLoad={() => {
