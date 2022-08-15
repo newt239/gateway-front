@@ -6,7 +6,7 @@ import { pageTitleAtom } from "#/components/lib/jotai";
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 
 type extraProp = {
-  type: "404" | "401" | "loading";
+  type: "404" | "401" | "unknown" | "loading";
 };
 
 const NotFound = (props: extraProp) => {
@@ -29,6 +29,12 @@ const NotFound = (props: extraProp) => {
               <Typography>お探しのページは見つかりませんでした。</Typography>
             ) : props.type === "401" ? (
               <Typography>このページを表示する権限がありません。</Typography>
+            ) : props.type === "unknown" ? (
+              <>
+                <Typography>このアカウントは使えません。テスト用のアカウントである可能性があります。</Typography>
+                <Typography>団体の代表者へメールでアカウントを配布しています。自分の団体に配られているアカウントを使用してください。</Typography>
+                <Typography>メールを受け取っていない場合は技術部までお問い合わせください。</Typography>
+              </>
             ) : props.type === "loading" ? (
               <Typography>ログインセッションの検証中...</Typography>
             ) : (
