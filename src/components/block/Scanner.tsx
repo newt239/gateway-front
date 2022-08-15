@@ -16,6 +16,12 @@ import {
   SelectChangeEvent,
   DialogTitle,
   MenuItem,
+  Switch,
+  ListItem,
+  ListItemText,
+  Tooltip,
+  FormControlLabel,
+  Stack,
 } from "@mui/material";
 import CameraswitchRoundedIcon from "@mui/icons-material/CameraswitchRounded";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -32,6 +38,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const [scannerStatus, setScannerStatus] = useState<
     "loading" | "waiting" | "error"
   >("loading");
+  const [reverseCamera, setReverseCamera] = useState<boolean>(true);
   type deviceProp = {
     deviceId: string;
     label: string;
@@ -188,7 +195,13 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   };
 
   return (
-    <>
+    <Stack>
+      <FormControlLabel
+        control={
+          <Switch edge="end" onChange={() => setReverseCamera(state => !state)} checked={reverseCamera} />
+        }
+        label="カメラを反転"
+      />
       <Box
         sx={{
           position: "relative",
@@ -268,7 +281,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
           setMessageDialogOpen(false);
         }}
       />
-    </>
+    </Stack>
   );
 };
 
