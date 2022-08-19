@@ -54,7 +54,7 @@ const AnalyticsExhibit = () => {
     }, [profile]);
 
     return (
-      <Grid container spacing={2} sx={{ py: 2 }}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           {["moderator"].includes(profile.user_type) && (
             <Button
@@ -93,7 +93,7 @@ const AnalyticsExhibit = () => {
           <Typography variant="h3">時間帯別入場者数</Typography>
           <ExhibitEnterCountBarChart exhibit_id={exhibit_id} />
         </Grid>
-      </Grid>
+      </Grid >
     );
   } else {
     return (

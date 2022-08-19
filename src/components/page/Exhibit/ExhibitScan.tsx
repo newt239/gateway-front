@@ -416,7 +416,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <>
       {!exhibit_id ? (
-        <Grid container spacing={2} sx={{ py: 2 }}>
+        <Grid container spacing={2} sx={{ p: 2 }}>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{ p: 2 }}>
               展示IDが正しくありません。
@@ -426,18 +426,18 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       ) : profile &&
         profile.user_type === "exhibit" &&
         profile.user_id !== exhibit_id ? (
-        <Grid container spacing={2} sx={{ py: 2 }}>
+        <Grid container spacing={2} sx={{ p: 2 }}>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{ p: 2 }}>
               このページを表示する権限がありません。
             </Card>
           </Grid>
-        </Grid>
+        </Grid >
       ) : (
         <Grid
           container
           spacing={2}
-          sx={{ py: 2, justifyContent: "space-evenly" }}
+          sx={{ justifyContent: "space-evenly" }}
         >
           <Grid item xs={12}>
             <Grid container sx={{ alignItems: "center", gap: "1rem" }}>
@@ -594,7 +594,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               ))}
           </Grid>
         </Grid>
-      )}
+      )
+      }
       <Snackbar
         open={snackbarMessage !== null}
         anchorOrigin={{

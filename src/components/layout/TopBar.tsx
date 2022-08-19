@@ -18,9 +18,9 @@ const TopBar = () => {
 
   return (
     <AppBar
-      position="fixed"
+      position="sticky"
       elevation={0}
-      sx={{ width: { xs: "100%", sm: `calc(100% - 240px)` } }}
+      sx={{ width: "100%", zIndex: 100 }}
     >
       <Container maxWidth="xl">
         <Toolbar

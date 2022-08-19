@@ -1,10 +1,10 @@
 import { useMediaQuery } from "@mui/material";
-import { Theme } from "@mui/material/styles";
-
+import { useTheme } from "@mui/material/styles";
 
 const useDeviceWidth = () => {
-  const largerThanSM = useMediaQuery((theme: Theme) => theme.breakpoints.up("sm"));
-  const largerThanMD = useMediaQuery((theme: Theme) => theme.breakpoints.up("md"));
+  const theme = useTheme();
+  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
+  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
   return { largerThanSM, largerThanMD };
 };
 

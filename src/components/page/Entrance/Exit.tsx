@@ -239,7 +239,7 @@ const EntranceExit = () => {
       <Grid
         container
         spacing={2}
-        sx={{ py: 2, justifyContent: "space-evenly" }}
+        sx={{ justifyContent: "space-evenly" }}
       >
         <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid

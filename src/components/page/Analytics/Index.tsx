@@ -18,7 +18,7 @@ const AnalyticsIndex = () => {
   const { largerThanMD } = useDeviceWidth();
 
   return (
-    <Grid container spacing={2} sx={{ py: 2, flexWrap: "nowrap", flexDirection: largerThanMD ? "row" : "column-reverse" }}>
+    <Grid container spacing={2} sx={{ flexWrap: "nowrap", flexDirection: largerThanMD ? "row" : "column-reverse" }}>
       <Grid item xs={12} md={8}>
         <RealtimeLog />
       </Grid>
