@@ -30,8 +30,6 @@ import {
   OutlinedInput,
   Button,
 } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
@@ -44,15 +42,14 @@ import {
   getTimePart,
   guestIdValidation,
 } from "#/components/lib/commonFunction";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import MessageDialog from "#/components/block/MessageDialog";
 
 const EntranceEnter = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
-  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
-  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
+  const { largerThanSM, largerThanMD } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");

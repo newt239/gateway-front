@@ -10,10 +10,10 @@ import {
   DialogActions,
   DialogTitle,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
 import BackspaceRoundedIcon from "@mui/icons-material/BackspaceRounded";
+
+import useDeviceWidth from "../lib/useDeviceWidth";
 
 const NumPad = ({
   scanType,
@@ -22,12 +22,10 @@ const NumPad = ({
   scanType: "reservation" | "guest";
   onClose: (num: number[]) => void;
 }) => {
+  const { largerThanSM, largerThanMD } = useDeviceWidth();
   const [open, setOpen] = useState<boolean>(false);
   const [id, setId] = useState<number[]>([]);
 
-  const theme = useTheme();
-  const smallerThanMD = useMediaQuery(theme.breakpoints.down("md"));
-  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
   const openNumPad = () => {
     setOpen(true);
   };
@@ -67,7 +65,7 @@ const NumPad = ({
       <Dialog
         open={open}
         onClose={() => handleClose(id)}
-        fullScreen={smallerThanMD}
+        fullScreen={!largerThanMD}
       >
         <DialogTitle
           sx={{ my: 0, px: 2, py: 2, textAlign: "center", overflowX: "scroll" }}

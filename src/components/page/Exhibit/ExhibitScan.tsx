@@ -32,8 +32,6 @@ import {
   Skeleton,
   Tooltip,
 } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
@@ -48,6 +46,7 @@ import {
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/components/lib/types";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
@@ -59,8 +58,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)\//);
   const exhibit_id = pathMatchResult && pathMatchResult[1];
   const navigate = useNavigate();
-  const theme = useTheme();
-  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
+  const { largerThanMD } = useDeviceWidth();
   const profile = useAtomValue(profileAtom);
   const token = useAtomValue(tokenAtom);
   const [text, setText] = useState<string>("");

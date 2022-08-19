@@ -4,17 +4,16 @@ import { profileAtom } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 
 import { Box, Fade, IconButton, Tooltip, Typography } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
+
+import useDeviceWidth from "../lib/useDeviceWidth";
 
 const ScanGuide = ({ show }: { show: boolean }) => {
   const profile = useAtomValue(profileAtom);
   const guideShow = localStorage.getItem("guideShow") || "yes";
   const [close, setClose] = useState<boolean>(false);
 
-  const theme = useTheme();
-  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
+  const { largerThanMD } = useDeviceWidth();
 
   const closeGuide = () => {
     setClose(true);
