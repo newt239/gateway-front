@@ -10,14 +10,12 @@ type extraProp = {
 
 const NotFound = (props: extraProp) => {
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (props.type === "loading") {
-      setTitle("読み込み中...");
-    } else {
+    if (props.type !== "loading") {
       setTitle("エラー");
     }
   }, []);
-
   return (
     <>
       <Grid container spacing={2}>

@@ -10,7 +10,7 @@ import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRound
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
-import ExhibitEnterCountBarChart from "../../block/ExhibitEnterCountBarChart";
+import ExhibitEnterCountBarChart from "#/components/block/ExhibitEnterCountBarChart";
 import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList";
 
 const AnalyticsExhibit = () => {

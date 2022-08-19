@@ -1,6 +1,5 @@
 import crypto from "crypto-js";
-
-import generalProps from "./generalProps";
+import generalProps from "#/components/lib/generalProps";
 
 export const getTimePart = (part: number) => {
   const time_part = generalProps.time_part;

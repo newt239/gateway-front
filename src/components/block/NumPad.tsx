@@ -13,7 +13,7 @@ import {
 import ModeEditRoundedIcon from "@mui/icons-material/ModeEditRounded";
 import BackspaceRoundedIcon from "@mui/icons-material/BackspaceRounded";
 
-import useDeviceWidth from "../lib/useDeviceWidth";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 
 const NumPad = ({
   scanType,

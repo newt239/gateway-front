@@ -4,13 +4,13 @@ import ReactGA from "react-ga4";
 
 import { Box, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-
 import theme from "#/components/lib/theme";
-import useDeviceWidth from "./components/lib/useDeviceWidth";
+
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
+import TopBar from "#/components/layout/TopBar";
 import Drawer from "#/components/layout/Drawer";
-import BottomNav from "./components/layout/BottomNav";
-import TopBar from "./components/layout/TopBar";
-import Body from "./components/page/Body";
+import BottomNav from "#/components/layout/BottomNav";
+import Body from "#/components/page/Body";
 
 const App = () => {
   const { largerThanMD } = useDeviceWidth();

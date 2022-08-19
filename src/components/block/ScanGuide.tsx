@@ -6,7 +6,7 @@ import ReactGA from "react-ga4";
 import { Box, Fade, IconButton, Tooltip, Typography } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
-import useDeviceWidth from "../lib/useDeviceWidth";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 
 const ScanGuide = ({ show }: { show: boolean }) => {
   const profile = useAtomValue(profileAtom);

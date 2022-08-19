@@ -1,6 +1,6 @@
+import { useEffect } from "react";
 import { atom, useSetAtom } from "jotai";
 import { profileProp, reservationInfoProp } from "#/components/lib/types";
-import { useEffect } from "react";
 
 export const tokenAtom = atom<string | null>(
   localStorage.getItem("gatewayApiToken")
@@ -8,7 +8,7 @@ export const tokenAtom = atom<string | null>(
 
 export const profileAtom = atom<profileProp | null>(null);
 
-const initialPageAtomValue = "ホーム";
+const initialPageAtomValue = "Gateway";
 const pageAtom = atom(initialPageAtomValue);
 export const pageTitleAtom = atom(
   (get) => get(pageAtom),

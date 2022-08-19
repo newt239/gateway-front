@@ -9,7 +9,7 @@ import Version from "#/components/block/Version";
 import Settings from "#/components/block/Settings";
 
 import GatewayThumbnail from "#/asset/gateway-hero.jpg";
-import useDeviceWidth from "../lib/useDeviceWidth";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 
 const Home = () => {
   setTitle("ホーム");
