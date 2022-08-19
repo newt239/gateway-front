@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
+import { useAtomValue } from "jotai";
+import { tokenAtom, profileAtom, setTitle } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -46,11 +46,7 @@ type exhibitProp = {
 };
 
 const AdminCheckGuest = () => {
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("ゲスト照会");
-  }, []);
-
+  setTitle("ゲスト照会");
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
 

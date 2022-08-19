@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSetAtom } from "jotai";
-import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
+import { tokenAtom, profileAtom, setTitle } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import ReactGA from "react-ga4";
@@ -21,12 +21,9 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IosShareIcon from "@mui/icons-material/IosShare";
 
 const Login = () => {
+  setTitle("ログイン");
   const setToken = useSetAtom(tokenAtom);
   const setProfile = useSetAtom(profileAtom);
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("ログイン");
-  }, []);
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [userIdValue, setUserIdValue] = useState<string>("");

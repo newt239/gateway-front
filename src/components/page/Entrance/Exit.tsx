@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
   profileAtom,
-  pageTitleAtom,
   deviceStateAtom,
+  setTitle,
 } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
@@ -43,6 +43,7 @@ import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
 const EntranceExit = () => {
+  setTitle("エントランス");
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
@@ -58,10 +59,6 @@ const EntranceExit = () => {
 
   const setDeviceState = useSetAtom(deviceStateAtom);
 
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("エントランス");
-  }, []);
   const { largerThanSM, largerThanMD } = useDeviceWidth();
 
   const handleScan = (scanText: string | null) => {

@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import { setTitle } from "#/components/lib/jotai";
 
 import {
   Grid,
@@ -12,12 +11,8 @@ import {
 } from "@mui/material";
 
 const Entrance = () => {
+  setTitle("エントランス");
   const navigate = useNavigate();
-
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("エントランス");
-  }, []);
 
   return (
     <Grid container spacing={2}>

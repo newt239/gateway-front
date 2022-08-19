@@ -1,5 +1,6 @@
-import { atom } from "jotai";
+import { atom, useSetAtom } from "jotai";
 import { profileProp, reservationInfoProp } from "#/components/lib/types";
+import { useEffect } from "react";
 
 export const tokenAtom = atom<string | null>(
   localStorage.getItem("gatewayApiToken")
@@ -20,6 +21,12 @@ export const pageTitleAtom = atom(
     set(pageAtom, action);
   }
 );
+export const setTitle = (pageTitle: string) => {
+  const setPageTitle = useSetAtom(pageTitleAtom);
+  useEffect(() => {
+    setPageTitle(pageTitle);
+  }, []);
+};
 
 export const deviceStateAtom = atom(false);
 

@@ -4,8 +4,8 @@ import { useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
   profileAtom,
-  pageTitleAtom,
   deviceStateAtom,
+  setTitle,
 } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
@@ -81,7 +81,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
   const setDeviceState = useSetAtom(deviceStateAtom);
 
-  const setPageTitle = useSetAtom(pageTitleAtom);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
       if (
@@ -98,7 +97,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             },
           })
           .then((res) => {
-            setPageTitle(`${res.exhibit_name} - ${res.room_name}`);
+            setTitle(`${res.exhibit_name} - ${res.room_name}`);
             setCapacity(res.capacity);
             setCurrentCount(res.current);
             setExhibitName(res.exhibit_name);

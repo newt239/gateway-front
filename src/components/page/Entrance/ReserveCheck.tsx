@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
   profileAtom,
-  pageTitleAtom,
   deviceStateAtom,
   reservationAtom,
+  setTitle,
 } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
@@ -45,6 +45,7 @@ import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
 const ReserveCheck = () => {
+  setTitle("エントランス入場処理");
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
@@ -60,11 +61,6 @@ const ReserveCheck = () => {
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
 
   const setDeviceState = useSetAtom(deviceStateAtom);
-
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("エントランス入場処理");
-  }, []);
   const { largerThanSM, largerThanMD } = useDeviceWidth();
 
   const handleScan = (scanText: string | null) => {

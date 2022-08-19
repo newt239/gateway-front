@@ -1,6 +1,5 @@
-import React, { useEffect, Suspense } from "react";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import React, { Suspense } from "react";
+import { setTitle } from "#/components/lib/jotai";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
@@ -13,10 +12,7 @@ import GatewayThumbnail from "#/asset/gateway-hero.jpg";
 import useDeviceWidth from "../lib/useDeviceWidth";
 
 const Home = () => {
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("ホーム");
-  }, []);
+  setTitle("ホーム");
   const { largerThanMD } = useDeviceWidth();
 
   return (

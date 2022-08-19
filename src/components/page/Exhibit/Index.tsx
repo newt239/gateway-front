@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import { setTitle } from "#/components/lib/jotai";
 
 import {
   Grid,
@@ -14,11 +13,8 @@ import {
 import SelectExhibit from "#/components/block/SelectExhibit";
 
 const ExhibitIndex = () => {
+  setTitle("展示選択");
   const navigate = useNavigate();
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("展示選択");
-  }, []);
 
   const [currentExhibit, setCurrentExhibit] = useState<string>("");
 

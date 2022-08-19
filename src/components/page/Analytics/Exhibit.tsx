@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
+import { useAtomValue } from "jotai";
+import { tokenAtom, profileAtom, setTitle } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -21,9 +21,8 @@ const AnalyticsExhibit = () => {
     const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)/);
     const exhibit_id = pathMatchResult ? pathMatchResult[1] : "";
 
-    const setPageTitle = useSetAtom(pageTitleAtom);
     useEffect(() => {
-      setPageTitle(`${exhibit_id} - 現在の滞在状況`);
+      setTitle(`${exhibit_id} - 現在の滞在状況`);
       if (token && profile) {
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.list.$get({
@@ -34,7 +33,7 @@ const AnalyticsExhibit = () => {
           .then((res) => {
             const currentExhibit = res.find((v) => v.exhibit_id === exhibit_id);
             if (currentExhibit) {
-              setPageTitle(`${currentExhibit.exhibit_name} - 現在の滞在状況`);
+              setTitle(`${currentExhibit.exhibit_name} - 現在の滞在状況`);
             }
           })
           .catch((err: AxiosError) => {

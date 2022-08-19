@@ -4,9 +4,9 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
   profileAtom,
-  pageTitleAtom,
   deviceStateAtom,
   reservationAtom,
+  setTitle,
 } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
@@ -48,6 +48,7 @@ import NumPad from "#/components/block/NumPad";
 import MessageDialog from "#/components/block/MessageDialog";
 
 const EntranceEnter = () => {
+  setTitle("エントランス入場処理");
   const navigate = useNavigate();
   const { largerThanSM, largerThanMD } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
@@ -60,11 +61,6 @@ const EntranceEnter = () => {
   const [guestList, setGuest] = useState<string[]>([]);
   const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const setDeviceState = useSetAtom(deviceStateAtom);
-
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("エントランス入場処理");
-  }, []);
 
   useEffect(() => {
     // reserve-checkのフローを経ていない場合はreserve-checkのページに遷移させる
