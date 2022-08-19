@@ -5,7 +5,7 @@ import {
   tokenAtom,
   profileAtom,
   deviceStateAtom,
-  setTitle,
+  pageTitleAtom,
 } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
@@ -55,6 +55,7 @@ type ExhibitScanProps = {
 };
 
 const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
+  const setTitle = useSetAtom(pageTitleAtom);
   const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)\//);
   const exhibit_id = pathMatchResult && pathMatchResult[1];
   const navigate = useNavigate();

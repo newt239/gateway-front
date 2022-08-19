@@ -10,6 +10,7 @@ export const profileAtom = atom<profileProp | null>(null);
 
 const initialPageAtomValue = "Gateway";
 const pageAtom = atom(initialPageAtomValue);
+// hook内ではこっちを使う
 export const pageTitleAtom = atom(
   (get) => get(pageAtom),
   (get, set, action: string) => {

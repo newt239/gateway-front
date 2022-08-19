@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAtomValue } from "jotai";
-import { tokenAtom, profileAtom, setTitle } from "#/components/lib/jotai";
+import { useAtomValue, useSetAtom } from "jotai";
+import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -14,6 +14,7 @@ import ExhibitEnterCountBarChart from "#/components/block/ExhibitEnterCountBarCh
 import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList";
 
 const AnalyticsExhibit = () => {
+  const setTitle = useSetAtom(pageTitleAtom);
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
