@@ -1,14 +1,15 @@
-import { atom } from "jotai";
+import { useEffect } from "react";
+import { atom, useSetAtom } from "jotai";
 import { profileProp, reservationInfoProp } from "#/components/lib/types";
 
 export const tokenAtom = atom<string | null>(
   localStorage.getItem("gatewayApiToken")
 );
-
 export const profileAtom = atom<profileProp | null>(null);
 
-const initialPageAtomValue = "ホーム";
+const initialPageAtomValue = "Gateway";
 const pageAtom = atom(initialPageAtomValue);
+// hook内ではこっちを使う
 export const pageTitleAtom = atom(
   (get) => get(pageAtom),
   (get, set, action: string) => {
@@ -20,6 +21,12 @@ export const pageTitleAtom = atom(
     set(pageAtom, action);
   }
 );
+export const setTitle = (pageTitle: string) => {
+  const setPageTitle = useSetAtom(pageTitleAtom);
+  useEffect(() => {
+    setPageTitle(pageTitle);
+  }, []);
+};
 
 export const deviceStateAtom = atom(false);
 

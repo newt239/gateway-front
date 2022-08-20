@@ -17,11 +17,7 @@ const TopBar = () => {
   const pageTitle = useAtomValue(pageTitleAtom);
 
   return (
-    <AppBar
-      position="fixed"
-      elevation={0}
-      sx={{ width: { xs: "100%", sm: `calc(100% - 240px)` } }}
-    >
+    <AppBar position="sticky" elevation={0} sx={{ width: "100%", zIndex: 100 }}>
       <Container maxWidth="xl">
         <Toolbar
           disableGutters

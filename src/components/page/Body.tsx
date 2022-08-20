@@ -6,6 +6,7 @@ import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
+import { handleApiError } from "#/components/lib/commonFunction";
 import Home from "#/components/page/Home";
 import Login from "#/components/page/Login";
 import ExhibitIndex from "#/components/page/Exhibit/Index";
@@ -42,6 +43,7 @@ const Body = () => {
         })
         .then((meRes) => {
           setProfile(meRes);
+          localStorage.setItem("user_id", meRes.user_id);
           ReactGA.event({
             category: "login",
             action: "auto_success",
@@ -49,48 +51,23 @@ const Body = () => {
           });
         })
         .catch((err: AxiosError) => {
-          if (err.response) {
-            if (err.response.status === 401) {
-              setErrorDialogTitle("セッションがタイムアウトしました");
-              setShowMessageDialog(true);
-              setMessageDialogMessage(
-                "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。"
-              );
-              localStorage.removeItem("gatewayApiToken");
-              ReactGA.event({
-                category: "login",
-                action: "session_timeout",
-                label: err.message,
-              });
-            } else {
-              setMessageDialogMessage(err.response.statusText);
-              ReactGA.event({
-                category: "login",
-                action: "unknown_error",
-                label: err.response.statusText,
-              });
-            }
+          if (err.response && err.response.status === 401) {
+            setErrorDialogTitle("セッションがタイムアウトしました");
+            setShowMessageDialog(true);
+            setMessageDialogMessage(
+              "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。"
+            );
+            localStorage.removeItem("gatewayApiToken");
+          } else if (err.message === "Network Error") {
+            setErrorDialogTitle("サーバーからの応答がありません");
+            setShowMessageDialog(true);
+            setMessageDialogMessage(
+              "端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。"
+            );
           } else {
-            if (err.message === "Network Error") {
-              setErrorDialogTitle("サーバーからの応答がありません");
-              setShowMessageDialog(true);
-              setMessageDialogMessage(
-                "端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。"
-              );
-              ReactGA.event({
-                category: "login",
-                action: "network_error",
-                label: err.message,
-              });
-            } else {
-              setMessageDialogMessage(err.message);
-              setShowMessageDialog(true);
-              ReactGA.event({
-                category: "login",
-                action: "unknown_error",
-                label: err.message,
-              });
-            }
+            handleApiError(err, "login");
+            setMessageDialogMessage(err.message);
+            setShowMessageDialog(true);
           }
           navigate("/login", { replace: true });
         });
@@ -111,73 +88,75 @@ const Body = () => {
         <Route path="login" element={<Login />} />
         {profile ? (
           <>
-            <Route index element={<Home />} />
-            <Route path="exhibit">
-              <Route index element={<ExhibitIndex />} />
-              {["moderator", "executive", "exhibit"].includes(
-                profile.user_type
-              ) ? (
-                <Route path=":exhibit_id">
-                  <Route
-                    path="enter"
-                    element={<ExhibitScan scanType="enter" />}
-                  />
-                  <Route
-                    path="exit"
-                    element={<ExhibitScan scanType="exit" />}
-                  />
+            {["moderator", "executive", "exhibit"].includes(
+              profile.user_type
+            ) ? (
+              <>
+                <Route index element={<Home />} />
+                <Route path="exhibit">
+                  <Route index element={<ExhibitIndex />} />
+                  <Route path=":exhibit_id">
+                    <Route
+                      path="enter"
+                      element={<ExhibitScan scanType="enter" />}
+                    />
+                    <Route
+                      path="exit"
+                      element={<ExhibitScan scanType="exit" />}
+                    />
+                  </Route>
                 </Route>
-              ) : (
-                <Route path="*" element={<Extra type="401" />} />
-              )}
-            </Route>
-            <Route path="entrance">
-              {["moderator", "executive"].includes(profile.user_type) ? (
-                <>
-                  <Route index element={<EntranceIndex />} />
-                  <Route path="reserve-check" element={<ReserveCheck />} />
-                  <Route path="enter" element={<EntranceEnter />} />
-                  <Route path="exit" element={<EntranceExit />} />
-                </>
-              ) : (
-                <Route path="*" element={<Extra type="401" />} />
-              )}
-            </Route>
-            <Route path="analytics">
-              {["moderator"].includes(profile.user_type) ? (
-                <>
-                  <Route index element={<AnalyticsIndex />} />
-                  <Route
-                    path="exhibit/:exhibit_id"
-                    element={<AnalyticsExhibit />}
-                  />
-                  <Route path="summary" element={<AnalyticsSummary />} />
-                </>
-              ) : ["exhibit"].includes(profile.user_type) ? (
-                <>
-                  <Route
-                    path={`exhibit/${profile.user_id}`}
-                    element={<AnalyticsExhibit />}
-                  />
-                </>
-              ) : (
-                <Route path="*" element={<Extra type="401" />} />
-              )}
-            </Route>
-            <Route path="admin">
-              {["moderator"].includes(profile.user_type) ? (
-                <>
-                  <Route path="guest" element={<AdminCheckGuest />} />
-                  <Route
-                    path="lost-wristband"
-                    element={<AdminLostWristband />}
-                  />
-                </>
-              ) : (
-                <Route path="*" element={<Extra type="401" />} />
-              )}
-            </Route>
-            <Route path="*" element={<Extra type="404" />} />
+                <Route path="entrance">
+                  {["moderator", "executive"].includes(profile.user_type) ? (
+                    <>
+                      <Route index element={<EntranceIndex />} />
+                      <Route path="reserve-check" element={<ReserveCheck />} />
+                      <Route path="enter" element={<EntranceEnter />} />
+                      <Route path="exit" element={<EntranceExit />} />
+                    </>
+                  ) : (
+                    <Route path="*" element={<Extra type="401" />} />
+                  )}
+                </Route>
+                <Route path="analytics">
+                  {["moderator"].includes(profile.user_type) ? (
+                    <>
+                      <Route index element={<AnalyticsIndex />} />
+                      <Route
+                        path="exhibit/:exhibit_id"
+                        element={<AnalyticsExhibit />}
+                      />
+                      <Route path="summary" element={<AnalyticsSummary />} />
+                    </>
+                  ) : ["exhibit"].includes(profile.user_type) ? (
+                    <>
+                      <Route
+                        path={`exhibit/${profile.user_id}`}
+                        element={<AnalyticsExhibit />}
+                      />
+                    </>
+                  ) : (
+                    <Route path="*" element={<Extra type="401" />} />
+                  )}
+                </Route>
+                <Route path="admin">
+                  {["moderator"].includes(profile.user_type) ? (
+                    <>
+                      <Route path="guest" element={<AdminCheckGuest />} />
+                      <Route
+                        path="lost-wristband"
+                        element={<AdminLostWristband />}
+                      />
+                    </>
+                  ) : (
+                    <Route path="*" element={<Extra type="401" />} />
+                  )}
+                </Route>
+                <Route path="*" element={<Extra type="404" />} />
+              </>
+            ) : (
+              <Route path="*" element={<Extra type="unknown" />} />
+            )}
           </>
         ) : (
           <Route path="*" element={<Extra type="loading" />} />

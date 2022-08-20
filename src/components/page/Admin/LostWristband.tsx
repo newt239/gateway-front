@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, pageTitleAtom } from "#/components/lib/jotai";
+import React, { useState } from "react";
+import { useAtomValue } from "jotai";
+import { tokenAtom, setTitle } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -34,26 +34,24 @@ import {
   getTimePart,
   guestIdValidation,
   reservationIdValidation,
+  handleApiError,
 } from "#/components/lib/commonFunction";
 import MessageDialog from "#/components/block/MessageDialog";
 
 const LostWristband = () => {
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("リストバンド紛失");
-  }, []);
+  setTitle("リストバンド紛失対応");
 
   const token = useAtomValue(tokenAtom);
 
-  const [reservationId, setReservationId] = useState("");
+  const [reservationId, setReservationId] = useState<string>("");
   const [reservation, setReservation] = useState<reservationInfoProp | null>(
     null
   );
-  const [newGuestId, setNewGuestId] = useState("");
-  const [oldGuestId, setOldGuestId] = useState("not-set");
-  const [loading, setLoading] = useState(false);
+  const [newGuestId, setNewGuestId] = useState<string>("");
+  const [oldGuestId, setOldGuestId] = useState<string>("not-set");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [dialogMessage, setDialogMessage] = useState<string>("");
 
   const checkReservation = () => {
@@ -66,11 +64,10 @@ const LostWristband = () => {
             headers: { Authorization: "Bearer " + token },
           })
           .then((res) => {
-            console.log(res);
             setReservation(res);
           })
           .catch((err: AxiosError) => {
-            console.log(err);
+            handleApiError(err, "reservation_info");
           })
           .finally(() => {
             setLoading(false);
@@ -100,7 +97,7 @@ const LostWristband = () => {
             setDialogMessage("スペアの登録が完了しました。");
           })
           .catch((err: AxiosError) => {
-            console.log(err);
+            handleApiError(err, "revoke_guest");
           })
           .finally(() => {
             setLoading(false);
@@ -116,7 +113,7 @@ const LostWristband = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -186,9 +183,7 @@ const LostWristband = () => {
                           )}
                       </ListItemText>
                     </ListItem>
-                    {reservation.registered.length !== 0 && (
-                      <Divider />
-                    )}
+                    {reservation.registered.length !== 0 && <Divider />}
                     {reservation.registered.map((guest) => (
                       <ListItem key={guest.guest_id}>
                         <ListItemIcon>
@@ -203,7 +198,9 @@ const LostWristband = () => {
                   </List>
                 </Card>
                 {reservation.registered.length === 0 && (
-                  <Alert severity="error" variant="filled" sx={{ my: 2 }}>この予約IDに紐付けられたリストバンドはありません。</Alert>
+                  <Alert severity="error" variant="filled" sx={{ my: 2 }}>
+                    この予約IDに紐付けられたリストバンドはありません。
+                  </Alert>
                 )}
               </Grid>
             )}

@@ -16,6 +16,9 @@ import {
   SelectChangeEvent,
   DialogTitle,
   MenuItem,
+  Switch,
+  FormControlLabel,
+  Stack,
 } from "@mui/material";
 import CameraswitchRoundedIcon from "@mui/icons-material/CameraswitchRounded";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -32,6 +35,9 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const [scannerStatus, setScannerStatus] = useState<
     "loading" | "waiting" | "error"
   >("loading");
+  const [reverseCamera, setReverseCamera] = useState<boolean>(
+    localStorage.getItem("reverseCamera") === "false" ? false : true
+  );
   type deviceProp = {
     deviceId: string;
     label: string;
@@ -183,12 +189,30 @@ const Scanner = ({ handleScan }: ScannerProps) => {
         setRefreshQrReader(false);
       }
     } else {
+      setScannerStatus("waiting");
       setSelectCameraModalOpen(true);
     }
   };
 
   return (
-    <>
+    <Stack>
+      <FormControlLabel
+        control={
+          <Switch
+            edge="end"
+            onChange={() =>
+              setReverseCamera((state) => {
+                localStorage.setItem("reverseCamera", String(!state));
+                return !state;
+              })
+            }
+            checked={reverseCamera}
+            sx={{ mr: 1 }}
+          />
+        }
+        label="カメラを反転"
+        sx={{ margin: "auto" }}
+      />
       <Box
         sx={{
           position: "relative",
@@ -201,7 +225,12 @@ const Scanner = ({ handleScan }: ScannerProps) => {
         }}
       >
         {qrReaderIsShow && refreshQrReader && (
-          <div style={{ position: "relative" }}>
+          <div
+            style={{
+              position: "relative",
+              transform: reverseCamera ? "scale(-1, 1)" : "scale(1, 1)",
+            }}
+          >
             <QrReader
               onScan={(text: string | null) => handleScan(text)}
               onLoad={() => {
@@ -268,7 +297,7 @@ const Scanner = ({ handleScan }: ScannerProps) => {
           setMessageDialogOpen(false);
         }}
       />
-    </>
+    </Stack>
   );
 };
 

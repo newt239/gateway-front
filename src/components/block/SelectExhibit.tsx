@@ -14,6 +14,8 @@ import {
   Grid,
 } from "@mui/material";
 
+import { handleApiError } from "#/components/lib/commonFunction";
+
 type SelectExhibitProp = {
   currentExhibit: string;
   setCurrentExhibit: Dispatch<SetStateAction<string>>;
@@ -60,7 +62,7 @@ const SelectExhibit = ({
           });
         })
         .catch((err: AxiosError) => {
-          console.log(err);
+          handleApiError(err, "select_exhibit");
         })
         .finally(() => {
           setLoading(false);
@@ -80,7 +82,7 @@ const SelectExhibit = ({
   };
 
   return (
-    <Grid container sx={{ alignItems: "center", gap: ".5rem" }}>
+    <Grid container spacing={2} sx={{ alignItems: "center" }}>
       <Grid item>
         <FormControl sx={{ m: 1, minWidth: 200 }}>
           <Select

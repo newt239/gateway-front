@@ -9,6 +9,8 @@ import { ApexOptions } from "apexcharts";
 
 import { TextField, Typography } from "@mui/material";
 
+import { handleApiError } from "#/components/lib/commonFunction";
+
 const ExhibitEnterCountBarChart: React.FunctionComponent<{
   exhibit_id: string;
 }> = ({ exhibit_id }) => {
@@ -49,7 +51,7 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
             }
           })
           .catch((err: AxiosError) => {
-            console.log(err);
+            handleApiError(err, "exhibit_enter_analytics");
           });
       }
     };

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, pageTitleAtom } from "#/components/lib/jotai";
+import { useAtomValue } from "jotai";
+import { tokenAtom, setTitle } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
@@ -20,32 +20,29 @@ import LinearProgress, {
 } from "@mui/material/LinearProgress";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
+import { handleApiError } from "#/components/lib/commonFunction";
+
+type ExhibitSummaryProp = {
+  id: string;
+  exhibit_name: string;
+  group_name: string;
+  room_name: string;
+  exhibit_type: string;
+  count: number;
+  capacity: number;
+};
+
 const AnalyticsSummary = () => {
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("展示一覧");
-  }, []);
-
+  setTitle("展示一覧");
   const token = useAtomValue(tokenAtom);
-
-  type exhibitProp = {
-    id: string;
-    exhibit_name: string;
-    group_name: string;
-    room_name: string;
-    exhibit_type: string;
-    count: number;
-    capacity: number;
-  };
-
-  const [clubList, setClubList] = useState<exhibitProp[]>([]);
-  const [classList, setClassList] = useState<exhibitProp[]>([]);
-  const [stageList, setStageList] = useState<exhibitProp[]>([]);
-  const [otherList, setOtherList] = useState<exhibitProp[]>([]);
+  const [clubList, setClubList] = useState<ExhibitSummaryProp[]>([]);
+  const [classList, setClassList] = useState<ExhibitSummaryProp[]>([]);
+  const [stageList, setStageList] = useState<ExhibitSummaryProp[]>([]);
+  const [otherList, setOtherList] = useState<ExhibitSummaryProp[]>([]);
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [loading, setLoading] = useState(true);
 
-  const sortExhibitByCount = (a: exhibitProp, b: exhibitProp) => {
+  const sortExhibitByCount = (a: ExhibitSummaryProp, b: ExhibitSummaryProp) => {
     if (a.count > b.count) return -1;
     if (a.count < b.count) return 1;
     return 0;
@@ -82,7 +79,7 @@ const AnalyticsSummary = () => {
           setLastUpdate(moment());
         })
         .catch((err: AxiosError) => {
-          console.log(err);
+          handleApiError(err, "exhibit_all_analytics");
         })
         .finally(() => {
           setLoading(false);
@@ -101,12 +98,17 @@ const AnalyticsSummary = () => {
     };
   }, []);
 
-  const ExhibitListBlock = ({ exhibit }: { exhibit: exhibitProp }) => {
+  const ExhibitListBlock = ({ exhibit }: { exhibit: ExhibitSummaryProp }) => {
     return (
       <ListItem divider disablePadding>
         <Link
           to={`/analytics/exhibit/${exhibit.id}`}
-          style={{ width: "100%", color: "black", textDecoration: "none", flexDirection: "column" }}
+          style={{
+            width: "100%",
+            color: "black",
+            textDecoration: "none",
+            flexDirection: "column",
+          }}
         >
           <Grid
             container
@@ -152,7 +154,7 @@ const AnalyticsSummary = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ py: 2 }}>
+    <Grid container spacing={2}>
       <Grid
         item
         xs={12}
@@ -177,13 +179,7 @@ const AnalyticsSummary = () => {
         <Typography variant="h3">部活動</Typography>
         <List>
           {clubList.length === 0 ? (
-            <>
-              <Skeleton
-                variant="rectangular"
-                height="90vh"
-                sx={{ borderRadius: ".5rem" }}
-              />
-            </>
+            <Skeleton variant="rounded" height="90vh" />
           ) : (
             <>
               {clubList.map((exhibit) => (
@@ -197,13 +193,7 @@ const AnalyticsSummary = () => {
         <Typography variant="h3">クラス</Typography>
         <List>
           {classList.length === 0 ? (
-            <>
-              <Skeleton
-                variant="rectangular"
-                height="90vh"
-                sx={{ borderRadius: ".5rem" }}
-              />
-            </>
+            <Skeleton variant="rounded" height="90vh" />
           ) : (
             <>
               {classList.map((exhibit) => (
@@ -219,13 +209,7 @@ const AnalyticsSummary = () => {
             <Typography variant="h3">ステージ</Typography>
             <List>
               {stageList.length === 0 ? (
-                <>
-                  <Skeleton
-                    variant="rectangular"
-                    height="30vh"
-                    sx={{ borderRadius: ".5rem" }}
-                  />
-                </>
+                <Skeleton variant="rounded" height="30vh" />
               ) : (
                 <>
                   {stageList.map((exhibit) => (
@@ -239,13 +223,7 @@ const AnalyticsSummary = () => {
             <Typography variant="h3">その他</Typography>
             <List>
               {otherList.length === 0 ? (
-                <>
-                  <Skeleton
-                    variant="rectangular"
-                    height="50vh"
-                    sx={{ borderRadius: ".5rem" }}
-                  />
-                </>
+                <Skeleton variant="rounded" height="50vh" />
               ) : (
                 <>
                   {otherList.map((exhibit) => (
