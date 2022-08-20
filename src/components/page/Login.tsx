@@ -34,6 +34,7 @@ const Login = () => {
 
   const login = () => {
     if (userIdValue !== "") {
+      localStorage.setItem("user_id", userIdValue);
       setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .auth.login.$post({

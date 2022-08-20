@@ -43,6 +43,7 @@ const Body = () => {
         })
         .then((meRes) => {
           setProfile(meRes);
+          localStorage.setItem("user_id", meRes.user_id);
           ReactGA.event({
             category: "login",
             action: "auto_success",
