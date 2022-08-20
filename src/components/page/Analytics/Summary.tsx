@@ -174,13 +174,10 @@ const AnalyticsSummary = () => {
         <Typography variant="h3">部活動</Typography>
         <List>
           {clubList.length === 0 ? (
-            <>
-              <Skeleton
-                variant="rectangular"
-                height="90vh"
-                sx={{ borderRadius: ".5rem" }}
-              />
-            </>
+            <Skeleton
+              variant="rounded"
+              height="90vh"
+            />
           ) : (
             <>
               {clubList.map((exhibit) => (
@@ -194,13 +191,10 @@ const AnalyticsSummary = () => {
         <Typography variant="h3">クラス</Typography>
         <List>
           {classList.length === 0 ? (
-            <>
-              <Skeleton
-                variant="rectangular"
-                height="90vh"
-                sx={{ borderRadius: ".5rem" }}
-              />
-            </>
+            <Skeleton
+              variant="rounded"
+              height="90vh"
+            />
           ) : (
             <>
               {classList.map((exhibit) => (
@@ -216,13 +210,10 @@ const AnalyticsSummary = () => {
             <Typography variant="h3">ステージ</Typography>
             <List>
               {stageList.length === 0 ? (
-                <>
-                  <Skeleton
-                    variant="rectangular"
-                    height="30vh"
-                    sx={{ borderRadius: ".5rem" }}
-                  />
-                </>
+                <Skeleton
+                  variant="rounded"
+                  height="30vh"
+                />
               ) : (
                 <>
                   {stageList.map((exhibit) => (
@@ -236,13 +227,10 @@ const AnalyticsSummary = () => {
             <Typography variant="h3">その他</Typography>
             <List>
               {otherList.length === 0 ? (
-                <>
-                  <Skeleton
-                    variant="rectangular"
-                    height="50vh"
-                    sx={{ borderRadius: ".5rem" }}
-                  />
-                </>
+                <Skeleton
+                  variant="rounded"
+                  height="50vh"
+                />
               ) : (
                 <>
                   {otherList.map((exhibit) => (

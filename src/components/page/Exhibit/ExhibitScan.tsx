@@ -541,7 +541,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     </Grid>
                   </Grid>
                 ) : (
-                  <Skeleton variant="rectangular" width={250} height="100%" />
+                  <Skeleton variant="rounded" width={250} height="100%" />
                 )}
               </Grid>
               {largerThanMD && (
