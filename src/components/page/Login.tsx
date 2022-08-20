@@ -20,6 +20,8 @@ import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IosShareIcon from "@mui/icons-material/IosShare";
 
+import { handleApiError } from "#/components/lib/commonFunction";
+
 const Login = () => {
   setTitle("ログイン");
   const setToken = useSetAtom(tokenAtom);
@@ -31,58 +33,53 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const login = () => {
-    if (userIdValue !== "") {
-      setLoading(true);
-      apiClient(process.env.REACT_APP_API_BASE_URL)
-        .auth.login.$post({
-          body: {
-            user_id: userIdValue,
-            password: passwordValue,
-          },
-        })
-        .then((loginRes) => {
-          localStorage.setItem("gatewayApiToken", loginRes.token);
-          setToken(loginRes.token);
-          apiClient(process.env.REACT_APP_API_BASE_URL)
-            .auth.me.$get({
-              headers: {
-                Authorization: `Bearer ${loginRes.token}`,
-              },
-            })
-            .then((meRes) => {
-              setProfile(meRes);
-              navigate("/", { replace: true });
-              ReactGA.event({
-                category: "login",
-                action: "success",
-                label: userIdValue,
-              });
-            })
-            .catch((err: AxiosError) => {
-              console.log(err);
-              setErrorMessage("ユーザー情報の取得に際しエラーが発生しました。");
-            });
-        })
-        .catch((err: AxiosError) => {
-          if (err.message === "Network Error") {
-            setErrorMessage(
-              "サーバーからの応答がありません。端末がネットワークに接続されているか確認してください。"
-            );
-          } else {
-            setErrorMessage(
-              "エラーが発生しました。ユーザーIDまたはパスワードが間違っている可能性があります。"
-            );
+    localStorage.setItem("user_id", userIdValue);
+    setLoading(true);
+    apiClient(process.env.REACT_APP_API_BASE_URL)
+      .auth.login.$post({
+        body: {
+          user_id: userIdValue,
+          password: passwordValue,
+        },
+      })
+      .then((loginRes) => {
+        localStorage.setItem("gatewayApiToken", loginRes.token);
+        setToken(loginRes.token);
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .auth.me.$get({
+            headers: {
+              Authorization: `Bearer ${loginRes.token}`,
+            },
+          })
+          .then((meRes) => {
+            setProfile(meRes);
+            navigate("/", { replace: true });
             ReactGA.event({
               category: "login",
-              action: "unknown_error",
+              action: "success",
               label: userIdValue,
             });
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
+          })
+          .catch((err: AxiosError) => {
+            handleApiError(err, "get_user_info");
+            setErrorMessage("ユーザー情報の取得に際しエラーが発生しました。");
+          });
+      })
+      .catch((err: AxiosError) => {
+        handleApiError(err, "login");
+        if (err.message === "Network Error") {
+          setErrorMessage(
+            "サーバーからの応答がありません。端末がネットワークに接続されているか確認してください。"
+          );
+        } else {
+          setErrorMessage(
+            "エラーが発生しました。ユーザーIDまたはパスワードが間違っている可能性があります。"
+          );
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   return (
     <Grid container spacing={2}>
@@ -132,6 +129,7 @@ const Login = () => {
                   }
                 }}
                 variant="outlined"
+                disabled={userIdValue.length === 0 || passwordValue.length === 0}
                 size="large"
                 startIcon={<LoginRoundedIcon />}
               >

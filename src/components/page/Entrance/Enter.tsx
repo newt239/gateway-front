@@ -41,6 +41,7 @@ import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import {
   getTimePart,
   guestIdValidation,
+  handleApiError,
 } from "#/components/lib/commonFunction";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import Scanner from "#/components/block/Scanner";
@@ -132,7 +133,7 @@ const EntranceEnter = () => {
           setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
         })
         .catch((err: AxiosError) => {
-          console.log(err.message);
+          handleApiError(err, "entrance_enter");
           setText("");
           setDeviceState(true);
           setSmDrawerStatus(false);

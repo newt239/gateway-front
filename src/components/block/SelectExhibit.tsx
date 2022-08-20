@@ -14,6 +14,8 @@ import {
   Grid,
 } from "@mui/material";
 
+import { handleApiError } from "#/components/lib/commonFunction";
+
 type SelectExhibitProp = {
   currentExhibit: string;
   setCurrentExhibit: Dispatch<SetStateAction<string>>;
@@ -60,7 +62,7 @@ const SelectExhibit = ({
           });
         })
         .catch((err: AxiosError) => {
-          console.log(err);
+          handleApiError(err, "select_exhibit");
         })
         .finally(() => {
           setLoading(false);

@@ -5,7 +5,6 @@ import { profileProp, reservationInfoProp } from "#/components/lib/types";
 export const tokenAtom = atom<string | null>(
   localStorage.getItem("gatewayApiToken")
 );
-
 export const profileAtom = atom<profileProp | null>(null);
 
 const initialPageAtomValue = "Gateway";

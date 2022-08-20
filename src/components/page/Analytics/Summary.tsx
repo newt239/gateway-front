@@ -20,6 +20,8 @@ import LinearProgress, {
 } from "@mui/material/LinearProgress";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
+import { handleApiError } from "#/components/lib/commonFunction";
+
 type ExhibitSummaryProp = {
   id: string;
   exhibit_name: string;
@@ -77,7 +79,7 @@ const AnalyticsSummary = () => {
           setLastUpdate(moment());
         })
         .catch((err: AxiosError) => {
-          console.log(err);
+          handleApiError(err, "exhibit_all_analytics");
         })
         .finally(() => {
           setLoading(false);

@@ -10,6 +10,7 @@ import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRound
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
+import { handleApiError } from "#/components/lib/commonFunction";
 import ExhibitEnterCountBarChart from "#/components/block/ExhibitEnterCountBarChart";
 import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList";
 
@@ -38,7 +39,7 @@ const AnalyticsExhibit = () => {
             }
           })
           .catch((err: AxiosError) => {
-            console.log(err);
+            handleApiError(err, "current_exhibit");
           });
       }
     }, []);

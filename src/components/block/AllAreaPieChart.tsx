@@ -8,6 +8,8 @@ import { ApexOptions } from "apexcharts";
 
 import { Typography, Box } from "@mui/material";
 
+import { handleApiError } from "#/components/lib/commonFunction";
+
 const AllAreaPieChart = () => {
   const token = useAtomValue(tokenAtom);
   const [allAreaTotalCount, setAllAreaTotalCount] = useState<number>(0);
@@ -41,7 +43,7 @@ const AllAreaPieChart = () => {
           setAllAreaChartSeries(res.map((v) => v.count));
         })
         .catch((err: AxiosError) => {
-          console.log(err);
+          handleApiError(err, "guest_ratio");
         });
     }
   }, []);

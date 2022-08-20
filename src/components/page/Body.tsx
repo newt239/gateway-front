@@ -6,6 +6,7 @@ import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
+import { handleApiError } from "#/components/lib/commonFunction";
 import Home from "#/components/page/Home";
 import Login from "#/components/page/Login";
 import ExhibitIndex from "#/components/page/Exhibit/Index";
@@ -42,6 +43,7 @@ const Body = () => {
         })
         .then((meRes) => {
           setProfile(meRes);
+          localStorage.setItem("user_id", meRes.user_id);
           ReactGA.event({
             category: "login",
             action: "auto_success",
@@ -49,6 +51,7 @@ const Body = () => {
           });
         })
         .catch((err: AxiosError) => {
+          handleApiError(err, "login");
           if (err.response) {
             if (err.response.status === 401) {
               setErrorDialogTitle("セッションがタイムアウトしました");
@@ -57,18 +60,8 @@ const Body = () => {
                 "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。"
               );
               localStorage.removeItem("gatewayApiToken");
-              ReactGA.event({
-                category: "login",
-                action: "session_timeout",
-                label: err.message,
-              });
             } else {
               setMessageDialogMessage(err.response.statusText);
-              ReactGA.event({
-                category: "login",
-                action: "unknown_error",
-                label: err.response.statusText,
-              });
             }
           } else {
             if (err.message === "Network Error") {
@@ -77,19 +70,9 @@ const Body = () => {
               setMessageDialogMessage(
                 "端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。"
               );
-              ReactGA.event({
-                category: "login",
-                action: "network_error",
-                label: err.message,
-              });
             } else {
               setMessageDialogMessage(err.message);
               setShowMessageDialog(true);
-              ReactGA.event({
-                category: "login",
-                action: "unknown_error",
-                label: err.message,
-              });
             }
           }
           navigate("/login", { replace: true });

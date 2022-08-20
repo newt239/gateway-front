@@ -43,6 +43,7 @@ import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import {
   getTimePart,
   guestIdValidation,
+  handleApiError,
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/components/lib/types";
@@ -235,7 +236,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setSmDrawerStatus(true);
           })
           .catch((err: AxiosError) => {
-            console.log(err);
+            handleApiError(err, "guest_info");
             setScanStatus("error");
             setAlertMessage("予期せぬエラーが発生しました。");
             ReactGA.event({
@@ -318,7 +319,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             );
           })
           .catch((err: AxiosError) => {
-            console.log(err.message);
+            handleApiError(err, "exhibit_scan");
             setAlertMessage(`何らかのエラーが発生しました。${err.message}`);
             setText("");
             setDeviceState(true);

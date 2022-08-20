@@ -16,6 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 
+import { handleApiError } from "#/components/lib/commonFunction";
+
 const RealtimeLog = () => {
   const token = useAtomValue(tokenAtom);
 
@@ -38,7 +40,7 @@ const RealtimeLog = () => {
           setExhibitList(res);
         })
         .catch((err: AxiosError) => {
-          console.log(err);
+          handleApiError(err, "realtime_log");
         });
     }
   };
@@ -89,7 +91,7 @@ const RealtimeLog = () => {
           setLastUpdate(moment());
         })
         .catch((err: AxiosError) => {
-          console.log(err);
+          handleApiError(err, "realtime_log");
         })
         .finally(() => {
           setLoading(false);

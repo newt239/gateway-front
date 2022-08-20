@@ -1,6 +1,8 @@
 import React from "react";
 import { BrowserRouter } from "react-router-dom";
 import ReactGA from "react-ga4";
+import { useAtomValue } from "jotai";
+import { profileAtom } from "#/components/lib/jotai";
 
 import { Box, ThemeProvider } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,6 +15,7 @@ import BottomNav from "#/components/layout/BottomNav";
 import Body from "#/components/page/Body";
 
 const App = () => {
+  const profile = useAtomValue(profileAtom);
   const { largerThanMD } = useDeviceWidth();
   ReactGA.initialize("G-1R85L99586");
   ReactGA.send("pageview");
@@ -25,7 +28,7 @@ const App = () => {
           <Box sx={{ display: "flex", flexWrap: "wrap", flexGrow: 1, m: 0 }}>
             <TopBar />
             <Box sx={{
-              height: largerThanMD ? "calc(100vh - 64px)" : "calc(100vh - 64px - 56px)",
+              height: !largerThanMD && profile ? "calc(100vh - 64px - 56px)" : "calc(100vh - 64px)",
               overflowY: "scroll",
               width: "100%",
               p: 2,
