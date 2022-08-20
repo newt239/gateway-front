@@ -19,6 +19,8 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
 
+import { handleApiError } from "#/components/lib/commonFunction";
+
 const columns: GridColDef[] = [
   { field: "id", headerName: "ゲストID" },
   { field: "guest_type", headerName: "属性" },
@@ -55,17 +57,17 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                  ? "教員"
-                  : v.guest_type === "family"
-                  ? "保護者"
-                  : "その他",
+                    ? "教員"
+                    : v.guest_type === "family"
+                      ? "保護者"
+                      : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:mm:ss"),
             };
           });
           setRows(currentGuestList);
         })
         .catch((err: AxiosError) => {
-          console.log(err);
+          handleApiError(err, "exhibit_current_guest_list");
         });
     }
   };
@@ -97,7 +99,7 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
               });
             })
             .catch((err: AxiosError) => {
-              console.log(err);
+              handleApiError(err, "leave_some_guest");
             });
         }
       }

@@ -34,6 +34,7 @@ import {
   getTimePart,
   guestIdValidation,
   reservationIdValidation,
+  handleApiError,
 } from "#/components/lib/commonFunction";
 import MessageDialog from "#/components/block/MessageDialog";
 
@@ -67,7 +68,7 @@ const LostWristband = () => {
             setReservation(res);
           })
           .catch((err: AxiosError) => {
-            console.log(err);
+            handleApiError(err, "reservation_info");
           })
           .finally(() => {
             setLoading(false);
@@ -97,7 +98,7 @@ const LostWristband = () => {
             setDialogMessage("スペアの登録が完了しました。");
           })
           .catch((err: AxiosError) => {
-            console.log(err);
+            handleApiError(err, "revoke_guest");
           })
           .finally(() => {
             setLoading(false);

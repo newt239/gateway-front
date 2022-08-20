@@ -20,6 +20,8 @@ import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IosShareIcon from "@mui/icons-material/IosShare";
 
+import { handleApiError } from "#/components/lib/commonFunction";
+
 const Login = () => {
   setTitle("ログイン");
   const setToken = useSetAtom(tokenAtom);
@@ -59,11 +61,12 @@ const Login = () => {
               });
             })
             .catch((err: AxiosError) => {
-              console.log(err);
+              handleApiError(err, "get_user_info");
               setErrorMessage("ユーザー情報の取得に際しエラーが発生しました。");
             });
         })
         .catch((err: AxiosError) => {
+          handleApiError(err, "login");
           if (err.message === "Network Error") {
             setErrorMessage(
               "サーバーからの応答がありません。端末がネットワークに接続されているか確認してください。"
@@ -72,11 +75,6 @@ const Login = () => {
             setErrorMessage(
               "エラーが発生しました。ユーザーIDまたはパスワードが間違っている可能性があります。"
             );
-            ReactGA.event({
-              category: "login",
-              action: "unknown_error",
-              label: userIdValue,
-            });
           }
         })
         .finally(() => {

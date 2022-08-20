@@ -37,6 +37,7 @@ import { guestInfoProp } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
+  handleApiError,
 } from "#/components/lib/commonFunction";
 
 type exhibitProp = {
@@ -67,7 +68,7 @@ const AdminCheckGuest = () => {
           setExhibitList(res);
         })
         .catch((err: AxiosError) => {
-          console.log(err);
+          handleApiError(err, "exhibit_list");
         });
     }
   }, [token]);

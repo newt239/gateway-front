@@ -36,6 +36,7 @@ import { guestInfoProp } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
+  handleApiError,
 } from "#/components/lib/commonFunction";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import Scanner from "#/components/block/Scanner";
@@ -86,6 +87,7 @@ const EntranceExit = () => {
             }
           })
           .catch((err: AxiosError) => {
+            handleApiError(err, "entrance_exit_guest");
             setLoading(false);
             setScanStatus("error");
             setAlertMessage(err.message);
@@ -122,6 +124,7 @@ const EntranceExit = () => {
           setSnackbarMessage(`${text}の退場処理が完了しました。`);
         })
         .catch((err: AxiosError) => {
+          handleApiError(err, "entrance_exit");
           setSnackbarMessage(`何らかのエラーが発生しました。${err.message}`);
           setText("");
           setDeviceState(true);

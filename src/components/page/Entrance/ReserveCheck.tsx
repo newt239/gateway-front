@@ -37,6 +37,7 @@ import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import {
   decodeReservationQRCode,
   getTimePart,
+  handleApiError,
   reservationIdValidation,
 } from "#/components/lib/commonFunction";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
@@ -117,6 +118,7 @@ const ReserveCheck = () => {
             }
           })
           .catch((err: AxiosError) => {
+            handleApiError(err, "reservation_info");
             setLoading(false);
             setScanStatus("error");
             setMessage(err.message);
