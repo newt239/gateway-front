@@ -129,7 +129,9 @@ const Login = () => {
                   }
                 }}
                 variant="outlined"
-                disabled={userIdValue.length === 0 || passwordValue.length === 0}
+                disabled={
+                  userIdValue.length === 0 || passwordValue.length === 0
+                }
                 size="large"
                 startIcon={<LoginRoundedIcon />}
               >
@@ -175,9 +177,7 @@ const Login = () => {
                 <IosShareIcon sx={{ verticalAlign: -5 }} />{" "}
                 から「ホーム画面に追加」をタップ
               </li>
-              <li>
-                ホーム画面に追加された「Gateway」アイコンをタップして起動
-              </li>
+              <li>ホーム画面に追加された「Gateway」アイコンをタップして起動</li>
             </ol>
           </Card>
         </Grid>

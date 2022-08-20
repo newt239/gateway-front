@@ -94,7 +94,7 @@ const AnalyticsExhibit = () => {
           <Typography variant="h3">時間帯別入場者数</Typography>
           <ExhibitEnterCountBarChart exhibit_id={exhibit_id} />
         </Grid>
-      </Grid >
+      </Grid>
     );
   } else {
     return (

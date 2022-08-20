@@ -82,7 +82,7 @@ const SelectExhibit = ({
   };
 
   return (
-    <Grid container sx={{ alignItems: "center", gap: ".5rem" }}>
+    <Grid container spacing={2} sx={{ alignItems: "center" }}>
       <Grid item>
         <FormControl sx={{ m: 1, minWidth: 200 }}>
           <Select

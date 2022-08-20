@@ -35,7 +35,9 @@ const Scanner = ({ handleScan }: ScannerProps) => {
   const [scannerStatus, setScannerStatus] = useState<
     "loading" | "waiting" | "error"
   >("loading");
-  const [reverseCamera, setReverseCamera] = useState<boolean>(localStorage.getItem("reverseCamera") === "false" ? false : true);
+  const [reverseCamera, setReverseCamera] = useState<boolean>(
+    localStorage.getItem("reverseCamera") === "false" ? false : true
+  );
   type deviceProp = {
     deviceId: string;
     label: string;
@@ -196,13 +198,17 @@ const Scanner = ({ handleScan }: ScannerProps) => {
     <Stack>
       <FormControlLabel
         control={
-          <Switch edge="end"
-            onChange={() => setReverseCamera(state => {
-              localStorage.setItem("reverseCamera", String(!state));
-              return !state;
-            })}
+          <Switch
+            edge="end"
+            onChange={() =>
+              setReverseCamera((state) => {
+                localStorage.setItem("reverseCamera", String(!state));
+                return !state;
+              })
+            }
             checked={reverseCamera}
-            sx={{ mr: 1 }} />
+            sx={{ mr: 1 }}
+          />
         }
         label="カメラを反転"
         sx={{ margin: "auto" }}
@@ -219,7 +225,12 @@ const Scanner = ({ handleScan }: ScannerProps) => {
         }}
       >
         {qrReaderIsShow && refreshQrReader && (
-          <div style={{ position: "relative", transform: reverseCamera ? "scale(-1, 1)" : "scale(1, 1)" }}>
+          <div
+            style={{
+              position: "relative",
+              transform: reverseCamera ? "scale(-1, 1)" : "scale(1, 1)",
+            }}
+          >
             <QrReader
               onScan={(text: string | null) => handleScan(text)}
               onLoad={() => {

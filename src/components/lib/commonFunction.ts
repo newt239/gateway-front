@@ -75,23 +75,32 @@ export const handleApiError = (error: AxiosError, name: string) => {
   if (url) {
     const config = {
       headers: {
-        'Accept': 'application/json',
-        'Content-type': 'application/json',
-      }
-    }
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+    };
     const userId = localStorage.getItem("user_id");
-    let content = "```timestamp: " + moment().format("MM/DD HH:mm:ss SSS") + "\n";
+    let content =
+      "```timestamp: " + moment().format("MM/DD HH:mm:ss SSS") + "\n";
     if (userId) {
       content += "user_id  : " + userId + "\n";
     }
-    content += "type     : " + name + "\nlocation : " + window.location.pathname + "\nmessage  : " + error.message + "\n\n" + String(error) + "```";
+    content +=
+      "type     : " +
+      name +
+      "\nlocation : " +
+      window.location.pathname +
+      "\nmessage  : " +
+      error.message +
+      "\n\n" +
+      String(error) +
+      "```";
     const postData = {
-      username: 'error log',
+      username: "error log",
       content: content,
-    }
-    axios.post(url, postData, config)
-      .catch((err: AxiosError) => {
-        console.log(err);
-      });
+    };
+    axios.post(url, postData, config).catch((err: AxiosError) => {
+      console.log(err);
+    });
   }
 };

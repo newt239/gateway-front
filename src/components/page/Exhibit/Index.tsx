@@ -52,9 +52,7 @@ const ExhibitIndex = () => {
       <Grid item xs={12} md={6} lg={4}>
         <Card variant="outlined" sx={{ height: "100%" }}>
           <CardActionArea
-            onClick={() =>
-              currentExhibit && navigate(`${currentExhibit}/exit`)
-            }
+            onClick={() => currentExhibit && navigate(`${currentExhibit}/exit`)}
           >
             <CardContent sx={{ p: 2 }}>
               <Typography variant="h3">退室処理</Typography>

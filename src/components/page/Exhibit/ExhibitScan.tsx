@@ -260,7 +260,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   useEffect(() => {
     if (scanStatus === "success") {
       setGuideMessage(
-        `情報を確認し、問題がなければ${scanType === "enter" ? "入室記録" : "退室記録"
+        `情報を確認し、問題がなければ${
+          scanType === "enter" ? "入室記録" : "退室記録"
         }を押してください`
       );
     }
@@ -373,10 +374,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -433,13 +434,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               このページを表示する権限がありません。
             </Card>
           </Grid>
-        </Grid >
+        </Grid>
       ) : (
-        <Grid
-          container
-          spacing={2}
-          sx={{ justifyContent: "space-evenly" }}
-        >
+        <Grid container spacing={2} sx={{ justifyContent: "space-evenly" }}>
           <Grid item xs={12}>
             <Grid container spacing={2} sx={{ alignItems: "center" }}>
               <Grid item>
@@ -448,14 +445,23 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 </Typography>
               </Grid>
               <Grid item flexGrow={1} xs={12} sm>
-                <Grid container spacing={2} sx={{ flexWrap: "nowrap", justifyContent: "flex-end", xs: { overflowX: "scroll" } }}>
+                <Grid
+                  container
+                  spacing={2}
+                  sx={{
+                    flexWrap: "nowrap",
+                    justifyContent: "flex-end",
+                    xs: { overflowX: "scroll" },
+                  }}
+                >
                   <Grid item>
                     <Button
                       size="small"
                       startIcon={<PublishedWithChangesRoundedIcon />}
                       onClick={() =>
                         navigate(
-                          `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                          `/exhibit/${exhibit_id || "unknown"}/${
+                            scanType === "enter" ? "exit" : "enter"
                           } `,
                           { replace: true }
                         )
@@ -464,28 +470,31 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
                     </Button>
                   </Grid>
-                  {profile && ["moderator", "exhibit"].includes(profile.user_type) && (
-                    <Grid item>
-                      <Button
-                        size="small"
-                        startIcon={<BarChartRoundedIcon />}
-                        onClick={() =>
-                          navigate(`/analytics/exhibit/${exhibit_id}`, {
-                            replace: true,
-                          })
-                        }
-                      >
-                        滞在状況
-                      </Button>
-                    </Grid>
-                  )}
+                  {profile &&
+                    ["moderator", "exhibit"].includes(profile.user_type) && (
+                      <Grid item>
+                        <Button
+                          size="small"
+                          startIcon={<BarChartRoundedIcon />}
+                          onClick={() =>
+                            navigate(`/analytics/exhibit/${exhibit_id}`, {
+                              replace: true,
+                            })
+                          }
+                        >
+                          滞在状況
+                        </Button>
+                      </Grid>
+                    )}
                   {profile &&
                     ["moderator", "executive"].includes(profile.user_type) && (
                       <Grid item>
                         <Button
                           size="small"
                           startIcon={<ArrowBackIosNewRoundedIcon />}
-                          onClick={() => navigate("/exhibit", { replace: true })}
+                          onClick={() =>
+                            navigate("/exhibit", { replace: true })
+                          }
                         >
                           一覧に戻る
                         </Button>
@@ -599,8 +608,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               ))}
           </Grid>
         </Grid>
-      )
-      }
+      )}
       <Snackbar
         open={snackbarMessage !== null}
         anchorOrigin={{

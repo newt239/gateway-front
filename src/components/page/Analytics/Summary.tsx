@@ -103,7 +103,12 @@ const AnalyticsSummary = () => {
       <ListItem divider disablePadding>
         <Link
           to={`/analytics/exhibit/${exhibit.id}`}
-          style={{ width: "100%", color: "black", textDecoration: "none", flexDirection: "column" }}
+          style={{
+            width: "100%",
+            color: "black",
+            textDecoration: "none",
+            flexDirection: "column",
+          }}
         >
           <Grid
             container
@@ -174,10 +179,7 @@ const AnalyticsSummary = () => {
         <Typography variant="h3">部活動</Typography>
         <List>
           {clubList.length === 0 ? (
-            <Skeleton
-              variant="rounded"
-              height="90vh"
-            />
+            <Skeleton variant="rounded" height="90vh" />
           ) : (
             <>
               {clubList.map((exhibit) => (
@@ -191,10 +193,7 @@ const AnalyticsSummary = () => {
         <Typography variant="h3">クラス</Typography>
         <List>
           {classList.length === 0 ? (
-            <Skeleton
-              variant="rounded"
-              height="90vh"
-            />
+            <Skeleton variant="rounded" height="90vh" />
           ) : (
             <>
               {classList.map((exhibit) => (
@@ -210,10 +209,7 @@ const AnalyticsSummary = () => {
             <Typography variant="h3">ステージ</Typography>
             <List>
               {stageList.length === 0 ? (
-                <Skeleton
-                  variant="rounded"
-                  height="30vh"
-                />
+                <Skeleton variant="rounded" height="30vh" />
               ) : (
                 <>
                   {stageList.map((exhibit) => (
@@ -227,10 +223,7 @@ const AnalyticsSummary = () => {
             <Typography variant="h3">その他</Typography>
             <List>
               {otherList.length === 0 ? (
-                <Skeleton
-                  variant="rounded"
-                  height="50vh"
-                />
+                <Skeleton variant="rounded" height="50vh" />
               ) : (
                 <>
                   {otherList.map((exhibit) => (

@@ -176,17 +176,15 @@ const LostWristband = () => {
                         {reservation.count}人
                         {reservation.count !==
                           reservation.registered.length && (
-                            <span>
-                              （残り：
-                              {reservation.count - reservation.registered.length}
-                              人）
-                            </span>
-                          )}
+                          <span>
+                            （残り：
+                            {reservation.count - reservation.registered.length}
+                            人）
+                          </span>
+                        )}
                       </ListItemText>
                     </ListItem>
-                    {reservation.registered.length !== 0 && (
-                      <Divider />
-                    )}
+                    {reservation.registered.length !== 0 && <Divider />}
                     {reservation.registered.map((guest) => (
                       <ListItem key={guest.guest_id}>
                         <ListItemIcon>
@@ -201,7 +199,9 @@ const LostWristband = () => {
                   </List>
                 </Card>
                 {reservation.registered.length === 0 && (
-                  <Alert severity="error" variant="filled" sx={{ my: 2 }}>この予約IDに紐付けられたリストバンドはありません。</Alert>
+                  <Alert severity="error" variant="filled" sx={{ my: 2 }}>
+                    この予約IDに紐付けられたリストバンドはありません。
+                  </Alert>
                 )}
               </Grid>
             )}

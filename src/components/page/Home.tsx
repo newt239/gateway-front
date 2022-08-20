@@ -68,17 +68,15 @@ const Home = () => {
           </Grid>
         </Card>
       </Grid>
-      {
-        largerThanMD && (
-          <Grid item xs={12} md={6} lg={4}>
-            <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-              <Typography variant="h3">アプリ設定</Typography>
-              <Settings />
-            </Card>
-          </Grid>
-        )
-      }
-    </Grid >
+      {largerThanMD && (
+        <Grid item xs={12} md={6} lg={4}>
+          <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+            <Typography variant="h3">アプリ設定</Typography>
+            <Settings />
+          </Card>
+        </Grid>
+      )}
+    </Grid>
   );
 };
 
