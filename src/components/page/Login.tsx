@@ -11,10 +11,10 @@ import {
   Alert,
   TextField,
   Button,
-  LinearProgress,
   Typography,
   Card,
   Link,
+  CircularProgress,
 } from "@mui/material";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
@@ -93,54 +93,59 @@ const Login = () => {
               </Grid>
             )}
             <Grid item xs={12}>
-              {loading && <LinearProgress />}
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                id="user_id"
-                label="ユーザーID"
-                type="text"
-                onChange={(event) => setUserIdValue(event.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    login();
-                  }
-                }}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                id="password"
-                label="パスワード"
-                type="password"
-                autoComplete="current-password"
-                onChange={(event) => setPasswordValue(event.target.value)}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    login();
-                  }
-                }}
-                fullWidth
-              />
-            </Grid>
-            <Grid item xs={12} sx={{ textAlign: "right" }}>
-              <Button
-                onClick={login}
-                onKeyPress={(e) => {
-                  if (e.key === "Enter") {
-                    login();
-                  }
-                }}
-                variant="outlined"
-                disabled={
-                  userIdValue.length === 0 || passwordValue.length === 0
-                }
-                size="large"
-                startIcon={<LoginRoundedIcon />}
-              >
-                ログイン
-              </Button>
+              <form>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      id="user_id"
+                      label="ユーザーID"
+                      type="text"
+                      autoComplete="username"
+                      onChange={(event) => setUserIdValue(event.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          login();
+                        }
+                      }}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      id="password"
+                      label="パスワード"
+                      type="password"
+                      autoComplete="current-password"
+                      onChange={(event) => setPasswordValue(event.target.value)}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          login();
+                        }
+                      }}
+                      fullWidth
+                    />
+                  </Grid>
+                  <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "1rem" }}>
+                    {!loading && <CircularProgress size={25} thickness={6} />}
+                    <Button
+                      onClick={login}
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter") {
+                          login();
+                        }
+                      }}
+                      variant="outlined"
+                      disabled={
+                        userIdValue.length === 0 || passwordValue.length === 0
+                      }
+                      size="large"
+                      startIcon={<LoginRoundedIcon />}
+                    >
+                      ログイン
+                    </Button>
+                  </Grid>
+                </Grid>
+              </form>
             </Grid>
           </Grid>
         </Card>
