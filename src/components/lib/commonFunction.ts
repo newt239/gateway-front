@@ -1,5 +1,10 @@
 import crypto from "crypto-js";
+import { AxiosError } from "axios";
+import { useAtomValue } from "jotai";
+import ReactGA from "react-ga4";
+
 import generalProps from "#/components/lib/generalProps";
+import { profileAtom } from "#/components/lib/jotai";
 
 export const getTimePart = (part: number) => {
   const time_part = generalProps.time_part;
@@ -58,4 +63,14 @@ export const reservationIdValidation = (reservation_id: string) => {
     }
   }
   return false;
+};
+
+export const handleApiError = (error: AxiosError, name: string) => {
+  const profile = useAtomValue(profileAtom);
+  console.log(error);
+  ReactGA.event({
+    category: `error_${name}`,
+    action: error.message,
+    label: profile?.user_id,
+  });
 };
