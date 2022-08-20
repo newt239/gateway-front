@@ -131,6 +131,7 @@ const Login = () => {
                   }
                 }}
                 variant="outlined"
+                disabled={userIdValue.length === 0 || passwordValue.length === 0}
                 size="large"
                 startIcon={<LoginRoundedIcon />}
               >
