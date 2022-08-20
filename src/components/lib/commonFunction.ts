@@ -1,10 +1,8 @@
 import crypto from "crypto-js";
-import { AxiosError } from "axios";
-import { useAtomValue } from "jotai";
+import axios, { AxiosError } from "axios";
 import ReactGA from "react-ga4";
 
 import generalProps from "#/components/lib/generalProps";
-import { profileAtom } from "#/components/lib/jotai";
 
 export const getTimePart = (part: number) => {
   const time_part = generalProps.time_part;
@@ -66,11 +64,27 @@ export const reservationIdValidation = (reservation_id: string) => {
 };
 
 export const handleApiError = (error: AxiosError, name: string) => {
-  const profile = useAtomValue(profileAtom);
   console.log(error);
   ReactGA.event({
     category: `error_${name}`,
     action: error.message,
-    label: profile?.user_id,
   });
+  const url = process.env.REACT_APP_DISCORD_WEBHOOK_URL;
+  console.log(url);
+  if (url) {
+    const config = {
+      headers: {
+        'Accept': 'application/json',
+        'Content-type': 'application/json',
+      }
+    }
+    const postData = {
+      username: 'error log',
+      content: "type: ``" + name + "``\nlocation: ``" + window.location.pathname + "``\nmessage: ``" + error.message + "``\n\n``" + String(error) + "``",
+    }
+    axios.post(url, postData, config)
+      .catch((err: AxiosError) => {
+        console.log(err);
+      });
+  }
 };
