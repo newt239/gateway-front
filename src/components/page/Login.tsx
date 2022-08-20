@@ -126,7 +126,7 @@ const Login = () => {
                     />
                   </Grid>
                   <Grid item xs={12} sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: "1rem" }}>
-                    {!loading && <CircularProgress size={25} thickness={6} />}
+                    {loading && <CircularProgress size={25} thickness={6} />}
                     <Button
                       onClick={login}
                       onKeyPress={(e) => {
