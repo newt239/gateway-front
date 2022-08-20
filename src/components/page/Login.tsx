@@ -33,55 +33,53 @@ const Login = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const login = () => {
-    if (userIdValue !== "") {
-      localStorage.setItem("user_id", userIdValue);
-      setLoading(true);
-      apiClient(process.env.REACT_APP_API_BASE_URL)
-        .auth.login.$post({
-          body: {
-            user_id: userIdValue,
-            password: passwordValue,
-          },
-        })
-        .then((loginRes) => {
-          localStorage.setItem("gatewayApiToken", loginRes.token);
-          setToken(loginRes.token);
-          apiClient(process.env.REACT_APP_API_BASE_URL)
-            .auth.me.$get({
-              headers: {
-                Authorization: `Bearer ${loginRes.token}`,
-              },
-            })
-            .then((meRes) => {
-              setProfile(meRes);
-              navigate("/", { replace: true });
-              ReactGA.event({
-                category: "login",
-                action: "success",
-                label: userIdValue,
-              });
-            })
-            .catch((err: AxiosError) => {
-              handleApiError(err, "get_user_info");
-              setErrorMessage("ユーザー情報の取得に際しエラーが発生しました。");
+    localStorage.setItem("user_id", userIdValue);
+    setLoading(true);
+    apiClient(process.env.REACT_APP_API_BASE_URL)
+      .auth.login.$post({
+        body: {
+          user_id: userIdValue,
+          password: passwordValue,
+        },
+      })
+      .then((loginRes) => {
+        localStorage.setItem("gatewayApiToken", loginRes.token);
+        setToken(loginRes.token);
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .auth.me.$get({
+            headers: {
+              Authorization: `Bearer ${loginRes.token}`,
+            },
+          })
+          .then((meRes) => {
+            setProfile(meRes);
+            navigate("/", { replace: true });
+            ReactGA.event({
+              category: "login",
+              action: "success",
+              label: userIdValue,
             });
-        })
-        .catch((err: AxiosError) => {
-          handleApiError(err, "login");
-          if (err.message === "Network Error") {
-            setErrorMessage(
-              "サーバーからの応答がありません。端末がネットワークに接続されているか確認してください。"
-            );
-          } else {
-            setErrorMessage(
-              "エラーが発生しました。ユーザーIDまたはパスワードが間違っている可能性があります。"
-            );
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
+          })
+          .catch((err: AxiosError) => {
+            handleApiError(err, "get_user_info");
+            setErrorMessage("ユーザー情報の取得に際しエラーが発生しました。");
+          });
+      })
+      .catch((err: AxiosError) => {
+        handleApiError(err, "login");
+        if (err.message === "Network Error") {
+          setErrorMessage(
+            "サーバーからの応答がありません。端末がネットワークに接続されているか確認してください。"
+          );
+        } else {
+          setErrorMessage(
+            "エラーが発生しました。ユーザーIDまたはパスワードが間違っている可能性があります。"
+          );
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   return (
     <Grid container spacing={2}>
