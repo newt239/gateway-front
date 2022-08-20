@@ -51,29 +51,23 @@ const Body = () => {
           });
         })
         .catch((err: AxiosError) => {
-          handleApiError(err, "login");
-          if (err.response) {
-            if (err.response.status === 401) {
-              setErrorDialogTitle("セッションがタイムアウトしました");
-              setShowMessageDialog(true);
-              setMessageDialogMessage(
-                "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。"
-              );
-              localStorage.removeItem("gatewayApiToken");
-            } else {
-              setMessageDialogMessage(err.response.statusText);
-            }
+          if (err.response && err.response.status === 401) {
+            setErrorDialogTitle("セッションがタイムアウトしました");
+            setShowMessageDialog(true);
+            setMessageDialogMessage(
+              "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。"
+            );
+            localStorage.removeItem("gatewayApiToken");
+          } else if (err.message === "Network Error") {
+            setErrorDialogTitle("サーバーからの応答がありません");
+            setShowMessageDialog(true);
+            setMessageDialogMessage(
+              "端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。"
+            );
           } else {
-            if (err.message === "Network Error") {
-              setErrorDialogTitle("サーバーからの応答がありません");
-              setShowMessageDialog(true);
-              setMessageDialogMessage(
-                "端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。"
-              );
-            } else {
-              setMessageDialogMessage(err.message);
-              setShowMessageDialog(true);
-            }
+            handleApiError(err, "login");
+            setMessageDialogMessage(err.message);
+            setShowMessageDialog(true);
           }
           navigate("/login", { replace: true });
         });

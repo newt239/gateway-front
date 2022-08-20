@@ -43,15 +43,15 @@ const LostWristband = () => {
 
   const token = useAtomValue(tokenAtom);
 
-  const [reservationId, setReservationId] = useState("");
+  const [reservationId, setReservationId] = useState<string>("");
   const [reservation, setReservation] = useState<reservationInfoProp | null>(
     null
   );
-  const [newGuestId, setNewGuestId] = useState("");
-  const [oldGuestId, setOldGuestId] = useState("not-set");
-  const [loading, setLoading] = useState(false);
+  const [newGuestId, setNewGuestId] = useState<string>("");
+  const [oldGuestId, setOldGuestId] = useState<string>("not-set");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [dialogMessage, setDialogMessage] = useState<string>("");
 
   const checkReservation = () => {
@@ -64,7 +64,6 @@ const LostWristband = () => {
             headers: { Authorization: "Bearer " + token },
           })
           .then((res) => {
-            console.log(res);
             setReservation(res);
           })
           .catch((err: AxiosError) => {
@@ -176,12 +175,12 @@ const LostWristband = () => {
                         {reservation.count}人
                         {reservation.count !==
                           reservation.registered.length && (
-                          <span>
-                            （残り：
-                            {reservation.count - reservation.registered.length}
-                            人）
-                          </span>
-                        )}
+                            <span>
+                              （残り：
+                              {reservation.count - reservation.registered.length}
+                              人）
+                            </span>
+                          )}
                       </ListItemText>
                     </ListItem>
                     {reservation.registered.length !== 0 && <Divider />}

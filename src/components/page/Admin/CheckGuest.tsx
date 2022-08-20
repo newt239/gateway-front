@@ -123,8 +123,8 @@ const AdminCheckGuest = () => {
               )
             );
           })
-          .catch((err) => {
-            console.log(err);
+          .catch((err: AxiosError) => {
+            handleApiError(err, "guest_info");
           })
           .finally(() => {
             ReactGA.event({
@@ -230,10 +230,10 @@ const AdminCheckGuest = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                      ? "生徒"
-                      : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : "その他"}
+                        ? "生徒"
+                        : guestInfo.guest_type === "teacher"
+                          ? "教員"
+                          : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>

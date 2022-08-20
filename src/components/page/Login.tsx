@@ -66,7 +66,6 @@ const Login = () => {
           });
       })
       .catch((err: AxiosError) => {
-        handleApiError(err, "login");
         if (err.message === "Network Error") {
           setErrorMessage(
             "サーバーからの応答がありません。端末がネットワークに接続されているか確認してください。"
@@ -102,6 +101,11 @@ const Login = () => {
                 label="ユーザーID"
                 type="text"
                 onChange={(event) => setUserIdValue(event.target.value)}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter") {
+                    login();
+                  }
+                }}
                 fullWidth
               />
             </Grid>

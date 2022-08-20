@@ -89,15 +89,18 @@ export const handleApiError = (error: AxiosError, name: string) => {
       "type     : " +
       name +
       "\nlocation : " +
-      window.location.pathname +
-      "\nmessage  : " +
+      window.location.pathname;
+    if (error.code) {
+      content += "\ncode     : " + error.code;
+    }
+    content += "\nmessage  : " +
       error.message +
       "\n\n" +
       String(error) +
       "```";
     const postData = {
       username: "error log",
-      content: content,
+      embeds: [{ title: "ERROR", description: content, color: parseInt("a83232", 16) }],
     };
     axios.post(url, postData, config).catch((err: AxiosError) => {
       console.log(err);
