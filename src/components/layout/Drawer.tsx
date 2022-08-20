@@ -54,6 +54,7 @@ const DrawerLeft = () => {
           width: drawerWidth,
           boxSizing: "border-box",
         },
+        zIndex: 100,
       }}
       variant="permanent"
       anchor="left"

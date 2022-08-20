@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
+import { useAtomValue } from "jotai";
+import { tokenAtom, profileAtom, setTitle } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -46,11 +46,7 @@ type exhibitProp = {
 };
 
 const AdminCheckGuest = () => {
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("ゲスト照会");
-  }, []);
-
+  setTitle("ゲスト照会");
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
 
@@ -153,7 +149,7 @@ const AdminCheckGuest = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ p: 2 }}>
+    <Grid container spacing={2}>
       <Grid item xs={12}>
         <TextField
           id="guestId"
@@ -233,10 +229,10 @@ const AdminCheckGuest = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                      ? "生徒"
-                      : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : "その他"}
+                        ? "生徒"
+                        : guestInfo.guest_type === "teacher"
+                          ? "教員"
+                          : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>

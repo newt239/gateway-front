@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, pageTitleAtom } from "#/components/lib/jotai";
+import React, { useState } from "react";
+import { useAtomValue } from "jotai";
+import { tokenAtom, setTitle } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
@@ -38,10 +38,7 @@ import {
 import MessageDialog from "#/components/block/MessageDialog";
 
 const LostWristband = () => {
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("リストバンド紛失");
-  }, []);
+  setTitle("リストバンド紛失対応");
 
   const token = useAtomValue(tokenAtom);
 
@@ -116,7 +113,7 @@ const LostWristband = () => {
 
   return (
     <>
-      <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Grid container spacing={2}>
             <Grid item xs={12}>

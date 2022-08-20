@@ -4,9 +4,9 @@ import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
   profileAtom,
-  pageTitleAtom,
   deviceStateAtom,
   reservationAtom,
+  setTitle,
 } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
@@ -30,8 +30,6 @@ import {
   OutlinedInput,
   Button,
 } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
@@ -44,15 +42,15 @@ import {
   getTimePart,
   guestIdValidation,
 } from "#/components/lib/commonFunction";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import MessageDialog from "#/components/block/MessageDialog";
 
 const EntranceEnter = () => {
+  setTitle("エントランス入場処理");
   const navigate = useNavigate();
-  const theme = useTheme();
-  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
-  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
+  const { largerThanSM, largerThanMD } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
@@ -63,11 +61,6 @@ const EntranceEnter = () => {
   const [guestList, setGuest] = useState<string[]>([]);
   const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const setDeviceState = useSetAtom(deviceStateAtom);
-
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("エントランス入場処理");
-  }, []);
 
   useEffect(() => {
     // reserve-checkのフローを経ていない場合はreserve-checkのページに遷移させる
@@ -319,7 +312,7 @@ const EntranceEnter = () => {
       <Grid
         container
         spacing={2}
-        sx={{ py: 2, justifyContent: "space-evenly" }}
+        sx={{ justifyContent: "space-evenly" }}
       >
         <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid

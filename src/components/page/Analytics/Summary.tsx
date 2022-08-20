@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { useAtomValue, useSetAtom } from "jotai";
-import { tokenAtom, pageTitleAtom } from "#/components/lib/jotai";
+import { useAtomValue } from "jotai";
+import { tokenAtom, setTitle } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
@@ -20,32 +20,27 @@ import LinearProgress, {
 } from "@mui/material/LinearProgress";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
+type ExhibitSummaryProp = {
+  id: string;
+  exhibit_name: string;
+  group_name: string;
+  room_name: string;
+  exhibit_type: string;
+  count: number;
+  capacity: number;
+};
+
 const AnalyticsSummary = () => {
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("展示一覧");
-  }, []);
-
+  setTitle("展示一覧");
   const token = useAtomValue(tokenAtom);
-
-  type exhibitProp = {
-    id: string;
-    exhibit_name: string;
-    group_name: string;
-    room_name: string;
-    exhibit_type: string;
-    count: number;
-    capacity: number;
-  };
-
-  const [clubList, setClubList] = useState<exhibitProp[]>([]);
-  const [classList, setClassList] = useState<exhibitProp[]>([]);
-  const [stageList, setStageList] = useState<exhibitProp[]>([]);
-  const [otherList, setOtherList] = useState<exhibitProp[]>([]);
+  const [clubList, setClubList] = useState<ExhibitSummaryProp[]>([]);
+  const [classList, setClassList] = useState<ExhibitSummaryProp[]>([]);
+  const [stageList, setStageList] = useState<ExhibitSummaryProp[]>([]);
+  const [otherList, setOtherList] = useState<ExhibitSummaryProp[]>([]);
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [loading, setLoading] = useState(true);
 
-  const sortExhibitByCount = (a: exhibitProp, b: exhibitProp) => {
+  const sortExhibitByCount = (a: ExhibitSummaryProp, b: ExhibitSummaryProp) => {
     if (a.count > b.count) return -1;
     if (a.count < b.count) return 1;
     return 0;
@@ -101,7 +96,7 @@ const AnalyticsSummary = () => {
     };
   }, []);
 
-  const ExhibitListBlock = ({ exhibit }: { exhibit: exhibitProp }) => {
+  const ExhibitListBlock = ({ exhibit }: { exhibit: ExhibitSummaryProp }) => {
     return (
       <ListItem divider disablePadding>
         <Link
@@ -152,7 +147,7 @@ const AnalyticsSummary = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={{ py: 2 }}>
+    <Grid container spacing={2}>
       <Grid
         item
         xs={12}

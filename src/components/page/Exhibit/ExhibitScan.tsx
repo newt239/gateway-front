@@ -4,8 +4,8 @@ import { useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
   profileAtom,
-  pageTitleAtom,
   deviceStateAtom,
+  pageTitleAtom,
 } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
@@ -32,8 +32,6 @@ import {
   Skeleton,
   Tooltip,
 } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
@@ -48,6 +46,7 @@ import {
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
 import { guestInfoProp } from "#/components/lib/types";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
@@ -56,11 +55,11 @@ type ExhibitScanProps = {
 };
 
 const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
+  const setTitle = useSetAtom(pageTitleAtom);
   const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)\//);
   const exhibit_id = pathMatchResult && pathMatchResult[1];
   const navigate = useNavigate();
-  const theme = useTheme();
-  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
+  const { largerThanMD } = useDeviceWidth();
   const profile = useAtomValue(profileAtom);
   const token = useAtomValue(tokenAtom);
   const [text, setText] = useState<string>("");
@@ -83,7 +82,6 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
   const setDeviceState = useSetAtom(deviceStateAtom);
 
-  const setPageTitle = useSetAtom(pageTitleAtom);
   const updateExhibitInfo = () => {
     if (token && profile && exhibit_id) {
       if (
@@ -100,7 +98,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             },
           })
           .then((res) => {
-            setPageTitle(`${res.exhibit_name} - ${res.room_name}`);
+            setTitle(`${res.exhibit_name} - ${res.room_name}`);
             setCapacity(res.capacity);
             setCurrentCount(res.current);
             setExhibitName(res.exhibit_name);
@@ -418,7 +416,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   return (
     <>
       {!exhibit_id ? (
-        <Grid container spacing={2} sx={{ py: 2 }}>
+        <Grid container spacing={2} sx={{ p: 2 }}>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{ p: 2 }}>
               展示IDが正しくありません。
@@ -428,68 +426,72 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       ) : profile &&
         profile.user_type === "exhibit" &&
         profile.user_id !== exhibit_id ? (
-        <Grid container spacing={2} sx={{ py: 2 }}>
+        <Grid container spacing={2} sx={{ p: 2 }}>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{ p: 2 }}>
               このページを表示する権限がありません。
             </Card>
           </Grid>
-        </Grid>
+        </Grid >
       ) : (
         <Grid
           container
           spacing={2}
-          sx={{ py: 2, justifyContent: "space-evenly" }}
+          sx={{ justifyContent: "space-evenly" }}
         >
           <Grid item xs={12}>
-            <Grid container sx={{ alignItems: "center", gap: "1rem" }}>
-              <Grid item sx={{ pr: 4 }} xs>
+            <Grid container spacing={2} sx={{ alignItems: "center" }}>
+              <Grid item>
                 <Typography variant="h3">
                   {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
                 </Typography>
               </Grid>
-              <Grid item>
-                <Button
-                  size="small"
-                  startIcon={<PublishedWithChangesRoundedIcon />}
-                  onClick={() =>
-                    navigate(
-                      `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
-                      } `,
-                      { replace: true }
-                    )
-                  }
-                >
-                  {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
-                </Button>
-              </Grid>
-              {profile && ["moderator", "exhibit"].includes(profile.user_type) && (
-                <Grid item>
-                  <Button
-                    size="small"
-                    startIcon={<BarChartRoundedIcon />}
-                    onClick={() =>
-                      navigate(`/analytics/exhibit/${exhibit_id}`, {
-                        replace: true,
-                      })
-                    }
-                  >
-                    滞在状況
-                  </Button>
-                </Grid>
-              )}
-              {profile &&
-                ["moderator", "executive"].includes(profile.user_type) && (
+              <Grid item flexGrow={1} xs={12} sm>
+                <Grid container spacing={2} sx={{ flexWrap: "nowrap", justifyContent: "flex-end", xs: { overflowX: "scroll" } }}>
                   <Grid item>
                     <Button
                       size="small"
-                      startIcon={<ArrowBackIosNewRoundedIcon />}
-                      onClick={() => navigate("/exhibit", { replace: true })}
+                      startIcon={<PublishedWithChangesRoundedIcon />}
+                      onClick={() =>
+                        navigate(
+                          `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                          } `,
+                          { replace: true }
+                        )
+                      }
                     >
-                      一覧に戻る
+                      {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
                     </Button>
                   </Grid>
-                )}
+                  {profile && ["moderator", "exhibit"].includes(profile.user_type) && (
+                    <Grid item>
+                      <Button
+                        size="small"
+                        startIcon={<BarChartRoundedIcon />}
+                        onClick={() =>
+                          navigate(`/analytics/exhibit/${exhibit_id}`, {
+                            replace: true,
+                          })
+                        }
+                      >
+                        滞在状況
+                      </Button>
+                    </Grid>
+                  )}
+                  {profile &&
+                    ["moderator", "executive"].includes(profile.user_type) && (
+                      <Grid item>
+                        <Button
+                          size="small"
+                          startIcon={<ArrowBackIosNewRoundedIcon />}
+                          onClick={() => navigate("/exhibit", { replace: true })}
+                        >
+                          一覧に戻る
+                        </Button>
+                      </Grid>
+                    )}
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
@@ -596,7 +598,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               ))}
           </Grid>
         </Grid>
-      )}
+      )
+      }
       <Snackbar
         open={snackbarMessage !== null}
         anchorOrigin={{

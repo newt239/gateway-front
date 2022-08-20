@@ -10,10 +10,11 @@ import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRound
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
-import ExhibitEnterCountBarChart from "../../block/ExhibitEnterCountBarChart";
+import ExhibitEnterCountBarChart from "#/components/block/ExhibitEnterCountBarChart";
 import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList";
 
 const AnalyticsExhibit = () => {
+  const setTitle = useSetAtom(pageTitleAtom);
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
@@ -21,9 +22,8 @@ const AnalyticsExhibit = () => {
     const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)/);
     const exhibit_id = pathMatchResult ? pathMatchResult[1] : "";
 
-    const setPageTitle = useSetAtom(pageTitleAtom);
     useEffect(() => {
-      setPageTitle(`${exhibit_id} - 現在の滞在状況`);
+      setTitle(`${exhibit_id} - 現在の滞在状況`);
       if (token && profile) {
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.list.$get({
@@ -34,7 +34,7 @@ const AnalyticsExhibit = () => {
           .then((res) => {
             const currentExhibit = res.find((v) => v.exhibit_id === exhibit_id);
             if (currentExhibit) {
-              setPageTitle(`${currentExhibit.exhibit_name} - 現在の滞在状況`);
+              setTitle(`${currentExhibit.exhibit_name} - 現在の滞在状況`);
             }
           })
           .catch((err: AxiosError) => {
@@ -54,7 +54,7 @@ const AnalyticsExhibit = () => {
     }, [profile]);
 
     return (
-      <Grid container spacing={2} sx={{ py: 2 }}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           {["moderator"].includes(profile.user_type) && (
             <Button
@@ -93,7 +93,7 @@ const AnalyticsExhibit = () => {
           <Typography variant="h3">時間帯別入場者数</Typography>
           <ExhibitEnterCountBarChart exhibit_id={exhibit_id} />
         </Grid>
-      </Grid>
+      </Grid >
     );
   } else {
     return (

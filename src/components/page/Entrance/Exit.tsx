@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
   profileAtom,
-  pageTitleAtom,
   deviceStateAtom,
+  setTitle,
 } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
@@ -27,8 +27,6 @@ import {
   ListItemText,
   Snackbar,
 } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
@@ -39,14 +37,13 @@ import {
   getTimePart,
   guestIdValidation,
 } from "#/components/lib/commonFunction";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
 const EntranceExit = () => {
-  const theme = useTheme();
-  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
-  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
+  setTitle("エントランス");
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
@@ -62,10 +59,7 @@ const EntranceExit = () => {
 
   const setDeviceState = useSetAtom(deviceStateAtom);
 
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("エントランス");
-  }, []);
+  const { largerThanSM, largerThanMD } = useDeviceWidth();
 
   const handleScan = (scanText: string | null) => {
     if (token && scanText) {
@@ -196,10 +190,10 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -242,7 +236,7 @@ const EntranceExit = () => {
       <Grid
         container
         spacing={2}
-        sx={{ py: 2, justifyContent: "space-evenly" }}
+        sx={{ justifyContent: "space-evenly" }}
       >
         <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid

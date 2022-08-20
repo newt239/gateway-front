@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetAtom } from "jotai";
-import { pageTitleAtom } from "#/components/lib/jotai";
+import { setTitle } from "#/components/lib/jotai";
 
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 
@@ -11,18 +10,15 @@ type extraProp = {
 
 const NotFound = (props: extraProp) => {
   const navigate = useNavigate();
-  const setPageTitle = useSetAtom(pageTitleAtom);
+
   useEffect(() => {
-    if (props.type === "loading") {
-      setPageTitle("Gateway");
-    } else {
-      setPageTitle("エラー");
+    if (props.type !== "loading") {
+      setTitle("エラー");
     }
   }, []);
-
   return (
     <>
-      <Grid container spacing={2} sx={{ p: 2 }}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
             {props.type === "404" ? (

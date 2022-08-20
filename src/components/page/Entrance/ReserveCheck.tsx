@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtom, useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
   profileAtom,
-  pageTitleAtom,
   deviceStateAtom,
   reservationAtom,
+  setTitle,
 } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
@@ -28,8 +28,6 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { useTheme } from "@mui/material/styles";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
@@ -41,14 +39,13 @@ import {
   getTimePart,
   reservationIdValidation,
 } from "#/components/lib/commonFunction";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
 const ReserveCheck = () => {
-  const theme = useTheme();
-  const largerThanSM = useMediaQuery(theme.breakpoints.up("sm"));
-  const largerThanMD = useMediaQuery(theme.breakpoints.up("md"));
+  setTitle("エントランス入場処理");
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
@@ -64,11 +61,7 @@ const ReserveCheck = () => {
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
 
   const setDeviceState = useSetAtom(deviceStateAtom);
-
-  const setPageTitle = useSetAtom(pageTitleAtom);
-  useEffect(() => {
-    setPageTitle("エントランス入場処理");
-  }, []);
+  const { largerThanSM, largerThanMD } = useDeviceWidth();
 
   const handleScan = (scanText: string | null) => {
     if (scanText && scanText !== text) {
@@ -262,7 +255,7 @@ const ReserveCheck = () => {
       <Grid
         container
         spacing={2}
-        sx={{ py: 2, justifyContent: "space-evenly" }}
+        sx={{ justifyContent: "space-evenly" }}
       >
         <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
