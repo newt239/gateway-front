@@ -66,11 +66,13 @@ const SimpleBottomNavigation = () => {
                 icon={<CelebrationRoundedIcon />}
                 sx={{ whiteSpace: "nowrap" }}
               />
-              <BottomNavigationAction
-                label="滞在状況"
-                value="analytics"
-                icon={<AutoGraphRoundedIcon />}
-              />
+              {profile.user_type === "moderator" && (
+                <BottomNavigationAction
+                  label="滞在状況"
+                  value="analytics"
+                  icon={<AutoGraphRoundedIcon />}
+                />
+              )}
             </BottomNavigation>
           )}
           {["exhibit"].includes(profile.user_type) && (
