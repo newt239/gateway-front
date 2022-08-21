@@ -66,7 +66,7 @@ const Login = () => {
             setProfile(meRes);
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "get_user_info");
+            handleApiError(err, "auth_login_post");
             setErrorMessage("ユーザー情報の取得に際しエラーが発生しました。");
           });
       })

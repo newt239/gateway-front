@@ -133,7 +133,7 @@ const EntranceEnter = () => {
           setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
         })
         .catch((err: AxiosError) => {
-          handleApiError(err, "entrance_enter");
+          handleApiError(err, "guest_register_post");
           setText("");
           setDeviceState(true);
           setSmDrawerStatus(false);

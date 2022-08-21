@@ -79,7 +79,7 @@ const AnalyticsSummary = () => {
           setLastUpdate(moment());
         })
         .catch((err: AxiosError) => {
-          handleApiError(err, "exhibit_all_analytics");
+          handleApiError(err, "exhibit_current_get");
         })
         .finally(() => {
           setLoading(false);

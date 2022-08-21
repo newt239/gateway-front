@@ -62,7 +62,7 @@ const SelectExhibit = ({
           });
         })
         .catch((err: AxiosError) => {
-          handleApiError(err, "select_exhibit");
+          handleApiError(err, "exhibit_list_get");
         })
         .finally(() => {
           setLoading(false);

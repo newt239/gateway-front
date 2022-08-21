@@ -39,7 +39,7 @@ const AnalyticsExhibit = () => {
             }
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "current_exhibit");
+            handleApiError(err, "exhibit_list_get");
           });
       }
     }, []);

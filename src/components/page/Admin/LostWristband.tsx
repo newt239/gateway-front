@@ -67,7 +67,7 @@ const LostWristband = () => {
             setReservation(res);
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "reservation_info");
+            handleApiError(err, "reservation_info_get");
           })
           .finally(() => {
             setLoading(false);
@@ -97,7 +97,7 @@ const LostWristband = () => {
             setDialogMessage("スペアの登録が完了しました。");
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "revoke_guest");
+            handleApiError(err, "guest_revoke_post");
           })
           .finally(() => {
             setLoading(false);
@@ -175,12 +175,12 @@ const LostWristband = () => {
                         {reservation.count}人
                         {reservation.count !==
                           reservation.registered.length && (
-                          <span>
-                            （残り：
-                            {reservation.count - reservation.registered.length}
-                            人）
-                          </span>
-                        )}
+                            <span>
+                              （残り：
+                              {reservation.count - reservation.registered.length}
+                              人）
+                            </span>
+                          )}
                       </ListItemText>
                     </ListItem>
                     {reservation.registered.length !== 0 && <Divider />}

@@ -186,7 +186,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                         "前の展示で退室処理が行われていなかったため退室処理しました。"
                       );
                     })
-                    .catch(() => {
+                    .catch((innerErr: AxiosError) => {
+                      handleApiError(innerErr, "activity_exit_post");
                       setAlertMessage(
                         "前の展示の退場処理に際し何らかのエラーが発生しました。"
                       );
@@ -236,7 +237,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             setSmDrawerStatus(true);
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "guest_info");
+            handleApiError(err, "guest_info_get");
             setScanStatus("error");
             setAlertMessage("予期せぬエラーが発生しました。");
             ReactGA.event({
@@ -260,8 +261,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   useEffect(() => {
     if (scanStatus === "success") {
       setGuideMessage(
-        `情報を確認し、問題がなければ${
-          scanType === "enter" ? "入室記録" : "退室記録"
+        `情報を確認し、問題がなければ${scanType === "enter" ? "入室記録" : "退室記録"
         }を押してください`
       );
     }
@@ -320,7 +320,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             );
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "exhibit_scan");
+            handleApiError(err, "activity_post");
             setAlertMessage(`何らかのエラーが発生しました。${err.message}`);
             setText("");
             setDeviceState(true);
@@ -374,10 +374,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -460,8 +460,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       startIcon={<PublishedWithChangesRoundedIcon />}
                       onClick={() =>
                         navigate(
-                          `/exhibit/${exhibit_id || "unknown"}/${
-                            scanType === "enter" ? "exit" : "enter"
+                          `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                           } `,
                           { replace: true }
                         )

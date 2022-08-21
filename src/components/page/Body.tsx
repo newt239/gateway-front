@@ -65,7 +65,7 @@ const Body = () => {
               "端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。"
             );
           } else {
-            handleApiError(err, "login");
+            handleApiError(err, "auth_me_get");
             setMessageDialogMessage(err.message);
             setShowMessageDialog(true);
           }

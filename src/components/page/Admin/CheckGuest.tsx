@@ -68,7 +68,7 @@ const AdminCheckGuest = () => {
           setExhibitList(res);
         })
         .catch((err: AxiosError) => {
-          handleApiError(err, "exhibit_list");
+          handleApiError(err, "exhibit_list_get");
         });
     }
   }, [token]);
@@ -125,7 +125,7 @@ const AdminCheckGuest = () => {
             );
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "guest_info");
+            handleApiError(err, "guest_activity_get");
           })
           .finally(() => {
             ReactGA.event({

@@ -118,7 +118,7 @@ const ReserveCheck = () => {
             }
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "reservation_info");
+            handleApiError(err, "reservation_info_get");
             setLoading(false);
             setScanStatus("error");
             setMessage(err.message);

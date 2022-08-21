@@ -87,7 +87,7 @@ const EntranceExit = () => {
             }
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "entrance_exit_guest");
+            handleApiError(err, "guest_info_get");
             setLoading(false);
             setScanStatus("error");
             setAlertMessage(err.message);
@@ -124,7 +124,7 @@ const EntranceExit = () => {
           setSnackbarMessage(`${text}の退場処理が完了しました。`);
         })
         .catch((err: AxiosError) => {
-          handleApiError(err, "entrance_exit");
+          handleApiError(err, "activity_exit_post");
           setSnackbarMessage(`何らかのエラーが発生しました。${err.message}`);
           setText("");
           setDeviceState(true);
@@ -193,10 +193,10 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
