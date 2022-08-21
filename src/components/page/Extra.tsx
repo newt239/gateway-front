@@ -7,7 +7,7 @@ import { Card, Box, Typography, Button } from "@mui/material";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 type extraProp = {
-  type: "404" | "401" | "unknown" | "loading";
+  type: "notFound" | "unauthorized" | "unknown" | "loading";
 };
 
 const NotFound = (props: extraProp) => {
@@ -31,9 +31,9 @@ const NotFound = (props: extraProp) => {
 
   return (
     <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-      {props.type === "404" ? (
+      {props.type === "notFound" ? (
         <Typography>お探しのページは見つかりませんでした。</Typography>
-      ) : props.type === "401" ? (
+      ) : props.type === "unauthorized" ? (
         <Typography>このページを表示する権限がありません。</Typography>
       ) : props.type === "unknown" ? (
         <>
