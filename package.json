@@ -35,8 +35,8 @@
     "workbox-streams": "^6.5.3"
   },
   "scripts": {
-    "start": "react-app-rewired start REACT_APP_VERSION=\"$npm_package_version\"",
-    "build": "react-app-rewired build REACT_APP_VERSION=\"$npm_package_version\"",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
     "eslint:check": "eslint src",
     "eslint": "eslint src --fix",
     "prettier:check": "prettier src --check",
