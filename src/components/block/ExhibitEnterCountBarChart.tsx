@@ -51,7 +51,7 @@ const ExhibitEnterCountBarChart: React.FunctionComponent<{
             }
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "exhibit_enter_analytics");
+            handleApiError(err, "exhibit_history_each_get");
           });
       }
     };

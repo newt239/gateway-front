@@ -1,6 +1,6 @@
 {
   "name": "gateway",
-  "version": "1.8.6",
+  "version": "1.8.7",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.0",
@@ -36,7 +36,7 @@
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build REACT_APP_VERSION=$npm_package_version",
+    "build": "react-app-rewired build",
     "eslint:check": "eslint src",
     "eslint": "eslint src --fix",
     "prettier:check": "prettier src --check",

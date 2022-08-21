@@ -57,17 +57,17 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                  ? "教員"
-                  : v.guest_type === "family"
-                  ? "保護者"
-                  : "その他",
+                    ? "教員"
+                    : v.guest_type === "family"
+                      ? "保護者"
+                      : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:mm:ss"),
             };
           });
           setRows(currentGuestList);
         })
         .catch((err: AxiosError) => {
-          handleApiError(err, "exhibit_current_guest_list");
+          handleApiError(err, "exhibit_current_each_get");
         });
     }
   };
@@ -99,7 +99,7 @@ const ExhibitCurrentGuestList: React.FunctionComponent<{
               });
             })
             .catch((err: AxiosError) => {
-              handleApiError(err, "leave_some_guest");
+              handleApiError(err, "activity_exit_post");
             });
         }
       }

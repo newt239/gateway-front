@@ -40,7 +40,7 @@ const RealtimeLog = () => {
           setExhibitList(res);
         })
         .catch((err: AxiosError) => {
-          handleApiError(err, "realtime_log");
+          handleApiError(err, "exhibit_list_get");
         });
     }
   };
@@ -91,7 +91,7 @@ const RealtimeLog = () => {
           setLastUpdate(moment());
         })
         .catch((err: AxiosError) => {
-          handleApiError(err, "realtime_log");
+          handleApiError(err, "activity_history_get");
         })
         .finally(() => {
           setLoading(false);

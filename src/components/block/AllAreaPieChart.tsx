@@ -43,7 +43,7 @@ const AllAreaPieChart = () => {
           setAllAreaChartSeries(res.map((v) => v.count));
         })
         .catch((err: AxiosError) => {
-          handleApiError(err, "guest_ratio");
+          handleApiError(err, "exhibit_info_get");
         });
     }
   }, []);
