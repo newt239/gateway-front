@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useSetAtom } from "jotai";
 import { pageTitleAtom, profileAtom, tokenAtom } from "#/components/lib/jotai";
 
-import { Card, Box, Typography, Button } from "@mui/material";
+import { Card, Box, Typography, Button, Link } from "@mui/material";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 type extraProp = {
-  type: "notFound" | "unauthorized" | "unknown" | "loading";
+  type: "notFound" | "unauthorized" | "keepout" | "unknown" | "loading";
 };
 
 const NotFound = (props: extraProp) => {
@@ -35,6 +35,16 @@ const NotFound = (props: extraProp) => {
         <Typography>お探しのページは見つかりませんでした。</Typography>
       ) : props.type === "unauthorized" ? (
         <Typography>このページを表示する権限がありません。</Typography>
+      ) : props.type === "keepout" ? (
+        <Typography>
+          現在メンテナンス中です。最新の情報は<Link
+            href={process.env.REACT_APP_MANUAL_URL || "/"}
+            target="_blank"
+            underline="hover"
+          >
+            こちら
+          </Link>からご確認ください。
+        </Typography>
       ) : props.type === "unknown" ? (
         <>
           <Typography>
