@@ -5,6 +5,7 @@ import { pageTitleAtom, profileAtom, tokenAtom } from "#/components/lib/jotai";
 
 import { Card, Box, Typography, Button, Link } from "@mui/material";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import { sendLog } from "#/components/lib/commonFunction";
 
 type extraProp = {
   type: "notFound" | "unauthorized" | "keepout" | "unknown" | "loading";
@@ -19,6 +20,9 @@ const NotFound = (props: extraProp) => {
   useEffect(() => {
     if (props.type !== "loading") {
       setPageTitle("エラー");
+    }
+    if (props.type === "unknown") {
+      sendLog("unknown account");
     }
   }, []);
 
