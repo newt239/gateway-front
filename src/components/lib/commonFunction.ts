@@ -82,6 +82,8 @@ export const handleApiError = (error: AxiosError, name: string) => {
       };
       let content =
         "```timestamp: " + moment().format("MM/DD HH:mm:ss SSS") + "\n";
+      const version = (process.env.REACT_APP_VERSION || "unknown") + "-" + (process.env.REACT_APP_ENV || "unknown");
+      content += "version   : " + version + "\n";
       const userId = localStorage.getItem("user_id");
       if (userId) {
         content += "user_id  : " + userId + "\n";
