@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSetAtom } from "jotai";
+import { useAtom, useSetAtom } from "jotai";
 import { tokenAtom, profileAtom, setTitle } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
@@ -25,12 +25,18 @@ import { handleApiError } from "#/components/lib/commonFunction";
 const Login = () => {
   setTitle("ログイン");
   const setToken = useSetAtom(tokenAtom);
-  const setProfile = useSetAtom(profileAtom);
+  const [profile, setProfile] = useAtom(profileAtom);
   const navigate = useNavigate();
   const [loading, setLoading] = useState<boolean>(false);
   const [userIdValue, setUserIdValue] = useState<string>("");
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (profile) {
+      navigate("/", { replace: true });
+    }
+  }, [profile]);
 
   const login = () => {
     localStorage.setItem("user_id", userIdValue);
@@ -52,13 +58,12 @@ const Login = () => {
             },
           })
           .then((meRes) => {
-            setProfile(meRes);
-            navigate("/", { replace: true });
             ReactGA.event({
               category: "login",
               action: "success",
               label: userIdValue,
             });
+            setProfile(meRes);
           })
           .catch((err: AxiosError) => {
             handleApiError(err, "get_user_info");
@@ -80,6 +85,7 @@ const Login = () => {
         setLoading(false);
       });
   };
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>

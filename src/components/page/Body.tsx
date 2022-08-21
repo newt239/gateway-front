@@ -115,7 +115,7 @@ const Body = () => {
                       <Route path="exit" element={<EntranceExit />} />
                     </>
                   ) : (
-                    <Route path="*" element={<Extra type="401" />} />
+                    <Route path="*" element={<Extra type="unauthorized" />} />
                   )}
                 </Route>
                 <Route path="analytics">
@@ -136,7 +136,7 @@ const Body = () => {
                       />
                     </>
                   ) : (
-                    <Route path="*" element={<Extra type="401" />} />
+                    <Route path="*" element={<Extra type="notFound" />} />
                   )}
                 </Route>
                 <Route path="admin">
@@ -149,11 +149,13 @@ const Body = () => {
                       />
                     </>
                   ) : (
-                    <Route path="*" element={<Extra type="401" />} />
+                    <Route path="*" element={<Extra type="unauthorized" />} />
                   )}
                 </Route>
-                <Route path="*" element={<Extra type="404" />} />
+                <Route path="*" element={<Extra type="notFound" />} />
               </>
+            ) : (profile.user_type === "keepout") ? (
+              <Route path="*" element={<Extra type="keepout" />} />
             ) : (
               <Route path="*" element={<Extra type="unknown" />} />
             )}
