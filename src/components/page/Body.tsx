@@ -154,7 +154,7 @@ const Body = () => {
                 </Route>
                 <Route path="*" element={<Extra type="notFound" />} />
               </>
-            ) : (profile.user_type === "keepout") ? (
+            ) : profile.user_type === "keepout" ? (
               <Route path="*" element={<Extra type="keepout" />} />
             ) : (
               <Route path="*" element={<Extra type="unknown" />} />

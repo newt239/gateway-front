@@ -41,13 +41,15 @@ const NotFound = (props: extraProp) => {
         <Typography>このページを表示する権限がありません。</Typography>
       ) : props.type === "keepout" ? (
         <Typography>
-          現在メンテナンス中です。最新の情報は<Link
+          現在メンテナンス中です。最新の情報は
+          <Link
             href={process.env.REACT_APP_MANUAL_URL || "/"}
             target="_blank"
             underline="hover"
           >
             こちら
-          </Link>からご確認ください。
+          </Link>
+          からご確認ください。
         </Typography>
       ) : props.type === "unknown" ? (
         <>
