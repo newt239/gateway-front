@@ -66,44 +66,46 @@ export const reservationIdValidation = (reservation_id: string) => {
 
 export const handleApiError = (error: AxiosError, name: string) => {
   console.log(error);
-  ReactGA.event({
-    category: `error_${name}`,
-    action: error.message,
-  });
-  const url = process.env.REACT_APP_DISCORD_WEBHOOK_URL;
-  console.log(url);
-  if (url) {
-    const config = {
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json",
-      },
-    };
-    const userId = localStorage.getItem("user_id");
-    let content =
-      "```timestamp: " + moment().format("MM/DD HH:mm:ss SSS") + "\n";
-    if (userId) {
-      content += "user_id  : " + userId + "\n";
-    }
-    content +=
-      "type     : " +
-      name +
-      "\nlocation : " +
-      window.location.pathname;
-    if (error.code) {
-      content += "\ncode     : " + error.code;
-    }
-    content += "\nmessage  : " +
-      error.message +
-      "\n\n" +
-      String(error) +
-      "```";
-    const postData = {
-      username: "error log",
-      embeds: [{ title: "ERROR", description: content, color: parseInt("a83232", 16) }],
-    };
-    axios.post(url, postData, config).catch((err: AxiosError) => {
-      console.log(err);
+  const env = process.env.REACT_APP_ENV;
+  if (env && (env === "production" || env === "develop")) {
+    ReactGA.event({
+      category: `error_${name}`,
+      action: error.message,
     });
+    const url = process.env.REACT_APP_DISCORD_WEBHOOK_URL;
+    if (url) {
+      const config = {
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+      };
+      let content =
+        "```timestamp: " + moment().format("MM/DD HH:mm:ss SSS") + "\n";
+      const userId = localStorage.getItem("user_id");
+      if (userId) {
+        content += "user_id  : " + userId + "\n";
+      }
+      content +=
+        "type     : " +
+        name +
+        "\nlocation : " +
+        window.location.pathname;
+      if (error.code) {
+        content += "\ncode     : " + error.code;
+      }
+      content += "\nmessage  : " +
+        error.message +
+        "\n\n" +
+        String(error) +
+        "```";
+      const postData = {
+        username: "error log",
+        embeds: [{ title: "ERROR", description: content, color: parseInt("a83232", 16) }],
+      };
+      axios.post(url, postData, config).catch((err: AxiosError) => {
+        console.log(err);
+      });
+    }
   }
 };
