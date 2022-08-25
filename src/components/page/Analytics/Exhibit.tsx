@@ -20,10 +20,10 @@ const AnalyticsExhibit: React.VFC = () => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   if (profile) {
-    const { exhibit_id } = useParams() as { exhibit_id: string };
+    const { exhibitId } = useParams() as { exhibitId: string };
 
     useEffect(() => {
-      setTitle(`${exhibit_id} - 現在の滞在状況`);
+      setTitle(`${exhibitId} - 現在の滞在状況`);
       if (token && profile) {
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.list.$get({
@@ -32,7 +32,7 @@ const AnalyticsExhibit: React.VFC = () => {
             },
           })
           .then((res) => {
-            const currentExhibit = res.find((v) => v.exhibit_id === exhibit_id);
+            const currentExhibit = res.find((v) => v.exhibit_id === exhibitId);
             if (currentExhibit) {
               setTitle(`${currentExhibit.exhibit_name} - 現在の滞在状況`);
             }
@@ -44,7 +44,7 @@ const AnalyticsExhibit: React.VFC = () => {
     }, []);
 
     useEffect(() => {
-      if (profile && exhibit_id === "") {
+      if (profile && exhibitId === "") {
         if (profile.user_type === "moderator") {
           navigate("/analytics/summary", { replace: true });
         } else {
@@ -71,7 +71,7 @@ const AnalyticsExhibit: React.VFC = () => {
             startIcon={<LoginRoundedIcon />}
             sx={{ mr: 2 }}
             onClick={() =>
-              navigate(`/exhibit/${exhibit_id}/enter`, { replace: true })
+              navigate(`/exhibit/${exhibitId}/enter`, { replace: true })
             }
           >
             入室スキャン
@@ -80,18 +80,18 @@ const AnalyticsExhibit: React.VFC = () => {
             size="small"
             startIcon={<LogoutRoundedIcon />}
             onClick={() =>
-              navigate(`/exhibit/${exhibit_id}/exit`, { replace: true })
+              navigate(`/exhibit/${exhibitId}/exit`, { replace: true })
             }
           >
             退室スキャン
           </Button>
         </Grid>
         <Grid item xs={12} lg={6}>
-          <ExhibitCurrentGuestList exhibit_id={exhibit_id} />
+          <ExhibitCurrentGuestList exhibit_id={exhibitId} />
         </Grid>
         <Grid item xs={12} lg={6}>
           <Typography variant="h3">時間帯別入場者数</Typography>
-          <ExhibitEnterCountBarChart exhibit_id={exhibit_id} />
+          <ExhibitEnterCountBarChart exhibit_id={exhibitId} />
         </Grid>
       </Grid>
     );

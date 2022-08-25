@@ -56,7 +56,7 @@ const ReserveCheck: React.VFC = () => {
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
-  const [message, setMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
@@ -70,15 +70,18 @@ const ReserveCheck: React.VFC = () => {
       const reservationId = decodeReservationQRCode(scanText);
       if (reservationId && reservationId !== "") {
         checkReservation(reservationId);
+      } else if (scanText.startsWith("G")) {
+        setScanStatus("error");
+        setErrorMessage("これはゲストIDのQRコードです。予約用QRコードをスキャンしてください。");
       } else {
         setScanStatus("error");
-        setMessage("このQRコードは使えません。");
+        setErrorMessage("このQRコードは使えません。");
       }
     }
   };
 
   const checkReservation = (reservationId: string) => {
-    if (reservationId && token) {
+    if (token) {
       setReservationId(reservationId);
       setShowScanGuide(false);
       if (reservationIdValidation(reservationId)) {
@@ -95,7 +98,7 @@ const ReserveCheck: React.VFC = () => {
             if (res.available) {
               if (res.count === res.registered.length) {
                 setScanStatus("error");
-                setMessage("この予約IDは既に利用済みです。");
+                setErrorMessage("この予約IDは既に利用済みです。");
                 setSmDrawerStatus(true);
                 ReactGA.event({
                   category: "scan",
@@ -113,7 +116,7 @@ const ReserveCheck: React.VFC = () => {
               }
             } else {
               setScanStatus("error");
-              setMessage("この予約IDは無効です。");
+              setErrorMessage("この予約IDは無効です。");
               setSmDrawerStatus(true);
             }
           })
@@ -121,12 +124,12 @@ const ReserveCheck: React.VFC = () => {
             handleApiError(err, "reservation_info_get");
             setLoading(false);
             setScanStatus("error");
-            setMessage(err.message);
+            setErrorMessage(err.message);
             setSmDrawerStatus(true);
           });
       } else if (reservationId.startsWith("G")) {
         setScanStatus("error");
-        setMessage("これはゲストIDです。予約IDをスキャンしてください。");
+        setErrorMessage("これはゲストIDです。予約IDをスキャンしてください。");
         setSmDrawerStatus(true);
         ReactGA.event({
           category: "scan",
@@ -135,13 +138,13 @@ const ReserveCheck: React.VFC = () => {
         });
       } else {
         setScanStatus("error");
-        setMessage("これは予約IDではありません。");
+        setErrorMessage("これは予約IDではありません。");
         setSmDrawerStatus(true);
       }
     }
   };
 
-  const retry = () => {
+  const reset = () => {
     setScanStatus("waiting");
     setText("");
     setReservationId("");
@@ -153,13 +156,11 @@ const ReserveCheck: React.VFC = () => {
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       checkReservation("R" + num.map((n) => String(n)).join(""));
-      if (profile) {
-        ReactGA.event({
-          category: "numpad",
-          action: "entrance_reserve_use_numpad",
-          label: profile.user_id,
-        });
-      }
+      ReactGA.event({
+        category: "numpad",
+        action: "entrance_reserve_use_numpad",
+        label: profile?.user_id,
+      });
     }
   };
 
@@ -171,12 +172,12 @@ const ReserveCheck: React.VFC = () => {
             severity="error"
             variant="filled"
             action={
-              <Button color="inherit" onClick={retry}>
+              <Button color="inherit" onClick={reset}>
                 スキャンし直す
               </Button>
             }
           >
-            {message}
+            {errorMessage}
           </Alert>
         )}
         {reservation && scanStatus === "success" && (
@@ -234,7 +235,7 @@ const ReserveCheck: React.VFC = () => {
               <Button
                 variant="outlined"
                 color="error"
-                onClick={retry}
+                onClick={reset}
                 startIcon={<ReplayRoundedIcon />}
               >
                 スキャンし直す
@@ -312,7 +313,7 @@ const ReserveCheck: React.VFC = () => {
               <SwipeableDrawer
                 anchor="bottom"
                 open={smDrawerOpen}
-                onClose={retry}
+                onClose={reset}
                 onOpen={() => setSmDrawerStatus(true)}
               >
                 <ReservationInfoCard />

@@ -62,6 +62,7 @@ const EntranceEnter: React.VFC = () => {
   const [guestList, setGuest] = useState<string[]>([]);
   const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const setDeviceState = useSetAtom(deviceStateAtom);
+  const [dialogMessage, setDialogMessage] = useState<string | null>(null);
 
   useEffect(() => {
     // reserve-checkのフローを経ていない場合はreserve-checkのページに遷移させる
@@ -76,9 +77,6 @@ const EntranceEnter: React.VFC = () => {
       );
     }
   }, [reservation]);
-
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogMessage, setDialogMessage] = useState("");
 
   useEffect(() => {
     if (reservation) {
@@ -95,14 +93,17 @@ const EntranceEnter: React.VFC = () => {
   }, [guestList]);
 
   const handleScan = (scanText: string | null) => {
-    if (text !== scanText) {
-      if (profile && reservation && scanText) {
+    if (scanText && text !== scanText) {
+      if (profile && reservation) {
         setText(scanText);
         if (guestIdValidation(scanText)) {
           if (!guestList.includes(scanText)) {
             setSmDrawerStatus(true);
-            const newGuestList = [...guestList, scanText];
-            setGuest(newGuestList);
+            if (guestList.length < reservation.count) {
+              setGuest([...guestList, scanText]);
+            } else {
+              setAlertMessage("この予約を使って登録可能なリストバンドの数の上限に達しました。");
+            }
           } else {
             setAlertMessage(`${scanText}は登録済みです。`);
           }
@@ -113,44 +114,9 @@ const EntranceEnter: React.VFC = () => {
     }
   };
 
-  const registerWristband = () => {
-    setLoading(true);
-    if (token && reservation) {
-      apiClient(process.env.REACT_APP_API_BASE_URL)
-        .guest.register.$post({
-          body: {
-            reservation_id: reservation.reservation_id,
-            guest_type: reservation.guest_type,
-            guest_id: guestList,
-            part: reservation.part,
-          },
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then(() => {
-          setDeviceState(true);
-          setSmDrawerStatus(false);
-          setDialogOpen(true);
-          setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
-        })
-        .catch((err: AxiosError) => {
-          handleApiError(err, "guest_register_post");
-          setText("");
-          setDeviceState(true);
-          setSmDrawerStatus(false);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  };
-
   const reset = (target: number) => {
     setGuest(guestList.splice(target - 1, 1));
     setText("");
-  };
-
-  const closeAlert = () => {
-    setAlertMessage(null);
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -167,14 +133,46 @@ const EntranceEnter: React.VFC = () => {
   };
 
   const onDialogClose = () => {
-    setDialogOpen(false);
-    setDialogMessage("");
+    setDialogMessage(null);
     setText("");
     setReservation(null);
     navigate("/entrance/reserve-check", { replace: true });
   };
 
   const ReservationInfoCard: React.VFC = () => {
+    const registerWristband = () => {
+      if (token && reservation) {
+        setLoading(true);
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .guest.register.$post({
+            body: {
+              reservation_id: reservation.reservation_id,
+              guest_type: reservation.guest_type,
+              guest_id: guestList,
+              part: reservation.part,
+            },
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then(() => {
+            setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
+          })
+          .catch((err: AxiosError) => {
+            setAlertMessage("リストバンドの登録に際し何らかのエラーが発生しました。もう一度やり直してください。");
+            handleApiError(err, "guest_register_post");
+            setText("");
+          })
+          .finally(() => {
+            setLoading(false);
+            setDeviceState(true);
+            setSmDrawerStatus(false);
+          });
+      }
+    };
+
+    const closeAlert = () => {
+      setAlertMessage(null);
+    };
+
     return (
       <>
         {alertMessage && (
@@ -383,10 +381,10 @@ const EntranceEnter: React.VFC = () => {
         </Grid>
       </Grid>
       <MessageDialog
-        open={dialogOpen}
+        open={dialogMessage !== null}
         type="success"
         title="処理が完了しました"
-        message={dialogMessage}
+        message={dialogMessage as string}
         onClose={onDialogClose}
       />
     </>

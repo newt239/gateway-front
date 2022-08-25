@@ -95,7 +95,7 @@ const Body: React.VFC = () => {
                 <Route index element={<Home />} />
                 <Route path="exhibit">
                   <Route index element={<ExhibitIndex />} />
-                  <Route path=":exhibit_id">
+                  <Route path=":exhibitId">
                     <Route
                       path="enter"
                       element={<ExhibitScan scanType="enter" />}
@@ -123,7 +123,7 @@ const Body: React.VFC = () => {
                     <>
                       <Route index element={<AnalyticsIndex />} />
                       <Route
-                        path="exhibit/:exhibit_id"
+                        path="exhibit/:exhibitId"
                         element={<AnalyticsExhibit />}
                       />
                       <Route path="summary" element={<AnalyticsSummary />} />

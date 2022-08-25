@@ -53,7 +53,7 @@ import ScanGuide from "#/components/block/ScanGuide";
 
 const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) => {
   const setTitle = useSetAtom(pageTitleAtom);
-  const { exhibit_id } = useParams() as { exhibit_id: string };
+  const { exhibitId } = useParams() as { exhibitId: string };
   const navigate = useNavigate();
   const { largerThanMD } = useDeviceWidth();
   const profile = useAtomValue(profileAtom);
@@ -80,7 +80,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
 
   const updateExhibitInfo = () => {
     if (token && profile) {
-      // 初期ロード時
+      // 初期ロード時 or 処理完了直後 or 最終取得から10秒以上経過後
       if (
         !exhibitName ||
         scanStatus === "success" ||
@@ -88,7 +88,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
       ) {
         setExhibitInfoLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
-          .exhibit.info._exhibit_id(exhibit_id)
+          .exhibit.info._exhibit_id(exhibitId)
           .$get({
             headers: {
               Authorization: `Bearer ${token}`,
@@ -124,7 +124,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
-    if (scanText && token && profile && exhibit_id) {
+    if (scanText && token && profile) {
       setText(scanText);
       setShowScanGuide(false);
       if (guestIdValidation(scanText)) {
@@ -146,14 +146,15 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
             } else {
               if (scanType === "enter") {
                 if (res.exhibit_id === "") {
+                  // 正常な入室処理
                   setScanStatus("success");
                   ReactGA.event({
                     category: "scan",
                     action: "exhibit_success",
                     label: profile.user_id,
                   });
-                } else if (res.exhibit_id === exhibit_id) {
-                  // すでに入室中の場合
+                } else if (res.exhibit_id === exhibitId) {
+                  // すでに該当の展示に入室中の場合
                   setScanStatus("error");
                   setAlertMessage(
                     "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
@@ -185,7 +186,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                     .catch((innerErr: AxiosError) => {
                       handleApiError(innerErr, "activity_exit_post");
                       setAlertMessage(
-                        "前の展示の退場処理に際し何らかのエラーが発生しました。"
+                        "前の展示で退室処理が行われていなかったため退室処理しようとしましたが、何らかのエラーが発生しました。"
                       );
                       ReactGA.event({
                         category: "scan",
@@ -195,10 +196,10 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                       setDeviceState(true);
                     });
                 }
-                if (scanType === "enter" && currentCount >= capacity) {
+                if (currentCount >= capacity) {
                   // すでにエラーメッセージがある場合はそのメッセージの後ろに追記
                   setAlertMessage((message) =>
-                    message ? message : "" + "滞在者数が上限に達しています。"
+                    (message ? message : "") + "滞在者数が上限に達しています。"
                   );
                   ReactGA.event({
                     category: "scan",
@@ -207,9 +208,11 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                   });
                 }
               } else if (scanType === "exit") {
-                if (res.exhibit_id === exhibit_id) {
+                if (res.exhibit_id === exhibitId) {
+                  // 正常な退室処理
                   setScanStatus("success");
                 } else if (res.exhibit_id === "") {
+                  // どこの展示にも入室していない
                   setScanStatus("error");
                   setAlertMessage(
                     "このゲストは現在どの展示にも入室していません。入室スキャンと間違えていませんか？"
@@ -220,6 +223,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                     label: profile.user_id,
                   });
                 } else {
+                  // 別の展示に入室中
                   setScanStatus("success");
                   setAlertMessage("このゲストは他の展示に入室中です。");
                   ReactGA.event({
@@ -229,6 +233,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                   });
                 }
               }
+              updateExhibitInfo();
             }
             setSmDrawerStatus(true);
           })
@@ -243,7 +248,6 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
             });
           })
           .finally(() => {
-            updateExhibitInfo();
             setLoading(false);
           });
       } else {
@@ -263,7 +267,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
     }
   }, [scanStatus]);
 
-  const retry = () => {
+  const reset = () => {
     setDeviceState(true);
     setText("");
     setAlertMessage(null);
@@ -271,6 +275,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
     setScanStatus("waiting");
     setSmDrawerStatus(false);
     setShowScanGuide(true);
+    setGuideMessage("来場者のQRコードをカメラに水平にかざしてください")
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -291,7 +296,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
       if (token && profile && guestInfo) {
         const payload = {
           guest_id: text,
-          exhibit_id: exhibit_id,
+          exhibit_id: exhibitId,
         };
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .activity[scanType].$post({
@@ -300,10 +305,10 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
           })
           .then(() => {
             if (scanType === "enter") {
-              setCurrentCount(currentCount + 1);
+              setCurrentCount((current) => current + 1);
               setSnackbarMessage("入室処理が完了しました。");
             } else if (scanType === "exit") {
-              setCurrentCount(currentCount - 1);
+              setCurrentCount((current) => current - 1);
               setSnackbarMessage("退室処理が完了しました。");
             }
             setDeviceState(true);
@@ -342,7 +347,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                 sx={{
                   whiteSpace: "nowrap",
                 }}
-                onClick={retry}
+                onClick={reset}
               >
                 再スキャン
               </Button>
@@ -396,7 +401,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
               <Button
                 variant="outlined"
                 color="error"
-                onClick={retry}
+                onClick={reset}
                 startIcon={<ReplayRoundedIcon />}
               >
                 スキャンし直す
@@ -413,9 +418,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
 
   return (
     <>
-      {profile &&
-        profile.user_type === "exhibit" &&
-        profile.user_id !== exhibit_id ? (
+      {profile?.user_type === "exhibit" && profile?.user_id !== exhibitId ? (
         <Grid container spacing={2} sx={{ p: 2 }}>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{ p: 2 }}>
@@ -448,7 +451,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                       startIcon={<PublishedWithChangesRoundedIcon />}
                       onClick={() =>
                         navigate(
-                          `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                          `/exhibit/${exhibitId || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                           } `,
                           { replace: true }
                         )
@@ -464,7 +467,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                           size="small"
                           startIcon={<BarChartRoundedIcon />}
                           onClick={() =>
-                            navigate(`/analytics/exhibit/${exhibit_id}`, {
+                            navigate(`/analytics/exhibit/${exhibitId}`, {
                               replace: true,
                             })
                           }
@@ -521,7 +524,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                     </Grid>
                     <Grid item>
                       <Tooltip
-                        title={`最終更新: ${lastUpdate.format("HH:mm:ss")} `}
+                        title={`${lastUpdate.format("HH:mm:ss")}現在`}
                       >
                         <span>
                           <IconButton
@@ -587,7 +590,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                 <SwipeableDrawer
                   anchor="bottom"
                   open={smDrawerOpen}
-                  onClose={retry}
+                  onClose={reset}
                   onOpen={() => setSmDrawerStatus(true)}
                 >
                   <GuestInfoCard />
