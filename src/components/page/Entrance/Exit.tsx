@@ -77,64 +77,29 @@ const EntranceExit: React.VFC = () => {
             setGuestInfo(res);
             if (res.available) {
               setScanStatus("success");
-              setSmDrawerStatus(true);
             } else {
               setScanStatus("error");
               setAlertMessage("このゲストは無効です。");
-              setSmDrawerStatus(true);
             }
           })
           .catch((err: AxiosError) => {
             handleApiError(err, "guest_info_get");
             setLoading(false);
             setScanStatus("error");
-            setAlertMessage(err.message);
-            setSmDrawerStatus(true);
+            setAlertMessage("予期せぬエラーが発生しました。" + err.message);
           });
       } else if (scanText.startsWith("R")) {
         setScanStatus("error");
         setAlertMessage("これは予約IDです。");
-        setSmDrawerStatus(true);
       } else {
         setScanStatus("error");
         setAlertMessage("このゲストIDは存在しません。");
-        setSmDrawerStatus(true);
       }
+      setSmDrawerStatus(true);
     }
   };
 
-  const registerSession = () => {
-    if (token && profile && guestInfo) {
-      apiClient(process.env.REACT_APP_API_BASE_URL)
-        .activity.exit.$post({
-          body: {
-            guest_id: text,
-            exhibit_id: "entrance",
-          },
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then(() => {
-          setDeviceState(true);
-          setText("");
-          setAlertMessage("");
-          setScanStatus("waiting");
-          setSmDrawerStatus(false);
-          setSnackbarMessage(`${text}の退場処理が完了しました。`);
-        })
-        .catch((err: AxiosError) => {
-          handleApiError(err, "activity_exit_post");
-          setSnackbarMessage(`何らかのエラーが発生しました。${err.message}`);
-          setText("");
-          setDeviceState(true);
-          setSmDrawerStatus(false);
-        })
-        .finally(() => {
-          setShowScanGuide(true);
-        });
-    }
-  };
-
-  const retry = () => {
+  const reset = () => {
     setScanStatus("waiting");
     setText("");
     setAlertMessage(null);
@@ -146,17 +111,43 @@ const EntranceExit: React.VFC = () => {
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
-      if (profile) {
-        ReactGA.event({
-          category: "numpad",
-          action: "entrance_exit_use_numpad",
-          label: profile.user_id,
-        });
-      }
+      ReactGA.event({
+        category: "numpad",
+        action: "entrance_exit_use_numpad",
+        label: profile?.user_id,
+      });
     }
   };
 
   const GuestInfoCard = () => {
+    const registerSession = () => {
+      if (token && profile && guestInfo) {
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .activity.exit.$post({
+            body: {
+              guest_id: text,
+              exhibit_id: "entrance",
+            },
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then(() => {
+            setAlertMessage(null);
+            setScanStatus("waiting");
+            setSnackbarMessage(`${text}の退場処理が完了しました。`);
+          })
+          .catch((err: AxiosError) => {
+            handleApiError(err, "activity_exit_post");
+            setSnackbarMessage(`何らかのエラーが発生しました。${err.message}`);
+          })
+          .finally(() => {
+            setText("");
+            setDeviceState(true);
+            setShowScanGuide(true);
+            setSmDrawerStatus(false);
+          });
+      }
+    };
+
     return (
       <>
         {alertMessage && (
@@ -164,7 +155,7 @@ const EntranceExit: React.VFC = () => {
             severity="error"
             variant="filled"
             action={
-              <Button color="inherit" onClick={retry}>
+              <Button color="inherit" onClick={reset}>
                 スキャンし直す
               </Button>
             }
@@ -217,7 +208,7 @@ const EntranceExit: React.VFC = () => {
               <Button
                 variant="outlined"
                 color="error"
-                onClick={retry}
+                onClick={reset}
                 startIcon={<ReplayRoundedIcon />}
               >
                 スキャンし直す
@@ -274,7 +265,7 @@ const EntranceExit: React.VFC = () => {
               <SwipeableDrawer
                 anchor="bottom"
                 open={smDrawerOpen}
-                onClose={retry}
+                onClose={reset}
                 onOpen={() => setSmDrawerStatus(true)}
               >
                 <GuestInfoCard />

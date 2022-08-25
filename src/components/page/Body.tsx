@@ -30,7 +30,7 @@ const Body: React.VFC = () => {
 
   const [showMessageDialog, setShowMessageDialog] = useState<boolean>(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState<string>("");
-  const [errorDialogMessage, setMessageDialogMessage] = useState<string>("");
+  const [errorDialogMessage, setErrorDialogMessage] = useState<string>("");
 
   useEffect(() => {
     if (token) {
@@ -51,23 +51,22 @@ const Body: React.VFC = () => {
           });
         })
         .catch((err: AxiosError) => {
+          setShowMessageDialog(true);
           if (err.response && err.response.status === 401) {
             setErrorDialogTitle("セッションがタイムアウトしました");
-            setShowMessageDialog(true);
-            setMessageDialogMessage(
+            setErrorDialogMessage(
               "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。"
             );
             localStorage.removeItem("gatewayApiToken");
           } else if (err.message === "Network Error") {
             setErrorDialogTitle("サーバーからの応答がありません");
-            setShowMessageDialog(true);
-            setMessageDialogMessage(
+            setErrorDialogMessage(
               "端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。"
             );
           } else {
             handleApiError(err, "auth_me_get");
-            setMessageDialogMessage(err.message);
-            setShowMessageDialog(true);
+            setErrorDialogTitle("予期せぬエラーが発生しました");
+            setErrorDialogMessage(err.message);
           }
           navigate("/login", { replace: true });
         });
@@ -79,7 +78,7 @@ const Body: React.VFC = () => {
 
   const handleClose = () => {
     setShowMessageDialog(false);
-    setMessageDialogMessage("");
+    setErrorDialogMessage("");
   };
 
   return (

@@ -279,13 +279,11 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
-      if (profile) {
-        ReactGA.event({
-          category: "numpad",
-          action: "exhibit_use_numpad",
-          label: profile.user_id,
-        });
-      }
+      ReactGA.event({
+        category: "numpad",
+        action: "exhibit_use_numpad",
+        label: profile?.user_id,
+      });
     }
   };
 

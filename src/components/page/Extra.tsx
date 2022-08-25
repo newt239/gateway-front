@@ -22,7 +22,7 @@ const NotFound: React.VFC<extraType> = ({ type }) => {
       setPageTitle("エラー");
     }
     if (type === "unknown") {
-      sendLog("unknown account");
+      sendLog("unknown_account");
     }
   }, []);
 

@@ -126,13 +126,11 @@ const EntranceEnter: React.VFC = () => {
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
-      if (profile) {
-        ReactGA.event({
-          category: "numpad",
-          action: "entrance_enter_use_numpad",
-          label: profile.user_id,
-        });
-      }
+      ReactGA.event({
+        category: "numpad",
+        action: "entrance_enter_use_numpad",
+        label: profile?.user_id,
+      });
     }
   };
 

@@ -40,16 +40,21 @@ import {
   handleApiError,
 } from "#/components/lib/commonFunction";
 
+type GuestActivityProps = {
+  datetime: Moment;
+  exhibit_id: string;
+  activity_type: string;
+};
 
 const AdminCheckGuest: React.VFC = () => {
   setTitle("ゲスト照会");
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
-
   const [guestId, setGuestId] = useState<string>("");
   const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [exhibitList, setExhibitList] = useState<ExhibitProps[]>([]);
+  const [guestActivity, setGuestActivity] = useState<GuestActivityProps[]>([]);
 
   useEffect(() => {
     if (token) {
@@ -67,13 +72,6 @@ const AdminCheckGuest: React.VFC = () => {
         });
     }
   }, [token]);
-
-  type guestActivityParams = {
-    datetime: Moment;
-    exhibit_id: string;
-    activity_type: string;
-  }[];
-  const [guestActivity, setGuestActivity] = useState<guestActivityParams>([]);
 
   const searchGuest = () => {
     if (token && profile && !loading) {
@@ -97,7 +95,6 @@ const AdminCheckGuest: React.VFC = () => {
           })
           .then((res) => {
             const guestActivityList = [];
-            console.log(res);
             for (const eachSession of res) {
               console.log(eachSession);
               guestActivityList.push({

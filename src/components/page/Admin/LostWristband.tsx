@@ -40,9 +40,7 @@ import MessageDialog from "#/components/block/MessageDialog";
 
 const LostWristband: React.VFC = () => {
   setTitle("リストバンド紛失対応");
-
   const token = useAtomValue(tokenAtom);
-
   const [reservationId, setReservationId] = useState<string>("");
   const [reservation, setReservation] = useState<ReservationInfoProps | null>(
     null
@@ -50,7 +48,6 @@ const LostWristband: React.VFC = () => {
   const [newGuestId, setNewGuestId] = useState<string>("");
   const [oldGuestId, setOldGuestId] = useState<string>("not-set");
   const [loading, setLoading] = useState<boolean>(false);
-
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [dialogMessage, setDialogMessage] = useState<string>("");
 
