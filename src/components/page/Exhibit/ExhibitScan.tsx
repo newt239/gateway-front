@@ -155,7 +155,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                   // すでに該当の展示に入室中の場合
                   setScanStatus("error");
                   setAlertMessage(
-                    "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
+                    `このゲストはすでに${exhibitName ? `「${exhibitName}」` : "この展示"}に入室中です。退室スキャンと間違えていませんか？`
                   );
                   ReactGA.event({
                     category: "scan",
@@ -197,7 +197,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                 if (currentCount >= capacity) {
                   // すでにエラーメッセージがある場合はそのメッセージの後ろに追記
                   setAlertMessage((message) =>
-                    (message ? message : "") + "滞在者数が上限に達しています。"
+                    (message ? message + "また、" : "") + "滞在者数が設定された上限人数に達しています。"
                   );
                   ReactGA.event({
                     category: "scan",
@@ -213,7 +213,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                   // どこの展示にも入室していない
                   setScanStatus("error");
                   setAlertMessage(
-                    "このゲストは現在どの展示にも入室していません。入室スキャンと間違えていませんか？"
+                    `このゲストの${exhibitName ? `「${exhibitName}」` : "この展示"}への入室記録がありません。入室スキャンと間違えていませんか？`
                   );
                   ReactGA.event({
                     category: "scan",
@@ -223,7 +223,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
                 } else {
                   // 別の展示に入室中
                   setScanStatus("success");
-                  setAlertMessage("このゲストは他の展示に入室中です。");
+                  setAlertMessage(`このゲストは他の展示に入室中です。まずは${exhibitName ? `「${exhibitName}」` : "この展示"}への入室スキャンをしてください。`);
                   ReactGA.event({
                     category: "scan",
                     action: "exhibit_exit_already_other",
@@ -233,7 +233,6 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
               }
               updateExhibitInfo();
             }
-            setSmDrawerStatus(true);
           })
           .catch((err: AxiosError) => {
             handleApiError(err, "guest_info_get");
@@ -246,6 +245,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
             });
           })
           .finally(() => {
+            setSmDrawerStatus(true);
             setLoading(false);
           });
       } else {
@@ -273,7 +273,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
     setScanStatus("waiting");
     setSmDrawerStatus(false);
     setShowScanGuide(true);
-    setGuideMessage("来場者のQRコードをカメラに水平にかざしてください")
+    setGuideMessage("来場者のQRコードをカメラに水平にかざしてください");
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -309,11 +309,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
               setCurrentCount((current) => current - 1);
               setSnackbarMessage("退室処理が完了しました。");
             }
-            setDeviceState(true);
-            setText("");
             setAlertMessage(null);
             setScanStatus("waiting");
-            setSmDrawerStatus(false);
             setGuideMessage(
               "処理が完了しました。次の来場者のスキャンができます"
             );
@@ -321,12 +318,12 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) =>
           .catch((err: AxiosError) => {
             handleApiError(err, "activity_post");
             setAlertMessage(`何らかのエラーが発生しました。${err.message}`);
-            setText("");
-            setDeviceState(true);
-            setSmDrawerStatus(false);
             setGuideMessage("来場者のQRコードを水平にかざしてください");
           })
           .finally(() => {
+            setText("");
+            setDeviceState(true);
+            setSmDrawerStatus(false);
             setShowScanGuide(true);
           });
       }

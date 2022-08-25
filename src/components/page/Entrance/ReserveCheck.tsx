@@ -97,7 +97,6 @@ const ReserveCheck: React.VFC = () => {
               if (res.count === res.registered.length) {
                 setScanStatus("error");
                 setErrorMessage("この予約IDは既に利用済みです。");
-                setSmDrawerStatus(true);
                 ReactGA.event({
                   category: "scan",
                   action: "entrance_reservation_used",
@@ -105,7 +104,6 @@ const ReserveCheck: React.VFC = () => {
                 });
               } else {
                 setScanStatus("success");
-                setSmDrawerStatus(true);
                 ReactGA.event({
                   category: "scan",
                   action: "entrance_reservation_pass",
@@ -115,20 +113,17 @@ const ReserveCheck: React.VFC = () => {
             } else {
               setScanStatus("error");
               setErrorMessage("この予約IDは無効です。");
-              setSmDrawerStatus(true);
             }
           })
           .catch((err: AxiosError) => {
             handleApiError(err, "reservation_info_get");
             setLoading(false);
             setScanStatus("error");
-            setErrorMessage(err.message);
-            setSmDrawerStatus(true);
+            setErrorMessage("予期せぬエラーが発生しました。" + err.message);
           });
       } else if (reservationId.startsWith("G")) {
         setScanStatus("error");
         setErrorMessage("これはゲストIDです。予約IDをスキャンしてください。");
-        setSmDrawerStatus(true);
         ReactGA.event({
           category: "scan",
           action: "entrance_is_guest_id",
@@ -136,9 +131,9 @@ const ReserveCheck: React.VFC = () => {
         });
       } else {
         setScanStatus("error");
-        setErrorMessage("これは予約IDではありません。");
-        setSmDrawerStatus(true);
+        setErrorMessage("これは予約用QRコードではありません。");
       }
+      setSmDrawerStatus(true);
     }
   };
 
