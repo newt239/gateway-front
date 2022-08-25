@@ -115,7 +115,13 @@ const EntranceEnter: React.VFC = () => {
   };
 
   const reset = (target: number) => {
-    setGuest(guestList.splice(target - 1, 1));
+    const newGuestList: string[] = [];
+    for (let i = 0; i < guestList.length; i++) {
+      if (i !== target) {
+        newGuestList.push(guestList[i]);
+      }
+    }
+    setGuest(newGuestList);
     setText("");
   };
 
@@ -372,7 +378,7 @@ const EntranceEnter: React.VFC = () => {
             <SwipeableDrawer
               anchor="bottom"
               open={smDrawerOpen}
-              onClose={() => reset(0)}
+              onClose={() => setSmDrawerStatus(false)}
               onOpen={() => setSmDrawerStatus(true)}
             >
               <ReservationInfoCard />
