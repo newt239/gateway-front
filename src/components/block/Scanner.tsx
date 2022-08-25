@@ -23,6 +23,7 @@ import {
 import CameraswitchRoundedIcon from "@mui/icons-material/CameraswitchRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 
+import { isDOMException, sendLog } from "#/components/lib/commonFunction";
 import MessageDialog from "#/components/block/MessageDialog";
 
 type ScannerProps = {
@@ -133,7 +134,6 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
     setMessageDialogTitle("カメラ起動失敗");
     let reason: string;
     if (isDOMException(err)) {
-      console.error(err.name, err.message);
       switch (err.name) {
         case "NotReadableError":
           reason =
@@ -143,19 +143,23 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
           reason =
             "カメラを使用する権限がありません。お使いのブラウザの設定を確認してください。";
           break;
+        case "OverconstrainedError":
+          reason = "この端末には利用可能なカメラがありません。";
+          break;
         default:
-          reason = "原因不明のエラーです。";
+          reason = "原因不明のエラーです。" + `[${err.name}] ${err.message}`;
+          sendLog("camera_dom_exception_error", err);
           break;
       }
-      reason += `[${err.name}] ${err.message}`;
       setMessageDialogMessage(reason);
     } else {
+      sendLog("camera_error", err);
       setMessageDialogMessage("原因不明のエラーです。");
     }
     setMessageDialogOpen(true);
   };
 
-  const Loading = () => {
+  const Loading: React.VFC = () => {
     return (
       <div
         style={{
@@ -298,18 +302,6 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
         }}
       />
     </Stack>
-  );
-};
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const isDOMException = (val: any): val is DOMException => {
-  if (!val) return false;
-  return (
-    typeof val === "object" &&
-    /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
-    typeof val.name === "string" &&
-    /* eslint-disable-next-line @typescript-eslint/no-unsafe-member-access */
-    typeof val.message === "string"
   );
 };
 

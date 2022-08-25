@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
 import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
@@ -20,8 +20,7 @@ const AnalyticsExhibit: React.VFC = () => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   if (profile) {
-    const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)/);
-    const exhibit_id = pathMatchResult ? pathMatchResult[1] : "";
+    const { exhibit_id } = useParams() as { exhibit_id: string };
 
     useEffect(() => {
       setTitle(`${exhibit_id} - 現在の滞在状況`);

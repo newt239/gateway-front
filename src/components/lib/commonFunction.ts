@@ -115,9 +115,9 @@ export const handleApiError = (error: AxiosError, name: string) => {
   }
 };
 
-export const sendLog = (message: string) => {
+export const sendLog = (message: string, err?: unknown) => {
   const env = process.env.REACT_APP_ENV;
-  if (env && (env === "production" || env === "develop")) {
+  if (env && (env === "production" || env === "local")) {
     const url = process.env.REACT_APP_DISCORD_WEBHOOK_URL;
     if (url) {
       const config = {
@@ -138,6 +138,10 @@ export const sendLog = (message: string) => {
         content += `user_id  : ${userId}\n`;
       }
       content += `location : ${window.location.pathname}\n\n${message}`;
+      if (err) {
+        content += `\n${err as string}`;
+        console.log(err);
+      }
       content += "```";
       const postData = {
         username: "error log",
@@ -155,3 +159,18 @@ export const sendLog = (message: string) => {
     }
   }
 };
+
+// https://typescriptbook.jp/reference/statements/unknown
+export const isDOMException = (value: unknown): value is DOMException => {
+  if (typeof value !== "object" || value === null) {
+    return false;
+  }
+  const domException = value as DOMException;
+  if (typeof domException.name !== "string") {
+    return false;
+  }
+  if (typeof domException.message !== "string") {
+    return false;
+  }
+  return true;
+}

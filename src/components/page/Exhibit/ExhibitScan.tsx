@@ -51,13 +51,9 @@ import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
-type ExhibitScanParams = {
-  exhibit_id: string;
-}
-
 const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) => {
   const setTitle = useSetAtom(pageTitleAtom);
-  const { exhibit_id } = useParams() as ExhibitScanParams;
+  const { exhibit_id } = useParams() as { exhibit_id: string };
   const navigate = useNavigate();
   const { largerThanMD } = useDeviceWidth();
   const profile = useAtomValue(profileAtom);
