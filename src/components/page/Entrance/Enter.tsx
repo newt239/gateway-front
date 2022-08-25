@@ -26,8 +26,6 @@ import {
   ListItemText,
   Alert,
   Divider,
-  FormControl,
-  OutlinedInput,
   Button,
 } from "@mui/material";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
@@ -96,9 +94,9 @@ const EntranceEnter: React.VFC = () => {
     if (scanText && text !== scanText) {
       if (profile && reservation) {
         setText(scanText);
+        setSmDrawerStatus(true);
         if (guestIdValidation(scanText)) {
           if (!guestList.includes(scanText)) {
-            setSmDrawerStatus(true);
             if (guestList.length < reservation.count) {
               setGuest([...guestList, scanText]);
             } else {
@@ -196,106 +194,104 @@ const EntranceEnter: React.VFC = () => {
                 非表示
               </Button>
             }
+            sx={{ mb: 2 }}
           >
             {alertMessage}
           </Alert>
         )}
         {reservation && (
-          <>
-            <Card variant="outlined" sx={{ p: 2 }}>
-              {!largerThanSM && guestList.length < reservation.count && (
-                <Alert
-                  severity="info"
-                  sx={{ mb: 2 }}
+          <Card variant="outlined" sx={{ p: 2 }}>
+            {!largerThanSM && guestList.length < reservation.count && (
+              <Alert
+                severity="info"
+                sx={{ mb: 2 }}
+              >
+                他のリストバンドも登録する場合は画面上部をタップしてスキャンしてください
+              </Alert>
+            )}
+            <Typography variant="h4">予約情報</Typography>
+            <List dense>
+              {guestList.map((guest, index) => (
+                <ListItem
+                  key={guest}
+                  secondaryAction={
+                    !reservation.registered
+                      .filter((guest) => guest.is_spare === 0)
+                      .map((guest) => guest.guest_id)
+                      .includes(guest) && (
+                      <IconButton
+                        edge="end"
+                        aria-label="delete"
+                        onClick={() => reset(index)}
+                      >
+                        <DeleteIcon color="error" />
+                      </IconButton>
+                    )
+                  }
                 >
-                  他のリストバンドも登録する場合は画面上部をタップしてスキャンしてください
-                </Alert>
-              )}
-              <Typography variant="h4">予約情報</Typography>
-              <List dense>
-                {guestList.map((guest, index) => (
-                  <ListItem
-                    key={guest}
-                    secondaryAction={
-                      !reservation.registered
+                  <ListItemIcon>
+                    <PersonRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText>{guest}</ListItemText>
+                </ListItem>
+              ))}
+              {guestList.length !== 0 && (
+                <>
+                  <Box
+                    m={1}
+                    sx={{
+                      display: "flex",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-end",
+                      gap: "1rem",
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      onClick={registerWristband}
+                      disabled={reservation.registered
                         .filter((guest) => guest.is_spare === 0)
                         .map((guest) => guest.guest_id)
-                        .includes(guest) && (
-                        <IconButton
-                          edge="end"
-                          aria-label="delete"
-                          onClick={() => reset(index)}
-                        >
-                          <DeleteIcon color="error" />
-                        </IconButton>
-                      )
-                    }
-                  >
-                    <ListItemIcon>
-                      <PersonRoundedIcon />
-                    </ListItemIcon>
-                    <ListItemText>{guest}</ListItemText>
-                  </ListItem>
-                ))}
-                {guestList.length !== 0 && (
-                  <>
-                    <Box
-                      m={1}
-                      sx={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        alignItems: "flex-end",
-                        gap: "1rem",
-                      }}
+                        .includes(guestList[guestList.length - 1])}
                     >
-                      <Button
-                        variant="contained"
-                        onClick={registerWristband}
-                        disabled={reservation.registered
-                          .filter((guest) => guest.is_spare === 0)
-                          .map((guest) => guest.guest_id)
-                          .includes(guestList[guestList.length - 1])}
-                      >
-                        すべて登録
-                      </Button>
-                    </Box>
-                    <Divider />
-                  </>
-                )}
-                <ListItem>
-                  <ListItemIcon>
-                    <AssignmentIndRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText>{reservation.reservation_id}</ListItemText>
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <GroupWorkRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={
-                      reservation.guest_type === "family" ? "保護者" : "その他"
-                    }
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <AccessTimeRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={getTimePart(reservation.part).part_name}
-                  />
-                </ListItem>
-                <ListItem>
-                  <ListItemIcon>
-                    <PeopleRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText>{reservation.count}人</ListItemText>
-                </ListItem>
-              </List>
-            </Card>
+                      すべて登録
+                    </Button>
+                  </Box>
+                  <Divider />
+                </>
+              )}
+              <ListItem>
+                <ListItemIcon>
+                  <AssignmentIndRoundedIcon />
+                </ListItemIcon>
+                <ListItemText>{reservation.reservation_id}</ListItemText>
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <GroupWorkRoundedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={
+                    reservation.guest_type === "family" ? "保護者" : "その他"
+                  }
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <AccessTimeRoundedIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={getTimePart(reservation.part).part_name}
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemIcon>
+                  <PeopleRoundedIcon />
+                </ListItemIcon>
+                <ListItemText>{reservation.count}人</ListItemText>
+              </ListItem>
+            </List>
             <Box
-              m={1}
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
@@ -314,7 +310,7 @@ const EntranceEnter: React.VFC = () => {
                 最初からやり直す
               </Button>
             </Box>
-          </>
+          </Card>
         )}
       </>
     );
@@ -344,7 +340,7 @@ const EntranceEnter: React.VFC = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Grid container spacing={2}>
+          <Grid container spacing={2} sx={{ flexDirection: "column", alignItems: "center" }}>
             <Grid item xs={12}>
               <Alert severity="info">{infoMessage}</Alert>
             </Grid>
@@ -354,27 +350,9 @@ const EntranceEnter: React.VFC = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
-              ゲストID:
-            </Typography>
-            <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
-              <OutlinedInput
-                type="text"
-                size="small"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                disabled
-                fullWidth
-              />
-            </FormControl>
-          </Box>
+          <Typography variant="h4" sx={{ mb: 2 }}>
+            ゲストID: {text}
+          </Typography>
           {loading && (
             <Box sx={{ width: "100%" }}>
               <LinearProgress />

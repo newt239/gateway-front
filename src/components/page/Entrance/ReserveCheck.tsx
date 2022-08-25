@@ -18,8 +18,6 @@ import {
   Grid,
   Typography,
   Button,
-  FormControl,
-  OutlinedInput,
   Box,
   LinearProgress,
   Card,
@@ -280,27 +278,9 @@ const ReserveCheck: React.VFC = () => {
           <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
-              予約ID:
-            </Typography>
-            <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
-              <OutlinedInput
-                type="text"
-                size="small"
-                value={reservationId}
-                onChange={(e) => setReservationId(e.target.value)}
-                disabled
-                fullWidth
-              />
-            </FormControl>
-          </Box>
+          <Typography variant="h4" sx={{ mb: 2 }}>
+            予約ID: {reservationId}
+          </Typography>
           {loading && (
             <Box sx={{ width: "100%" }}>
               <LinearProgress />
