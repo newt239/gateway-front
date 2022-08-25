@@ -14,7 +14,7 @@ import Drawer from "#/components/layout/Drawer";
 import BottomNav from "#/components/layout/BottomNav";
 import Body from "#/components/page/Body";
 
-const App = () => {
+const App: React.VFC = () => {
   const profile = useAtomValue(profileAtom);
   const { largerThanMD } = useDeviceWidth();
   ReactGA.initialize("G-1R85L99586");

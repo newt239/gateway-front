@@ -1,13 +1,15 @@
-export type userTypeProp = "moderator" | "executive" | "exhibit";
+export type UserType = "moderator" | "executive" | "exhibit";
+export type GuestType = "student" | "teacher" | "family" | "other";
+export type ExhibitType = "class" | "club" | "stage" | "other";
 
-export interface profileProp {
+export interface ProfileProps {
   user_id: string;
   display_name: string;
   user_type: string;
   available: number;
 }
 
-export interface reservationInfoProp {
+export interface ReservationInfoProps {
   reservation_id: string;
   guest_type: string;
   part: number;
@@ -19,12 +21,13 @@ export interface reservationInfoProp {
   available: number;
 }
 
-export interface exhibitProp {
+export interface ExhibitProps {
   exhibit_id: string;
+  group_name: string;
   exhibit_name: string;
 }
 
-export type guestInfoProp = {
+export type GuestInfoProps = {
   guest_id: string;
   guest_type: string;
   reservation_id: string;
@@ -32,15 +35,13 @@ export type guestInfoProp = {
   available: number;
 };
 
-export interface guestsInfoSuccessProp {
+export interface GuestsInfoSuccessProps {
   status: "success";
-  data: guestInfoProp;
+  data: GuestInfoProps;
 }
 
-export type exhibitCurrentGuestProp = {
+export type ExhibitCurrentGuestProps = {
   id: string;
-  guest_type: "student" | "teacher" | "family" | "other";
+  guest_type: GuestType;
   enter_at: string;
 };
-
-export type exhibitTypeProp = "class" | "club" | "stage" | "other";

@@ -7,6 +7,7 @@ import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
 
 import {
+  Box,
   Button,
   Grid,
   List,
@@ -19,10 +20,13 @@ import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
+import OpenInFullRoundedIcon from "@mui/icons-material/OpenInFullRounded";
+import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 
-type ExhibitSummaryProp = {
+type ExhibitSummaryProps = {
   id: string;
   exhibit_name: string;
   group_name: string;
@@ -32,19 +36,28 @@ type ExhibitSummaryProp = {
   capacity: number;
 };
 
-const AnalyticsSummary = () => {
+const AnalyticsSummary: React.VFC = () => {
   setTitle("展示一覧");
   const token = useAtomValue(tokenAtom);
-  const [clubList, setClubList] = useState<ExhibitSummaryProp[]>([]);
-  const [classList, setClassList] = useState<ExhibitSummaryProp[]>([]);
-  const [stageList, setStageList] = useState<ExhibitSummaryProp[]>([]);
-  const [otherList, setOtherList] = useState<ExhibitSummaryProp[]>([]);
+  const [exhibitList, setExhibitList] = useState<ExhibitSummaryProps[]>([]);
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [loading, setLoading] = useState(true);
+  const [expand, setExpand] = useState(false);
+  const [asc, setAsc] = useState(true);
+  const [pause, setPause] = useState(false);
 
-  const sortExhibitByCount = (a: ExhibitSummaryProp, b: ExhibitSummaryProp) => {
-    if (a.count > b.count) return -1;
-    if (a.count < b.count) return 1;
+  const sortExhibitByCount = (
+    a: ExhibitSummaryProps,
+    b: ExhibitSummaryProps
+  ) => {
+    if (a.count !== b.count) {
+      if (a.count > b.count) return asc ? -1 : 1;
+      if (a.count < b.count) return asc ? 1 : -1;
+    }
+    if (a.id !== b.id) {
+      if (a.id > b.id) return asc ? 1 : -1;
+      if (a.id < b.id) return asc ? -1 : 1;
+    }
     return 0;
   };
 
@@ -56,26 +69,7 @@ const AnalyticsSummary = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setClubList(
-            res
-              .filter((e) => e.exhibit_type === "club")
-              .sort(sortExhibitByCount)
-          );
-          setClassList(
-            res
-              .filter((e) => e.exhibit_type === "class")
-              .sort(sortExhibitByCount)
-          );
-          setStageList(
-            res
-              .filter((e) => e.exhibit_type === "stage")
-              .sort(sortExhibitByCount)
-          );
-          setOtherList(
-            res
-              .filter((e) => e.exhibit_type === "other")
-              .sort(sortExhibitByCount)
-          );
+          setExhibitList(res);
           setLastUpdate(moment());
         })
         .catch((err: AxiosError) => {
@@ -87,20 +81,32 @@ const AnalyticsSummary = () => {
     }
   };
 
-  // 1分ごとに自動で取得
+  // 30秒ごとに昇順/降順切り替え、1分ごとに新たにデータを取得
   useEffect(() => {
-    getNowAllExhibit();
-    const intervalId = setInterval(() => {
+    if (!pause) {
       getNowAllExhibit();
-    }, 1 * 60 * 1000);
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+      const intervalId = setInterval(() => {
+        if (!asc) {
+          getNowAllExhibit();
+        }
+        setAsc((asc) => !asc);
+      }, 1 * 30 * 1000);
+      return () => {
+        clearInterval(intervalId);
+      };
+    }
+  }, [asc, pause]);
 
-  const ExhibitListBlock = ({ exhibit }: { exhibit: ExhibitSummaryProp }) => {
+  const EachExhibit: React.VFC<{ exhibit: ExhibitSummaryProps }> = ({
+    exhibit,
+  }) => {
+    const over = exhibit.count >= exhibit.capacity;
     return (
-      <ListItem divider disablePadding>
+      <ListItem
+        divider
+        disablePadding
+        sx={{ pageBreakInside: "avoid", breakInside: "avoid" }}
+      >
         <Link
           to={`/analytics/exhibit/${exhibit.id}`}
           style={{
@@ -127,7 +133,13 @@ const AnalyticsSummary = () => {
               </ListItemText>
             </Grid>
             <Grid item>
-              <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+              <span
+                style={{
+                  fontSize: "2rem",
+                  fontWeight: 800,
+                  color: over ? "#d32f2f" : "black",
+                }}
+              >
                 {exhibit.count}
               </span>{" "}
               /{exhibit.capacity}
@@ -143,8 +155,8 @@ const AnalyticsSummary = () => {
                 backgroundColor: "transparent",
               },
               [`& .${linearProgressClasses.bar}`]: {
+                backgroundColor: over ? "#d32f2f" : "#1a90ff",
                 borderRadius: 5,
-                backgroundColor: "#1a90ff",
               },
             }}
           />
@@ -154,7 +166,24 @@ const AnalyticsSummary = () => {
   };
 
   return (
-    <Grid container spacing={2}>
+    <Grid
+      container
+      spacing={2}
+      sx={
+        expand
+          ? {
+              position: "fixed",
+              top: 0,
+              left: 0,
+              height: "100vh",
+              overflowY: "scroll",
+              my: 0,
+              px: 1,
+              backgroundColor: "white",
+            }
+          : null
+      }
+    >
       <Grid
         item
         xs={12}
@@ -167,73 +196,90 @@ const AnalyticsSummary = () => {
         <Typography variant="h2">
           {lastUpdate.format("HH:mm:ss")} 現在
         </Typography>
-        <Button
-          onClick={getNowAllExhibit}
-          disabled={loading}
-          startIcon={<ReplayRoundedIcon />}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: ".5rem",
+          }}
         >
-          再読み込み
-        </Button>
+          <Typography variant="body1">
+            {asc ? "昇順" : "降順"}で表示中
+          </Typography>
+          <Button
+            onClick={getNowAllExhibit}
+            disabled={loading || pause}
+            startIcon={<ReplayRoundedIcon />}
+          >
+            再読み込み
+          </Button>
+          <Button
+            onClick={() => setPause((pause) => !pause)}
+            startIcon={pause ? <PlayArrowRoundedIcon /> : <PauseRoundedIcon />}
+          >
+            {pause ? "更新を再開" : "更新を停止"}
+          </Button>
+          <Button
+            onClick={() => setExpand((expand) => !expand)}
+            startIcon={<OpenInFullRoundedIcon />}
+          >
+            {expand ? "縮小" : "拡大"}
+          </Button>
+        </Box>
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={3}>
         <Typography variant="h3">部活動</Typography>
-        <List>
-          {clubList.length === 0 ? (
+        <List sx={{ columnCount: 1, height: "90vh", overflowX: "scroll" }}>
+          {exhibitList.length === 0 ? (
             <Skeleton variant="rounded" height="90vh" />
           ) : (
             <>
-              {clubList.map((exhibit) => (
-                <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
-              ))}
+              {exhibitList
+                .filter((e) => e.exhibit_type === "club")
+                .sort(sortExhibitByCount)
+                .map((exhibit) => (
+                  <EachExhibit key={exhibit.id} exhibit={exhibit} />
+                ))}
             </>
           )}
         </List>
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} md={6}>
         <Typography variant="h3">クラス</Typography>
-        <List>
-          {classList.length === 0 ? (
-            <Skeleton variant="rounded" height="90vh" />
+        <List sx={{ columnCount: 2, height: "90vh", overflowX: "scroll" }}>
+          {exhibitList.length === 0 ? (
+            <Skeleton variant="rounded" height="180vh" />
           ) : (
             <>
-              {classList.map((exhibit) => (
-                <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
-              ))}
+              {exhibitList
+                .filter((e) => e.exhibit_type === "class")
+                .sort(sortExhibitByCount)
+                .map((exhibit) => (
+                  <EachExhibit key={exhibit.id} exhibit={exhibit} />
+                ))}
             </>
           )}
         </List>
       </Grid>
-      <Grid item xs={12} md={4}>
-        <Grid container sx={{ flexDirection: "row" }}>
-          <Grid item xs={12}>
-            <Typography variant="h3">ステージ</Typography>
-            <List>
-              {stageList.length === 0 ? (
-                <Skeleton variant="rounded" height="30vh" />
-              ) : (
-                <>
-                  {stageList.map((exhibit) => (
-                    <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
-                  ))}
-                </>
-              )}
-            </List>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="h3">その他</Typography>
-            <List>
-              {otherList.length === 0 ? (
-                <Skeleton variant="rounded" height="50vh" />
-              ) : (
-                <>
-                  {otherList.map((exhibit) => (
-                    <ExhibitListBlock key={exhibit.id} exhibit={exhibit} />
-                  ))}
-                </>
-              )}
-            </List>
-          </Grid>
-        </Grid>
+      <Grid item xs={12} md={3}>
+        <Typography variant="h3">ステージ・その他の展示</Typography>
+        <List sx={{ columnCount: 1, height: "90vh", overflowX: "scroll" }}>
+          {exhibitList.length === 0 ? (
+            <Skeleton variant="rounded" height="90vh" />
+          ) : (
+            <>
+              {exhibitList
+                .filter(
+                  (e) => ["stage", "other"].indexOf(e.exhibit_type) !== -1
+                )
+                .sort(sortExhibitByCount)
+                .map((exhibit) => (
+                  <EachExhibit key={exhibit.id} exhibit={exhibit} />
+                ))}
+            </>
+          )}
+        </List>
       </Grid>
     </Grid>
   );

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import HelpOutlineRoundedIcon from "@mui/icons-material/HelpOutlineRounded";
 
-const TopBar = () => {
+const TopBar: React.VFC = () => {
   const pageTitle = useAtomValue(pageTitleAtom);
 
   return (

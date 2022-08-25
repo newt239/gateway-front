@@ -29,7 +29,7 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
-import { reservationInfoProp } from "#/components/lib/types";
+import { ReservationInfoProps } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
@@ -38,19 +38,16 @@ import {
 } from "#/components/lib/commonFunction";
 import MessageDialog from "#/components/block/MessageDialog";
 
-const LostWristband = () => {
+const LostWristband: React.VFC = () => {
   setTitle("リストバンド紛失対応");
-
   const token = useAtomValue(tokenAtom);
-
   const [reservationId, setReservationId] = useState<string>("");
-  const [reservation, setReservation] = useState<reservationInfoProp | null>(
+  const [reservation, setReservation] = useState<ReservationInfoProps | null>(
     null
   );
   const [newGuestId, setNewGuestId] = useState<string>("");
   const [oldGuestId, setOldGuestId] = useState<string>("not-set");
   const [loading, setLoading] = useState<boolean>(false);
-
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [dialogMessage, setDialogMessage] = useState<string>("");
 
@@ -175,12 +172,12 @@ const LostWristband = () => {
                         {reservation.count}人
                         {reservation.count !==
                           reservation.registered.length && (
-                            <span>
-                              （残り：
-                              {reservation.count - reservation.registered.length}
-                              人）
-                            </span>
-                          )}
+                          <span>
+                            （残り：
+                            {reservation.count - reservation.registered.length}
+                            人）
+                          </span>
+                        )}
                       </ListItemText>
                     </ListItem>
                     {reservation.registered.length !== 0 && <Divider />}

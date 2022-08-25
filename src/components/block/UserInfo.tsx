@@ -11,7 +11,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import GroupIcon from "@mui/icons-material/Group";
 import NoAccountsIcon from "@mui/icons-material/NoAccounts";
 
-const UserInfo = () => {
+const UserInfo: React.VFC = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useAtom(profileAtom);
   const setToken = useSetAtom(tokenAtom);

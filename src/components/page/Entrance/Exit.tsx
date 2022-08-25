@@ -16,8 +16,6 @@ import {
   Grid,
   Typography,
   Button,
-  FormControl,
-  OutlinedInput,
   Box,
   LinearProgress,
   Card,
@@ -32,7 +30,7 @@ import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
-import { guestInfoProp } from "#/components/lib/types";
+import { GuestInfoProps } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
@@ -43,7 +41,7 @@ import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
-const EntranceExit = () => {
+const EntranceExit: React.VFC = () => {
   setTitle("エントランス");
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
@@ -53,7 +51,7 @@ const EntranceExit = () => {
   );
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
+  const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
   const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
@@ -79,64 +77,29 @@ const EntranceExit = () => {
             setGuestInfo(res);
             if (res.available) {
               setScanStatus("success");
-              setSmDrawerStatus(true);
             } else {
               setScanStatus("error");
               setAlertMessage("このゲストは無効です。");
-              setSmDrawerStatus(true);
             }
           })
           .catch((err: AxiosError) => {
             handleApiError(err, "guest_info_get");
             setLoading(false);
             setScanStatus("error");
-            setAlertMessage(err.message);
-            setSmDrawerStatus(true);
+            setAlertMessage("予期せぬエラーが発生しました。" + err.message);
           });
       } else if (scanText.startsWith("R")) {
         setScanStatus("error");
         setAlertMessage("これは予約IDです。");
-        setSmDrawerStatus(true);
       } else {
         setScanStatus("error");
         setAlertMessage("このゲストIDは存在しません。");
-        setSmDrawerStatus(true);
       }
+      setSmDrawerStatus(true);
     }
   };
 
-  const registerSession = () => {
-    if (token && profile && guestInfo) {
-      apiClient(process.env.REACT_APP_API_BASE_URL)
-        .activity.exit.$post({
-          body: {
-            guest_id: text,
-            exhibit_id: "entrance",
-          },
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then(() => {
-          setDeviceState(true);
-          setText("");
-          setAlertMessage("");
-          setScanStatus("waiting");
-          setSmDrawerStatus(false);
-          setSnackbarMessage(`${text}の退場処理が完了しました。`);
-        })
-        .catch((err: AxiosError) => {
-          handleApiError(err, "activity_exit_post");
-          setSnackbarMessage(`何らかのエラーが発生しました。${err.message}`);
-          setText("");
-          setDeviceState(true);
-          setSmDrawerStatus(false);
-        })
-        .finally(() => {
-          setShowScanGuide(true);
-        });
-    }
-  };
-
-  const retry = () => {
+  const reset = () => {
     setScanStatus("waiting");
     setText("");
     setAlertMessage(null);
@@ -148,17 +111,43 @@ const EntranceExit = () => {
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
-      if (profile) {
-        ReactGA.event({
-          category: "numpad",
-          action: "entrance_exit_use_numpad",
-          label: profile.user_id,
-        });
-      }
+      ReactGA.event({
+        category: "numpad",
+        action: "entrance_exit_use_numpad",
+        label: profile?.user_id,
+      });
     }
   };
 
   const GuestInfoCard = () => {
+    const registerSession = () => {
+      if (token && profile && guestInfo) {
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .activity.exit.$post({
+            body: {
+              guest_id: text,
+              exhibit_id: "entrance",
+            },
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then(() => {
+            setAlertMessage(null);
+            setScanStatus("waiting");
+            setSnackbarMessage(`${text}の退場処理が完了しました。`);
+          })
+          .catch((err: AxiosError) => {
+            handleApiError(err, "activity_exit_post");
+            setSnackbarMessage(`何らかのエラーが発生しました。${err.message}`);
+          })
+          .finally(() => {
+            setText("");
+            setDeviceState(true);
+            setShowScanGuide(true);
+            setSmDrawerStatus(false);
+          });
+      }
+    };
+
     return (
       <>
         {alertMessage && (
@@ -166,7 +155,7 @@ const EntranceExit = () => {
             severity="error"
             variant="filled"
             action={
-              <Button color="inherit" onClick={retry}>
+              <Button color="inherit" onClick={reset}>
                 スキャンし直す
               </Button>
             }
@@ -193,10 +182,10 @@ const EntranceExit = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -219,7 +208,7 @@ const EntranceExit = () => {
               <Button
                 variant="outlined"
                 color="error"
-                onClick={retry}
+                onClick={reset}
                 startIcon={<ReplayRoundedIcon />}
               >
                 スキャンし直す
@@ -249,7 +238,7 @@ const EntranceExit = () => {
             <Grid item>
               <Typography variant="h3">退場処理</Typography>
               <Typography variant="body1">
-                会場からの退場処理を行います。
+                会場からの退場処理を行います。リストバンドをかざしてください。
               </Typography>
             </Grid>
             <Grid item>
@@ -261,27 +250,9 @@ const EntranceExit = () => {
           <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-            }}
-          >
-            <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
-              ゲストID:
-            </Typography>
-            <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
-              <OutlinedInput
-                type="text"
-                size="small"
-                value={text}
-                onChange={(e) => setText(e.target.value)}
-                disabled
-                fullWidth
-              />
-            </FormControl>
-          </Box>
+          <Typography variant="h4" sx={{ mb: 2 }}>
+            ゲストID: {text}
+          </Typography>
           {loading && (
             <Box sx={{ width: "100%" }}>
               <LinearProgress />
@@ -294,7 +265,7 @@ const EntranceExit = () => {
               <SwipeableDrawer
                 anchor="bottom"
                 open={smDrawerOpen}
-                onClose={retry}
+                onClose={reset}
                 onOpen={() => setSmDrawerStatus(true)}
               >
                 <GuestInfoCard />

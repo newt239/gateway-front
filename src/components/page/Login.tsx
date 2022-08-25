@@ -22,7 +22,7 @@ import IosShareIcon from "@mui/icons-material/IosShare";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 
-const Login = () => {
+const Login: React.VFC = () => {
   setTitle("ログイン");
   const setToken = useSetAtom(tokenAtom);
   const [profile, setProfile] = useAtom(profileAtom);

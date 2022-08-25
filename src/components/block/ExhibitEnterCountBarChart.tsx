@@ -11,9 +11,9 @@ import { TextField, Typography } from "@mui/material";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 
-const ExhibitEnterCountBarChart: React.FunctionComponent<{
-  exhibit_id: string;
-}> = ({ exhibit_id }) => {
+const ExhibitEnterCountBarChart: React.VFC<{ exhibit_id: string }> = ({
+  exhibit_id,
+}) => {
   const token = useAtomValue(tokenAtom);
   const [categories, setCategories] = useState<string[]>([]);
   const [data, setData] = useState<number[]>([]);

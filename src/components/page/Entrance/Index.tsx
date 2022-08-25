@@ -10,7 +10,7 @@ import {
   CardContent,
 } from "@mui/material";
 
-const Entrance = () => {
+const Entrance: React.VFC = () => {
   setTitle("エントランス");
   const navigate = useNavigate();
 

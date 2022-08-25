@@ -16,18 +16,12 @@ import {
   Typography,
 } from "@mui/material";
 
+import { ExhibitProps } from "#/components/lib/types";
 import { handleApiError } from "#/components/lib/commonFunction";
 
-const RealtimeLog = () => {
+const RealtimeLog: React.VFC = () => {
   const token = useAtomValue(tokenAtom);
-
-  type exhibitProp = {
-    exhibit_id: string;
-    exhibit_name: string;
-    exhibit_type: string;
-    group_name: string;
-  };
-  const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
+  const [exhibitList, setExhibitList] = useState<ExhibitProps[]>([]);
   const getExhibitList = () => {
     if (token) {
       apiClient(process.env.REACT_APP_API_BASE_URL)
@@ -105,7 +99,7 @@ const RealtimeLog = () => {
       getActivityHistory();
       const intervalId = setInterval(() => {
         getActivityHistory();
-      }, 1 * 10 * 1000);
+      }, 1 * 15 * 1000);
       return () => {
         clearInterval(intervalId);
       };
@@ -126,7 +120,7 @@ const RealtimeLog = () => {
           }}
         >
           <Grid item>
-            <Tooltip title="10秒更新">
+            <Tooltip title="15秒更新">
               <Typography variant="h3">リアルタイムログ</Typography>
             </Tooltip>
           </Grid>
@@ -135,76 +129,78 @@ const RealtimeLog = () => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <Grid
-          container
-          sx={{
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <Grid item>
-            <ListItem sx={{ p: 0 }}>
-              <Switch
-                edge="end"
-                onChange={() => setMaskId((maskId) => !maskId)}
-                checked={maskId}
-              />
-              <ListItemText>ゲストIDを隠す</ListItemText>
-            </ListItem>
+      {activityList.length !== 0 ? (
+        <>
+          <Grid item xs={12}>
+            <Grid
+              container
+              sx={{
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
+            >
+              <Grid item>
+                <ListItem sx={{ p: 0 }}>
+                  <Switch
+                    edge="end"
+                    onChange={() => setMaskId((maskId) => !maskId)}
+                    checked={maskId}
+                  />
+                  <ListItemText>ゲストIDを隠す</ListItemText>
+                </ListItem>
+              </Grid>
+              <Grid item>{lastUpdate.format("HH:mm:ss")}</Grid>
+            </Grid>
           </Grid>
-          <Grid item>{lastUpdate.format("HH:mm:ss")}</Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        {activityList.length !== 0 ? (
-          <List>
-            {activityList.map((v) => (
-              <ListItem
-                key={`${v.session_id}-${v.activity_type}`}
-                divider
-                disablePadding
-              >
-                <Grid container sx={{ alignItems: "center" }}>
-                  <Grid item xs={2.5}>
-                    <ListItemText>
-                      {moment(v.timestamp).format("HH:mm:ss")}
-                    </ListItemText>
+          <Grid item xs={12}>
+            <List>
+              {activityList.map((v) => (
+                <ListItem
+                  key={`${v.session_id}-${v.activity_type}`}
+                  divider
+                  disablePadding
+                >
+                  <Grid container sx={{ alignItems: "center" }}>
+                    <Grid item xs={2.5}>
+                      <ListItemText>
+                        {moment(v.timestamp).format("HH:mm:ss")}
+                      </ListItemText>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <ListItemText
+                        secondary={
+                          maskId ? v.guest_id.slice(0, 6) + "____" : v.guest_id
+                        }
+                        secondaryTypographyProps={{ sx: { p: 0 } }}
+                      >
+                        {v.session_id}
+                      </ListItemText>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <ListItemText>
+                        {(exhibitList &&
+                          exhibitList.filter((x) => {
+                            return x.exhibit_id === v.exhibit_id;
+                          })[0]?.exhibit_name) ||
+                          "エントランス"}
+                      </ListItemText>
+                    </Grid>
+                    <Grid item xs={1.5}>
+                      <ListItemText>
+                        {v.activity_type === "enter" ? "入室" : "退室"}
+                      </ListItemText>
+                    </Grid>
                   </Grid>
-                  <Grid item xs={4}>
-                    <ListItemText
-                      secondary={
-                        maskId ? v.guest_id.slice(0, 6) + "____" : v.guest_id
-                      }
-                      secondaryTypographyProps={{ sx: { p: 0 } }}
-                    >
-                      {v.session_id}
-                    </ListItemText>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <ListItemText>
-                      {(exhibitList &&
-                        exhibitList.filter((x) => {
-                          return x.exhibit_id === v.exhibit_id;
-                        })[0]?.exhibit_name) ||
-                        "エントランス"}
-                    </ListItemText>
-                  </Grid>
-                  <Grid item xs={1.5}>
-                    <ListItemText>
-                      {v.activity_type === "enter" ? "入室" : "退室"}
-                    </ListItemText>
-                  </Grid>
-                </Grid>
-              </ListItem>
-            ))}
-          </List>
-        ) : (
-          <Typography variant="body1" sx={{ p: 2 }}>
-            データがありません。
-          </Typography>
-        )}
-      </Grid>
+                </ListItem>
+              ))}
+            </List>
+          </Grid>
+        </>
+      ) : (
+        <Typography variant="body1" sx={{ m: 2 }}>
+          データがありません。
+        </Typography>
+      )}
     </Grid>
   );
 };

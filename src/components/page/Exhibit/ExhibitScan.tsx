@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
@@ -18,9 +18,7 @@ import {
   Grid,
   Typography,
   Button,
-  FormControl,
   IconButton,
-  OutlinedInput,
   Box,
   LinearProgress,
   Card,
@@ -46,19 +44,16 @@ import {
   handleApiError,
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp } from "#/components/lib/types";
+import { GuestInfoProps } from "#/components/lib/types";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
-type ExhibitScanProps = {
-  scanType: "enter" | "exit";
-};
-
-const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
+const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
+  scanType,
+}) => {
   const setTitle = useSetAtom(pageTitleAtom);
-  const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)\//);
-  const exhibit_id = pathMatchResult && pathMatchResult[1];
+  const { exhibitId } = useParams() as { exhibitId: string };
   const navigate = useNavigate();
   const { largerThanMD } = useDeviceWidth();
   const profile = useAtomValue(profileAtom);
@@ -68,7 +63,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     "waiting"
   );
   const [loading, setLoading] = useState<boolean>(false);
-  const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
+  const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [capacity, setCapacity] = useState<number>(0);
   const [currentCount, setCurrentCount] = useState<number>(0);
   const [exhibitName, setExhibitName] = useState<string | null>(null);
@@ -84,7 +79,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const setDeviceState = useSetAtom(deviceStateAtom);
 
   const updateExhibitInfo = () => {
-    if (token && profile && exhibit_id) {
+    if (token && profile) {
+      // 初期ロード時 or 処理完了直後 or 最終取得から10秒以上経過後
       if (
         !exhibitName ||
         scanStatus === "success" ||
@@ -92,7 +88,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
       ) {
         setExhibitInfoLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
-          .exhibit.info._exhibit_id(exhibit_id)
+          .exhibit.info._exhibit_id(exhibitId)
           .$get({
             headers: {
               Authorization: `Bearer ${token}`,
@@ -128,7 +124,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
-    if (scanText && token && profile && exhibit_id) {
+    if (scanText && token && profile) {
       setText(scanText);
       setShowScanGuide(false);
       if (guestIdValidation(scanText)) {
@@ -150,17 +146,20 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             } else {
               if (scanType === "enter") {
                 if (res.exhibit_id === "") {
+                  // 正常な入室処理
                   setScanStatus("success");
                   ReactGA.event({
                     category: "scan",
                     action: "exhibit_success",
                     label: profile.user_id,
                   });
-                } else if (res.exhibit_id === exhibit_id) {
-                  // すでに入室中の場合
+                } else if (res.exhibit_id === exhibitId) {
+                  // すでに該当の展示に入室中の場合
                   setScanStatus("error");
                   setAlertMessage(
-                    "このゲストはすでにこの展示に入室中です。退室スキャンと間違えていませんか？"
+                    `このゲストはすでに${
+                      exhibitName ? `「${exhibitName}」` : "この展示"
+                    }に入室中です。退室スキャンと間違えていませんか？`
                   );
                   ReactGA.event({
                     category: "scan",
@@ -189,7 +188,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     .catch((innerErr: AxiosError) => {
                       handleApiError(innerErr, "activity_exit_post");
                       setAlertMessage(
-                        "前の展示の退場処理に際し何らかのエラーが発生しました。"
+                        "前の展示で退室処理が行われていなかったため退室処理しようとしましたが、何らかのエラーが発生しました。"
                       );
                       ReactGA.event({
                         category: "scan",
@@ -199,10 +198,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       setDeviceState(true);
                     });
                 }
-                if (scanType === "enter" && currentCount >= capacity) {
+                if (currentCount >= capacity) {
                   // すでにエラーメッセージがある場合はそのメッセージの後ろに追記
-                  setAlertMessage((message) =>
-                    message ? message : "" + "滞在者数が上限に達しています。"
+                  setAlertMessage(
+                    (message) =>
+                      (message ? message + "また、" : "") +
+                      "滞在者数が設定された上限人数に達しています。"
                   );
                   ReactGA.event({
                     category: "scan",
@@ -211,12 +212,16 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   });
                 }
               } else if (scanType === "exit") {
-                if (res.exhibit_id === exhibit_id) {
+                if (res.exhibit_id === exhibitId) {
+                  // 正常な退室処理
                   setScanStatus("success");
                 } else if (res.exhibit_id === "") {
+                  // どこの展示にも入室していない
                   setScanStatus("error");
                   setAlertMessage(
-                    "このゲストは現在どの展示にも入室していません。入室スキャンと間違えていませんか？"
+                    `このゲストの${
+                      exhibitName ? `「${exhibitName}」` : "この展示"
+                    }への入室記録がありません。入室スキャンと間違えていませんか？`
                   );
                   ReactGA.event({
                     category: "scan",
@@ -224,8 +229,13 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     label: profile.user_id,
                   });
                 } else {
+                  // 別の展示に入室中
                   setScanStatus("success");
-                  setAlertMessage("このゲストは他の展示に入室中です。");
+                  setAlertMessage(
+                    `このゲストは他の展示に入室中です。まずは${
+                      exhibitName ? `「${exhibitName}」` : "この展示"
+                    }への入室スキャンをしてください。`
+                  );
                   ReactGA.event({
                     category: "scan",
                     action: "exhibit_exit_already_other",
@@ -233,8 +243,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                   });
                 }
               }
+              updateExhibitInfo();
             }
-            setSmDrawerStatus(true);
           })
           .catch((err: AxiosError) => {
             handleApiError(err, "guest_info_get");
@@ -247,7 +257,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             });
           })
           .finally(() => {
-            updateExhibitInfo();
+            setSmDrawerStatus(true);
             setLoading(false);
           });
       } else {
@@ -261,13 +271,14 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   useEffect(() => {
     if (scanStatus === "success") {
       setGuideMessage(
-        `情報を確認し、問題がなければ${scanType === "enter" ? "入室記録" : "退室記録"
+        `情報を確認し、問題がなければ${
+          scanType === "enter" ? "入室記録" : "退室記録"
         }を押してください`
       );
     }
   }, [scanStatus]);
 
-  const retry = () => {
+  const reset = () => {
     setDeviceState(true);
     setText("");
     setAlertMessage(null);
@@ -275,27 +286,26 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     setScanStatus("waiting");
     setSmDrawerStatus(false);
     setShowScanGuide(true);
+    setGuideMessage("来場者のQRコードをカメラに水平にかざしてください");
   };
 
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
       handleScan("G" + num.map((n) => String(n)).join(""));
-      if (profile) {
-        ReactGA.event({
-          category: "numpad",
-          action: "exhibit_use_numpad",
-          label: profile.user_id,
-        });
-      }
+      ReactGA.event({
+        category: "numpad",
+        action: "exhibit_use_numpad",
+        label: profile?.user_id,
+      });
     }
   };
 
-  const GuestInfoCard = () => {
+  const GuestInfoCard: React.VFC = () => {
     const registerSession = () => {
-      if (token && profile && exhibit_id && guestInfo) {
+      if (token && profile && guestInfo) {
         const payload = {
           guest_id: text,
-          exhibit_id: exhibit_id,
+          exhibit_id: exhibitId,
         };
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .activity[scanType].$post({
@@ -304,17 +314,14 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           })
           .then(() => {
             if (scanType === "enter") {
-              setCurrentCount(currentCount + 1);
+              setCurrentCount((current) => current + 1);
               setSnackbarMessage("入室処理が完了しました。");
             } else if (scanType === "exit") {
-              setCurrentCount(currentCount - 1);
+              setCurrentCount((current) => current - 1);
               setSnackbarMessage("退室処理が完了しました。");
             }
-            setDeviceState(true);
-            setText("");
             setAlertMessage(null);
             setScanStatus("waiting");
-            setSmDrawerStatus(false);
             setGuideMessage(
               "処理が完了しました。次の来場者のスキャンができます"
             );
@@ -322,12 +329,12 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
           .catch((err: AxiosError) => {
             handleApiError(err, "activity_post");
             setAlertMessage(`何らかのエラーが発生しました。${err.message}`);
-            setText("");
-            setDeviceState(true);
-            setSmDrawerStatus(false);
             setGuideMessage("来場者のQRコードを水平にかざしてください");
           })
           .finally(() => {
+            setText("");
+            setDeviceState(true);
+            setSmDrawerStatus(false);
             setShowScanGuide(true);
           });
       }
@@ -346,7 +353,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 sx={{
                   whiteSpace: "nowrap",
                 }}
-                onClick={retry}
+                onClick={reset}
               >
                 再スキャン
               </Button>
@@ -374,10 +381,10 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -400,7 +407,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
               <Button
                 variant="outlined"
                 color="error"
-                onClick={retry}
+                onClick={reset}
                 startIcon={<ReplayRoundedIcon />}
               >
                 スキャンし直す
@@ -417,17 +424,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   return (
     <>
-      {!exhibit_id ? (
-        <Grid container spacing={2} sx={{ p: 2 }}>
-          <Grid item xs={12}>
-            <Card variant="outlined" sx={{ p: 2 }}>
-              展示IDが正しくありません。
-            </Card>
-          </Grid>
-        </Grid>
-      ) : profile &&
-        profile.user_type === "exhibit" &&
-        profile.user_id !== exhibit_id ? (
+      {profile?.user_type === "exhibit" && profile?.user_id !== exhibitId ? (
         <Grid container spacing={2} sx={{ p: 2 }}>
           <Grid item xs={12}>
             <Card variant="outlined" sx={{ p: 2 }}>
@@ -460,7 +457,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       startIcon={<PublishedWithChangesRoundedIcon />}
                       onClick={() =>
                         navigate(
-                          `/exhibit/${exhibit_id || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                          `/exhibit/${exhibitId || "unknown"}/${
+                            scanType === "enter" ? "exit" : "enter"
                           } `,
                           { replace: true }
                         )
@@ -476,7 +474,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                           size="small"
                           startIcon={<BarChartRoundedIcon />}
                           onClick={() =>
-                            navigate(`/analytics/exhibit/${exhibit_id}`, {
+                            navigate(`/analytics/exhibit/${exhibitId}`, {
                               replace: true,
                             })
                           }
@@ -532,9 +530,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                       <span> / {capacity} 人</span>
                     </Grid>
                     <Grid item>
-                      <Tooltip
-                        title={`最終更新: ${lastUpdate.format("HH:mm:ss")} `}
-                      >
+                      <Tooltip title={`${lastUpdate.format("HH:mm:ss")}現在`}>
                         <span>
                           <IconButton
                             size="small"
@@ -566,27 +562,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
             <Scanner handleScan={handleScan} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <Typography variant="h4" sx={{ whiteSpace: "noWrap" }}>
-                ゲストID:
-              </Typography>
-              <FormControl sx={{ m: 1, flexGrow: 1 }} variant="outlined">
-                <OutlinedInput
-                  type="text"
-                  size="small"
-                  value={text}
-                  onChange={(e) => setText(e.target.value)}
-                  disabled
-                  fullWidth
-                />
-              </FormControl>
-            </Box>
+            <Typography variant="h4" sx={{ mb: 2 }}>
+              ゲストID: {text}
+            </Typography>
             {loading && (
               <Box sx={{ width: "100%" }}>
                 <LinearProgress />
@@ -599,7 +577,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
                 <SwipeableDrawer
                   anchor="bottom"
                   open={smDrawerOpen}
-                  onClose={retry}
+                  onClose={reset}
                   onOpen={() => setSmDrawerStatus(true)}
                 >
                   <GuestInfoCard />

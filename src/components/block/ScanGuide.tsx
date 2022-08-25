@@ -8,7 +8,7 @@ import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 
-const ScanGuide = ({ show }: { show: boolean }) => {
+const ScanGuide: React.VFC<{ show: boolean }> = ({ show }) => {
   const profile = useAtomValue(profileAtom);
   const guideShow = localStorage.getItem("guideShow") || "yes";
   const [close, setClose] = useState<boolean>(false);

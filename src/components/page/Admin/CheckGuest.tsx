@@ -33,28 +33,28 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
-import { guestInfoProp } from "#/components/lib/types";
+import { ExhibitProps, GuestInfoProps } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
   handleApiError,
 } from "#/components/lib/commonFunction";
 
-type exhibitProp = {
+type GuestActivityProps = {
+  datetime: Moment;
   exhibit_id: string;
-  group_name: string;
-  exhibit_type: string;
+  activity_type: string;
 };
 
-const AdminCheckGuest = () => {
+const AdminCheckGuest: React.VFC = () => {
   setTitle("ゲスト照会");
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
-
   const [guestId, setGuestId] = useState<string>("");
-  const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
+  const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
+  const [exhibitList, setExhibitList] = useState<ExhibitProps[]>([]);
+  const [guestActivity, setGuestActivity] = useState<GuestActivityProps[]>([]);
 
   useEffect(() => {
     if (token) {
@@ -72,13 +72,6 @@ const AdminCheckGuest = () => {
         });
     }
   }, [token]);
-
-  type guestActivityParams = {
-    datetime: Moment;
-    exhibit_id: string;
-    activity_type: string;
-  }[];
-  const [guestActivity, setGuestActivity] = useState<guestActivityParams>([]);
 
   const searchGuest = () => {
     if (token && profile && !loading) {
@@ -102,7 +95,6 @@ const AdminCheckGuest = () => {
           })
           .then((res) => {
             const guestActivityList = [];
-            console.log(res);
             for (const eachSession of res) {
               console.log(eachSession);
               guestActivityList.push({
@@ -161,12 +153,14 @@ const AdminCheckGuest = () => {
           margin="normal"
           fullWidth
         />
-        <Box sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          gap: "1rem",
-        }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            gap: "1rem",
+          }}
+        >
           {loading && <CircularProgress size={25} thickness={6} />}
           <Button
             onClick={searchGuest}
@@ -236,10 +230,10 @@ const AdminCheckGuest = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                        ? "生徒"
-                        : guestInfo.guest_type === "teacher"
-                          ? "教員"
-                          : "その他"}
+                      ? "生徒"
+                      : guestInfo.guest_type === "teacher"
+                      ? "教員"
+                      : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>

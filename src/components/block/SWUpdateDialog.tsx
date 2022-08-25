@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, Dialog, DialogActions, DialogContent } from "@mui/material";
 
-export const SWUpdateDialog: React.FC<{
+export const SWUpdateDialog: React.VFC<{
   registration: ServiceWorkerRegistration;
 }> = ({ registration }) => {
   const [show, setShow] = useState<boolean>(!!registration.waiting);

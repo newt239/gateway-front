@@ -7,7 +7,7 @@ import AllAreaPieChart from "#/components/block/AllAreaPieChart";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import RealtimeLog from "#/components/block/RealtimeLog";
 
-const AnalyticsIndex = () => {
+const AnalyticsIndex: React.VFC = () => {
   setTitle("滞在状況");
   const { largerThanMD } = useDeviceWidth();
 

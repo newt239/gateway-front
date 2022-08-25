@@ -33,7 +33,7 @@ import Version from "#/components/block/Version";
 
 const drawerWidth = 250;
 
-const DrawerLeft = () => {
+const DrawerLeft: React.VFC = () => {
   const path = useLocation().pathname;
   const navigate = useNavigate();
   const profile = useAtomValue(profileAtom);

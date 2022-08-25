@@ -12,10 +12,9 @@ import {
 
 import SelectExhibit from "#/components/block/SelectExhibit";
 
-const ExhibitIndex = () => {
+const ExhibitIndex: React.VFC = () => {
   setTitle("展示選択");
   const navigate = useNavigate();
-
   const [currentExhibit, setCurrentExhibit] = useState<string>("");
 
   return (
