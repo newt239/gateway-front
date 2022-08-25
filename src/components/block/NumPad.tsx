@@ -18,7 +18,7 @@ import useDeviceWidth from "#/components/lib/useDeviceWidth";
 type NumPadProps = {
   scanType: "reservation" | "guest";
   onClose: (num: number[]) => void;
-}
+};
 
 const NumPad: React.VFC<NumPadProps> = ({ scanType, onClose }) => {
   const { largerThanSM, largerThanMD } = useDeviceWidth();

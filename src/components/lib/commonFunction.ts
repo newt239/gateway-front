@@ -173,4 +173,4 @@ export const isDOMException = (value: unknown): value is DOMException => {
     return false;
   }
   return true;
-}
+};

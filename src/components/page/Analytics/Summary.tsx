@@ -20,9 +20,9 @@ import LinearProgress, {
   linearProgressClasses,
 } from "@mui/material/LinearProgress";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
-import OpenInFullRoundedIcon from '@mui/icons-material/OpenInFullRounded';
-import PauseRoundedIcon from '@mui/icons-material/PauseRounded';
-import PlayArrowRoundedIcon from '@mui/icons-material/PlayArrowRounded';
+import OpenInFullRoundedIcon from "@mui/icons-material/OpenInFullRounded";
+import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
+import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 
@@ -46,7 +46,10 @@ const AnalyticsSummary: React.VFC = () => {
   const [asc, setAsc] = useState(true);
   const [pause, setPause] = useState(false);
 
-  const sortExhibitByCount = (a: ExhibitSummaryProps, b: ExhibitSummaryProps) => {
+  const sortExhibitByCount = (
+    a: ExhibitSummaryProps,
+    b: ExhibitSummaryProps
+  ) => {
     if (a.count !== b.count) {
       if (a.count > b.count) return asc ? -1 : 1;
       if (a.count < b.count) return asc ? 1 : -1;
@@ -86,7 +89,7 @@ const AnalyticsSummary: React.VFC = () => {
         if (!asc) {
           getNowAllExhibit();
         }
-        setAsc(asc => !asc);
+        setAsc((asc) => !asc);
       }, 1 * 30 * 1000);
       return () => {
         clearInterval(intervalId);
@@ -94,10 +97,16 @@ const AnalyticsSummary: React.VFC = () => {
     }
   }, [asc, pause]);
 
-  const EachExhibit: React.VFC<{ exhibit: ExhibitSummaryProps }> = ({ exhibit }) => {
+  const EachExhibit: React.VFC<{ exhibit: ExhibitSummaryProps }> = ({
+    exhibit,
+  }) => {
     const over = exhibit.count >= exhibit.capacity;
     return (
-      <ListItem divider disablePadding sx={{ pageBreakInside: "avoid", breakInside: "avoid" }}>
+      <ListItem
+        divider
+        disablePadding
+        sx={{ pageBreakInside: "avoid", breakInside: "avoid" }}
+      >
         <Link
           to={`/analytics/exhibit/${exhibit.id}`}
           style={{
@@ -124,7 +133,13 @@ const AnalyticsSummary: React.VFC = () => {
               </ListItemText>
             </Grid>
             <Grid item>
-              <span style={{ fontSize: "2rem", fontWeight: 800, color: over ? "#d32f2f" : "black" }}>
+              <span
+                style={{
+                  fontSize: "2rem",
+                  fontWeight: 800,
+                  color: over ? "#d32f2f" : "black",
+                }}
+              >
                 {exhibit.count}
               </span>{" "}
               /{exhibit.capacity}
@@ -151,16 +166,24 @@ const AnalyticsSummary: React.VFC = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={expand ? {
-      position: "fixed",
-      top: 0,
-      left: 0,
-      height: "100vh",
-      overflowY: "scroll",
-      my: 0,
-      px: 1,
-      backgroundColor: "white"
-    } : null}>
+    <Grid
+      container
+      spacing={2}
+      sx={
+        expand
+          ? {
+              position: "fixed",
+              top: 0,
+              left: 0,
+              height: "100vh",
+              overflowY: "scroll",
+              my: 0,
+              px: 1,
+              backgroundColor: "white",
+            }
+          : null
+      }
+    >
       <Grid
         item
         xs={12}
@@ -173,8 +196,17 @@ const AnalyticsSummary: React.VFC = () => {
         <Typography variant="h2">
           {lastUpdate.format("HH:mm:ss")} 現在
         </Typography>
-        <Box sx={{ display: "flex", flexDirection: "row", alignItems: "center", gap: ".5rem" }}>
-          <Typography variant="body1">{asc ? "昇順" : "降順"}で表示中</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: ".5rem",
+          }}
+        >
+          <Typography variant="body1">
+            {asc ? "昇順" : "降順"}で表示中
+          </Typography>
           <Button
             onClick={getNowAllExhibit}
             disabled={loading || pause}
@@ -203,23 +235,27 @@ const AnalyticsSummary: React.VFC = () => {
             <Skeleton variant="rounded" height="90vh" />
           ) : (
             <>
-              {exhibitList.filter((e) => e.exhibit_type === "club")
-                .sort(sortExhibitByCount).map((exhibit) => (
+              {exhibitList
+                .filter((e) => e.exhibit_type === "club")
+                .sort(sortExhibitByCount)
+                .map((exhibit) => (
                   <EachExhibit key={exhibit.id} exhibit={exhibit} />
                 ))}
             </>
           )}
         </List>
       </Grid>
-      <Grid item xs={12} md={6} >
+      <Grid item xs={12} md={6}>
         <Typography variant="h3">クラス</Typography>
         <List sx={{ columnCount: 2, height: "90vh", overflowX: "scroll" }}>
           {exhibitList.length === 0 ? (
             <Skeleton variant="rounded" height="180vh" />
           ) : (
             <>
-              {exhibitList.filter((e) => e.exhibit_type === "class")
-                .sort(sortExhibitByCount).map((exhibit) => (
+              {exhibitList
+                .filter((e) => e.exhibit_type === "class")
+                .sort(sortExhibitByCount)
+                .map((exhibit) => (
                   <EachExhibit key={exhibit.id} exhibit={exhibit} />
                 ))}
             </>
@@ -233,8 +269,12 @@ const AnalyticsSummary: React.VFC = () => {
             <Skeleton variant="rounded" height="90vh" />
           ) : (
             <>
-              {exhibitList.filter((e) => ["stage", "other"].indexOf(e.exhibit_type) !== -1)
-                .sort(sortExhibitByCount).map((exhibit) => (
+              {exhibitList
+                .filter(
+                  (e) => ["stage", "other"].indexOf(e.exhibit_type) !== -1
+                )
+                .sort(sortExhibitByCount)
+                .map((exhibit) => (
                   <EachExhibit key={exhibit.id} exhibit={exhibit} />
                 ))}
             </>

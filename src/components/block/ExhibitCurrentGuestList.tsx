@@ -33,7 +33,9 @@ type exhibitCurrentGuestTableListProp = {
   enter_at: string;
 }[];
 
-const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({ exhibit_id }) => {
+const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
+  exhibit_id,
+}) => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [rows, setRows] = useState<exhibitCurrentGuestTableListProp>([]);
@@ -55,10 +57,10 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({ exhibit_id
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                    ? "教員"
-                    : v.guest_type === "family"
-                      ? "保護者"
-                      : "その他",
+                  ? "教員"
+                  : v.guest_type === "family"
+                  ? "保護者"
+                  : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:mm:ss"),
             };
           });

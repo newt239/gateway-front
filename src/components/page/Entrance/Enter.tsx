@@ -100,7 +100,9 @@ const EntranceEnter: React.VFC = () => {
             if (guestList.length < reservation.count) {
               setGuest([...guestList, scanText]);
             } else {
-              setAlertMessage("この予約を使って登録可能なリストバンドの数の上限に達しました。");
+              setAlertMessage(
+                "この予約を使って登録可能なリストバンドの数の上限に達しました。"
+              );
             }
           } else {
             setAlertMessage(`${scanText}は登録済みです。`);
@@ -159,7 +161,9 @@ const EntranceEnter: React.VFC = () => {
             setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
           })
           .catch((err: AxiosError) => {
-            setAlertMessage("リストバンドの登録に際し何らかのエラーが発生しました。もう一度やり直してください。");
+            setAlertMessage(
+              "リストバンドの登録に際し何らかのエラーが発生しました。もう一度やり直してください。"
+            );
             handleApiError(err, "guest_register_post");
             setText("");
           })
@@ -200,10 +204,7 @@ const EntranceEnter: React.VFC = () => {
         {reservation && (
           <Card variant="outlined" sx={{ p: 2 }}>
             {!largerThanSM && guestList.length < reservation.count && (
-              <Alert
-                severity="info"
-                sx={{ mb: 2 }}
-              >
+              <Alert severity="info" sx={{ mb: 2 }}>
                 他のリストバンドも登録する場合は画面上部をタップしてスキャンしてください
               </Alert>
             )}
@@ -338,7 +339,11 @@ const EntranceEnter: React.VFC = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Grid container spacing={2} sx={{ flexDirection: "column", alignItems: "center" }}>
+          <Grid
+            container
+            spacing={2}
+            sx={{ flexDirection: "column", alignItems: "center" }}
+          >
             <Grid item xs={12}>
               <Alert severity="info">{infoMessage}</Alert>
             </Grid>

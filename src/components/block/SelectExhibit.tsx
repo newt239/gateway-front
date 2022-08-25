@@ -22,7 +22,10 @@ type SelectExhibitProp = {
   setCurrentExhibit: Dispatch<SetStateAction<string>>;
 };
 
-const SelectExhibit: React.VFC<SelectExhibitProp> = ({ currentExhibit, setCurrentExhibit }) => {
+const SelectExhibit: React.VFC<SelectExhibitProp> = ({
+  currentExhibit,
+  setCurrentExhibit,
+}) => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [loading, setLoading] = useState(true);

@@ -70,7 +70,9 @@ const ReserveCheck: React.VFC = () => {
         checkReservation(reservationId);
       } else if (scanText.startsWith("G")) {
         setScanStatus("error");
-        setErrorMessage("これはゲストIDのQRコードです。予約用QRコードをスキャンしてください。");
+        setErrorMessage(
+          "これはゲストIDのQRコードです。予約用QRコードをスキャンしてください。"
+        );
       } else {
         setScanStatus("error");
         setErrorMessage("このQRコードは使えません。");
