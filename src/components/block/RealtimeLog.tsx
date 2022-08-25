@@ -99,7 +99,7 @@ const RealtimeLog: React.VFC = () => {
       getActivityHistory();
       const intervalId = setInterval(() => {
         getActivityHistory();
-      }, 1 * 10 * 1000);
+      }, 1 * 15 * 1000);
       return () => {
         clearInterval(intervalId);
       };
@@ -120,7 +120,7 @@ const RealtimeLog: React.VFC = () => {
           }}
         >
           <Grid item>
-            <Tooltip title="10秒更新">
+            <Tooltip title="15秒更新">
               <Typography variant="h3">リアルタイムログ</Typography>
             </Tooltip>
           </Grid>

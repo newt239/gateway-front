@@ -151,7 +151,16 @@ const AnalyticsSummary: React.VFC = () => {
   };
 
   return (
-    <Grid container spacing={2} sx={expand ? { position: "fixed", top: 0, left: 0, height: "100vh", overflowY: "scroll", backgroundColor: "white", my: 0, px: 1 } : null}>
+    <Grid container spacing={2} sx={expand ? {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      height: "100vh",
+      overflowY: "scroll",
+      my: 0,
+      px: 1,
+      backgroundColor: "white"
+    } : null}>
       <Grid
         item
         xs={12}
