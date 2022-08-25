@@ -14,6 +14,7 @@ import {
   Grid,
 } from "@mui/material";
 
+import { ExhibitProps } from "#/components/lib/types";
 import { handleApiError } from "#/components/lib/commonFunction";
 
 type SelectExhibitProp = {
@@ -21,19 +22,11 @@ type SelectExhibitProp = {
   setCurrentExhibit: Dispatch<SetStateAction<string>>;
 };
 
-const SelectExhibit = ({
-  currentExhibit,
-  setCurrentExhibit,
-}: SelectExhibitProp) => {
+const SelectExhibit: React.VFC<SelectExhibitProp> = ({ currentExhibit, setCurrentExhibit }) => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [loading, setLoading] = useState(true);
-  type exhibitProp = {
-    exhibit_id: string;
-    group_name: string;
-    exhibit_type: string;
-  };
-  const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
+  const [exhibitList, setExhibitList] = useState<ExhibitProps[]>([]);
 
   useEffect(() => {
     if (token && profile) {

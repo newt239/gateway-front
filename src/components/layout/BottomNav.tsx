@@ -15,7 +15,7 @@ import MeetingRoomRoundedIcon from "@mui/icons-material/MeetingRoomRounded";
 import CelebrationRoundedIcon from "@mui/icons-material/CelebrationRounded";
 import AutoGraphRoundedIcon from "@mui/icons-material/AutoGraphRounded";
 
-const SimpleBottomNavigation = () => {
+const SimpleBottomNavigation: React.VFC = () => {
   const profile = useAtomValue(profileAtom);
   const path = useLocation().pathname;
   const [value, setValue] = React.useState("other");

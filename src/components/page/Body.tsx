@@ -23,7 +23,7 @@ import AdminLostWristband from "#/components/page/Admin/LostWristband";
 import Extra from "#/components/page/Extra";
 import MessageDialog from "#/components/block/MessageDialog";
 
-const Body = () => {
+const Body: React.VFC = () => {
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
   const [profile, setProfile] = useAtom(profileAtom);

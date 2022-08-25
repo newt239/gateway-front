@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 
-const Version = () => {
+const Version: React.VFC = () => {
   return (
     <Box>
       <Typography variant="caption">

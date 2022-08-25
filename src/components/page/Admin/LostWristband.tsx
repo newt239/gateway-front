@@ -29,7 +29,7 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
-import { reservationInfoProp } from "#/components/lib/types";
+import { ReservationInfoProps } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
@@ -38,13 +38,13 @@ import {
 } from "#/components/lib/commonFunction";
 import MessageDialog from "#/components/block/MessageDialog";
 
-const LostWristband = () => {
+const LostWristband: React.VFC = () => {
   setTitle("リストバンド紛失対応");
 
   const token = useAtomValue(tokenAtom);
 
   const [reservationId, setReservationId] = useState<string>("");
-  const [reservation, setReservation] = useState<reservationInfoProp | null>(
+  const [reservation, setReservation] = useState<ReservationInfoProps | null>(
     null
   );
   const [newGuestId, setNewGuestId] = useState<string>("");

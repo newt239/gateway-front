@@ -11,7 +11,7 @@ import Settings from "#/components/block/Settings";
 import GatewayThumbnail from "#/asset/gateway-hero.jpg";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 
-const Home = () => {
+const Home: React.VFC = () => {
   setTitle("ホーム");
   const { largerThanMD } = useDeviceWidth();
 

@@ -22,7 +22,7 @@ import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 
-type ExhibitSummaryProp = {
+type ExhibitSummaryProps = {
   id: string;
   exhibit_name: string;
   group_name: string;
@@ -32,17 +32,17 @@ type ExhibitSummaryProp = {
   capacity: number;
 };
 
-const AnalyticsSummary = () => {
+const AnalyticsSummary: React.VFC = () => {
   setTitle("展示一覧");
   const token = useAtomValue(tokenAtom);
-  const [clubList, setClubList] = useState<ExhibitSummaryProp[]>([]);
-  const [classList, setClassList] = useState<ExhibitSummaryProp[]>([]);
-  const [stageList, setStageList] = useState<ExhibitSummaryProp[]>([]);
-  const [otherList, setOtherList] = useState<ExhibitSummaryProp[]>([]);
+  const [clubList, setClubList] = useState<ExhibitSummaryProps[]>([]);
+  const [classList, setClassList] = useState<ExhibitSummaryProps[]>([]);
+  const [stageList, setStageList] = useState<ExhibitSummaryProps[]>([]);
+  const [otherList, setOtherList] = useState<ExhibitSummaryProps[]>([]);
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
   const [loading, setLoading] = useState(true);
 
-  const sortExhibitByCount = (a: ExhibitSummaryProp, b: ExhibitSummaryProp) => {
+  const sortExhibitByCount = (a: ExhibitSummaryProps, b: ExhibitSummaryProps) => {
     if (a.count > b.count) return -1;
     if (a.count < b.count) return 1;
     return 0;
@@ -98,7 +98,7 @@ const AnalyticsSummary = () => {
     };
   }, []);
 
-  const ExhibitListBlock = ({ exhibit }: { exhibit: ExhibitSummaryProp }) => {
+  const ExhibitListBlock = ({ exhibit }: { exhibit: ExhibitSummaryProps }) => {
     return (
       <ListItem divider disablePadding>
         <Link

@@ -32,7 +32,7 @@ import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
-import { guestInfoProp } from "#/components/lib/types";
+import { GuestInfoProps } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
@@ -43,7 +43,7 @@ import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
-const EntranceExit = () => {
+const EntranceExit: React.VFC = () => {
   setTitle("エントランス");
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
@@ -53,7 +53,7 @@ const EntranceExit = () => {
   );
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
+  const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
   const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);

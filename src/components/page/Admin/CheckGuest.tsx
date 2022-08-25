@@ -33,28 +33,23 @@ import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 
-import { guestInfoProp } from "#/components/lib/types";
+import { ExhibitProps, GuestInfoProps } from "#/components/lib/types";
 import {
   getTimePart,
   guestIdValidation,
   handleApiError,
 } from "#/components/lib/commonFunction";
 
-type exhibitProp = {
-  exhibit_id: string;
-  group_name: string;
-  exhibit_type: string;
-};
 
-const AdminCheckGuest = () => {
+const AdminCheckGuest: React.VFC = () => {
   setTitle("ゲスト照会");
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
 
   const [guestId, setGuestId] = useState<string>("");
-  const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
+  const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
+  const [exhibitList, setExhibitList] = useState<ExhibitProps[]>([]);
 
   useEffect(() => {
     if (token) {

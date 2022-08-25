@@ -10,7 +10,7 @@ import { Typography, Box } from "@mui/material";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 
-const AllAreaPieChart = () => {
+const AllAreaPieChart: React.VFC = () => {
   const token = useAtomValue(tokenAtom);
   const [allAreaTotalCount, setAllAreaTotalCount] = useState<number>(0);
   const [allAreaChartCategories, setAllAreaChartCategories] = useState<

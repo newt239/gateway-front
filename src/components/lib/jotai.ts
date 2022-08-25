@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { atom, useSetAtom } from "jotai";
-import { profileProp, reservationInfoProp } from "#/components/lib/types";
+import { ProfileProps, ReservationInfoProps } from "#/components/lib/types";
 
 export const tokenAtom = atom<string | null>(
   localStorage.getItem("gatewayApiToken")
 );
-export const profileAtom = atom<profileProp | null>(null);
+export const profileAtom = atom<ProfileProps | null>(null);
 
 const initialPageAtomValue = "Gateway";
 const pageAtom = atom(initialPageAtomValue);
@@ -30,4 +30,4 @@ export const setTitle = (pageTitle: string) => {
 
 export const deviceStateAtom = atom(false);
 
-export const reservationAtom = atom<reservationInfoProp | null>(null);
+export const reservationAtom = atom<ReservationInfoProps | null>(null);

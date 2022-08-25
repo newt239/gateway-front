@@ -33,9 +33,7 @@ type exhibitCurrentGuestTableListProp = {
   enter_at: string;
 }[];
 
-const ExhibitCurrentGuestList: React.FunctionComponent<{
-  exhibit_id: string;
-}> = ({ exhibit_id }) => {
+const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({ exhibit_id }) => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [rows, setRows] = useState<exhibitCurrentGuestTableListProp>([]);

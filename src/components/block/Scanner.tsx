@@ -29,7 +29,7 @@ type ScannerProps = {
   handleScan: (text: string | null) => void;
 };
 
-const Scanner = ({ handleScan }: ScannerProps) => {
+const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const location = useLocation();
   const [qrReaderIsShow, setQrReaderIsShow] = useAtom(deviceStateAtom);
   const [scannerStatus, setScannerStatus] = useState<

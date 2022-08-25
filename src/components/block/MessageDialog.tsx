@@ -11,7 +11,7 @@ import {
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 
-type errorDialogProps = {
+type MessageDialogProps = {
   open: boolean;
   type: "success" | "error";
   title?: string;
@@ -19,7 +19,7 @@ type errorDialogProps = {
   onClose: () => void;
 };
 
-const MessageDialog = (props: errorDialogProps) => {
+const MessageDialog: React.VFC<MessageDialogProps> = (props) => {
   return (
     <Dialog open={props.open} onClose={props.onClose}>
       {props.type === "success" ? (

@@ -45,7 +45,7 @@ import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
-const ReserveCheck = () => {
+const ReserveCheck: React.VFC = () => {
   setTitle("エントランス入場処理");
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);

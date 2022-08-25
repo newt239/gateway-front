@@ -48,7 +48,7 @@ import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import MessageDialog from "#/components/block/MessageDialog";
 
-const EntranceEnter = () => {
+const EntranceEnter: React.VFC = () => {
   setTitle("エントランス入場処理");
   const navigate = useNavigate();
   const { largerThanSM, largerThanMD } = useDeviceWidth();
@@ -174,7 +174,7 @@ const EntranceEnter = () => {
     navigate("/entrance/reserve-check", { replace: true });
   };
 
-  const ReservationInfoCard = () => {
+  const ReservationInfoCard: React.VFC = () => {
     return (
       <>
         {alertMessage && (

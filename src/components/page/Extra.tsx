@@ -7,21 +7,21 @@ import { Card, Box, Typography, Button, Link } from "@mui/material";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import { sendLog } from "#/components/lib/commonFunction";
 
-type extraProp = {
+type extraType = {
   type: "notFound" | "unauthorized" | "keepout" | "unknown" | "loading";
 };
 
-const NotFound = (props: extraProp) => {
+const NotFound: React.VFC<extraType> = ({ type }) => {
   const setPageTitle = useSetAtom(pageTitleAtom);
   const navigate = useNavigate();
   const setProfile = useSetAtom(profileAtom);
   const setToken = useSetAtom(tokenAtom);
 
   useEffect(() => {
-    if (props.type !== "loading") {
+    if (type !== "loading") {
       setPageTitle("エラー");
     }
-    if (props.type === "unknown") {
+    if (type === "unknown") {
       sendLog("unknown account");
     }
   }, []);
@@ -35,11 +35,11 @@ const NotFound = (props: extraProp) => {
 
   return (
     <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-      {props.type === "notFound" ? (
+      {type === "notFound" ? (
         <Typography>お探しのページは見つかりませんでした。</Typography>
-      ) : props.type === "unauthorized" ? (
+      ) : type === "unauthorized" ? (
         <Typography>このページを表示する権限がありません。</Typography>
-      ) : props.type === "keepout" ? (
+      ) : type === "keepout" ? (
         <Typography>
           現在メンテナンス中です。最新の情報は
           <Link
@@ -51,7 +51,7 @@ const NotFound = (props: extraProp) => {
           </Link>
           からご確認ください。
         </Typography>
-      ) : props.type === "unknown" ? (
+      ) : type === "unknown" ? (
         <>
           <Typography>
             このアカウントは使えません。テスト用のアカウントである可能性があります。
@@ -63,7 +63,7 @@ const NotFound = (props: extraProp) => {
             メールを受け取っていない場合は技術部までお問い合わせください。
           </Typography>
         </>
-      ) : props.type === "loading" ? (
+      ) : type === "loading" ? (
         <Typography>ログインセッションの検証中...</Typography>
       ) : (
         <Typography>何らかのエラーが発生しました。</Typography>

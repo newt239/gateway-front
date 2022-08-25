@@ -15,13 +15,12 @@ import BackspaceRoundedIcon from "@mui/icons-material/BackspaceRounded";
 
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 
-const NumPad = ({
-  scanType,
-  onClose,
-}: {
+type NumPadProps = {
   scanType: "reservation" | "guest";
   onClose: (num: number[]) => void;
-}) => {
+}
+
+const NumPad: React.VFC<NumPadProps> = ({ scanType, onClose }) => {
   const { largerThanSM, largerThanMD } = useDeviceWidth();
   const [open, setOpen] = useState<boolean>(false);
   const [id, setId] = useState<number[]>([]);

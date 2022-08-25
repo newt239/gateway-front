@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
@@ -46,19 +46,18 @@ import {
   handleApiError,
 } from "#/components/lib/commonFunction";
 import Scanner from "#/components/block/Scanner";
-import { guestInfoProp } from "#/components/lib/types";
+import { GuestInfoProps } from "#/components/lib/types";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
-type ExhibitScanProps = {
-  scanType: "enter" | "exit";
-};
+type ExhibitScanParams = {
+  exhibit_id: string;
+}
 
-const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
+const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({ scanType }) => {
   const setTitle = useSetAtom(pageTitleAtom);
-  const pathMatchResult = useLocation().pathname.match(/exhibit\/(.*)\//);
-  const exhibit_id = pathMatchResult && pathMatchResult[1];
+  const { exhibit_id } = useParams() as ExhibitScanParams;
   const navigate = useNavigate();
   const { largerThanMD } = useDeviceWidth();
   const profile = useAtomValue(profileAtom);
@@ -68,7 +67,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     "waiting"
   );
   const [loading, setLoading] = useState<boolean>(false);
-  const [guestInfo, setGuestInfo] = useState<guestInfoProp | null>(null);
+  const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [capacity, setCapacity] = useState<number>(0);
   const [currentCount, setCurrentCount] = useState<number>(0);
   const [exhibitName, setExhibitName] = useState<string | null>(null);
@@ -84,7 +83,8 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
   const setDeviceState = useSetAtom(deviceStateAtom);
 
   const updateExhibitInfo = () => {
-    if (token && profile && exhibit_id) {
+    if (token && profile) {
+      // 初期ロード時
       if (
         !exhibitName ||
         scanStatus === "success" ||
@@ -290,9 +290,9 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
     }
   };
 
-  const GuestInfoCard = () => {
+  const GuestInfoCard: React.VFC = () => {
     const registerSession = () => {
-      if (token && profile && exhibit_id && guestInfo) {
+      if (token && profile && guestInfo) {
         const payload = {
           guest_id: text,
           exhibit_id: exhibit_id,
@@ -417,15 +417,7 @@ const ExhibitScan = ({ scanType }: ExhibitScanProps) => {
 
   return (
     <>
-      {!exhibit_id ? (
-        <Grid container spacing={2} sx={{ p: 2 }}>
-          <Grid item xs={12}>
-            <Card variant="outlined" sx={{ p: 2 }}>
-              展示IDが正しくありません。
-            </Card>
-          </Grid>
-        </Grid>
-      ) : profile &&
+      {profile &&
         profile.user_type === "exhibit" &&
         profile.user_id !== exhibit_id ? (
         <Grid container spacing={2} sx={{ p: 2 }}>

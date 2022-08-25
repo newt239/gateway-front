@@ -14,7 +14,7 @@ import { handleApiError } from "#/components/lib/commonFunction";
 import ExhibitEnterCountBarChart from "#/components/block/ExhibitEnterCountBarChart";
 import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList";
 
-const AnalyticsExhibit = () => {
+const AnalyticsExhibit: React.VFC = () => {
   const setTitle = useSetAtom(pageTitleAtom);
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);

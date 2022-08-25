@@ -16,18 +16,12 @@ import {
   Typography,
 } from "@mui/material";
 
+import { ExhibitProps } from "#/components/lib/types";
 import { handleApiError } from "#/components/lib/commonFunction";
 
-const RealtimeLog = () => {
+const RealtimeLog: React.VFC = () => {
   const token = useAtomValue(tokenAtom);
-
-  type exhibitProp = {
-    exhibit_id: string;
-    exhibit_name: string;
-    exhibit_type: string;
-    group_name: string;
-  };
-  const [exhibitList, setExhibitList] = useState<exhibitProp[]>([]);
+  const [exhibitList, setExhibitList] = useState<ExhibitProps[]>([]);
   const getExhibitList = () => {
     if (token) {
       apiClient(process.env.REACT_APP_API_BASE_URL)
