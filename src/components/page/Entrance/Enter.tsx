@@ -203,6 +203,14 @@ const EntranceEnter: React.VFC = () => {
         {reservation && (
           <>
             <Card variant="outlined" sx={{ p: 2 }}>
+              {!largerThanSM && guestList.length < reservation.count && (
+                <Alert
+                  severity="info"
+                  sx={{ mb: 2 }}
+                >
+                  他のリストバンドも登録する場合は画面上部をタップしてスキャンしてください
+                </Alert>
+              )}
               <Typography variant="h4">予約情報</Typography>
               <List dense>
                 {guestList.map((guest, index) => (
