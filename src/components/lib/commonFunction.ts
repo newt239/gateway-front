@@ -117,7 +117,7 @@ export const handleApiError = (error: AxiosError, name: string) => {
 
 export const sendLog = (message: string, err?: unknown) => {
   const env = process.env.REACT_APP_ENV;
-  if (env && (env === "production" || env === "local")) {
+  if (env && (env === "production" || env === "develop")) {
     const url = process.env.REACT_APP_DISCORD_WEBHOOK_URL;
     if (url) {
       const config = {
