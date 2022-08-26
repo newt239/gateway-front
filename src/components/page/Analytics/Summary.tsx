@@ -27,7 +27,7 @@ import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
 import { handleApiError } from "#/components/lib/commonFunction";
 
 type ExhibitSummaryProps = {
-  id: string;
+  exhibit_id: string;
   exhibit_name: string;
   group_name: string;
   room_name: string;
@@ -54,9 +54,9 @@ const AnalyticsSummary: React.VFC = () => {
       if (a.count > b.count) return asc ? -1 : 1;
       if (a.count < b.count) return asc ? 1 : -1;
     }
-    if (a.id !== b.id) {
-      if (a.id > b.id) return asc ? 1 : -1;
-      if (a.id < b.id) return asc ? -1 : 1;
+    if (a.exhibit_id !== b.exhibit_id) {
+      if (a.exhibit_id > b.exhibit_id) return asc ? 1 : -1;
+      if (a.exhibit_id < b.exhibit_id) return asc ? -1 : 1;
     }
     return 0;
   };
@@ -108,7 +108,7 @@ const AnalyticsSummary: React.VFC = () => {
         sx={{ pageBreakInside: "avoid", breakInside: "avoid" }}
       >
         <Link
-          to={`/analytics/exhibit/${exhibit.id}`}
+          to={`/analytics/exhibit/${exhibit.exhibit_id}`}
           style={{
             width: "100%",
             color: "black",
@@ -172,15 +172,15 @@ const AnalyticsSummary: React.VFC = () => {
       sx={
         expand
           ? {
-              position: "fixed",
-              top: 0,
-              left: 0,
-              height: "100vh",
-              overflowY: "scroll",
-              my: 0,
-              px: 1,
-              backgroundColor: "white",
-            }
+            position: "fixed",
+            top: 0,
+            left: 0,
+            height: "100vh",
+            overflowY: "scroll",
+            my: 0,
+            px: 1,
+            backgroundColor: "white",
+          }
           : null
       }
     >
@@ -239,7 +239,7 @@ const AnalyticsSummary: React.VFC = () => {
                 .filter((e) => e.exhibit_type === "club")
                 .sort(sortExhibitByCount)
                 .map((exhibit) => (
-                  <EachExhibit key={exhibit.id} exhibit={exhibit} />
+                  <EachExhibit key={exhibit.exhibit_id} exhibit={exhibit} />
                 ))}
             </>
           )}
@@ -256,7 +256,7 @@ const AnalyticsSummary: React.VFC = () => {
                 .filter((e) => e.exhibit_type === "class")
                 .sort(sortExhibitByCount)
                 .map((exhibit) => (
-                  <EachExhibit key={exhibit.id} exhibit={exhibit} />
+                  <EachExhibit key={exhibit.exhibit_id} exhibit={exhibit} />
                 ))}
             </>
           )}
@@ -275,7 +275,7 @@ const AnalyticsSummary: React.VFC = () => {
                 )
                 .sort(sortExhibitByCount)
                 .map((exhibit) => (
-                  <EachExhibit key={exhibit.id} exhibit={exhibit} />
+                  <EachExhibit key={exhibit.exhibit_id} exhibit={exhibit} />
                 ))}
             </>
           )}
