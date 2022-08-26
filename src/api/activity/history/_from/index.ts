@@ -13,6 +13,7 @@ export type Methods = {
       activity_id: string;
       guest_id: string;
       exhibit_id: string;
+      activity_type: string;
       timestamp: string;
     }[];
   };

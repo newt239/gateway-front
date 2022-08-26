@@ -95,20 +95,13 @@ const AdminCheckGuest: React.VFC = () => {
           })
           .then((res) => {
             const guestActivityList = [];
-            for (const eachSession of res) {
-              console.log(eachSession);
+            for (const eachActivity of res) {
+              console.log(eachActivity);
               guestActivityList.push({
-                datetime: moment(eachSession.enter_at),
-                exhibit_id: eachSession.exhibit_id,
-                activity_type: "enter",
+                exhibit_id: eachActivity.exhibit_id,
+                activity_type: eachActivity.activity_type,
+                datetime: moment(eachActivity.timestamp),
               });
-              if (eachSession.exit_at !== "current") {
-                guestActivityList.push({
-                  datetime: moment(eachSession.exit_at),
-                  exhibit_id: eachSession.exhibit_id,
-                  activity_type: "exit",
-                });
-              }
             }
             setGuestActivity(
               guestActivityList.sort((a, b) =>
@@ -230,10 +223,10 @@ const AdminCheckGuest: React.VFC = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                      ? "生徒"
-                      : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : "その他"}
+                        ? "生徒"
+                        : guestInfo.guest_type === "teacher"
+                          ? "教員"
+                          : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>

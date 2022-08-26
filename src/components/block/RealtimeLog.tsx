@@ -39,14 +39,14 @@ const RealtimeLog: React.VFC = () => {
     }
   };
 
-  type activityProp = {
-    session_id: string;
-    exhibit_id: string;
+  type ActivityProps = {
+    activity_id: string;
     guest_id: string;
+    exhibit_id: string;
     activity_type: string;
     timestamp: string;
   };
-  const [activityList, setActivityList] = useState<activityProp[]>([]);
+  const [activityList, setActivityList] = useState<ActivityProps[]>([]);
   const [lastUpdate, setLastUpdate] = useState<Moment>(
     moment().subtract(1, "weeks")
   );
@@ -62,14 +62,10 @@ const RealtimeLog: React.VFC = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          const enterActivityList = res.enter.map((v) => {
-            return { ...v, activity_type: "enter" };
-          });
-          const exitActivityList = res.exit.map((v) => {
-            return { ...v, activity_type: "exit" };
-          });
-          const newActivityList = enterActivityList
-            .concat(exitActivityList)
+          const newActivityList = res
+            .map((v) => {
+              return { ...v, activity_type: "enter" };
+            })
             .sort((a, b) => {
               if (a.timestamp < b.timestamp) {
                 return 1;
@@ -77,11 +73,7 @@ const RealtimeLog: React.VFC = () => {
                 return -1;
               }
             });
-          setActivityList([
-            ...activityList,
-            ...newActivityList,
-            ...activityList,
-          ]);
+          setActivityList([...activityList, ...newActivityList]);
           setLastUpdate(moment());
         })
         .catch((err: AxiosError) => {
@@ -156,7 +148,7 @@ const RealtimeLog: React.VFC = () => {
             <List>
               {activityList.map((v) => (
                 <ListItem
-                  key={`${v.session_id}-${v.activity_type}`}
+                  key={`${v.activity_id}-${v.activity_type}`}
                   divider
                   disablePadding
                 >
@@ -173,7 +165,7 @@ const RealtimeLog: React.VFC = () => {
                         }
                         secondaryTypographyProps={{ sx: { p: 0 } }}
                       >
-                        {v.session_id}
+                        {v.activity_id}
                       </ListItemText>
                     </Grid>
                     <Grid item xs={4}>
