@@ -182,10 +182,10 @@ const EntranceExit: React.VFC = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -274,10 +274,16 @@ const EntranceExit: React.VFC = () => {
         </Grid>
         <Snackbar
           open={snackbarMessage !== null}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
           autoHideDuration={6000}
           onClose={() => setSnackbarMessage(null)}
         >
-          <Alert severity="success">{snackbarMessage}</Alert>
+          <Alert variant="filled" severity="success">{
+            snackbarMessage}
+          </Alert>
         </Snackbar>
       </Grid>
       <ScanGuide show={showScanGuide} />
