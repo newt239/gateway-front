@@ -13,7 +13,6 @@ export type Methods = {
       id: string;
       guest_type: string;
       enter_at: string;
-      session_id: string;
     }[];
   };
 };

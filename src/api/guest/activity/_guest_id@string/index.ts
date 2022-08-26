@@ -11,8 +11,8 @@ export type Methods = {
     /** 正常レスポンス */
     resBody: {
       exhibit_id: string;
-      enter_at: string;
-      exit_at: string;
+      activity_type: string;
+      timestamp: string;
     }[];
   };
 };
