@@ -24,7 +24,6 @@ import {
   ListItemIcon,
   ListItemText,
   Alert,
-  Divider,
   Button,
   CircularProgress,
 } from "@mui/material";
@@ -161,7 +160,7 @@ const EntranceEnter: React.VFC = () => {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then(() => {
-            setDialogMessage(`${guestList.join(",")}の登録が完了しました。`);
+            setDialogMessage(`予約ID ${reservation.reservation_id}へ2つのリストバンド(${guestList.join(", ")})の紐付けが完了しました。`);
           })
           .catch((err: AxiosError) => {
             setAlertMessage(
@@ -194,41 +193,48 @@ const EntranceEnter: React.VFC = () => {
             {alertMessage}
           </Alert>
         )}
-        {reservation && (
-          <Card variant="outlined" sx={{ p: 2 }}>
-            {!largerThanSM && guestList.length < reservation.count && (
-              <Alert severity="info" sx={{ mb: 2 }}>
-                他のリストバンドも登録する場合は画面上部をタップしてスキャンしてください
-              </Alert>
-            )}
-            <Typography variant="h4">予約情報</Typography>
-            <List dense>
-              {guestList.map((guest, index) => (
-                <ListItem
-                  key={guest}
-                  secondaryAction={
-                    !reservation.registered
-                      .filter((guest) => guest.is_spare === 0)
-                      .map((guest) => guest.guest_id)
-                      .includes(guest) && (
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => reset(index)}
-                      >
-                        <DeleteIcon color="error" />
-                      </IconButton>
-                    )
-                  }
-                >
-                  <ListItemIcon>
-                    <PersonRoundedIcon />
-                  </ListItemIcon>
-                  <ListItemText>{guest}</ListItemText>
-                </ListItem>
-              ))}
+        {reservation && !alertMessage && (
+          <>
+            {
+              0 < guestList.length && guestList.length < reservation.count && (
+                <Alert severity="warning" sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}>
+                  同じ予約の来場者が他にもいる場合は{!largerThanSM && "画面上部をタップし"}スキャンを続けてください
+                </Alert>
+              )
+            }
+            <Card variant="outlined" sx={{ my: 1, mx: !largerThanMD ? 1 : 0, p: 2 }}>
+              <Typography variant="h4">リストバンド</Typography>
+              {guestList.length === 0 && (
+                <Typography variant="body1" sx={{ p: 2 }}>ここに予約と紐づけるリストバンドのIDが表示されます</Typography>
+              )}
               {guestList.length !== 0 && (
                 <>
+                  <List dense>
+                    {guestList.map((guest, index) => (
+                      <ListItem
+                        key={guest}
+                        secondaryAction={
+                          !reservation.registered
+                            .filter((guest) => guest.is_spare === 0)
+                            .map((guest) => guest.guest_id)
+                            .includes(guest) && (
+                            <IconButton
+                              edge="end"
+                              aria-label="delete"
+                              onClick={() => reset(index)}
+                            >
+                              <DeleteIcon color="error" />
+                            </IconButton>
+                          )
+                        }
+                      >
+                        <ListItemIcon>
+                          <PersonRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText>{guest}</ListItemText>
+                      </ListItem>
+                    ))}
+                  </List>
                   <Box
                     m={1}
                     sx={{
@@ -249,60 +255,10 @@ const EntranceEnter: React.VFC = () => {
                       すべて登録
                     </Button>
                   </Box>
-                  <Divider />
                 </>
               )}
-              <ListItem>
-                <ListItemIcon>
-                  <AssignmentIndRoundedIcon />
-                </ListItemIcon>
-                <ListItemText>{reservation.reservation_id}</ListItemText>
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <GroupWorkRoundedIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={
-                    reservation.guest_type === "family" ? "保護者" : "その他"
-                  }
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <AccessTimeRoundedIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={getTimePart(reservation.part).part_name}
-                />
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <PeopleRoundedIcon />
-                </ListItemIcon>
-                <ListItemText>{reservation.count}人</ListItemText>
-              </ListItem>
-            </List>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                gap: "1rem",
-              }}
-            >
-              <Button
-                variant="outlined"
-                color="error"
-                startIcon={<ReplayRoundedIcon />}
-                onClick={() =>
-                  navigate("/entrance/reserve-check", { replace: true })
-                }
-              >
-                最初からやり直す
-              </Button>
-            </Box>
-          </Card>
+            </Card>
+          </>
         )}
       </>
     );
@@ -374,6 +330,62 @@ const EntranceEnter: React.VFC = () => {
               <ReservationInfoCard />
             </SwipeableDrawer>
           )}
+          {reservation && (
+            <Card variant="outlined" sx={{ my: 1, mx: !largerThanMD ? 1 : 0, p: 2 }}>
+              <Typography variant="h4">予約情報</Typography>
+              <List>
+                <ListItem>
+                  <ListItemIcon>
+                    <AssignmentIndRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText>{reservation.reservation_id}</ListItemText>
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <GroupWorkRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={
+                      reservation.guest_type === "family" ? "保護者" : "その他"
+                    }
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <AccessTimeRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={getTimePart(reservation.part).part_name}
+                  />
+                </ListItem>
+                <ListItem>
+                  <ListItemIcon>
+                    <PeopleRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText>{reservation.count}人</ListItemText>
+                </ListItem>
+              </List>
+            </Card>
+          )}
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "flex-end",
+              gap: "1rem",
+            }}
+          >
+            <Button
+              variant="outlined"
+              color="error"
+              startIcon={<ReplayRoundedIcon />}
+              onClick={() =>
+                navigate("/entrance/reserve-check", { replace: true })
+              }
+            >
+              最初からやり直す
+            </Button>
+          </Box>
         </Grid>
       </Grid>
       <MessageDialog
