@@ -11,7 +11,7 @@ export type Methods = {
 
     /** 正常レスポンス */
     resBody: {
-      session_id: string;
+      activity_id: string;
     };
 
     reqBody: {

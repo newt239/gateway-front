@@ -58,9 +58,9 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const [deviceList, setDeviceList] = useState<deviceProp[]>([]);
   const [selectCameraModalOpen, setSelectCameraModalOpen] =
     useState<boolean>(false);
-  const [errorDialogOpen, setMessageDialogOpen] = useState<boolean>(false);
-  const [errorDialogTitle, setMessageDialogTitle] = useState<string>("");
-  const [errorDialogMessage, setMessageDialogMessage] = useState<string>("");
+  const [errorDialogOpen, setErrorDialogOpen] = useState<boolean>(false);
+  const [errorDialogTitle, setErrorDialogTitle] = useState<string>("");
+  const [errorDialogMessage, setErrorDialogMessage] = useState<string>("");
 
   const getCameraDeviceList = () => {
     navigator.mediaDevices
@@ -131,7 +131,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   // https://github.com/afes-website/cappuccino-app/blob/824cf2295cebae85b762b6c7a21cbbe94bf1d0ee/src/components/QRScanner.tsx#L201
   const handleError = (err: unknown) => {
     setScannerStatus("error");
-    setMessageDialogTitle("カメラ起動失敗");
+    setErrorDialogTitle("カメラ起動失敗");
     let reason: string;
     if (isDOMException(err)) {
       switch (err.name) {
@@ -151,12 +151,12 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
           sendLog("camera_dom_exception_error", err);
           break;
       }
-      setMessageDialogMessage(reason);
+      setErrorDialogMessage(reason);
     } else {
       sendLog("camera_error", err);
-      setMessageDialogMessage("原因不明のエラーです。");
+      setErrorDialogMessage("原因不明のエラーです。");
     }
-    setMessageDialogOpen(true);
+    setErrorDialogOpen(true);
   };
 
   const Loading: React.VFC = () => {
@@ -298,7 +298,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
         title={errorDialogTitle}
         message={errorDialogMessage}
         onClose={() => {
-          setMessageDialogOpen(false);
+          setErrorDialogOpen(false);
         }}
       />
     </Stack>

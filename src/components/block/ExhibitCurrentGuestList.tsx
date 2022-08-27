@@ -78,31 +78,31 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
 
   const leaveGuest = () => {
     if (token && profile && exhibit_id) {
+      const payload: { guest_id: string; exhibit_id: string }[] = [];
       for (const guest of selectedGuestList) {
-        if (typeof guest == "string") {
-          const payload = {
-            guest_id: guest,
-            exhibit_id: exhibit_id,
-          };
-          apiClient(process.env.REACT_APP_API_BASE_URL)
-            .activity.exit.$post({
-              headers: { Authorization: "Bearer " + token },
-              body: payload,
-            })
-            .then(() => {
-              getCurrentGuestList();
-              setDialogOpen(false);
-              ReactGA.event({
-                category: "exhibit",
-                action: "leave_some_guest",
-                label: profile.user_id,
-              });
-            })
-            .catch((err: AxiosError) => {
-              handleApiError(err, "activity_exit_post");
-            });
-        }
+        const eachPayload = {
+          guest_id: guest as string,
+          exhibit_id: exhibit_id,
+        };
+        payload.push(eachPayload);
       }
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .activity.exit.batch.$post({
+          headers: { Authorization: "Bearer " + token },
+          body: payload,
+        })
+        .then(() => {
+          getCurrentGuestList();
+          setDialogOpen(false);
+          ReactGA.event({
+            category: "exhibit",
+            action: "leave_some_guest",
+            label: profile.user_id,
+          });
+        })
+        .catch((err: AxiosError) => {
+          handleApiError(err, "activity_exit_post");
+        });
     }
   };
 

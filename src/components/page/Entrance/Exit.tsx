@@ -274,10 +274,16 @@ const EntranceExit: React.VFC = () => {
         </Grid>
         <Snackbar
           open={snackbarMessage !== null}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
           autoHideDuration={6000}
           onClose={() => setSnackbarMessage(null)}
         >
-          <Alert severity="success">{snackbarMessage}</Alert>
+          <Alert variant="filled" severity="success">
+            {snackbarMessage}
+          </Alert>
         </Snackbar>
       </Grid>
       <ScanGuide show={showScanGuide} />

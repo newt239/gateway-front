@@ -10,7 +10,7 @@ export type Methods = {
     status: 200;
     /** 正常レスポンス */
     resBody: {
-      id: string;
+      exhibit_id: string;
       exhibit_name: string;
       group_name: string;
       room_name: string;

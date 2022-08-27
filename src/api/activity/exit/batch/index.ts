@@ -1,6 +1,6 @@
 /* eslint-disable */
 export type Methods = {
-  get: {
+  post: {
     reqHeaders?:
       | {
           Authorization: string;
@@ -8,11 +8,9 @@ export type Methods = {
       | undefined;
 
     status: 200;
-    /** 正常レスポンス */
-    resBody: {
+    reqBody: {
+      guest_id: string;
       exhibit_id: string;
-      activity_type: string;
-      timestamp: string;
     }[];
   };
 };
