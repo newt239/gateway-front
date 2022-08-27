@@ -57,10 +57,10 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                  ? "教員"
-                  : v.guest_type === "family"
-                  ? "保護者"
-                  : "その他",
+                    ? "教員"
+                    : v.guest_type === "family"
+                      ? "保護者"
+                      : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:mm:ss"),
             };
           });
@@ -114,9 +114,8 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
       <Dialog open={dialogOpen} onClose={onClose}>
         <DialogTitle>一括退室処理</DialogTitle>
         <DialogContent>
-          <DialogContentText>{selectedGuestList.join(", ")}</DialogContentText>
           <DialogContentText>
-            上記ゲスト{selectedGuestList.length}名に退室処理を行います。
+            選択中のゲスト{selectedGuestList.length}名に退室処理を行います。
           </DialogContentText>
         </DialogContent>
         <DialogActions>
