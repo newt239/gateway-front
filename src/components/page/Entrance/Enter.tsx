@@ -83,7 +83,7 @@ const EntranceEnter: React.VFC = () => {
         );
       } else {
         setInfoMessage(
-          `予約されている人数分のリストバンドの読み込みが終わりました。「登録」を押してください`
+          "予約されている人数分のリストバンドの読み込みが終わりました。「登録」を押してください"
         );
       }
     }
@@ -161,8 +161,7 @@ const EntranceEnter: React.VFC = () => {
           })
           .then(() => {
             setDialogMessage(
-              `予約ID: ${reservation.reservation_id}へ${
-                guestList.length
+              `予約ID: ${reservation.reservation_id}へ${guestList.length
               }つのリストバンド(${guestList.join(
                 ", "
               )})の紐付けが完了しました。`

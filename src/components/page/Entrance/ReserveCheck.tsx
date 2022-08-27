@@ -183,25 +183,21 @@ const ReserveCheck: React.VFC = () => {
                 <ListItemIcon>
                   <AssignmentIndRoundedIcon />
                 </ListItemIcon>
-                <ListItemText primary={reservationId} />
+                <ListItemText>{reservationId}</ListItemText>
               </ListItem>
               <ListItem>
                 <ListItemIcon>
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={
-                    reservation.guest_type === "family" ? "保護者" : "その他"
-                  }
-                />
+                <ListItemText>{
+                  reservation.guest_type === "family" ? "保護者" : "その他"
+                }</ListItemText>
               </ListItem>
               <ListItem>
                 <ListItemIcon>
                   <AccessTimeRoundedIcon />
                 </ListItemIcon>
-                <ListItemText
-                  primary={getTimePart(reservation.part).part_name}
-                />
+                <ListItemText>{getTimePart(reservation.part).part_name}</ListItemText>
               </ListItem>
               <ListItem>
                 <ListItemIcon>
