@@ -28,6 +28,7 @@ import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import ExploreOffRoundedIcon from "@mui/icons-material/ExploreOffRounded";
 import LocationOnRoundedIcon from "@mui/icons-material/LocationOnRounded";
 
+import theme from "#/components/lib/theme";
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";
 
@@ -41,7 +42,7 @@ const DrawerLeft: React.VFC = () => {
   const StyledListItemButton = styled(ListItemButton)<ListItemButtonProps>(
     () => ({
       margin: ".1rem .5rem",
-      borderRadius: "1rem",
+      borderRadius: theme.shape.borderRadius,
     })
   );
 

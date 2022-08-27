@@ -24,6 +24,7 @@ import CameraswitchRoundedIcon from "@mui/icons-material/CameraswitchRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import { isDOMException, sendLog } from "#/components/lib/commonFunction";
+import theme from "#/components/lib/theme";
 import MessageDialog from "#/components/block/MessageDialog";
 
 type ScannerProps = {
@@ -225,7 +226,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
           maxWidth: "50vh",
           aspectRatio: "1 / 1",
           backgroundColor: "black",
-          borderRadius: "1rem",
+          borderRadius: `${theme.shape.borderRadius}px`,
         }}
       >
         {qrReaderIsShow && refreshQrReader && (

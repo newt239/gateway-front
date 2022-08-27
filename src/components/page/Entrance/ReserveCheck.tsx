@@ -19,12 +19,12 @@ import {
   Typography,
   Button,
   Box,
-  LinearProgress,
   Card,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  CircularProgress,
 } from "@mui/material";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
@@ -54,7 +54,7 @@ const ReserveCheck: React.VFC = () => {
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
@@ -81,6 +81,7 @@ const ReserveCheck: React.VFC = () => {
   };
 
   const checkReservation = (reservationId: string) => {
+    setErrorMessage(null);
     if (token) {
       setReservationId(reservationId);
       setShowScanGuide(false);
@@ -146,6 +147,7 @@ const ReserveCheck: React.VFC = () => {
     setReservation(null);
     setDeviceState(true);
     setShowScanGuide(true);
+    setErrorMessage(null);
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -162,15 +164,12 @@ const ReserveCheck: React.VFC = () => {
   const ReservationInfoCard = () => {
     return (
       <>
-        {scanStatus === "error" && (
+        {errorMessage && (
           <Alert
             severity="error"
             variant="filled"
-            action={
-              <Button color="inherit" onClick={reset}>
-                スキャンし直す
-              </Button>
-            }
+            onClose={reset}
+            sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
           >
             {errorMessage}
           </Alert>
@@ -275,14 +274,22 @@ const ReserveCheck: React.VFC = () => {
           <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant="h4" sx={{ mb: 2 }}>
-            予約ID: {reservationId}
-          </Typography>
-          {loading && (
-            <Box sx={{ width: "100%" }}>
-              <LinearProgress />
-            </Box>
-          )}
+          <Box
+            sx={{
+              mb: 2,
+              borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+              width: "100%",
+              display: "flex",
+              flextWrap: "nowrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Typography variant="h4" sx={{ py: 1 }}>
+              予約ID: {reservationId}
+            </Typography>
+            {loading && <CircularProgress size={30} thickness={6} />}
+          </Box>
           {scanStatus !== "waiting" &&
             (largerThanSM ? (
               <ReservationInfoCard />

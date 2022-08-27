@@ -6,6 +6,10 @@ const theme = createTheme({
     primary: {
       main: blue[500],
     },
+    action: {
+      hoverOpacity: 0.2,
+      selectedOpacity: 0.2,
+    },
   },
   typography: {
     // Use the system font instead of the default Roboto font.
@@ -33,11 +37,15 @@ const theme = createTheme({
       padding: ".5rem 0",
     },
   },
+  shape: {
+    borderRadius: 10,
+  },
   components: {
     MuiCssBaseline: {
       styleOverrides: `
         #root {
           overflow-y: hidden;
+          cursor: default;
         }
         ::-webkit-scrollbar {
           width: .3rem;
@@ -46,14 +54,14 @@ const theme = createTheme({
         }
         ::-webkit-scrollbar-thumb {
           background-color: ${grey[500]};
-          border-radius: .1rem;
+          border-radius: 10px;
         }
         .qrcode {
           margin: auto;
           width: 100%;
         }
         .qrcode section video {
-          border-radius: 1rem;
+          border-radius: 10px;
         }
       `,
     },

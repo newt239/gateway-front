@@ -83,7 +83,7 @@ export const handleApiError = (error: AxiosError, name: string) => {
       let content =
         "```timestamp: " + moment().format("MM/DD HH:mm:ss SSS") + "\n";
       const version =
-        (process.env.REACT_APP_VERSION || "unknown") +
+        generalProps.app_version +
         "-" +
         (process.env.REACT_APP_ENV || "unknown");
       content += "version  : " + version + "\n";
