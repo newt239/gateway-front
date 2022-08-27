@@ -41,7 +41,7 @@ const ScanGuide: React.VFC<{ show: boolean }> = ({ show }) => {
             transform: "translateX(-50%)",
             backgroundColor: "error.main",
             padding: "1rem",
-            borderRadius: theme.shape.borderRadius,
+            borderRadius: `${theme.shape.borderRadius}px`,
             textAlign: "center",
             display: "flex",
           }}

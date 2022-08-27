@@ -17,13 +17,13 @@ import {
   Typography,
   Button,
   Box,
-  LinearProgress,
   Card,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Snackbar,
+  CircularProgress,
 } from "@mui/material";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
@@ -248,14 +248,22 @@ const EntranceExit: React.VFC = () => {
           <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant="h4" sx={{ mb: 2, p: 1, borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}>
-            ゲストID: {text}
-          </Typography>
-          {loading && (
-            <Box sx={{ width: "100%" }}>
-              <LinearProgress />
-            </Box>
-          )}
+          <Box sx={{
+            mb: 2,
+            borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+            width: "100%",
+            display: "flex",
+            flextWrap: "nowrap",
+            alignItems: "center",
+            justifyContent: "space-between"
+          }}>
+            <Typography variant="h4" sx={{ py: 1 }}>
+              ゲストID: {text}
+            </Typography>
+            {loading && (
+              <CircularProgress size={30} thickness={6} />
+            )}
+          </Box>
           {scanStatus !== "waiting" &&
             (largerThanSM ? (
               <GuestInfoCard />
