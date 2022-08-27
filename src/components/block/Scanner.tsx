@@ -23,7 +23,7 @@ import {
 import CameraswitchRoundedIcon from "@mui/icons-material/CameraswitchRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import { isDOMException, sendLog } from "#/components/lib/commonFunction";
+import { isAndroid, isDOMException, sendLog } from "#/components/lib/commonFunction";
 import theme from "#/components/lib/theme";
 import MessageDialog from "#/components/block/MessageDialog";
 
@@ -103,11 +103,12 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   // out of memory の対策として、5 分ごとに react-qr-reader を unmount して、直後に mount している
   // https://github.com/afes-website/cappuccino-app/blob/d0201aa5506e6b3aa7c3cc887171d83b0e773b18/src/components/QRScanner.tsx#L146
   const [refreshQrReader, setRefreshQrReader] = useState(true);
+  const interval = isAndroid() ? 30 * 1000 : 5 * 60 * 1000;
   useEffect(() => {
     const intervalId = setInterval(() => {
       setScannerStatus("loading");
       setRefreshQrReader(false);
-    }, 5 * 60 * 1000);
+    }, interval);
     return () => {
       clearInterval(intervalId);
     };

@@ -44,7 +44,7 @@ const SimpleBottomNavigation: React.VFC = () => {
     <>
       {profile && profile.available && (
         <Paper
-          sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 1 }}
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
           elevation={3}
         >
           {["moderator", "executive"].includes(profile.user_type) && (
