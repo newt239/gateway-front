@@ -15,7 +15,7 @@ import MeetingRoomRoundedIcon from "@mui/icons-material/MeetingRoomRounded";
 import CelebrationRoundedIcon from "@mui/icons-material/CelebrationRounded";
 import AutoGraphRoundedIcon from "@mui/icons-material/AutoGraphRounded";
 
-const SimpleBottomNavigation: React.VFC = () => {
+const BottomNav: React.VFC = () => {
   const profile = useAtomValue(profileAtom);
   const path = useLocation().pathname;
   const [value, setValue] = React.useState("other");
@@ -57,13 +57,13 @@ const SimpleBottomNavigation: React.VFC = () => {
               <BottomNavigationAction
                 label="エントランス"
                 value="entrance"
-                icon={<MeetingRoomRoundedIcon />}
+                icon={<CelebrationRoundedIcon />}
                 sx={{ whiteSpace: "nowrap" }}
               />
               <BottomNavigationAction
                 label="入退室処理"
                 value="exhibit"
-                icon={<CelebrationRoundedIcon />}
+                icon={<MeetingRoomRoundedIcon />}
                 sx={{ whiteSpace: "nowrap" }}
               />
               {profile.user_type === "moderator" && (
@@ -105,4 +105,4 @@ const SimpleBottomNavigation: React.VFC = () => {
   );
 };
 
-export default SimpleBottomNavigation;
+export default BottomNav;
