@@ -6,6 +6,10 @@ const theme = createTheme({
     primary: {
       main: blue[500],
     },
+    action: {
+      hoverOpacity: 0.2,
+      selectedOpacity: 0.2,
+    },
   },
   typography: {
     // Use the system font instead of the default Roboto font.
@@ -41,6 +45,7 @@ const theme = createTheme({
       styleOverrides: `
         #root {
           overflow-y: hidden;
+          cursor: default;
         }
         ::-webkit-scrollbar {
           width: .3rem;
