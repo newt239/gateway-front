@@ -34,6 +34,10 @@ import MessageDialog from "#/components/block/MessageDialog";
 type ScannerProps = {
   handleScan: (text: string | null) => void;
 };
+type DeviceProps = {
+  deviceId: string;
+  label: string;
+};
 
 const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const location = useLocation();
@@ -41,13 +45,6 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const [scannerStatus, setScannerStatus] = useState<
     "loading" | "waiting" | "error"
   >("loading");
-  const [reverseCamera, setReverseCamera] = useState<boolean>(
-    localStorage.getItem("reverseCamera") === "false" ? false : true
-  );
-  type DeviceProps = {
-    deviceId: string;
-    label: string;
-  };
   const getDeviceIdFromStorage = () => {
     const savedCurrentCameraDeviceId = localStorage.getItem(
       "currentCameraDeviceId"
@@ -66,6 +63,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const [errorDialogOpen, setErrorDialogOpen] = useState<boolean>(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState<string>("");
   const [errorDialogMessage, setErrorDialogMessage] = useState<string>("");
+  const [reverseCamera, setReverseCamera] = useState<boolean>(localStorage.getItem("reverseCamera") === "false" ? false : true);
 
   const getCameraDeviceList = () => {
     navigator.mediaDevices
@@ -88,6 +86,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
       })
       .catch((err) => {
         console.log(err);
+        sendLog("get_camera_error", err);
       });
   };
 
