@@ -1,5 +1,5 @@
 const generalProps = {
-  app_version: "1.9.2",
+  app_version: "1.9.3",
   version_date: "2022/08/27",
   time_part: [
     {
