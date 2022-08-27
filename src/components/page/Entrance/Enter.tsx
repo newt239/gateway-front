@@ -107,6 +107,8 @@ const EntranceEnter: React.VFC = () => {
           } else {
             setAlertMessage(`${scanText}は登録済みです。`);
           }
+        } else if (scanText.endsWith("=")) {
+          setAlertMessage("これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。");
         } else {
           setAlertMessage(`${scanText}というゲストは存在しません。`);
         }

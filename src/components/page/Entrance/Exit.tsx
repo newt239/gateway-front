@@ -88,9 +88,8 @@ const EntranceExit: React.VFC = () => {
             setScanStatus("error");
             setAlertMessage("予期せぬエラーが発生しました。" + err.message);
           });
-      } else if (scanText.startsWith("R")) {
-        setScanStatus("error");
-        setAlertMessage("これは予約IDです。");
+      } else if (scanText.endsWith("=")) {
+        setAlertMessage("これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。");
       } else {
         setScanStatus("error");
         setAlertMessage("このゲストIDは存在しません。");
@@ -182,10 +181,10 @@ const EntranceExit: React.VFC = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
