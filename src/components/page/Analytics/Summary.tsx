@@ -172,15 +172,15 @@ const AnalyticsSummary: React.VFC = () => {
       sx={
         expand
           ? {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            height: "100vh",
-            overflowY: "scroll",
-            my: 0,
-            px: 1,
-            backgroundColor: "white",
-          }
+              position: "fixed",
+              top: 0,
+              left: 0,
+              height: "100vh",
+              overflowY: "scroll",
+              my: 0,
+              px: 1,
+              backgroundColor: "white",
+            }
           : null
       }
     >

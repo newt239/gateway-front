@@ -57,10 +57,10 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                  ? "教員"
-                  : v.guest_type === "family"
-                  ? "保護者"
-                  : "その他",
+                    ? "教員"
+                    : v.guest_type === "family"
+                      ? "保護者"
+                      : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:mm:ss"),
             };
           });
@@ -78,31 +78,31 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
 
   const leaveGuest = () => {
     if (token && profile && exhibit_id) {
+      const payload: { guest_id: string; exhibit_id: string; }[] = [];
       for (const guest of selectedGuestList) {
-        if (typeof guest == "string") {
-          const payload = {
-            guest_id: guest,
-            exhibit_id: exhibit_id,
-          };
-          apiClient(process.env.REACT_APP_API_BASE_URL)
-            .activity.exit.$post({
-              headers: { Authorization: "Bearer " + token },
-              body: payload,
-            })
-            .then(() => {
-              getCurrentGuestList();
-              setDialogOpen(false);
-              ReactGA.event({
-                category: "exhibit",
-                action: "leave_some_guest",
-                label: profile.user_id,
-              });
-            })
-            .catch((err: AxiosError) => {
-              handleApiError(err, "activity_exit_post");
-            });
-        }
+        const eachPayload = {
+          guest_id: guest as string,
+          exhibit_id: exhibit_id,
+        };
+        payload.push(eachPayload);
       }
+      apiClient(process.env.REACT_APP_API_BASE_URL)
+        .activity.exit.batch.$post({
+          headers: { Authorization: "Bearer " + token },
+          body: payload,
+        })
+        .then(() => {
+          getCurrentGuestList();
+          setDialogOpen(false);
+          ReactGA.event({
+            category: "exhibit",
+            action: "leave_some_guest",
+            label: profile.user_id,
+          });
+        })
+        .catch((err: AxiosError) => {
+          handleApiError(err, "activity_exit_post");
+        });
     }
   };
 

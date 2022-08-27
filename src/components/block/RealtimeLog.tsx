@@ -40,7 +40,7 @@ const RealtimeLog: React.VFC = () => {
   };
 
   type ActivityProps = {
-    activity_id: string;
+    activity_id: number;
     guest_id: string;
     exhibit_id: string;
     activity_type: string;
