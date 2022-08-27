@@ -27,7 +27,7 @@ const columns: GridColDef[] = [
   { field: "enter_at", headerName: "入室時刻", width: 150 },
 ];
 
-type exhibitCurrentGuestTableListProp = {
+type ExhibitCurrentGuestTableListProp = {
   id: string;
   guest_type: string;
   enter_at: string;
@@ -38,7 +38,7 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
 }) => {
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
-  const [rows, setRows] = useState<exhibitCurrentGuestTableListProp>([]);
+  const [rows, setRows] = useState<ExhibitCurrentGuestTableListProp>([]);
   const [selectedGuestList, setSelectedGuestList] = useState<GridRowId[]>([]);
   const [dialogOpen, setDialogOpen] = useState(false);
 

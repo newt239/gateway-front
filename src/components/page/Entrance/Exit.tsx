@@ -43,6 +43,7 @@ import ScanGuide from "#/components/block/ScanGuide";
 
 const EntranceExit: React.VFC = () => {
   setTitle("エントランス");
+  const { largerThanSM, largerThanMD } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
@@ -55,10 +56,7 @@ const EntranceExit: React.VFC = () => {
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
   const [smDrawerOpen, setSMDrawerOpen] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
-
   const setDeviceState = useSetAtom(deviceStateAtom);
-
-  const { largerThanSM, largerThanMD } = useDeviceWidth();
 
   const handleScan = (scanText: string | null) => {
     if (scanText && scanText !== text && token) {
@@ -253,6 +251,7 @@ const EntranceExit: React.VFC = () => {
           <Box
             sx={{
               mb: 2,
+              px: 1,
               borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
               width: "100%",
               display: "flex",

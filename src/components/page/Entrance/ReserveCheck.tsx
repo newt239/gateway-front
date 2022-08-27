@@ -277,6 +277,7 @@ const ReserveCheck: React.VFC = () => {
           <Box
             sx={{
               mb: 2,
+              px: 1,
               borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
               width: "100%",
               display: "flex",

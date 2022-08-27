@@ -17,12 +17,12 @@ import {
 import { ExhibitProps } from "#/components/lib/types";
 import { handleApiError } from "#/components/lib/commonFunction";
 
-type SelectExhibitProp = {
+type SelectExhibitProps = {
   currentExhibit: string;
   setCurrentExhibit: Dispatch<SetStateAction<string>>;
 };
 
-const SelectExhibit: React.VFC<SelectExhibitProp> = ({
+const SelectExhibit: React.VFC<SelectExhibitProps> = ({
   currentExhibit,
   setCurrentExhibit,
 }) => {

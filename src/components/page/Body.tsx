@@ -27,7 +27,6 @@ const Body: React.VFC = () => {
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
   const [profile, setProfile] = useAtom(profileAtom);
-
   const [showMessageDialog, setShowMessageDialog] = useState<boolean>(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState<string>("");
   const [errorDialogMessage, setErrorDialogMessage] = useState<string>("");

@@ -40,7 +40,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const [reverseCamera, setReverseCamera] = useState<boolean>(
     localStorage.getItem("reverseCamera") === "false" ? false : true
   );
-  type deviceProp = {
+  type DeviceProps = {
     deviceId: string;
     label: string;
   };
@@ -56,7 +56,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const [currentDeviceId, setCurrentDeviceId] = useState<string>(
     getDeviceIdFromStorage()
   );
-  const [deviceList, setDeviceList] = useState<deviceProp[]>([]);
+  const [deviceList, setDeviceList] = useState<DeviceProps[]>([]);
   const [selectCameraModalOpen, setSelectCameraModalOpen] =
     useState<boolean>(false);
   const [errorDialogOpen, setErrorDialogOpen] = useState<boolean>(false);
