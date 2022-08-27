@@ -108,7 +108,9 @@ const EntranceEnter: React.VFC = () => {
             setAlertMessage(`${scanText}は登録済みです。`);
           }
         } else if (scanText.endsWith("=")) {
-          setAlertMessage("これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。");
+          setAlertMessage(
+            "これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。"
+          );
         } else {
           setAlertMessage(`${scanText}というゲストは存在しません。`);
         }
@@ -345,21 +347,21 @@ const EntranceEnter: React.VFC = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Box sx={{
-            mb: 2,
-            borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
-            width: "100%",
-            display: "flex",
-            flextWrap: "nowrap",
-            alignItems: "center",
-            justifyContent: "space-between"
-          }}>
+          <Box
+            sx={{
+              mb: 2,
+              borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+              width: "100%",
+              display: "flex",
+              flextWrap: "nowrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <Typography variant="h4" sx={{ py: 1 }}>
               ゲストID: {text}
             </Typography>
-            {loading && (
-              <CircularProgress size={30} thickness={6} />
-            )}
+            {loading && <CircularProgress size={30} thickness={6} />}
           </Box>
           {largerThanSM ? (
             <ReservationInfoCard />

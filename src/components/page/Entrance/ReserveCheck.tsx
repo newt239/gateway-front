@@ -274,21 +274,21 @@ const ReserveCheck: React.VFC = () => {
           <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Box sx={{
-            mb: 2,
-            borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
-            width: "100%",
-            display: "flex",
-            flextWrap: "nowrap",
-            alignItems: "center",
-            justifyContent: "space-between"
-          }}>
+          <Box
+            sx={{
+              mb: 2,
+              borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+              width: "100%",
+              display: "flex",
+              flextWrap: "nowrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <Typography variant="h4" sx={{ py: 1 }}>
               予約ID: {reservationId}
             </Typography>
-            {loading && (
-              <CircularProgress size={30} thickness={6} />
-            )}
+            {loading && <CircularProgress size={30} thickness={6} />}
           </Box>
           {scanStatus !== "waiting" &&
             (largerThanSM ? (

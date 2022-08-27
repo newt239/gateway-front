@@ -91,7 +91,9 @@ const EntranceExit: React.VFC = () => {
           });
       } else if (scanText.endsWith("=")) {
         setScanStatus("error");
-        setAlertMessage("これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。");
+        setAlertMessage(
+          "これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。"
+        );
       } else {
         setScanStatus("error");
         setAlertMessage("このゲストIDは存在しません。");
@@ -180,10 +182,10 @@ const EntranceExit: React.VFC = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -248,21 +250,21 @@ const EntranceExit: React.VFC = () => {
           <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Box sx={{
-            mb: 2,
-            borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
-            width: "100%",
-            display: "flex",
-            flextWrap: "nowrap",
-            alignItems: "center",
-            justifyContent: "space-between"
-          }}>
+          <Box
+            sx={{
+              mb: 2,
+              borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
+              width: "100%",
+              display: "flex",
+              flextWrap: "nowrap",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
             <Typography variant="h4" sx={{ py: 1 }}>
               ゲストID: {text}
             </Typography>
-            {loading && (
-              <CircularProgress size={30} thickness={6} />
-            )}
+            {loading && <CircularProgress size={30} thickness={6} />}
           </Box>
           {scanStatus !== "waiting" &&
             (largerThanSM ? (
