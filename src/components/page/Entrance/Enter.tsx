@@ -57,7 +57,7 @@ const EntranceEnter: React.VFC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [reservation, setReservation] = useAtom(reservationAtom);
   const [guestList, setGuest] = useState<string[]>([]);
-  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [smDrawerOpen, setSMDrawerOpen] = useState<boolean>(false);
   const setDeviceState = useSetAtom(deviceStateAtom);
   const [dialogMessage, setDialogMessage] = useState<string | null>(null);
 
@@ -93,7 +93,7 @@ const EntranceEnter: React.VFC = () => {
     if (scanText && text !== scanText && profile && reservation) {
       setAlertMessage(null);
       setText(scanText);
-      setSmDrawerStatus(true);
+      setSMDrawerOpen(true);
       if (guestIdValidation(scanText)) {
         if (!guestList.includes(scanText)) {
           if (guestList.length < reservation.count) {
@@ -160,7 +160,7 @@ const EntranceEnter: React.VFC = () => {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then(() => {
-            setDialogMessage(`予約ID ${reservation.reservation_id}へ2つのリストバンド(${guestList.join(", ")})の紐付けが完了しました。`);
+            setDialogMessage(`予約ID: ${reservation.reservation_id}へ${guestList.length}つのリストバンド(${guestList.join(", ")})の紐付けが完了しました。`);
           })
           .catch((err: AxiosError) => {
             setAlertMessage(
@@ -172,7 +172,7 @@ const EntranceEnter: React.VFC = () => {
           .finally(() => {
             setLoading(false);
             setDeviceState(true);
-            setSmDrawerStatus(false);
+            setSMDrawerOpen(false);
           });
       }
     };
@@ -312,6 +312,7 @@ const EntranceEnter: React.VFC = () => {
               alignItems: "center",
               justifyContent: "space-between",
             }}
+            onClick={() => setSMDrawerOpen(true)}
           >
             <Typography variant="h4" sx={{ py: 1 }}>
               ゲストID: {text}
@@ -324,8 +325,8 @@ const EntranceEnter: React.VFC = () => {
             <SwipeableDrawer
               anchor="bottom"
               open={smDrawerOpen}
-              onClose={() => setSmDrawerStatus(false)}
-              onOpen={() => setSmDrawerStatus(true)}
+              onClose={() => setSMDrawerOpen(false)}
+              onOpen={() => setSMDrawerOpen(true)}
             >
               <ReservationInfoCard />
             </SwipeableDrawer>

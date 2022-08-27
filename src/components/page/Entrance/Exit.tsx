@@ -53,7 +53,7 @@ const EntranceExit: React.VFC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
-  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [smDrawerOpen, setSMDrawerOpen] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
 
   const setDeviceState = useSetAtom(deviceStateAtom);
@@ -98,7 +98,7 @@ const EntranceExit: React.VFC = () => {
         setScanStatus("error");
         setAlertMessage("このゲストIDは存在しません。");
       }
-      setSmDrawerStatus(true);
+      setSMDrawerOpen(true);
     }
   };
 
@@ -146,7 +146,7 @@ const EntranceExit: React.VFC = () => {
             setText("");
             setDeviceState(true);
             setShowScanGuide(true);
-            setSmDrawerStatus(false);
+            setSMDrawerOpen(false);
           });
       }
     };
@@ -182,10 +182,10 @@ const EntranceExit: React.VFC = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -274,7 +274,7 @@ const EntranceExit: React.VFC = () => {
                 anchor="bottom"
                 open={smDrawerOpen}
                 onClose={reset}
-                onOpen={() => setSmDrawerStatus(true)}
+                onOpen={() => setSMDrawerOpen(true)}
               >
                 <GuestInfoCard />
               </SwipeableDrawer>
