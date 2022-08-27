@@ -44,7 +44,7 @@ import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
 const EntranceOtherEnter: React.VFC = () => {
-  setTitle("エントランス");
+  setTitle("エントランス入場処理");
   const { largerThanSM, largerThanMD } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
@@ -76,7 +76,14 @@ const EntranceOtherEnter: React.VFC = () => {
           .then((res) => {
             setLoading(false);
             setGuestInfo(res);
-            if (res.available) {
+            if (res.guest_type === "family") {
+              setScanStatus("error");
+              if (res.reservation_id === "family") {
+                setAlertMessage("このリストバンドは未使用かつ保護者用のものです。この処理では新しいリストバンドは使用しないでください。対象のゲストが持っているリストバンドをスキャンしてください。");
+              } else {
+                setAlertMessage("このリストバンドは保護者用のもので、すでに使用されています。対象のゲストが持っているリストバンドをスキャンしてください。");
+              }
+            } else if (res.available) {
               setScanStatus("success");
             } else {
               setScanStatus("error");
@@ -246,7 +253,7 @@ const EntranceOtherEnter: React.VFC = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item>
+        <Grid item xs={12}>
           <Alert severity="warning">
             生徒の再入場及びその他事前にリストバンドが配られている特別なゲスト用の処理です。対象のゲストがリストバンドを持っていない場合この操作はしないでください。
           </Alert>
