@@ -18,7 +18,15 @@ const Home: React.VFC = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12} lg={8}>
-        <Box sx={{ textAlign: "center", height: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Box
+          sx={{
+            textAlign: "center",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <img
             src={GatewayThumbnail}
             style={{

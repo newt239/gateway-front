@@ -23,7 +23,11 @@ import {
 import CameraswitchRoundedIcon from "@mui/icons-material/CameraswitchRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import { isAndroid, isDOMException, sendLog } from "#/components/lib/commonFunction";
+import {
+  isAndroid,
+  isDOMException,
+  sendLog,
+} from "#/components/lib/commonFunction";
 import theme from "#/components/lib/theme";
 import MessageDialog from "#/components/block/MessageDialog";
 

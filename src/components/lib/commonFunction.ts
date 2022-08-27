@@ -181,4 +181,4 @@ export const isAndroid = () => {
   } else {
     return false;
   }
-}
+};

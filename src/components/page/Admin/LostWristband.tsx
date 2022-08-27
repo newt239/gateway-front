@@ -172,20 +172,21 @@ const LostWristband: React.VFC = () => {
                     </ListItemIcon>
                     <ListItemText>
                       {reservation.count}人
-                      {reservation.count !==
-                        reservation.registered.length && (
-                          <span>
-                            （残り：
-                            {reservation.count - reservation.registered.length}
-                            人）
-                          </span>
-                        )}
+                      {reservation.count !== reservation.registered.length && (
+                        <span>
+                          （残り：
+                          {reservation.count - reservation.registered.length}
+                          人）
+                        </span>
+                      )}
                     </ListItemText>
                   </ListItem>
                 </List>
               </Card>
               <Card variant="outlined" sx={{ p: 2, mt: 2 }}>
-                <Typography variant="h4">紐付けられているリストバンド</Typography>
+                <Typography variant="h4">
+                  紐付けられているリストバンド
+                </Typography>
                 <List dense>
                   {reservation.registered.map((guest) => (
                     <ListItem key={guest.guest_id}>
@@ -256,16 +257,24 @@ const LostWristband: React.VFC = () => {
                       </Select>
                     </FormControl>
                   </Grid>
-                  <Grid item xs={12} sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-end",
-                    gap: "1rem",
-                  }}>
-                    {registerLoading && <CircularProgress size={25} thickness={6} />}
+                  <Grid
+                    item
+                    xs={12}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-end",
+                      gap: "1rem",
+                    }}
+                  >
+                    {registerLoading && (
+                      <CircularProgress size={25} thickness={6} />
+                    )}
                     <Button
                       onClick={registerNewWristband}
-                      disabled={registerLoading || !reservation || newGuestId === ""}
+                      disabled={
+                        registerLoading || !reservation || newGuestId === ""
+                      }
                       variant="contained"
                     >
                       登録

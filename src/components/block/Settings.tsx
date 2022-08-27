@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { FormControlLabel, List, ListItem, Switch, Tooltip } from "@mui/material";
+import {
+  FormControlLabel,
+  List,
+  ListItem,
+  Switch,
+  Tooltip,
+} from "@mui/material";
 
 const Settings: React.VFC = () => {
   const [guideShow, setGuideShow] = useState<boolean>(

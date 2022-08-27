@@ -3,13 +3,21 @@ import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { profileAtom } from "#/components/lib/jotai";
 
-import { Card, Typography, List, ListItem, ListItemButton, ListItemText, ListItemIcon } from "@mui/material";
+import {
+  Card,
+  Typography,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ListItemIcon,
+} from "@mui/material";
 
 import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
-import RoomRoundedIcon from '@mui/icons-material/RoomRounded';
+import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
 
 const QuickMenu: React.VFC = () => {
   const profile = useAtomValue(profileAtom);
@@ -21,7 +29,10 @@ const QuickMenu: React.VFC = () => {
       {profile ? (
         <List>
           <ListItem divider disablePadding>
-            <ListItemButton href={process.env.REACT_APP_MANUAL_URL || "/"} target="_blank">
+            <ListItemButton
+              href={process.env.REACT_APP_MANUAL_URL || "/"}
+              target="_blank"
+            >
               <ListItemIcon>
                 <LibraryBooksRoundedIcon />
               </ListItemIcon>
@@ -31,7 +42,11 @@ const QuickMenu: React.VFC = () => {
           {["exhibit"].includes(profile.user_type) && (
             <>
               <ListItem divider disablePadding>
-                <ListItemButton onClick={() => navigate(`/${profile.user_id}/enter`, { replace: true })}>
+                <ListItemButton
+                  onClick={() =>
+                    navigate(`/${profile.user_id}/enter`, { replace: true })
+                  }
+                >
                   <ListItemIcon>
                     <LoginRoundedIcon />
                   </ListItemIcon>
@@ -39,7 +54,11 @@ const QuickMenu: React.VFC = () => {
                 </ListItemButton>
               </ListItem>
               <ListItem divider disablePadding>
-                <ListItemButton onClick={() => navigate(`/${profile.user_id}/exit`, { replace: true })}>
+                <ListItemButton
+                  onClick={() =>
+                    navigate(`/${profile.user_id}/exit`, { replace: true })
+                  }
+                >
                   <ListItemIcon>
                     <LogoutRoundedIcon />
                   </ListItemIcon>
@@ -47,7 +66,13 @@ const QuickMenu: React.VFC = () => {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton onClick={() => navigate(`/analytics/exhibit/${profile.user_id}`, { replace: true })}>
+                <ListItemButton
+                  onClick={() =>
+                    navigate(`/analytics/exhibit/${profile.user_id}`, {
+                      replace: true,
+                    })
+                  }
+                >
                   <ListItemIcon>
                     <BarChartRoundedIcon />
                   </ListItemIcon>
@@ -59,7 +84,11 @@ const QuickMenu: React.VFC = () => {
           {["moderator", "executive"].includes(profile.user_type) && (
             <>
               <ListItem divider disablePadding>
-                <ListItemButton onClick={() => navigate("entrance/reserve-check", { replace: true })}>
+                <ListItemButton
+                  onClick={() =>
+                    navigate("entrance/reserve-check", { replace: true })
+                  }
+                >
                   <ListItemIcon>
                     <LoginRoundedIcon />
                   </ListItemIcon>
@@ -67,7 +96,9 @@ const QuickMenu: React.VFC = () => {
                 </ListItemButton>
               </ListItem>
               <ListItem divider disablePadding>
-                <ListItemButton onClick={() => navigate("entrance/exit", { replace: true })}>
+                <ListItemButton
+                  onClick={() => navigate("entrance/exit", { replace: true })}
+                >
                   <ListItemIcon>
                     <LogoutRoundedIcon />
                   </ListItemIcon>
@@ -75,7 +106,9 @@ const QuickMenu: React.VFC = () => {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton onClick={() => navigate("/exhibit/", { replace: true })}>
+                <ListItemButton
+                  onClick={() => navigate("/exhibit/", { replace: true })}
+                >
                   <ListItemIcon>
                     <RoomRoundedIcon />
                   </ListItemIcon>

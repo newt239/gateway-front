@@ -160,7 +160,13 @@ const EntranceEnter: React.VFC = () => {
             headers: { Authorization: `Bearer ${token}` },
           })
           .then(() => {
-            setDialogMessage(`予約ID: ${reservation.reservation_id}へ${guestList.length}つのリストバンド(${guestList.join(", ")})の紐付けが完了しました。`);
+            setDialogMessage(
+              `予約ID: ${reservation.reservation_id}へ${
+                guestList.length
+              }つのリストバンド(${guestList.join(
+                ", "
+              )})の紐付けが完了しました。`
+            );
           })
           .catch((err: AxiosError) => {
             setAlertMessage(
@@ -195,17 +201,24 @@ const EntranceEnter: React.VFC = () => {
         )}
         {reservation && !alertMessage && (
           <>
-            {
-              0 < guestList.length && guestList.length < reservation.count && (
-                <Alert severity="warning" sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}>
-                  同じ予約の来場者が他にもいる場合は{!largerThanSM && "画面上部をタップし"}スキャンを続けてください
-                </Alert>
-              )
-            }
-            <Card variant="outlined" sx={{ my: 1, mx: !largerThanMD ? 1 : 0, p: 2 }}>
+            {0 < guestList.length && guestList.length < reservation.count && (
+              <Alert
+                severity="warning"
+                sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
+              >
+                同じ予約の来場者が他にもいる場合は
+                {!largerThanSM && "画面上部をタップし"}スキャンを続けてください
+              </Alert>
+            )}
+            <Card
+              variant="outlined"
+              sx={{ my: 1, mx: !largerThanMD ? 1 : 0, p: 2 }}
+            >
               <Typography variant="h4">リストバンド</Typography>
               {guestList.length === 0 && (
-                <Typography variant="body1" sx={{ p: 2 }}>ここに予約と紐づけるリストバンドのIDが表示されます</Typography>
+                <Typography variant="body1" sx={{ p: 2 }}>
+                  ここに予約と紐づけるリストバンドのIDが表示されます
+                </Typography>
               )}
               {guestList.length !== 0 && (
                 <>
@@ -333,7 +346,10 @@ const EntranceEnter: React.VFC = () => {
             </SwipeableDrawer>
           )}
           {reservation && (
-            <Card variant="outlined" sx={{ my: 1, mx: !largerThanMD ? 1 : 0, p: 2 }}>
+            <Card
+              variant="outlined"
+              sx={{ my: 1, mx: !largerThanMD ? 1 : 0, p: 2 }}
+            >
               <Typography variant="h4">予約情報</Typography>
               <List>
                 <ListItem>
