@@ -17,6 +17,7 @@ import AnalyticsSummary from "#/components/page/Analytics/Summary";
 import EntranceIndex from "#/components/page/Entrance/Index";
 import ReserveCheck from "#/components/page/Entrance/ReserveCheck";
 import EntranceEnter from "#/components/page/Entrance/Enter";
+import EntranceOtherEnter from "#/components/page/Entrance/OtherEnter";
 import EntranceExit from "#/components/page/Entrance/Exit";
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminLostWristband from "#/components/page/Admin/LostWristband";
@@ -110,6 +111,7 @@ const Body: React.VFC = () => {
                       <Route index element={<EntranceIndex />} />
                       <Route path="reserve-check" element={<ReserveCheck />} />
                       <Route path="enter" element={<EntranceEnter />} />
+                      <Route path="other-enter" element={<EntranceOtherEnter />} />
                       <Route path="exit" element={<EntranceExit />} />
                     </>
                   ) : (
