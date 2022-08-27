@@ -91,29 +91,28 @@ const EntranceEnter: React.VFC = () => {
   }, [guestList]);
 
   const handleScan = (scanText: string | null) => {
-    if (scanText && text !== scanText) {
-      if (profile && reservation) {
-        setText(scanText);
-        setSmDrawerStatus(true);
-        if (guestIdValidation(scanText)) {
-          if (!guestList.includes(scanText)) {
-            if (guestList.length < reservation.count) {
-              setGuest([...guestList, scanText]);
-            } else {
-              setAlertMessage(
-                "この予約を使って登録可能なリストバンドの数の上限に達しました。"
-              );
-            }
+    if (scanText && text !== scanText && profile && reservation) {
+      setAlertMessage(null);
+      setText(scanText);
+      setSmDrawerStatus(true);
+      if (guestIdValidation(scanText)) {
+        if (!guestList.includes(scanText)) {
+          if (guestList.length < reservation.count) {
+            setGuest([...guestList, scanText]);
           } else {
-            setAlertMessage(`${scanText}は登録済みです。`);
+            setAlertMessage(
+              "この予約を使って登録可能なリストバンドの数の上限に達しました。"
+            );
           }
-        } else if (scanText.endsWith("=")) {
-          setAlertMessage(
-            "これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。"
-          );
         } else {
-          setAlertMessage(`${scanText}というゲストは存在しません。`);
+          setAlertMessage(`${scanText}は登録済みです。`);
         }
+      } else if (scanText.endsWith("=")) {
+        setAlertMessage(
+          "これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。"
+        );
+      } else {
+        setAlertMessage(`${scanText}というゲストは存在しません。`);
       }
     }
   };
