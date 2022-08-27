@@ -187,18 +187,8 @@ const EntranceEnter: React.VFC = () => {
           <Alert
             variant="filled"
             severity="error"
-            action={
-              <Button
-                color="inherit"
-                sx={{
-                  whiteSpace: "nowrap",
-                }}
-                onClick={closeAlert}
-              >
-                非表示
-              </Button>
-            }
-            sx={{ mb: 2 }}
+            onClose={closeAlert}
+            sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
           >
             {alertMessage}
           </Alert>
@@ -355,7 +345,7 @@ const EntranceEnter: React.VFC = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant="h4" sx={{ mb: 2, p: 1, borderBottom: "3px solid rgba(0, 0, 0, 0.12)" }}>
+          <Typography variant="h4" sx={{ mb: 2, p: 1, borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}>
             ゲストID: {text}
           </Typography>
           {loading && (

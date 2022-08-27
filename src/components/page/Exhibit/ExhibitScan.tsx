@@ -124,7 +124,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
-    if (scanText && token && profile) {
+    if (scanText && scanText !== text && token && profile) {
+      setAlertMessage(null);
       setText(scanText);
       setShowScanGuide(false);
       if (guestIdValidation(scanText)) {
@@ -258,7 +259,9 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             setLoading(false);
           });
       } else if (scanText.endsWith("=")) {
+        setScanStatus("error");
         setAlertMessage("これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。");
+        setSmDrawerStatus(true);
       } else {
         setScanStatus("error");
         setAlertMessage("このゲストは存在しません。");
@@ -345,17 +348,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             variant="filled"
             severity="error"
             sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
-            action={
-              <Button
-                color="inherit"
-                sx={{
-                  whiteSpace: "nowrap",
-                }}
-                onClick={reset}
-              >
-                再スキャン
-              </Button>
-            }
+            onClose={reset}
           >
             {alertMessage}
           </Alert>
@@ -559,7 +552,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             <Scanner handleScan={handleScan} />
           </Grid>
           <Grid item xs={12} md={6}>
-            <Typography variant="h4" sx={{ mb: 2, p: 1, borderBottom: "3px solid rgba(0, 0, 0, 0.12)" }}>
+            <Typography variant="h4" sx={{ mb: 2, p: 1, borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}>
               ゲストID: {text}
             </Typography>
             {loading && (

@@ -54,7 +54,7 @@ const ReserveCheck: React.VFC = () => {
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
@@ -81,6 +81,7 @@ const ReserveCheck: React.VFC = () => {
   };
 
   const checkReservation = (reservationId: string) => {
+    setErrorMessage(null);
     if (token) {
       setReservationId(reservationId);
       setShowScanGuide(false);
@@ -146,6 +147,7 @@ const ReserveCheck: React.VFC = () => {
     setReservation(null);
     setDeviceState(true);
     setShowScanGuide(true);
+    setErrorMessage(null);
   };
 
   const onNumPadClose = (num: number[]) => {
@@ -162,15 +164,12 @@ const ReserveCheck: React.VFC = () => {
   const ReservationInfoCard = () => {
     return (
       <>
-        {scanStatus === "error" && (
+        {errorMessage && (
           <Alert
             severity="error"
             variant="filled"
-            action={
-              <Button color="inherit" onClick={reset}>
-                スキャンし直す
-              </Button>
-            }
+            onClose={reset}
+            sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
           >
             {errorMessage}
           </Alert>

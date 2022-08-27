@@ -33,6 +33,9 @@ const theme = createTheme({
       padding: ".5rem 0",
     },
   },
+  shape: {
+    borderRadius: 10,
+  },
   components: {
     MuiCssBaseline: {
       styleOverrides: `
@@ -46,14 +49,14 @@ const theme = createTheme({
         }
         ::-webkit-scrollbar-thumb {
           background-color: ${grey[500]};
-          border-radius: .1rem;
+          border-radius: 10px;
         }
         .qrcode {
           margin: auto;
           width: 100%;
         }
         .qrcode section video {
-          border-radius: 1rem;
+          border-radius: 10px;
         }
       `,
     },

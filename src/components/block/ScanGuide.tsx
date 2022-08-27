@@ -7,6 +7,7 @@ import { Box, Fade, IconButton, Tooltip, Typography } from "@mui/material";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
+import theme from "#/components/lib/theme";
 
 const ScanGuide: React.VFC<{ show: boolean }> = ({ show }) => {
   const profile = useAtomValue(profileAtom);
@@ -40,7 +41,7 @@ const ScanGuide: React.VFC<{ show: boolean }> = ({ show }) => {
             transform: "translateX(-50%)",
             backgroundColor: "error.main",
             padding: "1rem",
-            borderRadius: "1rem",
+            borderRadius: theme.shape.borderRadius,
             textAlign: "center",
             display: "flex",
           }}

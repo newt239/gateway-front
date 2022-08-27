@@ -61,7 +61,8 @@ const EntranceExit: React.VFC = () => {
   const { largerThanSM, largerThanMD } = useDeviceWidth();
 
   const handleScan = (scanText: string | null) => {
-    if (token && scanText) {
+    if (scanText && scanText !== text && token) {
+      setAlertMessage(null);
       setText(scanText);
       setShowScanGuide(false);
       if (guestIdValidation(scanText)) {
@@ -89,6 +90,7 @@ const EntranceExit: React.VFC = () => {
             setAlertMessage("予期せぬエラーが発生しました。" + err.message);
           });
       } else if (scanText.endsWith("=")) {
+        setScanStatus("error");
         setAlertMessage("これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。");
       } else {
         setScanStatus("error");
@@ -153,11 +155,8 @@ const EntranceExit: React.VFC = () => {
           <Alert
             severity="error"
             variant="filled"
-            action={
-              <Button color="inherit" onClick={reset}>
-                スキャンし直す
-              </Button>
-            }
+            onClose={reset}
+            sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
           >
             {alertMessage}
           </Alert>
@@ -249,7 +248,7 @@ const EntranceExit: React.VFC = () => {
           <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant="h4" sx={{ mb: 2, p: 1, borderBottom: "3px solid rgba(0, 0, 0, 0.12)" }}>
+          <Typography variant="h4" sx={{ mb: 2, p: 1, borderBottom: "1px solid rgba(0, 0, 0, 0.12)" }}>
             ゲストID: {text}
           </Typography>
           {loading && (
