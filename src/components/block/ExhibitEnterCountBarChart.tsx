@@ -48,6 +48,8 @@ const ExhibitEnterCountBarChart: React.VFC<{ exhibit_id: string }> = ({
               }
               setCategories(timeList);
               setData(countList);
+            } else {
+              setData([]);
             }
           })
           .catch((err: AxiosError) => {
