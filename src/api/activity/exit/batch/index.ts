@@ -1,14 +1,16 @@
 /* eslint-disable */
 export type Methods = {
   post: {
-    reqHeaders?: {
-      Authorization: string
-    } | undefined
+    reqHeaders?:
+      | {
+          Authorization: string;
+        }
+      | undefined;
 
-    status: 200
+    status: 200;
     reqBody: {
-      guest_id: string
-      exhibit_id: string
-    }[]
-  }
-}
+      guest_id: string;
+      exhibit_id: string;
+    }[];
+  };
+};

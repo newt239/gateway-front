@@ -57,10 +57,10 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                    ? "教員"
-                    : v.guest_type === "family"
-                      ? "保護者"
-                      : "その他",
+                  ? "教員"
+                  : v.guest_type === "family"
+                  ? "保護者"
+                  : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:mm:ss"),
             };
           });
@@ -78,7 +78,7 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
 
   const leaveGuest = () => {
     if (token && profile && exhibit_id) {
-      const payload: { guest_id: string; exhibit_id: string; }[] = [];
+      const payload: { guest_id: string; exhibit_id: string }[] = [];
       for (const guest of selectedGuestList) {
         const eachPayload = {
           guest_id: guest as string,
