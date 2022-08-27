@@ -249,7 +249,7 @@ const EntranceExit: React.VFC = () => {
           <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>
-          <Typography variant="h4" sx={{ mb: 2 }}>
+          <Typography variant="h4" sx={{ mb: 2, p: 1, borderBottom: "3px solid rgba(0, 0, 0, 0.12)" }}>
             ゲストID: {text}
           </Typography>
           {loading && (
