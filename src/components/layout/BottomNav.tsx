@@ -44,7 +44,8 @@ const BottomNav: React.VFC = () => {
     <>
       {profile && profile.available && (
         <Paper
-          sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+          // https://rishuntrading.co.jp/blog/programing/safari_z-index_notwork/
+          sx={{ position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 200, transform: "translateZ(1px)" }}
           elevation={3}
         >
           {["moderator", "executive"].includes(profile.user_type) && (
