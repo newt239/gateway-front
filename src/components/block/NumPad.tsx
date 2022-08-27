@@ -36,7 +36,9 @@ const NumPad: React.VFC<NumPadProps> = ({ scanType, onClose }) => {
       (scanType === "reservation" && newId.length === 6) ||
       (scanType === "guest" && newId.length === 9)
     ) {
-      handleClose(newId);
+      setId([]);
+      setOpen(false);
+      onClose(newId);
     }
   };
 
