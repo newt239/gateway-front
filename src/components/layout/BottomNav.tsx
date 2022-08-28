@@ -22,7 +22,6 @@ const BottomNav: React.VFC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(path)
     setValue(path);
   }, []);
 

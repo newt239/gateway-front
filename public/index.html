@@ -25,14 +25,15 @@
       const manifest = document.createElement('link');
       manifest.rel = 'manifest';
       manifest.href = path;
+      manifest.crossOrigin = 'use-credentials';
       document.head.appendChild(manifest);
     }
     // OSに応じて読み込むmanifestを変更
     const userAgent = navigator.userAgent.toLowerCase();
     if (userAgent.indexOf("iphone") > 0 || userAgent.indexOf("ipad") > 0) {
-      setManifest('manifest_ios.json');
+      setManifest('%PUBLIC_URL%/manifest_ios.json');
     } else {
-      setManifest('manifest.json');
+      setManifest('%PUBLIC_URL%/manifest.json');
     }
   </script>
   <!--
