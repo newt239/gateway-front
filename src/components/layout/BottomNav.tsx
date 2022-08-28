@@ -22,18 +22,9 @@ const BottomNav: React.VFC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (path === "/") {
-      setValue("");
-    } else if (/exhibit/.test(path) && !/analytics\/exhibit/.test(path)) {
-      setValue("exhibit");
-    } else if (/entrance/.test(path)) {
-      setValue("entrance");
-    } else if (/analytics/.test(path)) {
-      setValue("analytics");
-    } else {
-      setValue("other");
-    }
-  }, [path]);
+    console.log(path)
+    setValue(path);
+  }, []);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     navigate(`${newValue}`);
@@ -52,25 +43,25 @@ const BottomNav: React.VFC = () => {
             <BottomNavigation showLabels value={value} onChange={handleChange}>
               <BottomNavigationAction
                 label="ホーム"
-                value=""
+                value="/"
                 icon={<HomeRoundedIcon />}
               />
               <BottomNavigationAction
                 label="エントランス"
-                value="entrance"
+                value="/entrance"
                 icon={<CelebrationRoundedIcon />}
                 sx={{ whiteSpace: "nowrap" }}
               />
               <BottomNavigationAction
                 label="入退室処理"
-                value="exhibit"
+                value="/exhibit"
                 icon={<MeetingRoomRoundedIcon />}
                 sx={{ whiteSpace: "nowrap" }}
               />
               {profile.user_type === "moderator" && (
                 <BottomNavigationAction
                   label="滞在状況"
-                  value="analytics"
+                  value="/analytics"
                   icon={<AutoGraphRoundedIcon />}
                 />
               )}
@@ -80,22 +71,22 @@ const BottomNav: React.VFC = () => {
             <BottomNavigation showLabels value={value} onChange={handleChange}>
               <BottomNavigationAction
                 label="ホーム"
-                value=""
+                value="/"
                 icon={<HomeRoundedIcon />}
               />
               <BottomNavigationAction
                 label="入室処理"
-                value={`exhibit/${profile.user_id}/enter`}
+                value={`/exhibit/${profile.user_id}/enter`}
                 icon={<LoginRoundedIcon />}
               />
               <BottomNavigationAction
                 label="退室処理"
-                value={`exhibit/${profile.user_id}/exit`}
+                value={`/exhibit/${profile.user_id}/exit`}
                 icon={<LogoutRoundedIcon />}
               />
               <BottomNavigationAction
                 label="滞在状況"
-                value={`analytics/exhibit/${profile.user_id}`}
+                value={`/analytics/exhibit/${profile.user_id}`}
                 icon={<AutoGraphRoundedIcon />}
               />
             </BottomNavigation>
