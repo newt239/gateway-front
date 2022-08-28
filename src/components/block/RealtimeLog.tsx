@@ -7,6 +7,7 @@ import moment, { Moment } from "moment";
 
 import {
   CircularProgress,
+  FormControlLabel,
   Grid,
   List,
   ListItem,
@@ -85,7 +86,7 @@ const RealtimeLog: React.VFC = () => {
     }
   };
 
-  // 10秒ごとに自動で取得
+  // 15秒ごとに自動で取得
   useEffect(() => {
     if (exhibitList.length !== 0) {
       getActivityHistory();
@@ -131,15 +132,18 @@ const RealtimeLog: React.VFC = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Grid item>
-                <ListItem sx={{ p: 0 }}>
-                  <Switch
-                    edge="end"
-                    onChange={() => setMaskId((maskId) => !maskId)}
-                    checked={maskId}
-                  />
-                  <ListItemText>ゲストIDを隠す</ListItemText>
-                </ListItem>
+              <Grid item sx={{ px: 2 }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      edge="start"
+                      onChange={() => setMaskId((maskId) => !maskId)}
+                      checked={maskId}
+                      sx={{ mr: 1 }}
+                    />
+                  }
+                  label="ゲストIDを隠す"
+                />
               </Grid>
               <Grid item>{lastUpdate.format("HH:mm:ss")}</Grid>
             </Grid>
