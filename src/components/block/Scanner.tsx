@@ -63,7 +63,9 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const [errorDialogOpen, setErrorDialogOpen] = useState<boolean>(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState<string>("");
   const [errorDialogMessage, setErrorDialogMessage] = useState<string>("");
-  const [reverseCamera, setReverseCamera] = useState<boolean>(localStorage.getItem("reverseCamera") === "false" ? false : true);
+  const [reverseCamera, setReverseCamera] = useState<boolean>(
+    localStorage.getItem("reverseCamera") === "false" ? false : true
+  );
 
   const getCameraDeviceList = () => {
     navigator.mediaDevices

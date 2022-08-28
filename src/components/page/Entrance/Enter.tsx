@@ -161,7 +161,8 @@ const EntranceEnter: React.VFC = () => {
           })
           .then(() => {
             setDialogMessage(
-              `予約ID: ${reservation.reservation_id}へ${guestList.length
+              `予約ID: ${reservation.reservation_id}へ${
+                guestList.length
               }つのリストバンド(${guestList.join(
                 ", "
               )})の紐付けが完了しました。`

@@ -79,9 +79,13 @@ const EntranceOtherEnter: React.VFC = () => {
             if (res.guest_type === "family") {
               setScanStatus("error");
               if (res.reservation_id === "family") {
-                setAlertMessage("このリストバンドは未使用かつ保護者用のものです。この処理では新しいリストバンドは使用しないでください。対象のゲストが持っているリストバンドをスキャンしてください。");
+                setAlertMessage(
+                  "このリストバンドは未使用かつ保護者用のものです。この処理では新しいリストバンドは使用しないでください。対象のゲストが持っているリストバンドをスキャンしてください。"
+                );
               } else {
-                setAlertMessage("このリストバンドは保護者用のもので、すでに使用されています。対象のゲストが持っているリストバンドをスキャンしてください。");
+                setAlertMessage(
+                  "このリストバンドは保護者用のもので、すでに使用されています。対象のゲストが持っているリストバンドをスキャンしてください。"
+                );
               }
             } else if (res.available) {
               setScanStatus("success");
@@ -189,10 +193,10 @@ const EntranceOtherEnter: React.VFC = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -245,7 +249,11 @@ const EntranceOtherEnter: React.VFC = () => {
             <Grid item>
               <Typography variant="h3">保護者以外の入場</Typography>
               <Typography variant="body1">
-                保護者の入場は <Link component={RouterLink} to="/entrance/reserve-check">エントランス入場処理</Link> からスキャンしてください。
+                保護者の入場は{" "}
+                <Link component={RouterLink} to="/entrance/reserve-check">
+                  エントランス入場処理
+                </Link>{" "}
+                からスキャンしてください。
               </Typography>
             </Grid>
             <Grid item>

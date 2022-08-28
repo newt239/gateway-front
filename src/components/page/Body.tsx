@@ -111,7 +111,10 @@ const Body: React.VFC = () => {
                       <Route index element={<EntranceIndex />} />
                       <Route path="reserve-check" element={<ReserveCheck />} />
                       <Route path="enter" element={<EntranceEnter />} />
-                      <Route path="other-enter" element={<EntranceOtherEnter />} />
+                      <Route
+                        path="other-enter"
+                        element={<EntranceOtherEnter />}
+                      />
                       <Route path="exit" element={<EntranceExit />} />
                     </>
                   ) : (

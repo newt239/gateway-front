@@ -44,7 +44,9 @@ const QuickMenu: React.VFC = () => {
               <ListItem divider disablePadding>
                 <ListItemButton
                   onClick={() =>
-                    navigate(`/exhibit/${profile.user_id}/enter`, { replace: true })
+                    navigate(`/exhibit/${profile.user_id}/enter`, {
+                      replace: true,
+                    })
                   }
                 >
                   <ListItemIcon>
@@ -56,7 +58,9 @@ const QuickMenu: React.VFC = () => {
               <ListItem divider disablePadding>
                 <ListItemButton
                   onClick={() =>
-                    navigate(`/exhibit/${profile.user_id}/exit`, { replace: true })
+                    navigate(`/exhibit/${profile.user_id}/exit`, {
+                      replace: true,
+                    })
                   }
                 >
                   <ListItemIcon>

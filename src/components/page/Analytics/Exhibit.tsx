@@ -30,7 +30,10 @@ const AnalyticsExhibit: React.VFC = () => {
         } else {
           navigate("/", { replace: true });
         }
-      } else if (profile.user_type === "exhibit" && profile.user_id !== exhibitId) {
+      } else if (
+        profile.user_type === "exhibit" &&
+        profile.user_id !== exhibitId
+      ) {
         navigate("/", { replace: true });
       } else {
         apiClient(process.env.REACT_APP_API_BASE_URL)
@@ -64,17 +67,23 @@ const AnalyticsExhibit: React.VFC = () => {
         </Grid>
       ) : (
         <Grid container spacing={2}>
-          <Grid item xs={12} sx={{
-            display: "flex",
-            flexWrap: "nowrap",
-            justifyContent: "flex-end",
-          }}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              flexWrap: "nowrap",
+              justifyContent: "flex-end",
+            }}
+          >
             {profile?.user_type === "moderator" && (
               <Button
                 size="small"
                 startIcon={<ArrowBackIosNewRoundedIcon />}
                 sx={{ mr: 2 }}
-                onClick={() => navigate("/analytics/summary", { replace: true })}
+                onClick={() =>
+                  navigate("/analytics/summary", { replace: true })
+                }
               >
                 一覧に戻る
               </Button>

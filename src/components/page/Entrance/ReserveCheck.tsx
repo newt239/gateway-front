@@ -189,15 +189,17 @@ const ReserveCheck: React.VFC = () => {
                 <ListItemIcon>
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
-                <ListItemText>{
-                  reservation.guest_type === "family" ? "保護者" : "その他"
-                }</ListItemText>
+                <ListItemText>
+                  {reservation.guest_type === "family" ? "保護者" : "その他"}
+                </ListItemText>
               </ListItem>
               <ListItem>
                 <ListItemIcon>
                   <AccessTimeRoundedIcon />
                 </ListItemIcon>
-                <ListItemText>{getTimePart(reservation.part).part_name}</ListItemText>
+                <ListItemText>
+                  {getTimePart(reservation.part).part_name}
+                </ListItemText>
               </ListItem>
               <ListItem>
                 <ListItemIcon>
@@ -269,7 +271,11 @@ const ReserveCheck: React.VFC = () => {
         </Grid>
         <Grid item xs={12}>
           <Alert severity="warning">
-            生徒の再入場及びその他特別枠のゲストの入場は <Link component={RouterLink} to="/entrance/other-enter">保護者以外の入場</Link> からスキャンしてください。
+            生徒の再入場及びその他特別枠のゲストの入場は{" "}
+            <Link component={RouterLink} to="/entrance/other-enter">
+              保護者以外の入場
+            </Link>{" "}
+            からスキャンしてください。
           </Alert>
         </Grid>
         <Grid item xs={12} md="auto">
