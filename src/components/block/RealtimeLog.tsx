@@ -184,7 +184,7 @@ const RealtimeLog: React.VFC = () => {
                           exhibitList.filter((x) => {
                             return x.exhibit_id === v.exhibit_id;
                           })[0]?.exhibit_name) ||
-                          "男女逆転シンデレラ〜方言ver"}
+                          "エントランス"}
                       </ListItemText>
                     </Grid>
                     <Grid item xs={1.5} sm={1} sx={{ whiteSpace: "nowrap", textAlign: "right" }}>
