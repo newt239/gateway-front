@@ -22,12 +22,21 @@ const BottomNav: React.VFC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setValue(path);
-  }, []);
+    if (path === "/" || profile?.user_type === "exhibit") {
+      setValue(path);
+    } else {
+      if (path.startsWith("/exhibit")) {
+        setValue("/exhibit");
+      } else if (path.startsWith("/entrance")) {
+        setValue("/entrance");
+      } else if (path.startsWith("/analytics")) {
+        setValue("/analytics");
+      }
+    }
+  }, [path]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     navigate(`${newValue}`);
-    setValue(newValue);
   };
 
   return (
