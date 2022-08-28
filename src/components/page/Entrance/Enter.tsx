@@ -340,6 +340,7 @@ const EntranceEnter: React.VFC = () => {
               open={smDrawerOpen}
               onClose={() => setSMDrawerOpen(false)}
               onOpen={() => setSMDrawerOpen(true)}
+              sx={{ transform: "translateZ(3px)" }}
             >
               <ReservationInfoCard />
             </SwipeableDrawer>

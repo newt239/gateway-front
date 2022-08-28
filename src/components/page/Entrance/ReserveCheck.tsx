@@ -302,6 +302,7 @@ const ReserveCheck: React.VFC = () => {
                 open={smDrawerOpen}
                 onClose={reset}
                 onOpen={() => setSmDrawerStatus(true)}
+                sx={{ transform: "translateZ(3px)" }}
               >
                 <ReservationInfoCard />
               </SwipeableDrawer>

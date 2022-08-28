@@ -581,6 +581,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   open={smDrawerOpen}
                   onClose={reset}
                   onOpen={() => setSMDrawerStatus(true)}
+                  sx={{ transform: "translateZ(3px)" }}
                 >
                   <GuestInfoCard />
                 </SwipeableDrawer>
