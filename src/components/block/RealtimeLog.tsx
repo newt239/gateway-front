@@ -19,8 +19,10 @@ import {
 
 import { ExhibitProps } from "#/components/lib/types";
 import { handleApiError } from "#/components/lib/commonFunction";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 
 const RealtimeLog: React.VFC = () => {
+  const { largerThanSM } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
   const [exhibitList, setExhibitList] = useState<ExhibitProps[]>([]);
   const getExhibitList = () => {
@@ -133,17 +135,19 @@ const RealtimeLog: React.VFC = () => {
               }}
             >
               <Grid item sx={{ px: 2 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      edge="start"
-                      onChange={() => setMaskId((maskId) => !maskId)}
-                      checked={maskId}
-                      sx={{ mr: 1 }}
-                    />
-                  }
-                  label="ゲストIDを隠す"
-                />
+                {largerThanSM && (
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        edge="start"
+                        onChange={() => setMaskId((maskId) => !maskId)}
+                        checked={maskId}
+                        sx={{ mr: 1 }}
+                      />
+                    }
+                    label="ゲストIDを隠す"
+                  />
+                )}
               </Grid>
               <Grid item>{lastUpdate.format("HH:mm:ss")}</Grid>
             </Grid>
@@ -156,32 +160,34 @@ const RealtimeLog: React.VFC = () => {
                   divider
                   disablePadding
                 >
-                  <Grid container sx={{ alignItems: "center" }}>
-                    <Grid item xs={2.5}>
+                  <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
+                    <Grid item xs={3.5} sm={2}>
                       <ListItemText>
                         {moment(v.timestamp).format("HH:mm:ss")}
                       </ListItemText>
                     </Grid>
-                    <Grid item xs={4}>
-                      <ListItemText
-                        secondary={
-                          maskId ? v.guest_id.slice(0, 6) + "____" : v.guest_id
-                        }
-                        secondaryTypographyProps={{ sx: { p: 0 } }}
-                      >
-                        {v.activity_id}
-                      </ListItemText>
-                    </Grid>
-                    <Grid item xs={4}>
+                    {largerThanSM && (
+                      <Grid item sm={4}>
+                        <ListItemText
+                          secondary={
+                            maskId ? v.guest_id.slice(0, 6) + "____" : v.guest_id
+                          }
+                          secondaryTypographyProps={{ sx: { p: 0 } }}
+                        >
+                          {v.activity_id}
+                        </ListItemText>
+                      </Grid>
+                    )}
+                    <Grid item xs={7} sm={4}>
                       <ListItemText>
                         {(exhibitList &&
                           exhibitList.filter((x) => {
                             return x.exhibit_id === v.exhibit_id;
                           })[0]?.exhibit_name) ||
-                          "エントランス"}
+                          "男女逆転シンデレラ〜方言ver"}
                       </ListItemText>
                     </Grid>
-                    <Grid item xs={1.5}>
+                    <Grid item xs={1.5} sm={1} sx={{ whiteSpace: "nowrap", textAlign: "right" }}>
                       <ListItemText>
                         {v.activity_type === "enter" ? "入室" : "退室"}
                       </ListItemText>
