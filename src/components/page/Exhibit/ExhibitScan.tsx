@@ -117,6 +117,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
 
   useEffect(() => {
     reset();
+    updateExhibitInfo();
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
@@ -432,61 +433,55 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                 </Typography>
               </Grid>
               <Grid item flexGrow={1} xs={12} sm>
-                <Grid
-                  container
-                  spacing={2}
+                <Box
                   sx={{
+                    gap: 2,
+                    display: "flex",
                     flexWrap: "nowrap",
                     justifyContent: "flex-end",
-                    xs: { overflowX: "scroll" },
+                    whiteSpace: "nowrap",
                   }}
                 >
-                  <Grid item>
-                    <Button
-                      size="small"
-                      startIcon={<PublishedWithChangesRoundedIcon />}
-                      onClick={() =>
-                        navigate(
-                          `/exhibit/${exhibitId || "unknown"}/${scanType === "enter" ? "exit" : "enter"
-                          } `,
-                          { replace: true }
-                        )
-                      }
-                    >
-                      {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
-                    </Button>
-                  </Grid>
+                  <Button
+                    size="small"
+                    startIcon={<PublishedWithChangesRoundedIcon />}
+                    onClick={() =>
+                      navigate(
+                        `/exhibit/${exhibitId || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                        } `,
+                        { replace: true }
+                      )
+                    }
+                  >
+                    {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
+                  </Button>
                   {profile &&
                     ["moderator", "exhibit"].includes(profile.user_type) && (
-                      <Grid item>
-                        <Button
-                          size="small"
-                          startIcon={<BarChartRoundedIcon />}
-                          onClick={() =>
-                            navigate(`/analytics/exhibit/${exhibitId}`, {
-                              replace: true,
-                            })
-                          }
-                        >
-                          滞在状況
-                        </Button>
-                      </Grid>
+                      <Button
+                        size="small"
+                        startIcon={<BarChartRoundedIcon />}
+                        onClick={() =>
+                          navigate(`/analytics/exhibit/${exhibitId}`, {
+                            replace: true,
+                          })
+                        }
+                      >
+                        滞在状況
+                      </Button>
                     )}
                   {profile &&
                     ["moderator", "executive"].includes(profile.user_type) && (
-                      <Grid item>
-                        <Button
-                          size="small"
-                          startIcon={<ArrowBackIosNewRoundedIcon />}
-                          onClick={() =>
-                            navigate("/exhibit", { replace: true })
-                          }
-                        >
-                          一覧に戻る
-                        </Button>
-                      </Grid>
+                      <Button
+                        size="small"
+                        startIcon={<ArrowBackIosNewRoundedIcon />}
+                        onClick={() =>
+                          navigate("/exhibit", { replace: true })
+                        }
+                      >
+                        一覧に戻る
+                      </Button>
                     )}
-                </Grid>
+                </Box>
               </Grid>
             </Grid>
           </Grid>

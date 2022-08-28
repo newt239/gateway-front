@@ -7,14 +7,17 @@ import moment from "moment";
 import ReactGA from "react-ga4";
 
 import {
+  Alert,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
   Grid,
+  Snackbar,
   Typography,
 } from "@mui/material";
 import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
@@ -40,7 +43,9 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
   const profile = useAtomValue(profileAtom);
   const [rows, setRows] = useState<ExhibitCurrentGuestTableListProp>([]);
   const [selectedGuestList, setSelectedGuestList] = useState<GridRowId[]>([]);
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
 
   const getCurrentGuestList = () => {
     if (token && exhibit_id !== "") {
@@ -57,10 +62,10 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                  ? "教員"
-                  : v.guest_type === "family"
-                  ? "保護者"
-                  : "その他",
+                    ? "教員"
+                    : v.guest_type === "family"
+                      ? "保護者"
+                      : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:mm:ss"),
             };
           });
@@ -78,6 +83,7 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
 
   const leaveGuest = () => {
     if (token && profile && exhibit_id) {
+      setLoading(true);
       const payload: { guest_id: string; exhibit_id: string }[] = [];
       for (const guest of selectedGuestList) {
         const eachPayload = {
@@ -93,7 +99,7 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
         })
         .then(() => {
           getCurrentGuestList();
-          setDialogOpen(false);
+          setSnackbarMessage("一括退場処理が完了しました。");
           ReactGA.event({
             category: "exhibit",
             action: "leave_some_guest",
@@ -102,11 +108,15 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
         })
         .catch((err: AxiosError) => {
           handleApiError(err, "activity_exit_post");
+          setSnackbarMessage("一括退場処理に失敗しました。");
+        }).finally(() => {
+          setDialogOpen(false);
+          setLoading(false);
         });
     }
   };
 
-  const ConfirmDialog = () => {
+  const ConfirmDialog: React.VFC = () => {
     const onClose = () => {
       setDialogOpen(false);
     };
@@ -119,8 +129,11 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
           </DialogContentText>
         </DialogContent>
         <DialogActions>
+          {loading && (
+            <CircularProgress size={30} thickness={6} sx={{ mx: 2 }} />
+          )}
           <Button onClick={onClose}>閉じる</Button>
-          <Button onClick={leaveGuest} color="error">
+          <Button onClick={leaveGuest} color="error" disabled={loading}>
             実行
           </Button>
         </DialogActions>
@@ -129,40 +142,55 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
   };
 
   return (
-    <Grid container spacing={1} sx={{ width: "100%" }}>
-      <Grid item xs={12}>
-        <Typography variant="h3">現在滞在中のゲスト一覧</Typography>
+    <>
+      <Grid container spacing={1} sx={{ width: "100%" }}>
+        <Grid item xs={12}>
+          <Typography variant="h3">現在滞在中のゲスト一覧</Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <Box sx={{ width: "100%", textAlign: "right" }}>
+            <Button
+              disabled={selectedGuestList.length === 0}
+              variant="outlined"
+              color="error"
+              onClick={() => setDialogOpen(true)}
+            >
+              選択中のゲストを退室処理
+            </Button>
+          </Box>
+          <ConfirmDialog />
+        </Grid>
+        <Grid item xs={12} sx={{ height: "100%" }}>
+          <DataGrid
+            autoHeight
+            rows={rows}
+            columns={columns}
+            rowHeight={50}
+            checkboxSelection
+            hideFooter
+            onSelectionModelChange={(newSelection) => {
+              setSelectedGuestList(newSelection);
+            }}
+            localeText={{
+              noRowsLabel: "現在この展示に滞在中のゲストはいません",
+            }}
+          />
+        </Grid>
       </Grid>
-      <Grid item xs={12}>
-        <Box sx={{ width: "100%", textAlign: "right" }}>
-          <Button
-            disabled={selectedGuestList.length === 0}
-            variant="outlined"
-            color="error"
-            onClick={() => setDialogOpen(true)}
-          >
-            選択中のゲストを退室処理
-          </Button>
-        </Box>
-        <ConfirmDialog />
-      </Grid>
-      <Grid item xs={12} sx={{ height: "100%" }}>
-        <DataGrid
-          autoHeight
-          rows={rows}
-          columns={columns}
-          rowHeight={50}
-          checkboxSelection
-          hideFooter
-          onSelectionModelChange={(newSelection) => {
-            setSelectedGuestList(newSelection);
-          }}
-          localeText={{
-            noRowsLabel: "現在この展示に滞在中のゲストはいません",
-          }}
-        />
-      </Grid>
-    </Grid>
+      <Snackbar
+        open={snackbarMessage !== null}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "right",
+        }}
+        autoHideDuration={6000}
+        onClose={() => setSnackbarMessage(null)}
+      >
+        <Alert variant="filled" severity="success">
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
+    </>
   );
 };
 

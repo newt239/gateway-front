@@ -227,7 +227,7 @@ const EntranceExit: React.VFC = () => {
         <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
             container
-            gap={2}
+            spacing={2}
             sx={{
               alignItems: "center",
               justifyContent: "space-between",
