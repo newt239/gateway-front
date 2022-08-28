@@ -116,11 +116,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   };
 
   useEffect(() => {
-    setGuestInfo(null);
-    setAlertMessage(null);
-    updateExhibitInfo();
-    setShowScanGuide(true);
-    setGuideMessage("来場者のQRコードを水平にかざしてください");
+    reset();
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
@@ -284,6 +280,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   const reset = () => {
     setDeviceState(true);
     setText("");
+    setGuestInfo(null);
     setAlertMessage(null);
     setSnackbarMessage(null);
     setScanStatus("waiting");
