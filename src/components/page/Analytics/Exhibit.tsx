@@ -74,21 +74,17 @@ const AnalyticsExhibit: React.VFC = () => {
             xs={12}
             sx={{
               width: "100%",
+              display: "flex",
               overflowX: "scroll",
-              p: 1,
+              flexDirection: "row",
+              justifyContent: largerThanSM ? "flex-end" : "flex-start",
+              alignItems: "center",
+              whiteSpace: "nowrap",
+              gap: 1,
+              py: 1,
             }}
           >
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: largerThanSM ? "flex-end" : "flex-start",
-                alignItems: "center",
-                whiteSpace: "nowrap",
-                minWidth: 400,
-                gap: 1,
-              }}
-            >
+            <Box sx={{ display: "flex" }}>
               {profile?.user_type === "moderator" && (
                 <Button
                   size="small"

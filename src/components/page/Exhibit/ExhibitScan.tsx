@@ -434,20 +434,16 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
               </Grid>
               <Grid item flexGrow={1} xs={12} sm sx={{
                 width: "100%",
+                display: "flex",
                 overflowX: "scroll",
-                p: 1,
+                flexDirection: "row",
+                justifyContent: largerThanSM ? "flex-end" : "flex-start",
+                alignItems: "center",
+                whiteSpace: "nowrap",
+                gap: 1,
+                py: 1,
               }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "row",
-                    justifyContent: largerThanSM ? "flex-end" : "flex-start",
-                    alignItems: "center",
-                    whiteSpace: "nowrap",
-                    minWidth: 400,
-                    gap: 1,
-                  }}
-                >
+                <Box sx={{ display: "flex" }}>
                   <Button
                     size="small"
                     startIcon={<PublishedWithChangesRoundedIcon />}

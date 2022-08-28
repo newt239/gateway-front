@@ -194,7 +194,7 @@ const AnalyticsSummary: React.VFC = () => {
         xs={12}
         sx={{
           display: "flex",
-          gap: 2,
+          gap: 1,
           alignItems: largerThanSM ? "center" : "flex-start",
           justifyContent: "space-between",
           flexDirection: largerThanSM ? "row" : "column",
@@ -203,17 +203,17 @@ const AnalyticsSummary: React.VFC = () => {
         <Typography variant="h2">
           {lastUpdate.format("HH:mm:ss")}
         </Typography>
-        <Box sx={{ width: "100%", overflowX: "scroll" }}>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              justifyContent: "flex-end",
-              alignItems: "center",
-              whiteSpace: "nowrap",
-              minWidth: 400,
-              gap: 1,
-            }}
+        <Box sx={{
+          width: "100%",
+          display: "flex",
+          overflowX: "scroll",
+          flexDirection: "row",
+          justifyContent: largerThanSM ? "flex-end" : "flex-start",
+          alignItems: "center",
+          whiteSpace: "nowrap",
+          gap: 1,
+        }}>
+          <Box sx={{ display: "flex" }}
           >
             <Button
               onClick={() => setAsc((asc) => !asc)}
