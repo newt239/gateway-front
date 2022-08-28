@@ -193,10 +193,10 @@ const EntranceOtherEnter: React.VFC = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -240,6 +240,7 @@ const EntranceOtherEnter: React.VFC = () => {
         <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
             container
+            gap={2}
             sx={{
               alignItems: "center",
               justifyContent: "space-between",
@@ -251,7 +252,7 @@ const EntranceOtherEnter: React.VFC = () => {
               <Typography variant="body1">
                 保護者の入場は{" "}
                 <Link component={RouterLink} to="/entrance/reserve-check">
-                  エントランス入場処理
+                  予約確認
                 </Link>{" "}
                 からスキャンしてください。
               </Typography>

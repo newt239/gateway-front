@@ -161,8 +161,7 @@ const EntranceEnter: React.VFC = () => {
           })
           .then(() => {
             setDialogMessage(
-              `予約ID: ${reservation.reservation_id}へ${
-                guestList.length
+              `予約ID: ${reservation.reservation_id}へ${guestList.length
               }つのリストバンド(${guestList.join(
                 ", "
               )})の紐付けが完了しました。`
@@ -283,6 +282,7 @@ const EntranceEnter: React.VFC = () => {
         <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
             container
+            gap={2}
             sx={{
               alignItems: "center",
               justifyContent: "space-between",
@@ -300,15 +300,15 @@ const EntranceEnter: React.VFC = () => {
             </Grid>
           </Grid>
         </Grid>
+        <Grid item xs={12}>
+          <Alert severity="info">{infoMessage}</Alert>
+        </Grid>
         <Grid item xs={12} md={6}>
           <Grid
             container
             spacing={2}
             sx={{ flexDirection: "column", alignItems: "center" }}
           >
-            <Grid item xs={12}>
-              <Alert severity="info">{infoMessage}</Alert>
-            </Grid>
             <Grid item xs={12}>
               <Scanner handleScan={handleScan} />
             </Grid>
@@ -349,7 +349,7 @@ const EntranceEnter: React.VFC = () => {
           {reservation && (
             <Card
               variant="outlined"
-              sx={{ my: 1, mx: !largerThanMD ? 1 : 0, p: 2 }}
+              sx={{ my: 1, p: 2 }}
             >
               <Typography variant="h4">予約情報</Typography>
               <List>

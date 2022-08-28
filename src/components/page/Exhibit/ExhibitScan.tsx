@@ -26,7 +26,6 @@ import {
   ListItemIcon,
   ListItemText,
   Snackbar,
-  Skeleton,
   Tooltip,
   CircularProgress,
 } from "@mui/material";
@@ -55,7 +54,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   const setTitle = useSetAtom(pageTitleAtom);
   const { exhibitId } = useParams() as { exhibitId: string };
   const navigate = useNavigate();
-  const { largerThanMD } = useDeviceWidth();
+  const { largerThanSM, largerThanMD } = useDeviceWidth();
   const profile = useAtomValue(profileAtom);
   const token = useAtomValue(tokenAtom);
   const [text, setText] = useState<string>("");
@@ -159,8 +158,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   // すでに該当の展示に入室中の場合
                   setScanStatus("error");
                   setAlertMessage(
-                    `このゲストはすでに${
-                      exhibitName ? `「${exhibitName}」` : "この展示"
+                    `このゲストはすでに${exhibitName ? `「${exhibitName}」` : "この展示"
                     }に入室中です。退室スキャンと間違えていませんか？`
                   );
                   ReactGA.event({
@@ -221,8 +219,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   // どこの展示にも入室していない
                   setScanStatus("error");
                   setAlertMessage(
-                    `このゲストの${
-                      exhibitName ? `「${exhibitName}」` : "この展示"
+                    `このゲストの${exhibitName ? `「${exhibitName}」` : "この展示"
                     }への入室記録がありません。入室スキャンと間違えていませんか？`
                   );
                   ReactGA.event({
@@ -234,8 +231,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   // 別の展示に入室中
                   setScanStatus("success");
                   setAlertMessage(
-                    `このゲストは他の展示に入室中です。まずは${
-                      exhibitName ? `「${exhibitName}」` : "この展示"
+                    `このゲストは他の展示に入室中です。まずは${exhibitName ? `「${exhibitName}」` : "この展示"
                     }への入室スキャンをしてください。`
                   );
                   ReactGA.event({
@@ -279,8 +275,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   useEffect(() => {
     if (scanStatus === "success") {
       setGuideMessage(
-        `情報を確認し、問題がなければ${
-          scanType === "enter" ? "入室記録" : "退室記録"
+        `情報を確認し、問題がなければ${scanType === "enter" ? "入室記録" : "退室記録"
         }を押してください`
       );
     }
@@ -379,10 +374,10 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -455,8 +450,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                       startIcon={<PublishedWithChangesRoundedIcon />}
                       onClick={() =>
                         navigate(
-                          `/exhibit/${exhibitId || "unknown"}/${
-                            scanType === "enter" ? "exit" : "enter"
+                          `/exhibit/${exhibitId || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                           } `,
                           { replace: true }
                         )
@@ -500,61 +494,56 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             </Grid>
           </Grid>
           <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
-            <Grid
-              container
+            <Box
               sx={{
+                display: "flex",
+                gap: "1rem",
                 justifyContent: "space-between",
                 alignItems: "center",
                 flexWrap: "nowrap",
               }}
             >
-              <Grid item>
-                {capacity ? (
-                  <Grid
-                    container
-                    spacing={2}
-                    sx={{ alignItems: "end", flexWrap: "nowrap" }}
-                  >
-                    <Grid item>
-                      <span
-                        style={{
-                          fontSize: "2rem",
-                          fontWeight: 800,
-                          color: currentCount >= capacity ? "red" : "black",
-                        }}
-                      >
-                        {currentCount}
+              {capacity !== 0 && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "end",
+                    flexWrap: "nowrap",
+                  }}
+                >
+                  <Box sx={{ whiteSpace: "nowrap" }}>
+                    <span
+                      style={{
+                        fontSize: "2rem",
+                        fontWeight: 800,
+                        color: currentCount >= capacity ? "red" : "black",
+                      }}
+                    >
+                      {currentCount}
+                    </span>
+                    <span> / {capacity} 人</span>
+                  </Box>
+                  <Box>
+                    <Tooltip title={`${lastUpdate.format("HH:mm:ss")}現在`}>
+                      <span>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={updateExhibitInfo}
+                          disabled={exhibitInfoLoading}
+                        >
+                          <ReplayRoundedIcon />
+                        </IconButton>
                       </span>
-                      <span> / {capacity} 人</span>
-                    </Grid>
-                    <Grid item>
-                      <Tooltip title={`${lastUpdate.format("HH:mm:ss")}現在`}>
-                        <span>
-                          <IconButton
-                            size="small"
-                            color="primary"
-                            onClick={updateExhibitInfo}
-                            disabled={exhibitInfoLoading}
-                          >
-                            <ReplayRoundedIcon />
-                          </IconButton>
-                        </span>
-                      </Tooltip>
-                    </Grid>
-                  </Grid>
-                ) : (
-                  <Skeleton variant="rounded" width={250} height="100%" />
-                )}
-              </Grid>
-              {largerThanMD && (
-                <Grid item sx={{ maxWidth: "70%" }}>
-                  <Alert severity="info">{guideMessage}</Alert>
-                </Grid>
+                    </Tooltip>
+                  </Box>
+                </Box>
               )}
-              <Grid item>
-                <NumPad scanType="guest" onClose={onNumPadClose} />
-              </Grid>
-            </Grid>
+              {largerThanSM && (
+                <Alert severity="info" sx={{ flexGrow: 1 }}>{guideMessage}</Alert>
+              )}
+              <NumPad scanType="guest" onClose={onNumPadClose} />
+            </Box>
           </Grid>
           <Grid item xs={12} md="auto">
             <Scanner handleScan={handleScan} />
