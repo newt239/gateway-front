@@ -67,6 +67,7 @@ const NumPad: React.VFC<NumPadProps> = ({ scanType, onClose }) => {
         open={open}
         onClose={() => handleClose(id)}
         fullScreen={!largerThanMD}
+        sx={{ transform: "translateZ(2px)" }}
       >
         <DialogTitle
           sx={{ my: 0, px: 2, py: 2, textAlign: "center", overflowX: "scroll" }}
