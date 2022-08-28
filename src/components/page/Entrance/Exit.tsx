@@ -43,6 +43,7 @@ import ScanGuide from "#/components/block/ScanGuide";
 
 const EntranceExit: React.VFC = () => {
   setTitle("エントランス");
+  const { largerThanSM, largerThanMD } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [text, setText] = useState<string>("");
@@ -53,12 +54,9 @@ const EntranceExit: React.VFC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
-  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [smDrawerOpen, setSMDrawerOpen] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
-
   const setDeviceState = useSetAtom(deviceStateAtom);
-
-  const { largerThanSM, largerThanMD } = useDeviceWidth();
 
   const handleScan = (scanText: string | null) => {
     if (scanText && scanText !== text && token) {
@@ -98,7 +96,7 @@ const EntranceExit: React.VFC = () => {
         setScanStatus("error");
         setAlertMessage("このゲストIDは存在しません。");
       }
-      setSmDrawerStatus(true);
+      setSMDrawerOpen(true);
     }
   };
 
@@ -146,7 +144,7 @@ const EntranceExit: React.VFC = () => {
             setText("");
             setDeviceState(true);
             setShowScanGuide(true);
-            setSmDrawerStatus(false);
+            setSMDrawerOpen(false);
           });
       }
     };
@@ -253,6 +251,7 @@ const EntranceExit: React.VFC = () => {
           <Box
             sx={{
               mb: 2,
+              px: 1,
               borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
               width: "100%",
               display: "flex",
@@ -274,7 +273,8 @@ const EntranceExit: React.VFC = () => {
                 anchor="bottom"
                 open={smDrawerOpen}
                 onClose={reset}
-                onOpen={() => setSmDrawerStatus(true)}
+                onOpen={() => setSMDrawerOpen(true)}
+                sx={{ transform: "translateZ(3px)" }}
               >
                 <GuestInfoCard />
               </SwipeableDrawer>

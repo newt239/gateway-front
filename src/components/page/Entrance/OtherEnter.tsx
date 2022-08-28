@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate, Link as RouterLink } from "react-router-dom";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { Link as RouterLink } from "react-router-dom";
+import { useAtomValue, useSetAtom } from "jotai";
 import {
   tokenAtom,
   profileAtom,
   deviceStateAtom,
-  reservationAtom,
   setTitle,
 } from "#/components/lib/jotai";
 import ReactGA from "react-ga4";
@@ -24,196 +23,188 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  Snackbar,
   CircularProgress,
   Link,
 } from "@mui/material";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import GroupWorkRoundedIcon from "@mui/icons-material/GroupWorkRounded";
-import PeopleRoundedIcon from "@mui/icons-material/PeopleRounded";
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 
+import { GuestInfoProps } from "#/components/lib/types";
 import {
-  decodeReservationQRCode,
   getTimePart,
+  guestIdValidation,
   handleApiError,
-  reservationIdValidation,
 } from "#/components/lib/commonFunction";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import Scanner from "#/components/block/Scanner";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
-const ReserveCheck: React.VFC = () => {
+const EntranceOtherEnter: React.VFC = () => {
   setTitle("エントランス入場処理");
-  const navigate = useNavigate();
+  const { largerThanSM, largerThanMD } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
-  const [reservation, setReservation] = useAtom(reservationAtom);
   const [text, setText] = useState<string>("");
-  const [reservationId, setReservationId] = useState<string>("");
   const [scanStatus, setScanStatus] = useState<"waiting" | "success" | "error">(
     "waiting"
   );
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
+  const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
+  const [smDrawerOpen, setSMDrawerOpen] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
-
   const setDeviceState = useSetAtom(deviceStateAtom);
-  const { largerThanSM, largerThanMD } = useDeviceWidth();
 
   const handleScan = (scanText: string | null) => {
-    if (scanText && scanText !== text) {
+    if (scanText && scanText !== text && token) {
+      setAlertMessage(null);
       setText(scanText);
-      const reservationId = decodeReservationQRCode(scanText);
-      if (reservationId && reservationId !== "") {
-        checkReservation(reservationId);
-      } else if (scanText.startsWith("G")) {
-        setScanStatus("error");
-        setErrorMessage(
-          "これはゲストIDのQRコードです。予約用QRコードをスキャンしてください。"
-        );
-      } else {
-        setScanStatus("error");
-        setErrorMessage("このQRコードは使えません。");
-      }
-    }
-  };
-
-  const checkReservation = (reservationId: string) => {
-    setErrorMessage(null);
-    if (token) {
-      setReservationId(reservationId);
       setShowScanGuide(false);
-      if (reservationIdValidation(reservationId)) {
+      if (guestIdValidation(scanText)) {
         setDeviceState(false);
         setLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
-          .reservation.info._reservation_id(reservationId)
+          .guest.info._guest_id(scanText)
           .$get({
-            headers: { Authorization: "Bearer " + token },
+            headers: { Authorization: `Bearer ${token}` },
           })
           .then((res) => {
             setLoading(false);
-            setReservation(res);
-            if (res.available) {
-              if (res.count === res.registered.length) {
-                setScanStatus("error");
-                setErrorMessage("この予約IDは既に利用済みです。");
-                ReactGA.event({
-                  category: "scan",
-                  action: "entrance_reservation_used",
-                  label: res.reservation_id,
-                });
+            setGuestInfo(res);
+            if (res.guest_type === "family") {
+              setScanStatus("error");
+              if (res.reservation_id === "family") {
+                setAlertMessage(
+                  "このリストバンドは未使用かつ保護者用のものです。この処理では新しいリストバンドは使用しないでください。対象のゲストが持っているリストバンドをスキャンしてください。"
+                );
               } else {
-                setScanStatus("success");
-                ReactGA.event({
-                  category: "scan",
-                  action: "entrance_reservation_pass",
-                  label: res.reservation_id,
-                });
+                setAlertMessage(
+                  "このリストバンドは保護者用のもので、すでに使用されています。対象のゲストが持っているリストバンドをスキャンしてください。"
+                );
               }
+            } else if (res.available) {
+              setScanStatus("success");
             } else {
               setScanStatus("error");
-              setErrorMessage("この予約IDは無効です。");
+              setAlertMessage("このゲストは無効です。");
             }
           })
           .catch((err: AxiosError) => {
-            handleApiError(err, "reservation_info_get");
+            handleApiError(err, "guest_info_get");
             setLoading(false);
             setScanStatus("error");
-            setErrorMessage("予期せぬエラーが発生しました。" + err.message);
+            setAlertMessage("予期せぬエラーが発生しました。" + err.message);
           });
-      } else if (reservationId.startsWith("G")) {
+      } else if (scanText.endsWith("=")) {
         setScanStatus("error");
-        setErrorMessage("これはゲストIDです。予約IDをスキャンしてください。");
-        ReactGA.event({
-          category: "scan",
-          action: "entrance_is_guest_id",
-          label: reservationId,
-        });
+        setAlertMessage(
+          "これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。"
+        );
       } else {
         setScanStatus("error");
-        setErrorMessage("これは予約用QRコードではありません。");
+        setAlertMessage("このゲストIDは存在しません。");
       }
-      setSmDrawerStatus(true);
+      setSMDrawerOpen(true);
     }
   };
 
   const reset = () => {
     setScanStatus("waiting");
     setText("");
-    setReservationId("");
-    setReservation(null);
+    setAlertMessage(null);
+    setGuestInfo(null);
     setDeviceState(true);
     setShowScanGuide(true);
-    setErrorMessage(null);
   };
 
   const onNumPadClose = (num: number[]) => {
     if (num.length > 0) {
-      checkReservation("R" + num.map((n) => String(n)).join(""));
+      handleScan("G" + num.map((n) => String(n)).join(""));
       ReactGA.event({
         category: "numpad",
-        action: "entrance_reserve_use_numpad",
+        action: "entrance_other_enter_use_numpad",
         label: profile?.user_id,
       });
     }
   };
 
-  const ReservationInfoCard = () => {
+  const GuestInfoCard = () => {
+    const registerSession = () => {
+      if (token && profile && guestInfo) {
+        apiClient(process.env.REACT_APP_API_BASE_URL)
+          .activity.enter.$post({
+            body: {
+              guest_id: text,
+              exhibit_id: "entrance",
+            },
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then(() => {
+            setAlertMessage(null);
+            setScanStatus("waiting");
+            setSnackbarMessage(`${text}の入場処理が完了しました。`);
+          })
+          .catch((err: AxiosError) => {
+            handleApiError(err, "activity_other_enter_post");
+            setSnackbarMessage(`何らかのエラーが発生しました。${err.message}`);
+          })
+          .finally(() => {
+            setText("");
+            setDeviceState(true);
+            setShowScanGuide(true);
+            setSMDrawerOpen(false);
+          });
+      }
+    };
+
     return (
       <>
-        {errorMessage && (
+        {alertMessage && (
           <Alert
             severity="error"
             variant="filled"
             onClose={reset}
             sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
           >
-            {errorMessage}
+            {alertMessage}
           </Alert>
         )}
-        {reservation && scanStatus === "success" && (
+        {scanStatus === "success" && guestInfo && (
           <Card variant="outlined" sx={{ p: 2 }}>
-            <Typography variant="h4">予約情報</Typography>
+            <Typography variant="h4">ゲスト情報</Typography>
             <List dense>
               <ListItem>
                 <ListItemIcon>
                   <AssignmentIndRoundedIcon />
                 </ListItemIcon>
-                <ListItemText>{reservationId}</ListItemText>
+                <ListItemText primary={text} />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
                   <GroupWorkRoundedIcon />
                 </ListItemIcon>
-                <ListItemText>
-                  {reservation.guest_type === "family" ? "保護者" : "その他"}
-                </ListItemText>
+                <ListItemText
+                  primary={
+                    guestInfo.guest_type === "student"
+                      ? "生徒"
+                      : guestInfo.guest_type === "teacher"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
+                  }
+                />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
                   <AccessTimeRoundedIcon />
                 </ListItemIcon>
-                <ListItemText>
-                  {getTimePart(reservation.part).part_name}
-                </ListItemText>
-              </ListItem>
-              <ListItem>
-                <ListItemIcon>
-                  <PeopleRoundedIcon />
-                </ListItemIcon>
-                <ListItemText>
-                  {reservation.count}人
-                  {reservation.count !== reservation.registered.length && (
-                    <span>
-                      （残り：
-                      {reservation.count - reservation.registered.length}人）
-                    </span>
-                  )}
-                </ListItemText>
+                <ListItemText primary={getTimePart(guestInfo.part).part_name} />
               </ListItem>
             </List>
             <Box
@@ -233,11 +224,8 @@ const ReserveCheck: React.VFC = () => {
               >
                 スキャンし直す
               </Button>
-              <Button
-                variant="contained"
-                onClick={() => navigate("/entrance/enter", { replace: true })}
-              >
-                登録開始
+              <Button variant="contained" onClick={registerSession}>
+                入場
               </Button>
             </Box>
           </Card>
@@ -259,23 +247,23 @@ const ReserveCheck: React.VFC = () => {
             }}
           >
             <Grid item>
-              <Typography variant="h3">予約確認</Typography>
+              <Typography variant="h3">保護者以外の入場</Typography>
               <Typography variant="body1">
-                予約用QRコードをスキャンしてください。
+                保護者の入場は{" "}
+                <Link component={RouterLink} to="/entrance/reserve-check">
+                  エントランス入場処理
+                </Link>{" "}
+                からスキャンしてください。
               </Typography>
             </Grid>
             <Grid item>
-              <NumPad scanType="reservation" onClose={onNumPadClose} />
+              <NumPad scanType="guest" onClose={onNumPadClose} />
             </Grid>
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <Alert severity="warning">
-            生徒の再入場及びその他特別枠のゲストの入場は{" "}
-            <Link component={RouterLink} to="/entrance/other-enter">
-              保護者以外の入場
-            </Link>{" "}
-            からスキャンしてください。
+            生徒の再入場及びその他事前にリストバンドが配られている特別なゲスト用の処理です。対象のゲストがリストバンドを持っていない場合この操作はしないでください。
           </Alert>
         </Grid>
         <Grid item xs={12} md="auto">
@@ -295,29 +283,42 @@ const ReserveCheck: React.VFC = () => {
             }}
           >
             <Typography variant="h4" sx={{ py: 1 }}>
-              予約ID: {reservationId}
+              ゲストID: {text}
             </Typography>
             {loading && <CircularProgress size={30} thickness={6} />}
           </Box>
           {scanStatus !== "waiting" &&
             (largerThanSM ? (
-              <ReservationInfoCard />
+              <GuestInfoCard />
             ) : (
               <SwipeableDrawer
                 anchor="bottom"
                 open={smDrawerOpen}
                 onClose={reset}
-                onOpen={() => setSmDrawerStatus(true)}
+                onOpen={() => setSMDrawerOpen(true)}
                 sx={{ transform: "translateZ(3px)" }}
               >
-                <ReservationInfoCard />
+                <GuestInfoCard />
               </SwipeableDrawer>
             ))}
         </Grid>
+        <Snackbar
+          open={snackbarMessage !== null}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          autoHideDuration={6000}
+          onClose={() => setSnackbarMessage(null)}
+        >
+          <Alert variant="filled" severity="success">
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
       </Grid>
       <ScanGuide show={showScanGuide} />
     </>
   );
 };
 
-export default ReserveCheck;
+export default EntranceOtherEnter;

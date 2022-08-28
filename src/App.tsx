@@ -41,6 +41,7 @@ const App: React.VFC = () => {
                 overflowY: "scroll",
                 width: "100%",
                 p: 2,
+                pb: "56px",
                 zIndex: 200,
               }}
             >

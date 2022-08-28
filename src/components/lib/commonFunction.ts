@@ -174,3 +174,11 @@ export const isDOMException = (value: unknown): value is DOMException => {
   }
   return true;
 };
+
+export const isAndroid = () => {
+  if (navigator.userAgent.match(/Android/)) {
+    return true;
+  } else {
+    return false;
+  }
+};

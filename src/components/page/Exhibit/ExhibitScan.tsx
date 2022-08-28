@@ -74,7 +74,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   );
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
-  const [smDrawerOpen, setSmDrawerStatus] = useState<boolean>(false);
+  const [smDrawerOpen, setSMDrawerStatus] = useState<boolean>(false);
   const [showScanGuide, setShowScanGuide] = useState<boolean>(true);
   const setDeviceState = useSetAtom(deviceStateAtom);
 
@@ -117,6 +117,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   };
 
   useEffect(() => {
+    setGuestInfo(null);
     setAlertMessage(null);
     updateExhibitInfo();
     setShowScanGuide(true);
@@ -258,7 +259,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             });
           })
           .finally(() => {
-            setSmDrawerStatus(true);
+            setSMDrawerStatus(true);
             setLoading(false);
           });
       } else if (scanText.endsWith("=")) {
@@ -266,11 +267,11 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
         setAlertMessage(
           "これは予約用QRコードです。リストバンドのQRコードをスキャンしてください。"
         );
-        setSmDrawerStatus(true);
+        setSMDrawerStatus(true);
       } else {
         setScanStatus("error");
         setAlertMessage("このゲストは存在しません。");
-        setSmDrawerStatus(true);
+        setSMDrawerStatus(true);
       }
     }
   };
@@ -291,7 +292,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
     setAlertMessage(null);
     setSnackbarMessage(null);
     setScanStatus("waiting");
-    setSmDrawerStatus(false);
+    setSMDrawerStatus(false);
     setShowScanGuide(true);
     setGuideMessage("来場者のQRコードをカメラに水平にかざしてください");
   };
@@ -341,7 +342,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
           .finally(() => {
             setText("");
             setDeviceState(true);
-            setSmDrawerStatus(false);
+            setSMDrawerStatus(false);
             setShowScanGuide(true);
           });
       }
@@ -562,6 +563,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             <Box
               sx={{
                 mb: 2,
+                px: 1,
                 borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
                 width: "100%",
                 display: "flex",
@@ -583,7 +585,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   anchor="bottom"
                   open={smDrawerOpen}
                   onClose={reset}
-                  onOpen={() => setSmDrawerStatus(true)}
+                  onOpen={() => setSMDrawerStatus(true)}
+                  sx={{ transform: "translateZ(3px)" }}
                 >
                   <GuestInfoCard />
                 </SwipeableDrawer>

@@ -17,7 +17,7 @@ const TopBar: React.VFC = () => {
   const pageTitle = useAtomValue(pageTitleAtom);
 
   return (
-    <AppBar position="sticky" elevation={0} sx={{ width: "100%", zIndex: 100 }}>
+    <AppBar position="sticky" elevation={0} sx={{ width: "100%", zIndex: 200 }}>
       <Container maxWidth="xl">
         <Toolbar
           disableGutters

@@ -17,6 +17,7 @@ import AnalyticsSummary from "#/components/page/Analytics/Summary";
 import EntranceIndex from "#/components/page/Entrance/Index";
 import ReserveCheck from "#/components/page/Entrance/ReserveCheck";
 import EntranceEnter from "#/components/page/Entrance/Enter";
+import EntranceOtherEnter from "#/components/page/Entrance/OtherEnter";
 import EntranceExit from "#/components/page/Entrance/Exit";
 import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminLostWristband from "#/components/page/Admin/LostWristband";
@@ -27,7 +28,6 @@ const Body: React.VFC = () => {
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
   const [profile, setProfile] = useAtom(profileAtom);
-
   const [showMessageDialog, setShowMessageDialog] = useState<boolean>(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState<string>("");
   const [errorDialogMessage, setErrorDialogMessage] = useState<string>("");
@@ -111,6 +111,10 @@ const Body: React.VFC = () => {
                       <Route index element={<EntranceIndex />} />
                       <Route path="reserve-check" element={<ReserveCheck />} />
                       <Route path="enter" element={<EntranceEnter />} />
+                      <Route
+                        path="other-enter"
+                        element={<EntranceOtherEnter />}
+                      />
                       <Route path="exit" element={<EntranceExit />} />
                     </>
                   ) : (
@@ -118,25 +122,19 @@ const Body: React.VFC = () => {
                   )}
                 </Route>
                 <Route path="analytics">
-                  {["moderator"].includes(profile.user_type) ? (
+                  {["moderator", "exhibit"].includes(profile.user_type) && (
+                    <Route
+                      path="exhibit/:exhibitId"
+                      element={<AnalyticsExhibit />}
+                    />
+                  )}
+                  {["moderator"].includes(profile.user_type) && (
                     <>
                       <Route index element={<AnalyticsIndex />} />
-                      <Route
-                        path="exhibit/:exhibitId"
-                        element={<AnalyticsExhibit />}
-                      />
                       <Route path="summary" element={<AnalyticsSummary />} />
                     </>
-                  ) : ["exhibit"].includes(profile.user_type) ? (
-                    <>
-                      <Route
-                        path={`exhibit/${profile.user_id}`}
-                        element={<AnalyticsExhibit />}
-                      />
-                    </>
-                  ) : (
-                    <Route path="*" element={<Extra type="notFound" />} />
                   )}
+                  <Route path="*" element={<Extra type="notFound" />} />
                 </Route>
                 <Route path="admin">
                   {["moderator"].includes(profile.user_type) ? (

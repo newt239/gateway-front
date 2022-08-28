@@ -5,7 +5,7 @@ import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
-import { Grid, Button, Typography, CircularProgress } from "@mui/material";
+import { Grid, Button, Typography, Card } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
@@ -19,12 +19,23 @@ const AnalyticsExhibit: React.VFC = () => {
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
-  if (profile) {
-    const { exhibitId } = useParams() as { exhibitId: string };
+  const { exhibitId } = useParams() as { exhibitId: string };
 
-    useEffect(() => {
-      setTitle(`${exhibitId} - 現在の滞在状況`);
-      if (token && profile) {
+  useEffect(() => {
+    setTitle(`${exhibitId} - 現在の滞在状況`);
+    if (token && profile) {
+      if (exhibitId === "") {
+        if (profile.user_type === "moderator") {
+          navigate("/analytics/summary", { replace: true });
+        } else {
+          navigate("/", { replace: true });
+        }
+      } else if (
+        profile.user_type === "exhibit" &&
+        profile.user_id !== exhibitId
+      ) {
+        navigate("/", { replace: true });
+      } else {
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .exhibit.list.$get({
             headers: {
@@ -41,72 +52,73 @@ const AnalyticsExhibit: React.VFC = () => {
             handleApiError(err, "exhibit_list_get");
           });
       }
-    }, []);
+    }
+  }, []);
 
-    useEffect(() => {
-      if (profile && exhibitId === "") {
-        if (profile.user_type === "moderator") {
-          navigate("/analytics/summary", { replace: true });
-        } else {
-          navigate("/", { replace: true });
-        }
-      }
-    }, [profile]);
-
-    return (
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          {["moderator"].includes(profile.user_type) && (
+  return (
+    <>
+      {profile?.user_type === "exhibit" && profile?.user_id !== exhibitId ? (
+        <Grid container spacing={2} sx={{ p: 2 }}>
+          <Grid item xs={12}>
+            <Card variant="outlined" sx={{ p: 2 }}>
+              このページを表示する権限がありません。
+            </Card>
+          </Grid>
+        </Grid>
+      ) : (
+        <Grid container spacing={2}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              display: "flex",
+              flexWrap: "nowrap",
+              justifyContent: "flex-end",
+            }}
+          >
+            {profile?.user_type === "moderator" && (
+              <Button
+                size="small"
+                startIcon={<ArrowBackIosNewRoundedIcon />}
+                sx={{ mr: 2 }}
+                onClick={() =>
+                  navigate("/analytics/summary", { replace: true })
+                }
+              >
+                一覧に戻る
+              </Button>
+            )}
             <Button
               size="small"
-              startIcon={<ArrowBackIosNewRoundedIcon />}
+              startIcon={<LoginRoundedIcon />}
               sx={{ mr: 2 }}
-              onClick={() => navigate("/analytics/summary", { replace: true })}
+              onClick={() =>
+                navigate(`/exhibit/${exhibitId}/enter`, { replace: true })
+              }
             >
-              一覧に戻る
+              入室スキャン
             </Button>
-          )}
-          <Button
-            size="small"
-            startIcon={<LoginRoundedIcon />}
-            sx={{ mr: 2 }}
-            onClick={() =>
-              navigate(`/exhibit/${exhibitId}/enter`, { replace: true })
-            }
-          >
-            入室スキャン
-          </Button>
-          <Button
-            size="small"
-            startIcon={<LogoutRoundedIcon />}
-            onClick={() =>
-              navigate(`/exhibit/${exhibitId}/exit`, { replace: true })
-            }
-          >
-            退室スキャン
-          </Button>
+            <Button
+              size="small"
+              startIcon={<LogoutRoundedIcon />}
+              onClick={() =>
+                navigate(`/exhibit/${exhibitId}/exit`, { replace: true })
+              }
+            >
+              退室スキャン
+            </Button>
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <ExhibitCurrentGuestList exhibit_id={exhibitId} />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <Typography variant="h3">時間帯別入場者数</Typography>
+            <ExhibitEnterCountBarChart exhibit_id={exhibitId} />
+          </Grid>
         </Grid>
-        <Grid item xs={12} lg={6}>
-          <ExhibitCurrentGuestList exhibit_id={exhibitId} />
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <Typography variant="h3">時間帯別入場者数</Typography>
-          <ExhibitEnterCountBarChart exhibit_id={exhibitId} />
-        </Grid>
-      </Grid>
-    );
-  } else {
-    return (
-      <Grid container spacing={2} sx={{ py: 2, alignItems: "center" }}>
-        <Grid item>
-          <CircularProgress />
-        </Grid>
-        <Grid item>
-          <Typography variant="body1">セッション状態を確認中...</Typography>
-        </Grid>
-      </Grid>
-    );
-  }
+      )}
+    </>
+  );
 };
 
 export default AnalyticsExhibit;

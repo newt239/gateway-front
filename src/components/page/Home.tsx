@@ -4,12 +4,12 @@ import { setTitle } from "#/components/lib/jotai";
 import { Grid, Card, Box, Typography, Button } from "@mui/material";
 import LibraryBooksRoundedIcon from "@mui/icons-material/LibraryBooksRounded";
 
+import GatewayThumbnail from "#/asset/gateway-hero.jpg";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";
 import Settings from "#/components/block/Settings";
-
-import GatewayThumbnail from "#/asset/gateway-hero.jpg";
-import useDeviceWidth from "#/components/lib/useDeviceWidth";
+import QuickMenu from "#/components/block/QuickMenu";
 
 const Home: React.VFC = () => {
   setTitle("ホーム");
@@ -17,8 +17,16 @@ const Home: React.VFC = () => {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <Box sx={{ textAlign: "center", p: 2, height: "100%" }}>
+      <Grid item xs={12} lg={8}>
+        <Box
+          sx={{
+            textAlign: "center",
+            height: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <img
             src={GatewayThumbnail}
             style={{
@@ -29,6 +37,9 @@ const Home: React.VFC = () => {
             }}
           />
         </Box>
+      </Grid>
+      <Grid item xs={12} md={6} lg={4}>
+        <QuickMenu />
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Card variant="outlined" sx={{ p: 2, height: "100%" }}>

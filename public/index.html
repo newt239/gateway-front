@@ -18,7 +18,24 @@
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-  <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+  <script>
+    // https://qiita.com/1pp0/items/a3f0ea14910e25f49878
+    // manifestのlinkタグを生成
+    function setManifest(path) {
+      const manifest = document.createElement('link');
+      manifest.rel = 'manifest';
+      manifest.href = path;
+      manifest.crossOrigin = 'use-credentials';
+      document.head.appendChild(manifest);
+    }
+    // OSに応じて読み込むmanifestを変更
+    const userAgent = navigator.userAgent.toLowerCase();
+    if (userAgent.indexOf("iphone") > 0 || userAgent.indexOf("ipad") > 0) {
+      setManifest('%PUBLIC_URL%/manifest_ios.json');
+    } else {
+      setManifest('%PUBLIC_URL%/manifest.json');
+    }
+  </script>
   <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.

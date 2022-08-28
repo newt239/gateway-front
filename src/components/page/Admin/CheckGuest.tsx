@@ -138,30 +138,37 @@ const AdminCheckGuest: React.VFC = () => {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <TextField
-          id="guestId"
-          label="ゲストID"
-          value={guestId}
-          onChange={(e) => setGuestId(e.target.value)}
-          margin="normal"
-          fullWidth
-        />
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            gap: "1rem",
-          }}
-        >
-          {loading && <CircularProgress size={25} thickness={6} />}
-          <Button
-            onClick={searchGuest}
-            disabled={loading || !guestIdValidation(guestId)}
-            variant="contained"
+        <Box sx={{ width: "min(100%, 300px)" }}>
+          <TextField
+            id="guestId"
+            label="ゲストID"
+            value={guestId}
+            onChange={(e) => setGuestId(e.target.value)}
+            margin="normal"
+            fullWidth
+            onKeyPress={(e) => {
+              if (e.key === "Enter") {
+                searchGuest();
+              }
+            }}
+          />
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              gap: "1rem",
+            }}
           >
-            検索
-          </Button>
+            {loading && <CircularProgress size={25} thickness={6} />}
+            <Button
+              onClick={searchGuest}
+              disabled={loading || !guestIdValidation(guestId)}
+              variant="contained"
+            >
+              検索
+            </Button>
+          </Box>
         </Box>
       </Grid>
       {guestInfo && (

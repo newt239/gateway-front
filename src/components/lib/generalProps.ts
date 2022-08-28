@@ -1,6 +1,6 @@
 const generalProps = {
-  app_version: "1.9.3",
-  version_date: "2022/08/27",
+  app_version: "1.9.4",
+  version_date: "2022/08/28",
   time_part: [
     {
       part_name: "全時間帯",

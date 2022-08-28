@@ -23,12 +23,20 @@ import {
 import CameraswitchRoundedIcon from "@mui/icons-material/CameraswitchRounded";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import { isDOMException, sendLog } from "#/components/lib/commonFunction";
+import {
+  isAndroid,
+  isDOMException,
+  sendLog,
+} from "#/components/lib/commonFunction";
 import theme from "#/components/lib/theme";
 import MessageDialog from "#/components/block/MessageDialog";
 
 type ScannerProps = {
   handleScan: (text: string | null) => void;
+};
+type DeviceProps = {
+  deviceId: string;
+  label: string;
 };
 
 const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
@@ -37,13 +45,6 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const [scannerStatus, setScannerStatus] = useState<
     "loading" | "waiting" | "error"
   >("loading");
-  const [reverseCamera, setReverseCamera] = useState<boolean>(
-    localStorage.getItem("reverseCamera") === "false" ? false : true
-  );
-  type deviceProp = {
-    deviceId: string;
-    label: string;
-  };
   const getDeviceIdFromStorage = () => {
     const savedCurrentCameraDeviceId = localStorage.getItem(
       "currentCameraDeviceId"
@@ -56,12 +57,15 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const [currentDeviceId, setCurrentDeviceId] = useState<string>(
     getDeviceIdFromStorage()
   );
-  const [deviceList, setDeviceList] = useState<deviceProp[]>([]);
+  const [deviceList, setDeviceList] = useState<DeviceProps[]>([]);
   const [selectCameraModalOpen, setSelectCameraModalOpen] =
     useState<boolean>(false);
   const [errorDialogOpen, setErrorDialogOpen] = useState<boolean>(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState<string>("");
   const [errorDialogMessage, setErrorDialogMessage] = useState<string>("");
+  const [reverseCamera, setReverseCamera] = useState<boolean>(
+    localStorage.getItem("reverseCamera") === "false" ? false : true
+  );
 
   const getCameraDeviceList = () => {
     navigator.mediaDevices
@@ -84,6 +88,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
       })
       .catch((err) => {
         console.log(err);
+        sendLog("get_camera_error", err);
       });
   };
 
@@ -103,11 +108,12 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   // out of memory の対策として、5 分ごとに react-qr-reader を unmount して、直後に mount している
   // https://github.com/afes-website/cappuccino-app/blob/d0201aa5506e6b3aa7c3cc887171d83b0e773b18/src/components/QRScanner.tsx#L146
   const [refreshQrReader, setRefreshQrReader] = useState(true);
+  const interval = isAndroid() ? 30 * 1000 : 5 * 60 * 1000;
   useEffect(() => {
     const intervalId = setInterval(() => {
       setScannerStatus("loading");
       setRefreshQrReader(false);
-    }, 5 * 60 * 1000);
+    }, interval);
     return () => {
       clearInterval(intervalId);
     };

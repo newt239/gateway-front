@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { List, ListItem, ListItemText, Switch, Tooltip } from "@mui/material";
+import {
+  FormControlLabel,
+  List,
+  ListItem,
+  Switch,
+  Tooltip,
+} from "@mui/material";
 
 const Settings: React.VFC = () => {
   const [guideShow, setGuideShow] = useState<boolean>(
@@ -19,8 +25,17 @@ const Settings: React.VFC = () => {
     <List>
       <Tooltip title="スキャン画面で、一般的なパソコンのフロントカメラがある位置に案内が表示されます。">
         <ListItem>
-          <ListItemText>来場者用にスキャンガイドを表示</ListItemText>
-          <Switch edge="end" onChange={handleToggle} checked={guideShow} />
+          <FormControlLabel
+            control={
+              <Switch
+                edge="start"
+                onChange={handleToggle}
+                checked={guideShow}
+                sx={{ mr: 1 }}
+              />
+            }
+            label="来場者用にスキャンガイドを表示"
+          />
         </ListItem>
       </Tooltip>
     </List>
