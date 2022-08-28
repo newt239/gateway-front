@@ -432,14 +432,20 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
                 </Typography>
               </Grid>
-              <Grid item flexGrow={1} xs={12} sm>
+              <Grid item flexGrow={1} xs={12} sm sx={{
+                width: "100%",
+                overflowX: "scroll",
+                p: 1,
+              }}>
                 <Box
                   sx={{
-                    gap: 2,
                     display: "flex",
-                    flexWrap: "nowrap",
-                    justifyContent: "flex-end",
+                    flexDirection: "row",
+                    justifyContent: largerThanSM ? "flex-end" : "flex-start",
+                    alignItems: "center",
                     whiteSpace: "nowrap",
+                    minWidth: 400,
+                    gap: 1,
                   }}
                 >
                   <Button

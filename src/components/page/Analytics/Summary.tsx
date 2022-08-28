@@ -212,7 +212,7 @@ const AnalyticsSummary: React.VFC = () => {
               alignItems: "center",
               whiteSpace: "nowrap",
               minWidth: 400,
-              gap: 2,
+              gap: 1,
             }}
           >
             <Button
