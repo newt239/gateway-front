@@ -183,31 +183,33 @@ const LostWristband: React.VFC = () => {
                   </ListItem>
                 </List>
               </Card>
-              <Card variant="outlined" sx={{ p: 2, mt: 2 }}>
-                <Typography variant="h4">
-                  紐付けられているリストバンド
-                </Typography>
-                <List dense>
-                  {reservation.registered.map((guest) => (
-                    <ListItem key={guest.guest_id}>
-                      <ListItemIcon>
-                        <PersonRoundedIcon />
-                      </ListItemIcon>
-                      <ListItemText>
-                        {guest.guest_id}
-                        {guest.is_spare === 1 && <span>(スペア)</span>}
-                      </ListItemText>
-                    </ListItem>
-                  ))}
-                </List>
-              </Card>
+              {reservation.registered.length !== 0 && (
+                <Card variant="outlined" sx={{ p: 2, mt: 2 }}>
+                  <Typography variant="h4">
+                    紐付けられているリストバンド
+                  </Typography>
+                  <List dense>
+                    {reservation.registered.map((guest) => (
+                      <ListItem key={guest.guest_id}>
+                        <ListItemIcon>
+                          <PersonRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText>
+                          {guest.guest_id}
+                          {guest.is_spare === 1 && <span>(スペア)</span>}
+                        </ListItemText>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Card>
+              )}
             </>
           )}
         </Grid>
         {reservation && (
           <Grid item xs={12} md={6}>
             {reservation.registered.length === 0 && (
-              <Alert severity="error" variant="filled" sx={{ mt: 2 }}>
+              <Alert severity="error" variant="filled">
                 この予約IDに紐付けられたリストバンドはありません。
               </Alert>
             )}
