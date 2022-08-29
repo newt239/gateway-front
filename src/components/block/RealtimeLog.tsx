@@ -6,6 +6,7 @@ import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
 
 import {
+  Box,
   CircularProgress,
   FormControlLabel,
   Grid,
@@ -198,6 +199,11 @@ const RealtimeLog: React.VFC = () => {
             </List>
           </Grid>
         </>
+      ) : loading ? (
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, p: 2 }}>
+          <CircularProgress size={25} thickness={6} />
+          <Typography variant="body1">読み込み中...</Typography>
+        </Box>
       ) : (
         <Typography variant="body1" sx={{ m: 2 }}>
           データがありません。

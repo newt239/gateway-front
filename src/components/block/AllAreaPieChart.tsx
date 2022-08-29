@@ -6,7 +6,7 @@ import apiClient from "#/axios-config";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, CircularProgress } from "@mui/material";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 
@@ -17,9 +17,11 @@ const AllAreaPieChart: React.VFC = () => {
     string[]
   >(["保護者", "生徒", "教員"]);
   const [allAreaChartSeries, setAllAreaChartSeries] = useState<number[]>([0]);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     if (token) {
+      setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
         .exhibit.info.$get({
           headers: { Authorization: `Bearer ${token}` },
@@ -44,6 +46,8 @@ const AllAreaPieChart: React.VFC = () => {
         })
         .catch((err: AxiosError) => {
           handleApiError(err, "exhibit_info_get");
+        }).finally(() => {
+          setLoading(false);
         });
     }
   }, []);
@@ -76,8 +80,13 @@ const AllAreaPieChart: React.VFC = () => {
             />
           </Box>
         </>
+      ) : loading ? (
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, p: 2 }}>
+          <CircularProgress size={25} thickness={6} />
+          <Typography variant="body1">読み込み中...</Typography>
+        </Box>
       ) : (
-        <Typography sx={{ p: 2 }}>現在校内に来場者はいません。</Typography>
+        <Typography variant="body1" sx={{ p: 2 }}>現在校内に来場者はいません。</Typography>
       )}
     </>
   );
