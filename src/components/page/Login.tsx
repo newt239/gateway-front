@@ -20,11 +20,14 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
+  InputAdornment,
 } from "@mui/material";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IosShareIcon from "@mui/icons-material/IosShare";
 import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 
@@ -38,6 +41,7 @@ const Login: React.VFC = () => {
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   useEffect(() => {
     if (profile) {
@@ -159,7 +163,7 @@ const Login: React.VFC = () => {
                       <TextField
                         id="password"
                         label="パスワード"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         autoComplete="current-password"
                         onChange={(event) => setPasswordValue(event.target.value)}
                         onKeyPress={(e) => {
@@ -168,6 +172,18 @@ const Login: React.VFC = () => {
                           }
                         }}
                         fullWidth
+                        InputProps={{
+                          endAdornment: (
+                            <InputAdornment position="end">
+                              <IconButton
+                                aria-label="パスワードの表示を切り替える"
+                                onClick={() => setShowPassword((showPassword) => !showPassword)}
+                              >
+                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                              </IconButton>
+                            </InputAdornment>
+                          )
+                        }}
                       />
                     </Grid>
                     <Grid
