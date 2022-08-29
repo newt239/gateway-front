@@ -82,7 +82,7 @@ const Login: React.VFC = () => {
           setDialogOpen(true);
         } else {
           setErrorMessage(
-            "エラーが発生しました。ユーザーIDまたはパスワードが間違っている可能性があります。"
+            "ユーザーIDまたはパスワードが間違っている可能性があります。"
           );
         }
       })
@@ -190,7 +190,7 @@ const Login: React.VFC = () => {
                         }}
                         variant="outlined"
                         disabled={
-                          userIdValue.length === 0 || passwordValue.length === 0
+                          userIdValue.length === 0 || passwordValue.length === 0 || loading
                         }
                         size="large"
                         startIcon={<LoginRoundedIcon />}

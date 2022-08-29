@@ -52,6 +52,7 @@ const EntranceExit: React.VFC = () => {
   );
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [registerLoading, setRegisterLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
   const [smDrawerOpen, setSMDrawerOpen] = useState<boolean>(false);
@@ -123,6 +124,7 @@ const EntranceExit: React.VFC = () => {
   const GuestInfoCard = () => {
     const registerSession = () => {
       if (token && profile && guestInfo) {
+        setRegisterLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .activity.exit.$post({
             body: {
@@ -145,6 +147,7 @@ const EntranceExit: React.VFC = () => {
             setDeviceState(true);
             setShowScanGuide(true);
             setSMDrawerOpen(false);
+            setRegisterLoading(false);
           });
       }
     };
@@ -198,9 +201,8 @@ const EntranceExit: React.VFC = () => {
               m={1}
               sx={{
                 display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                gap: "1rem",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <Button
@@ -211,9 +213,16 @@ const EntranceExit: React.VFC = () => {
               >
                 スキャンし直す
               </Button>
-              <Button variant="contained" onClick={registerSession}>
-                退場
-              </Button>
+              <Box sx={{
+                display: "flex",
+                gap: 2,
+                alignItems: "center",
+              }}>
+                {registerLoading && <CircularProgress size={25} thickness={6} />}
+                <Button variant="contained" onClick={registerSession} disabled={registerLoading}>
+                  退場記録
+                </Button>
+              </Box>
             </Box>
           </Card>
         )}

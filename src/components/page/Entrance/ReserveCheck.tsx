@@ -220,9 +220,8 @@ const ReserveCheck: React.VFC = () => {
               m={1}
               sx={{
                 display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                gap: "1rem",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <Button

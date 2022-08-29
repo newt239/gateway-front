@@ -223,7 +223,7 @@ const LostWristband: React.VFC = () => {
                     <TextField
                       id="newGuestId"
                       label="新しいゲストID"
-                      disabled={loading || !reservation}
+                      disabled={registerLoading || !reservation}
                       value={newGuestId}
                       onChange={(e) => setNewGuestId(e.target.value)}
                       margin="normal"
@@ -239,7 +239,7 @@ const LostWristband: React.VFC = () => {
                         labelId="old-guest-label"
                         id="oldGuestId"
                         value={oldGuestId}
-                        disabled={loading || !reservation}
+                        disabled={registerLoading || !reservation}
                         label="紛失したゲストID"
                         onChange={(e) => setOldGuestId(e.target.value)}
                       >

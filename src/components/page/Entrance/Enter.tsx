@@ -203,7 +203,7 @@ const EntranceEnter: React.VFC = () => {
             {0 < guestList.length && guestList.length < reservation.count && (
               <Alert
                 severity="warning"
-                sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
+                sx={{ mt: 1, mx: !largerThanMD ? 1 : 0 }}
               >
                 同じ予約の来場者が他にもいる場合は
                 {!largerThanSM && "画面上部をタップし"}スキャンを続けてください
@@ -252,14 +252,15 @@ const EntranceEnter: React.VFC = () => {
                     sx={{
                       display: "flex",
                       justifyContent: "flex-end",
-                      alignItems: "flex-end",
-                      gap: "1rem",
+                      alignItems: "center",
+                      gap: 2,
                     }}
                   >
+                    {loading && <CircularProgress size={25} thickness={6} />}
                     <Button
                       variant="contained"
                       onClick={registerWristband}
-                      disabled={reservation.registered
+                      disabled={loading || reservation.registered
                         .filter((guest) => guest.is_spare === 0)
                         .map((guest) => guest.guest_id)
                         .includes(guestList[guestList.length - 1])}
@@ -331,7 +332,7 @@ const EntranceEnter: React.VFC = () => {
             <Typography variant="h4" sx={{ py: 1 }}>
               ゲストID: {text}
             </Typography>
-            {loading && <CircularProgress size={30} thickness={6} />}
+
           </Box>
           {largerThanSM ? (
             <ReservationInfoCard />

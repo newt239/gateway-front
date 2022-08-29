@@ -62,6 +62,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
     "waiting"
   );
   const [loading, setLoading] = useState<boolean>(false);
+  const [registerLoading, setRegisterLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [capacity, setCapacity] = useState<number>(0);
   const [currentCount, setCurrentCount] = useState<number>(0);
@@ -304,6 +305,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   const GuestInfoCard: React.VFC = () => {
     const registerSession = () => {
       if (token && profile && guestInfo) {
+        setRegisterLoading(true);
         const payload = {
           guest_id: text,
           exhibit_id: exhibitId,
@@ -337,6 +339,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             setDeviceState(true);
             setSMDrawerStatus(false);
             setShowScanGuide(true);
+            setRegisterLoading(false);
           });
       }
     };
@@ -390,9 +393,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
               m={1}
               sx={{
                 display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                gap: "1rem",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <Button
@@ -403,9 +405,16 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
               >
                 スキャンし直す
               </Button>
-              <Button variant="contained" onClick={registerSession}>
-                {scanType === "enter" ? "入室記録" : "退室記録"}
-              </Button>
+              <Box sx={{
+                display: "flex",
+                gap: 2,
+                alignItems: "center",
+              }}>
+                {registerLoading && <CircularProgress size={25} thickness={6} />}
+                <Button variant="contained" onClick={registerSession} disabled={registerLoading}>
+                  {scanType === "enter" ? "入室記録" : "退室記録"}
+                </Button>
+              </Box>
             </Box>
           </Card>
         )}
