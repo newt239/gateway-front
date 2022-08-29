@@ -500,48 +500,50 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             <Box
               sx={{
                 display: "flex",
-                gap: "1rem",
+                gap: 2,
                 justifyContent: "space-between",
                 alignItems: "center",
                 flexWrap: "nowrap",
               }}
             >
-              {capacity !== 0 && (
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "end",
-                    flexWrap: "nowrap",
-                  }}
-                >
-                  <Box sx={{ whiteSpace: "nowrap" }}>
-                    <span
-                      style={{
-                        fontSize: "2rem",
-                        fontWeight: 800,
-                        color: currentCount >= capacity ? "red" : "black",
-                      }}
-                    >
-                      {currentCount}
-                    </span>
-                    <span> / {capacity} 人</span>
-                  </Box>
-                  <Box>
-                    <Tooltip title={`${lastUpdate.format("HH:mm:ss")}現在`}>
-                      <span>
-                        <IconButton
-                          size="small"
-                          color="primary"
-                          onClick={updateExhibitInfo}
-                          disabled={exhibitInfoLoading}
-                        >
-                          <ReplayRoundedIcon />
-                        </IconButton>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "end",
+                  flexWrap: "nowrap",
+                }}
+              >
+                {capacity !== 0 && (
+                  <>
+                    <Box sx={{ whiteSpace: "nowrap" }}>
+                      <span
+                        style={{
+                          fontSize: "2rem",
+                          fontWeight: 800,
+                          color: currentCount >= capacity ? "red" : "black",
+                        }}
+                      >
+                        {currentCount}
                       </span>
-                    </Tooltip>
-                  </Box>
-                </Box>
-              )}
+                      <span> / {capacity} 人</span>
+                    </Box>
+                    <Box>
+                      <Tooltip title={`${lastUpdate.format("HH:mm:ss")}現在`}>
+                        <span>
+                          <IconButton
+                            size="small"
+                            color="primary"
+                            onClick={updateExhibitInfo}
+                            disabled={exhibitInfoLoading}
+                          >
+                            <ReplayRoundedIcon />
+                          </IconButton>
+                        </span>
+                      </Tooltip>
+                    </Box>
+                  </>
+                )}
+              </Box>
               {largerThanSM && (
                 <Alert severity="info" sx={{ flexGrow: 1 }}>{guideMessage}</Alert>
               )}
