@@ -205,8 +205,8 @@ const EntranceEnter: React.VFC = () => {
                 severity="warning"
                 sx={{ mt: 1, mx: !largerThanMD ? 1 : 0 }}
               >
-                同じ予約の来場者が他にもいる場合は
-                {!largerThanSM && "画面上部をタップし"}スキャンを続けてください
+                同じ予約の来場者が他にもいる場合は「すべて登録」を押さず、
+                {!largerThanSM && "画面上部をタップし"}<strong>連続でスキャンしてください</strong>
               </Alert>
             )}
             <Card
@@ -304,16 +304,8 @@ const EntranceEnter: React.VFC = () => {
         <Grid item xs={12}>
           <Alert severity="info">{infoMessage}</Alert>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Grid
-            container
-            spacing={2}
-            sx={{ flexDirection: "column", alignItems: "center" }}
-          >
-            <Grid item xs={12}>
-              <Scanner handleScan={handleScan} />
-            </Grid>
-          </Grid>
+        <Grid item xs={12} md="auto">
+          <Scanner handleScan={handleScan} />
         </Grid>
         <Grid item xs={12} md={6}>
           <Box
@@ -332,7 +324,6 @@ const EntranceEnter: React.VFC = () => {
             <Typography variant="h4" sx={{ py: 1 }}>
               ゲストID: {text}
             </Typography>
-
           </Box>
           {largerThanSM ? (
             <ReservationInfoCard />

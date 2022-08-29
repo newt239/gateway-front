@@ -90,10 +90,21 @@ const AnalyticsExhibit: React.VFC = () => {
                   size="small"
                   startIcon={<ArrowBackIosNewRoundedIcon />}
                   onClick={() =>
+                    navigate("/exhibit/", { replace: true })
+                  }
+                >
+                  展示選択
+                </Button>
+              )}
+              {profile?.user_type === "moderator" && (
+                <Button
+                  size="small"
+                  startIcon={<ArrowBackIosNewRoundedIcon />}
+                  onClick={() =>
                     navigate("/analytics/summary", { replace: true })
                   }
                 >
-                  一覧に戻る
+                  展示一覧
                 </Button>
               )}
               <Button
