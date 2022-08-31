@@ -28,7 +28,7 @@ const ExhibitIndex: React.VFC = () => {
         <Grid item xs={12}>
           <Alert severity="warning">
             <AlertTitle>一括退室処理</AlertTitle>
-            ステージについては管理者用アカウントでのみ「滞在状況」ページ上で実行できます。
+            ステージについては管理者用アカウントから「滞在状況」ページ上で実行できます。
           </Alert>
         </Grid>
       )}
