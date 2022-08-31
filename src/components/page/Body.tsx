@@ -23,6 +23,7 @@ import AdminCheckGuest from "#/components/page/Admin/CheckGuest";
 import AdminLostWristband from "#/components/page/Admin/LostWristband";
 import Extra from "#/components/page/Extra";
 import MessageDialog from "#/components/block/MessageDialog";
+import NetworkErrorDialog from "#/components/block/NetworkErrorDialog";
 
 const Body: React.VFC = () => {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const Body: React.VFC = () => {
   const [showMessageDialog, setShowMessageDialog] = useState<boolean>(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState<string>("");
   const [errorDialogMessage, setErrorDialogMessage] = useState<string>("");
+  const [networkErrorDialogOpen, setNetworkErrorDialogOpen] = useState<boolean>(false);
 
   useEffect(() => {
     if (token) {
@@ -51,20 +53,18 @@ const Body: React.VFC = () => {
           });
         })
         .catch((err: AxiosError) => {
-          setShowMessageDialog(true);
           if (err.response && err.response.status === 401) {
+            setShowMessageDialog(true);
             setErrorDialogTitle("セッションがタイムアウトしました");
             setErrorDialogMessage(
               "最後のログインから一定時間が経過したためログアウトしました。再度ログインしてください。"
             );
             localStorage.removeItem("gatewayApiToken");
           } else if (err.message === "Network Error") {
-            setErrorDialogTitle("サーバーからの応答がありません");
-            setErrorDialogMessage(
-              "端末のネットワーク接続を確認した上で、「ログイン出来ない場合」に記載されたステータスページを確認してください。"
-            );
+            setNetworkErrorDialogOpen(true);
           } else {
             handleApiError(err, "auth_me_get");
+            setShowMessageDialog(true);
             setErrorDialogTitle("予期せぬエラーが発生しました");
             setErrorDialogMessage(err.message);
           }
@@ -167,6 +167,10 @@ const Body: React.VFC = () => {
         title={errorDialogTitle}
         message={errorDialogMessage}
         onClose={handleClose}
+      />
+      <NetworkErrorDialog
+        open={networkErrorDialogOpen}
+        onClose={() => setNetworkErrorDialogOpen(false)}
       />
     </>
   );

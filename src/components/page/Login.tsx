@@ -15,21 +15,16 @@ import {
   Card,
   Link,
   CircularProgress,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogContentText,
-  DialogTitle,
   IconButton,
   InputAdornment,
 } from "@mui/material";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import IosShareIcon from "@mui/icons-material/IosShare";
-import ErrorRoundedIcon from "@mui/icons-material/ErrorRounded";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 import { handleApiError } from "#/components/lib/commonFunction";
+import NetworkErrorDialog from "../block/NetworkErrorDialog";
 
 const Login: React.VFC = () => {
   setTitle("ログイン");
@@ -40,7 +35,7 @@ const Login: React.VFC = () => {
   const [userIdValue, setUserIdValue] = useState<string>("");
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [networkErrorDialogOpen, setNetworkErrorDialogOpen] = useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   useEffect(() => {
@@ -83,7 +78,7 @@ const Login: React.VFC = () => {
       })
       .catch((err: AxiosError) => {
         if (err.message === "Network Error") {
-          setDialogOpen(true);
+          setNetworkErrorDialogOpen(true);
         } else {
           setErrorMessage(
             "ユーザーIDまたはパスワードが間違っている可能性があります。"
@@ -93,39 +88,6 @@ const Login: React.VFC = () => {
       .finally(() => {
         setLoading(false);
       });
-  };
-
-  const NetworkErrorDialog: React.VFC = () => {
-    const onClose = () => {
-      setDialogOpen(false);
-    };
-    return (
-      <Dialog open={dialogOpen} onClose={onClose}>
-        <DialogTitle
-          sx={{
-            display: "inline-flex",
-            alignItems: "center",
-            color: "error.main",
-          }}
-        ><ErrorRoundedIcon />ネットワークエラー</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            サーバーからの応答がありません。端末がネットワークに接続されているか確認してください。
-          </DialogContentText>
-        </DialogContent>
-        <Alert severity="warning" sx={{ mx: 3 }}>Chromebookからアクセスしている場合、プロキシの設定の関係上起動直後はエラーが表示される場合があります。
-          <Link
-            href={process.env.REACT_APP_STATUS_URL || "/"}
-            target="_blank"
-            underline="hover"
-          >このページ</Link>
-          を開いた上でもう一度ログインをお試しください。
-        </Alert>
-        <DialogActions>
-          <Button onClick={onClose}>閉じる</Button>
-        </DialogActions>
-      </Dialog >
-    );
   };
 
   return (
@@ -262,7 +224,10 @@ const Login: React.VFC = () => {
           </Grid>
         )}
       </Grid>
-      <NetworkErrorDialog />
+      <NetworkErrorDialog
+        open={networkErrorDialogOpen}
+        onClose={() => setNetworkErrorDialogOpen(false)}
+      />
     </>
   );
 };
