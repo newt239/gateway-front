@@ -9,6 +9,7 @@ import moment, { Moment } from "moment";
 import {
   Box,
   Button,
+  CircularProgress,
   Grid,
   List,
   ListItem,
@@ -200,9 +201,16 @@ const AnalyticsSummary: React.VFC = () => {
           flexDirection: largerThanSM ? "row" : "column",
         }}
       >
-        <Typography variant="h2">
-          {lastUpdate.format("HH:mm:ss")}
-        </Typography>
+        <Box sx={{
+          display: "flex",
+          gap: 2,
+          alignItems: "center",
+        }}>
+          <Typography variant="h2">
+            {lastUpdate.format("HH:mm:ss")}
+          </Typography>
+          {loading && <CircularProgress size={25} thickness={6} />}
+        </Box>
         <Box sx={{
           width: "100%",
           display: "flex",
@@ -211,9 +219,8 @@ const AnalyticsSummary: React.VFC = () => {
           justifyContent: largerThanSM ? "flex-end" : "flex-start",
           alignItems: "center",
           whiteSpace: "nowrap",
-          gap: 1,
         }}>
-          <Box sx={{ display: "flex" }}
+          <Box sx={{ display: "flex", gap: 1 }}
           >
             <Button
               onClick={() => setAsc((asc) => !asc)}

@@ -449,12 +449,11 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                 justifyContent: largerThanSM ? "flex-end" : "flex-start",
                 alignItems: "center",
                 whiteSpace: "nowrap",
-                gap: 1,
-                py: 1,
+                p: 0,
+                pb: largerThanSM ? 0 : 1,
               }}>
-                <Box sx={{ display: "flex" }}>
+                <Box sx={{ display: "flex", gap: 1 }}>
                   <Button
-                    size="small"
                     startIcon={<PublishedWithChangesRoundedIcon />}
                     onClick={() =>
                       navigate(
@@ -469,7 +468,6 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   {profile &&
                     ["moderator", "exhibit"].includes(profile.user_type) && (
                       <Button
-                        size="small"
                         startIcon={<BarChartRoundedIcon />}
                         onClick={() =>
                           navigate(`/analytics/exhibit/${exhibitId}`, {
@@ -483,7 +481,6 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   {profile &&
                     ["moderator", "executive"].includes(profile.user_type) && (
                       <Button
-                        size="small"
                         startIcon={<ArrowBackIosNewRoundedIcon />}
                         onClick={() =>
                           navigate("/exhibit", { replace: true })
@@ -553,7 +550,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
           <Grid item xs={12} md="auto">
             <Scanner handleScan={handleScan} />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} lg={5}>
             <Box
               sx={{
                 mb: 2,

@@ -80,14 +80,13 @@ const AnalyticsExhibit: React.VFC = () => {
               justifyContent: largerThanSM ? "flex-end" : "flex-start",
               alignItems: "center",
               whiteSpace: "nowrap",
-              gap: 1,
-              py: 1,
+              p: 0,
+              pb: largerThanSM ? 0 : 1,
             }}
           >
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", gap: 1 }}>
               {profile?.user_type === "moderator" && (
                 <Button
-                  size="small"
                   startIcon={<ArrowBackIosNewRoundedIcon />}
                   onClick={() =>
                     navigate("/exhibit/", { replace: true })
@@ -98,7 +97,6 @@ const AnalyticsExhibit: React.VFC = () => {
               )}
               {profile?.user_type === "moderator" && (
                 <Button
-                  size="small"
                   startIcon={<ArrowBackIosNewRoundedIcon />}
                   onClick={() =>
                     navigate("/analytics/summary", { replace: true })
@@ -108,7 +106,6 @@ const AnalyticsExhibit: React.VFC = () => {
                 </Button>
               )}
               <Button
-                size="small"
                 startIcon={<LoginRoundedIcon />}
                 onClick={() =>
                   navigate(`/exhibit/${exhibitId}/enter`, { replace: true })
@@ -117,7 +114,6 @@ const AnalyticsExhibit: React.VFC = () => {
                 入室スキャン
               </Button>
               <Button
-                size="small"
                 startIcon={<LogoutRoundedIcon />}
                 onClick={() =>
                   navigate(`/exhibit/${exhibitId}/exit`, { replace: true })

@@ -279,7 +279,7 @@ const EntranceOtherEnter: React.VFC = () => {
         <Grid item xs={12} md="auto">
           <Scanner handleScan={handleScan} />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} lg={5}>
           <Box
             sx={{
               mb: 2,
