@@ -177,7 +177,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
           transform: "translateY(-50%) translateX(-50%)",
         }}
       >
-        <CircularProgress color="inherit" size={64} />
+        <CircularProgress color="inherit" size={64} thickness={6} />
       </div>
     );
   };
@@ -295,9 +295,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
             </Dialog>
           </div>
         )}
-        {(refreshQrReader || ["loading"].includes(scannerStatus)) && (
-          <>{scannerStatus === "loading" && <Loading />}</>
-        )}
+        {(!refreshQrReader || scannerStatus === "loading") && (<Loading />)}
       </Box>
       <MessageDialog
         open={errorDialogOpen}
