@@ -220,9 +220,8 @@ const ReserveCheck: React.VFC = () => {
               m={1}
               sx={{
                 display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                gap: "1rem",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <Button
@@ -252,6 +251,7 @@ const ReserveCheck: React.VFC = () => {
         <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
             container
+            spacing={2}
             sx={{
               alignItems: "center",
               justifyContent: "space-between",
@@ -281,7 +281,7 @@ const ReserveCheck: React.VFC = () => {
         <Grid item xs={12} md="auto">
           <Scanner handleScan={handleScan} />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} lg={5}>
           <Box
             sx={{
               mb: 2,

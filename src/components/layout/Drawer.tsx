@@ -21,6 +21,7 @@ import ListItemButton, {
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import ConfirmationNumberRoundedIcon from "@mui/icons-material/ConfirmationNumberRounded";
 import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
@@ -151,7 +152,10 @@ const DrawerLeft: React.VFC = () => {
               </List>
               <List subheader={<ListSubheader>エントランス</ListSubheader>}>
                 <StyledListItemButton
-                  selected={path === `/entrance/reserve-check`}
+                  selected={
+                    path === `/entrance/reserve-check` ||
+                    path === `/entrance/enter`
+                  }
                   onClick={() => navigate("/entrance/reserve-check")}
                 >
                   <ListItemIcon>
@@ -167,6 +171,15 @@ const DrawerLeft: React.VFC = () => {
                     <LogoutRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="退場スキャン" />
+                </StyledListItemButton>
+                <StyledListItemButton
+                  selected={path === `/entrance/other-enter`}
+                  onClick={() => navigate("/entrance/other-enter")}
+                >
+                  <ListItemIcon>
+                    <ConfirmationNumberRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="保護者以外の入場" />
                 </StyledListItemButton>
               </List>
             </>

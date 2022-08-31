@@ -26,7 +26,6 @@ import {
   ListItemIcon,
   ListItemText,
   Snackbar,
-  Skeleton,
   Tooltip,
   CircularProgress,
 } from "@mui/material";
@@ -55,7 +54,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   const setTitle = useSetAtom(pageTitleAtom);
   const { exhibitId } = useParams() as { exhibitId: string };
   const navigate = useNavigate();
-  const { largerThanMD } = useDeviceWidth();
+  const { largerThanSM, largerThanMD } = useDeviceWidth();
   const profile = useAtomValue(profileAtom);
   const token = useAtomValue(tokenAtom);
   const [text, setText] = useState<string>("");
@@ -63,6 +62,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
     "waiting"
   );
   const [loading, setLoading] = useState<boolean>(false);
+  const [registerLoading, setRegisterLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [capacity, setCapacity] = useState<number>(0);
   const [currentCount, setCurrentCount] = useState<number>(0);
@@ -117,11 +117,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   };
 
   useEffect(() => {
-    setGuestInfo(null);
-    setAlertMessage(null);
+    reset();
     updateExhibitInfo();
-    setShowScanGuide(true);
-    setGuideMessage("来場者のQRコードを水平にかざしてください");
   }, [scanType]);
 
   const handleScan = (scanText: string | null) => {
@@ -289,6 +286,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   const reset = () => {
     setDeviceState(true);
     setText("");
+    setGuestInfo(null);
     setAlertMessage(null);
     setSnackbarMessage(null);
     setScanStatus("waiting");
@@ -311,6 +309,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   const GuestInfoCard: React.VFC = () => {
     const registerSession = () => {
       if (token && profile && guestInfo) {
+        setRegisterLoading(true);
         const payload = {
           guest_id: text,
           exhibit_id: exhibitId,
@@ -344,6 +343,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             setDeviceState(true);
             setSMDrawerStatus(false);
             setShowScanGuide(true);
+            setRegisterLoading(false);
           });
       }
     };
@@ -397,9 +397,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
               m={1}
               sx={{
                 display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                gap: "1rem",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <Button
@@ -410,9 +409,24 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
               >
                 スキャンし直す
               </Button>
-              <Button variant="contained" onClick={registerSession}>
-                {scanType === "enter" ? "入室記録" : "退室記録"}
-              </Button>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  alignItems: "center",
+                }}
+              >
+                {registerLoading && (
+                  <CircularProgress size={25} thickness={6} />
+                )}
+                <Button
+                  variant="contained"
+                  onClick={registerSession}
+                  disabled={registerLoading}
+                >
+                  {scanType === "enter" ? "入室記録" : "退室記録"}
+                </Button>
+              </Box>
             </Box>
           </Card>
         )}
@@ -439,83 +453,83 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
                 </Typography>
               </Grid>
-              <Grid item flexGrow={1} xs={12} sm>
-                <Grid
-                  container
-                  spacing={2}
-                  sx={{
-                    flexWrap: "nowrap",
-                    justifyContent: "flex-end",
-                    xs: { overflowX: "scroll" },
-                  }}
-                >
-                  <Grid item>
-                    <Button
-                      size="small"
-                      startIcon={<PublishedWithChangesRoundedIcon />}
-                      onClick={() =>
-                        navigate(
-                          `/exhibit/${exhibitId || "unknown"}/${
-                            scanType === "enter" ? "exit" : "enter"
-                          } `,
-                          { replace: true }
-                        )
-                      }
-                    >
-                      {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
-                    </Button>
-                  </Grid>
+              <Grid
+                item
+                flexGrow={1}
+                xs={12}
+                sm
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  overflowX: "scroll",
+                  flexDirection: "row",
+                  justifyContent: largerThanSM ? "flex-end" : "flex-start",
+                  alignItems: "center",
+                  whiteSpace: "nowrap",
+                  p: 0,
+                  pb: largerThanSM ? 0 : 1,
+                }}
+              >
+                <Box sx={{ display: "flex", gap: 1 }}>
+                  <Button
+                    startIcon={<PublishedWithChangesRoundedIcon />}
+                    onClick={() =>
+                      navigate(
+                        `/exhibit/${exhibitId || "unknown"}/${
+                          scanType === "enter" ? "exit" : "enter"
+                        } `,
+                        { replace: true }
+                      )
+                    }
+                  >
+                    {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
+                  </Button>
                   {profile &&
                     ["moderator", "exhibit"].includes(profile.user_type) && (
-                      <Grid item>
-                        <Button
-                          size="small"
-                          startIcon={<BarChartRoundedIcon />}
-                          onClick={() =>
-                            navigate(`/analytics/exhibit/${exhibitId}`, {
-                              replace: true,
-                            })
-                          }
-                        >
-                          滞在状況
-                        </Button>
-                      </Grid>
+                      <Button
+                        startIcon={<BarChartRoundedIcon />}
+                        onClick={() =>
+                          navigate(`/analytics/exhibit/${exhibitId}`, {
+                            replace: true,
+                          })
+                        }
+                      >
+                        滞在状況
+                      </Button>
                     )}
                   {profile &&
                     ["moderator", "executive"].includes(profile.user_type) && (
-                      <Grid item>
-                        <Button
-                          size="small"
-                          startIcon={<ArrowBackIosNewRoundedIcon />}
-                          onClick={() =>
-                            navigate("/exhibit", { replace: true })
-                          }
-                        >
-                          一覧に戻る
-                        </Button>
-                      </Grid>
+                      <Button
+                        startIcon={<ArrowBackIosNewRoundedIcon />}
+                        onClick={() => navigate("/exhibit", { replace: true })}
+                      >
+                        一覧に戻る
+                      </Button>
                     )}
-                </Grid>
+                </Box>
               </Grid>
             </Grid>
           </Grid>
           <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
-            <Grid
-              container
+            <Box
               sx={{
+                display: "flex",
+                gap: 2,
                 justifyContent: "space-between",
                 alignItems: "center",
                 flexWrap: "nowrap",
               }}
             >
-              <Grid item>
-                {capacity ? (
-                  <Grid
-                    container
-                    spacing={2}
-                    sx={{ alignItems: "end", flexWrap: "nowrap" }}
-                  >
-                    <Grid item>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "end",
+                  flexWrap: "nowrap",
+                }}
+              >
+                {capacity !== 0 && (
+                  <>
+                    <Box sx={{ whiteSpace: "nowrap" }}>
                       <span
                         style={{
                           fontSize: "2rem",
@@ -526,8 +540,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                         {currentCount}
                       </span>
                       <span> / {capacity} 人</span>
-                    </Grid>
-                    <Grid item>
+                    </Box>
+                    <Box>
                       <Tooltip title={`${lastUpdate.format("HH:mm:ss")}現在`}>
                         <span>
                           <IconButton
@@ -540,26 +554,22 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                           </IconButton>
                         </span>
                       </Tooltip>
-                    </Grid>
-                  </Grid>
-                ) : (
-                  <Skeleton variant="rounded" width={250} height="100%" />
+                    </Box>
+                  </>
                 )}
-              </Grid>
-              {largerThanMD && (
-                <Grid item sx={{ maxWidth: "70%" }}>
-                  <Alert severity="info">{guideMessage}</Alert>
-                </Grid>
+              </Box>
+              {largerThanSM && (
+                <Alert severity="info" sx={{ flexGrow: 1 }}>
+                  {guideMessage}
+                </Alert>
               )}
-              <Grid item>
-                <NumPad scanType="guest" onClose={onNumPadClose} />
-              </Grid>
-            </Grid>
+              <NumPad scanType="guest" onClose={onNumPadClose} />
+            </Box>
           </Grid>
           <Grid item xs={12} md="auto">
             <Scanner handleScan={handleScan} />
           </Grid>
-          <Grid item xs={12} md={6}>
+          <Grid item xs={12} md={6} lg={5}>
             <Box
               sx={{
                 mb: 2,

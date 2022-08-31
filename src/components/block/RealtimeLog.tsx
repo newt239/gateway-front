@@ -6,7 +6,9 @@ import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
 
 import {
+  Box,
   CircularProgress,
+  FormControlLabel,
   Grid,
   List,
   ListItem,
@@ -18,8 +20,10 @@ import {
 
 import { ExhibitProps } from "#/components/lib/types";
 import { handleApiError } from "#/components/lib/commonFunction";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 
 const RealtimeLog: React.VFC = () => {
+  const { largerThanSM } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
   const [exhibitList, setExhibitList] = useState<ExhibitProps[]>([]);
   const getExhibitList = () => {
@@ -85,7 +89,7 @@ const RealtimeLog: React.VFC = () => {
     }
   };
 
-  // 10秒ごとに自動で取得
+  // 15秒ごとに自動で取得
   useEffect(() => {
     if (exhibitList.length !== 0) {
       getActivityHistory();
@@ -131,15 +135,20 @@ const RealtimeLog: React.VFC = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Grid item>
-                <ListItem sx={{ p: 0 }}>
-                  <Switch
-                    edge="end"
-                    onChange={() => setMaskId((maskId) => !maskId)}
-                    checked={maskId}
+              <Grid item sx={{ px: 2 }}>
+                {largerThanSM && (
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        edge="start"
+                        onChange={() => setMaskId((maskId) => !maskId)}
+                        checked={maskId}
+                        sx={{ mr: 1 }}
+                      />
+                    }
+                    label="ゲストIDを隠す"
                   />
-                  <ListItemText>ゲストIDを隠す</ListItemText>
-                </ListItem>
+                )}
               </Grid>
               <Grid item>{lastUpdate.format("HH:mm:ss")}</Grid>
             </Grid>
@@ -152,23 +161,33 @@ const RealtimeLog: React.VFC = () => {
                   divider
                   disablePadding
                 >
-                  <Grid container sx={{ alignItems: "center" }}>
-                    <Grid item xs={2.5}>
+                  <Grid
+                    container
+                    sx={{
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <Grid item xs={3.5} sm={2}>
                       <ListItemText>
                         {moment(v.timestamp).format("HH:mm:ss")}
                       </ListItemText>
                     </Grid>
-                    <Grid item xs={4}>
-                      <ListItemText
-                        secondary={
-                          maskId ? v.guest_id.slice(0, 6) + "____" : v.guest_id
-                        }
-                        secondaryTypographyProps={{ sx: { p: 0 } }}
-                      >
-                        {v.activity_id}
-                      </ListItemText>
-                    </Grid>
-                    <Grid item xs={4}>
+                    {largerThanSM && (
+                      <Grid item sm={4}>
+                        <ListItemText
+                          secondary={
+                            maskId
+                              ? v.guest_id.slice(0, 6) + "____"
+                              : v.guest_id
+                          }
+                          secondaryTypographyProps={{ sx: { p: 0 } }}
+                        >
+                          {v.activity_id}
+                        </ListItemText>
+                      </Grid>
+                    )}
+                    <Grid item xs={7} sm={4}>
                       <ListItemText>
                         {(exhibitList &&
                           exhibitList.filter((x) => {
@@ -177,7 +196,12 @@ const RealtimeLog: React.VFC = () => {
                           "エントランス"}
                       </ListItemText>
                     </Grid>
-                    <Grid item xs={1.5}>
+                    <Grid
+                      item
+                      xs={1.5}
+                      sm={1}
+                      sx={{ whiteSpace: "nowrap", textAlign: "right" }}
+                    >
                       <ListItemText>
                         {v.activity_type === "enter" ? "入室" : "退室"}
                       </ListItemText>
@@ -188,6 +212,11 @@ const RealtimeLog: React.VFC = () => {
             </List>
           </Grid>
         </>
+      ) : loading ? (
+        <Box sx={{ display: "flex", alignItems: "center", gap: 2, p: 2 }}>
+          <CircularProgress size={25} thickness={6} />
+          <Typography variant="body1">読み込み中...</Typography>
+        </Box>
       ) : (
         <Typography variant="body1" sx={{ m: 2 }}>
           データがありません。

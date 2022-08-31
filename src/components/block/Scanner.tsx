@@ -105,10 +105,10 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
     }
   }, [location]);
 
-  // out of memory の対策として、5 分ごとに react-qr-reader を unmount して、直後に mount している
+  // out of memory の対策として、2 分 30 秒ごとに react-qr-reader を unmount して、直後に mount している
   // https://github.com/afes-website/cappuccino-app/blob/d0201aa5506e6b3aa7c3cc887171d83b0e773b18/src/components/QRScanner.tsx#L146
   const [refreshQrReader, setRefreshQrReader] = useState(true);
-  const interval = isAndroid() ? 30 * 1000 : 5 * 60 * 1000;
+  const interval = isAndroid() ? 30 * 1000 : 2.5 * 60 * 1000;
   useEffect(() => {
     const intervalId = setInterval(() => {
       setScannerStatus("loading");
@@ -177,7 +177,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
           transform: "translateY(-50%) translateX(-50%)",
         }}
       >
-        <CircularProgress color="inherit" size={64} />
+        <CircularProgress color="inherit" size={64} thickness={6} />
       </div>
     );
   };
@@ -295,9 +295,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
             </Dialog>
           </div>
         )}
-        {(refreshQrReader || ["loading"].includes(scannerStatus)) && (
-          <>{scannerStatus === "loading" && <Loading />}</>
-        )}
+        {(!refreshQrReader || scannerStatus === "loading") && <Loading />}
       </Box>
       <MessageDialog
         open={errorDialogOpen}

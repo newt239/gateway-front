@@ -54,6 +54,7 @@ const EntranceOtherEnter: React.VFC = () => {
   );
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
+  const [registerLoading, setRegisterLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
   const [snackbarMessage, setSnackbarMessage] = useState<string | null>(null);
   const [smDrawerOpen, setSMDrawerOpen] = useState<boolean>(false);
@@ -136,6 +137,7 @@ const EntranceOtherEnter: React.VFC = () => {
   const GuestInfoCard = () => {
     const registerSession = () => {
       if (token && profile && guestInfo) {
+        setRegisterLoading(true);
         apiClient(process.env.REACT_APP_API_BASE_URL)
           .activity.enter.$post({
             body: {
@@ -158,6 +160,7 @@ const EntranceOtherEnter: React.VFC = () => {
             setDeviceState(true);
             setShowScanGuide(true);
             setSMDrawerOpen(false);
+            setRegisterLoading(false);
           });
       }
     };
@@ -211,9 +214,8 @@ const EntranceOtherEnter: React.VFC = () => {
               m={1}
               sx={{
                 display: "flex",
-                justifyContent: "flex-end",
-                alignItems: "flex-end",
-                gap: "1rem",
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <Button
@@ -224,9 +226,24 @@ const EntranceOtherEnter: React.VFC = () => {
               >
                 スキャンし直す
               </Button>
-              <Button variant="contained" onClick={registerSession}>
-                入場
-              </Button>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  alignItems: "center",
+                }}
+              >
+                {registerLoading && (
+                  <CircularProgress size={25} thickness={6} />
+                )}
+                <Button
+                  variant="contained"
+                  onClick={registerSession}
+                  disabled={registerLoading}
+                >
+                  入場記録
+                </Button>
+              </Box>
             </Box>
           </Card>
         )}
@@ -240,6 +257,7 @@ const EntranceOtherEnter: React.VFC = () => {
         <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
             container
+            spacing={2}
             sx={{
               alignItems: "center",
               justifyContent: "space-between",
@@ -251,7 +269,7 @@ const EntranceOtherEnter: React.VFC = () => {
               <Typography variant="body1">
                 保護者の入場は{" "}
                 <Link component={RouterLink} to="/entrance/reserve-check">
-                  エントランス入場処理
+                  予約確認
                 </Link>{" "}
                 からスキャンしてください。
               </Typography>
@@ -269,7 +287,7 @@ const EntranceOtherEnter: React.VFC = () => {
         <Grid item xs={12} md="auto">
           <Scanner handleScan={handleScan} />
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={6} lg={5}>
           <Box
             sx={{
               mb: 2,

@@ -59,6 +59,7 @@ const NumPad: React.VFC<NumPadProps> = ({ scanType, onClose }) => {
         variant={largerThanSM ? "extended" : "circular"}
         onClick={openNumPad}
         color="primary"
+        sx={{ whiteSpace: "nowrap" }}
       >
         <ModeEditRoundedIcon sx={{ mr: largerThanSM ? 1 : 0 }} />
         {largerThanSM && "直接入力"}

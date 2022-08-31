@@ -5,16 +5,18 @@ import { tokenAtom, profileAtom, pageTitleAtom } from "#/components/lib/jotai";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
-import { Grid, Button, Typography, Card } from "@mui/material";
+import { Grid, Button, Typography, Card, Box } from "@mui/material";
 import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import { handleApiError } from "#/components/lib/commonFunction";
 import ExhibitEnterCountBarChart from "#/components/block/ExhibitEnterCountBarChart";
 import ExhibitCurrentGuestList from "#/components/block/ExhibitCurrentGuestList";
 
 const AnalyticsExhibit: React.VFC = () => {
+  const { largerThanSM } = useDeviceWidth();
   const setTitle = useSetAtom(pageTitleAtom);
   const navigate = useNavigate();
   const token = useAtomValue(tokenAtom);
@@ -71,42 +73,53 @@ const AnalyticsExhibit: React.VFC = () => {
             item
             xs={12}
             sx={{
+              width: "100%",
               display: "flex",
-              flexWrap: "nowrap",
-              justifyContent: "flex-end",
+              overflowX: "scroll",
+              flexDirection: "row",
+              justifyContent: largerThanSM ? "flex-end" : "flex-start",
+              alignItems: "center",
+              whiteSpace: "nowrap",
+              p: 0,
+              pb: largerThanSM ? 0 : 1,
             }}
           >
-            {profile?.user_type === "moderator" && (
+            <Box sx={{ display: "flex", gap: 1 }}>
+              {profile?.user_type === "moderator" && (
+                <Button
+                  startIcon={<ArrowBackIosNewRoundedIcon />}
+                  onClick={() => navigate("/exhibit/", { replace: true })}
+                >
+                  展示選択
+                </Button>
+              )}
+              {profile?.user_type === "moderator" && (
+                <Button
+                  startIcon={<ArrowBackIosNewRoundedIcon />}
+                  onClick={() =>
+                    navigate("/analytics/summary", { replace: true })
+                  }
+                >
+                  展示一覧
+                </Button>
+              )}
               <Button
-                size="small"
-                startIcon={<ArrowBackIosNewRoundedIcon />}
-                sx={{ mr: 2 }}
+                startIcon={<LoginRoundedIcon />}
                 onClick={() =>
-                  navigate("/analytics/summary", { replace: true })
+                  navigate(`/exhibit/${exhibitId}/enter`, { replace: true })
                 }
               >
-                一覧に戻る
+                入室スキャン
               </Button>
-            )}
-            <Button
-              size="small"
-              startIcon={<LoginRoundedIcon />}
-              sx={{ mr: 2 }}
-              onClick={() =>
-                navigate(`/exhibit/${exhibitId}/enter`, { replace: true })
-              }
-            >
-              入室スキャン
-            </Button>
-            <Button
-              size="small"
-              startIcon={<LogoutRoundedIcon />}
-              onClick={() =>
-                navigate(`/exhibit/${exhibitId}/exit`, { replace: true })
-              }
-            >
-              退室スキャン
-            </Button>
+              <Button
+                startIcon={<LogoutRoundedIcon />}
+                onClick={() =>
+                  navigate(`/exhibit/${exhibitId}/exit`, { replace: true })
+                }
+              >
+                退室スキャン
+              </Button>
+            </Box>
           </Grid>
           <Grid item xs={12} lg={6}>
             <ExhibitCurrentGuestList exhibit_id={exhibitId} />

@@ -183,31 +183,33 @@ const LostWristband: React.VFC = () => {
                   </ListItem>
                 </List>
               </Card>
-              <Card variant="outlined" sx={{ p: 2, mt: 2 }}>
-                <Typography variant="h4">
-                  紐付けられているリストバンド
-                </Typography>
-                <List dense>
-                  {reservation.registered.map((guest) => (
-                    <ListItem key={guest.guest_id}>
-                      <ListItemIcon>
-                        <PersonRoundedIcon />
-                      </ListItemIcon>
-                      <ListItemText>
-                        {guest.guest_id}
-                        {guest.is_spare === 1 && <span>(スペア)</span>}
-                      </ListItemText>
-                    </ListItem>
-                  ))}
-                </List>
-              </Card>
+              {reservation.registered.length !== 0 && (
+                <Card variant="outlined" sx={{ p: 2, mt: 2 }}>
+                  <Typography variant="h4">
+                    紐付けられているリストバンド
+                  </Typography>
+                  <List dense>
+                    {reservation.registered.map((guest) => (
+                      <ListItem key={guest.guest_id}>
+                        <ListItemIcon>
+                          <PersonRoundedIcon />
+                        </ListItemIcon>
+                        <ListItemText>
+                          {guest.guest_id}
+                          {guest.is_spare === 1 && <span>(スペア)</span>}
+                        </ListItemText>
+                      </ListItem>
+                    ))}
+                  </List>
+                </Card>
+              )}
             </>
           )}
         </Grid>
         {reservation && (
           <Grid item xs={12} md={6}>
             {reservation.registered.length === 0 && (
-              <Alert severity="error" variant="filled" sx={{ mt: 2 }}>
+              <Alert severity="error" variant="filled">
                 この予約IDに紐付けられたリストバンドはありません。
               </Alert>
             )}
@@ -223,7 +225,7 @@ const LostWristband: React.VFC = () => {
                     <TextField
                       id="newGuestId"
                       label="新しいゲストID"
-                      disabled={loading || !reservation}
+                      disabled={registerLoading || !reservation}
                       value={newGuestId}
                       onChange={(e) => setNewGuestId(e.target.value)}
                       margin="normal"
@@ -239,7 +241,7 @@ const LostWristband: React.VFC = () => {
                         labelId="old-guest-label"
                         id="oldGuestId"
                         value={oldGuestId}
-                        disabled={loading || !reservation}
+                        disabled={registerLoading || !reservation}
                         label="紛失したゲストID"
                         onChange={(e) => setOldGuestId(e.target.value)}
                       >

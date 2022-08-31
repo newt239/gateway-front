@@ -204,10 +204,11 @@ const EntranceEnter: React.VFC = () => {
             {0 < guestList.length && guestList.length < reservation.count && (
               <Alert
                 severity="warning"
-                sx={{ my: 1, mx: !largerThanMD ? 1 : 0 }}
+                sx={{ mt: 1, mx: !largerThanMD ? 1 : 0 }}
               >
-                同じ予約の来場者が他にもいる場合は
-                {!largerThanSM && "画面上部をタップし"}スキャンを続けてください
+                同じ予約の来場者が他にもいる場合は「すべて登録」を押さず、
+                {!largerThanSM && "画面上部をタップし"}
+                <strong>連続でスキャンしてください</strong>
               </Alert>
             )}
             <Card
@@ -253,17 +254,21 @@ const EntranceEnter: React.VFC = () => {
                     sx={{
                       display: "flex",
                       justifyContent: "flex-end",
-                      alignItems: "flex-end",
-                      gap: "1rem",
+                      alignItems: "center",
+                      gap: 2,
                     }}
                   >
+                    {loading && <CircularProgress size={25} thickness={6} />}
                     <Button
                       variant="contained"
                       onClick={registerWristband}
-                      disabled={reservation.registered
-                        .filter((guest) => guest.is_spare === 0)
-                        .map((guest) => guest.guest_id)
-                        .includes(guestList[guestList.length - 1])}
+                      disabled={
+                        loading ||
+                        reservation.registered
+                          .filter((guest) => guest.is_spare === 0)
+                          .map((guest) => guest.guest_id)
+                          .includes(guestList[guestList.length - 1])
+                      }
                     >
                       すべて登録
                     </Button>
@@ -283,6 +288,7 @@ const EntranceEnter: React.VFC = () => {
         <Grid item xs={12} sx={{ mb: largerThanMD ? 3 : 0 }}>
           <Grid
             container
+            spacing={2}
             sx={{
               alignItems: "center",
               justifyContent: "space-between",
@@ -300,21 +306,13 @@ const EntranceEnter: React.VFC = () => {
             </Grid>
           </Grid>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Grid
-            container
-            spacing={2}
-            sx={{ flexDirection: "column", alignItems: "center" }}
-          >
-            <Grid item xs={12}>
-              <Alert severity="info">{infoMessage}</Alert>
-            </Grid>
-            <Grid item xs={12}>
-              <Scanner handleScan={handleScan} />
-            </Grid>
-          </Grid>
+        <Grid item xs={12}>
+          <Alert severity="info">{infoMessage}</Alert>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md="auto">
+          <Scanner handleScan={handleScan} />
+        </Grid>
+        <Grid item xs={12} md={6} lg={5}>
           <Box
             sx={{
               mb: 2,
@@ -331,7 +329,6 @@ const EntranceEnter: React.VFC = () => {
             <Typography variant="h4" sx={{ py: 1 }}>
               ゲストID: {text}
             </Typography>
-            {loading && <CircularProgress size={30} thickness={6} />}
           </Box>
           {largerThanSM ? (
             <ReservationInfoCard />
@@ -347,10 +344,7 @@ const EntranceEnter: React.VFC = () => {
             </SwipeableDrawer>
           )}
           {reservation && (
-            <Card
-              variant="outlined"
-              sx={{ my: 1, mx: !largerThanMD ? 1 : 0, p: 2 }}
-            >
+            <Card variant="outlined" sx={{ my: 1, p: 2 }}>
               <Typography variant="h4">予約情報</Typography>
               <List>
                 <ListItem>

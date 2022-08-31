@@ -9,6 +9,7 @@ import moment, { Moment } from "moment";
 import {
   Box,
   Button,
+  CircularProgress,
   Grid,
   List,
   ListItem,
@@ -21,10 +22,13 @@ import LinearProgress, {
 } from "@mui/material/LinearProgress";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import OpenInFullRoundedIcon from "@mui/icons-material/OpenInFullRounded";
+import CloseFullscreenRoundedIcon from "@mui/icons-material/CloseFullscreenRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
+import SortByAlphaRoundedIcon from "@mui/icons-material/SortByAlphaRounded";
 
 import { handleApiError } from "#/components/lib/commonFunction";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 
 type ExhibitSummaryProps = {
   exhibit_id: string;
@@ -38,6 +42,7 @@ type ExhibitSummaryProps = {
 
 const AnalyticsSummary: React.VFC = () => {
   setTitle("展示一覧");
+  const { largerThanSM } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
   const [exhibitList, setExhibitList] = useState<ExhibitSummaryProps[]>([]);
   const [lastUpdate, setLastUpdate] = useState<Moment>(moment());
@@ -180,6 +185,7 @@ const AnalyticsSummary: React.VFC = () => {
               my: 0,
               px: 1,
               backgroundColor: "white",
+              transform: "translateZ(3px)",
             }
           : null
       }
@@ -189,43 +195,69 @@ const AnalyticsSummary: React.VFC = () => {
         xs={12}
         sx={{
           display: "flex",
-          alignItems: "center",
+          gap: 1,
+          alignItems: largerThanSM ? "center" : "flex-start",
           justifyContent: "space-between",
+          flexDirection: largerThanSM ? "row" : "column",
         }}
       >
-        <Typography variant="h2">
-          {lastUpdate.format("HH:mm:ss")} 現在
-        </Typography>
         <Box
           sx={{
             display: "flex",
-            flexDirection: "row",
+            gap: 2,
             alignItems: "center",
-            gap: ".5rem",
           }}
         >
-          <Typography variant="body1">
-            {asc ? "昇順" : "降順"}で表示中
-          </Typography>
-          <Button
-            onClick={getNowAllExhibit}
-            disabled={loading || pause}
-            startIcon={<ReplayRoundedIcon />}
-          >
-            再読み込み
-          </Button>
-          <Button
-            onClick={() => setPause((pause) => !pause)}
-            startIcon={pause ? <PlayArrowRoundedIcon /> : <PauseRoundedIcon />}
-          >
-            {pause ? "更新を再開" : "更新を停止"}
-          </Button>
-          <Button
-            onClick={() => setExpand((expand) => !expand)}
-            startIcon={<OpenInFullRoundedIcon />}
-          >
-            {expand ? "縮小" : "拡大"}
-          </Button>
+          <Typography variant="h2">{lastUpdate.format("HH:mm:ss")}</Typography>
+          {loading && <CircularProgress size={25} thickness={6} />}
+        </Box>
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            overflowX: "scroll",
+            flexDirection: "row",
+            justifyContent: largerThanSM ? "flex-end" : "flex-start",
+            alignItems: "center",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Button
+              onClick={() => setAsc((asc) => !asc)}
+              disabled={loading}
+              startIcon={<SortByAlphaRoundedIcon />}
+            >
+              {asc ? "昇順" : "降順"}
+            </Button>
+            <Button
+              onClick={getNowAllExhibit}
+              disabled={loading || pause}
+              startIcon={<ReplayRoundedIcon />}
+            >
+              再読み込み
+            </Button>
+            <Button
+              onClick={() => setPause((pause) => !pause)}
+              startIcon={
+                pause ? <PlayArrowRoundedIcon /> : <PauseRoundedIcon />
+              }
+            >
+              {pause ? "更新を再開" : "更新を停止"}
+            </Button>
+            <Button
+              onClick={() => setExpand((expand) => !expand)}
+              startIcon={
+                expand ? (
+                  <CloseFullscreenRoundedIcon />
+                ) : (
+                  <OpenInFullRoundedIcon />
+                )
+              }
+            >
+              {expand ? "縮小" : "拡大"}
+            </Button>
+          </Box>
         </Box>
       </Grid>
       <Grid item xs={12} md={3}>
