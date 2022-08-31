@@ -97,7 +97,7 @@ const AllAreaPieChart: React.VFC = () => {
         <Typography variant="h3">全体の滞在状況</Typography>
         {loading && <CircularProgress size={25} thickness={6} />}
       </Box>
-      {allAreaCount ? (
+      {allAreaCount.length !== 0 ? (
         <Box sx={{
           display: "flex",
           flexDirection: (largerThanSM && !largerThanLG) ? "row" : "column",

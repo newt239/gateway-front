@@ -72,7 +72,8 @@ const AnalyticsExhibit: React.VFC = () => {
           <Grid
             item
             xs={12}
-            sx={{
+          >
+            <Box sx={{
               width: "100%",
               display: "flex",
               overflowX: "scroll",
@@ -81,45 +82,43 @@ const AnalyticsExhibit: React.VFC = () => {
               alignItems: "center",
               whiteSpace: "nowrap",
               p: 0,
-              pb: largerThanSM ? 0 : 1,
-            }}
-          >
-            <Box sx={{ display: "flex", gap: 1 }}>
-              {profile?.user_type === "moderator" && (
+            }} >
+              <Box sx={{ display: "flex", gap: 1 }}>
+                {profile?.user_type === "moderator" && (
+                  <Button
+                    startIcon={<ArrowBackIosNewRoundedIcon />}
+                    onClick={() => navigate("/exhibit/", { replace: true })}
+                  >
+                    展示選択
+                  </Button>
+                )}
+                {profile?.user_type === "moderator" && (
+                  <Button
+                    startIcon={<ArrowBackIosNewRoundedIcon />}
+                    onClick={() =>
+                      navigate("/analytics/summary", { replace: true })
+                    }
+                  >
+                    展示一覧
+                  </Button>
+                )}
                 <Button
-                  startIcon={<ArrowBackIosNewRoundedIcon />}
-                  onClick={() => navigate("/exhibit/", { replace: true })}
-                >
-                  展示選択
-                </Button>
-              )}
-              {profile?.user_type === "moderator" && (
-                <Button
-                  startIcon={<ArrowBackIosNewRoundedIcon />}
+                  startIcon={<LoginRoundedIcon />}
                   onClick={() =>
-                    navigate("/analytics/summary", { replace: true })
+                    navigate(`/exhibit/${exhibitId}/enter`, { replace: true })
                   }
                 >
-                  展示一覧
+                  入室スキャン
                 </Button>
-              )}
-              <Button
-                startIcon={<LoginRoundedIcon />}
-                onClick={() =>
-                  navigate(`/exhibit/${exhibitId}/enter`, { replace: true })
-                }
-              >
-                入室スキャン
-              </Button>
-              <Button
-                startIcon={<LogoutRoundedIcon />}
-                onClick={() =>
-                  navigate(`/exhibit/${exhibitId}/exit`, { replace: true })
-                }
-              >
-                退室スキャン
-              </Button>
-            </Box>
+                <Button
+                  startIcon={<LogoutRoundedIcon />}
+                  onClick={() =>
+                    navigate(`/exhibit/${exhibitId}/exit`, { replace: true })
+                  }
+                >
+                  退室スキャン
+                </Button>
+              </Box></Box>
           </Grid>
           <Grid item xs={12} lg={6}>
             <ExhibitCurrentGuestList exhibit_id={exhibitId} />
