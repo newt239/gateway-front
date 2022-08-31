@@ -9,7 +9,7 @@ import RealtimeLog from "#/components/block/RealtimeLog";
 
 const AnalyticsIndex: React.VFC = () => {
   setTitle("滞在状況");
-  const { largerThanMD } = useDeviceWidth();
+  const { largerThanLG } = useDeviceWidth();
 
   return (
     <Grid
@@ -17,13 +17,14 @@ const AnalyticsIndex: React.VFC = () => {
       spacing={2}
       sx={{
         flexWrap: "nowrap",
-        flexDirection: largerThanMD ? "row" : "column-reverse",
+        flexDirection: largerThanLG ? "row" : "column-reverse",
+        justifyContent: "space-between",
       }}
     >
-      <Grid item xs={12} md={8}>
+      <Grid item xs={12} lg={7}>
         <RealtimeLog />
       </Grid>
-      <Grid item xs={12} md={4}>
+      <Grid item xs={12} lg={4}>
         <AllAreaPieChart />
       </Grid>
     </Grid>
