@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { profileAtom, setTitle } from "#/components/lib/jotai";
 
-
 import {
   Grid,
   Card,
@@ -81,7 +80,12 @@ const ExhibitIndex: React.VFC = () => {
         <Grid item xs={12} md={6} lg={4}>
           <Card variant="outlined" sx={{ height: "100%" }}>
             <CardActionArea
-              onClick={() => currentExhibit && navigate(`/analytics/exhibit/${currentExhibit}`, { replace: true })}
+              onClick={() =>
+                currentExhibit &&
+                navigate(`/analytics/exhibit/${currentExhibit}`, {
+                  replace: true,
+                })
+              }
               sx={{ height: "100%" }}
             >
               <CardContent sx={{ p: 2, height: "100%" }}>

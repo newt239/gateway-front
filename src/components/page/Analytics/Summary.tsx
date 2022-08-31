@@ -22,10 +22,10 @@ import LinearProgress, {
 } from "@mui/material/LinearProgress";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
 import OpenInFullRoundedIcon from "@mui/icons-material/OpenInFullRounded";
-import CloseFullscreenRoundedIcon from '@mui/icons-material/CloseFullscreenRounded';
+import CloseFullscreenRoundedIcon from "@mui/icons-material/CloseFullscreenRounded";
 import PauseRoundedIcon from "@mui/icons-material/PauseRounded";
 import PlayArrowRoundedIcon from "@mui/icons-material/PlayArrowRounded";
-import SortByAlphaRoundedIcon from '@mui/icons-material/SortByAlphaRounded';
+import SortByAlphaRoundedIcon from "@mui/icons-material/SortByAlphaRounded";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
@@ -177,16 +177,16 @@ const AnalyticsSummary: React.VFC = () => {
       sx={
         expand
           ? {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            height: "100vh",
-            overflowY: "scroll",
-            my: 0,
-            px: 1,
-            backgroundColor: "white",
-            transform: "translateZ(3px)",
-          }
+              position: "fixed",
+              top: 0,
+              left: 0,
+              height: "100vh",
+              overflowY: "scroll",
+              my: 0,
+              px: 1,
+              backgroundColor: "white",
+              transform: "translateZ(3px)",
+            }
           : null
       }
     >
@@ -201,27 +201,28 @@ const AnalyticsSummary: React.VFC = () => {
           flexDirection: largerThanSM ? "row" : "column",
         }}
       >
-        <Box sx={{
-          display: "flex",
-          gap: 2,
-          alignItems: "center",
-        }}>
-          <Typography variant="h2">
-            {lastUpdate.format("HH:mm:ss")}
-          </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 2,
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h2">{lastUpdate.format("HH:mm:ss")}</Typography>
           {loading && <CircularProgress size={25} thickness={6} />}
         </Box>
-        <Box sx={{
-          width: "100%",
-          display: "flex",
-          overflowX: "scroll",
-          flexDirection: "row",
-          justifyContent: largerThanSM ? "flex-end" : "flex-start",
-          alignItems: "center",
-          whiteSpace: "nowrap",
-        }}>
-          <Box sx={{ display: "flex", gap: 1 }}
-          >
+        <Box
+          sx={{
+            width: "100%",
+            display: "flex",
+            overflowX: "scroll",
+            flexDirection: "row",
+            justifyContent: largerThanSM ? "flex-end" : "flex-start",
+            alignItems: "center",
+            whiteSpace: "nowrap",
+          }}
+        >
+          <Box sx={{ display: "flex", gap: 1 }}>
             <Button
               onClick={() => setAsc((asc) => !asc)}
               disabled={loading}
@@ -238,13 +239,21 @@ const AnalyticsSummary: React.VFC = () => {
             </Button>
             <Button
               onClick={() => setPause((pause) => !pause)}
-              startIcon={pause ? <PlayArrowRoundedIcon /> : <PauseRoundedIcon />}
+              startIcon={
+                pause ? <PlayArrowRoundedIcon /> : <PauseRoundedIcon />
+              }
             >
               {pause ? "更新を再開" : "更新を停止"}
             </Button>
             <Button
               onClick={() => setExpand((expand) => !expand)}
-              startIcon={expand ? <CloseFullscreenRoundedIcon /> : <OpenInFullRoundedIcon />}
+              startIcon={
+                expand ? (
+                  <CloseFullscreenRoundedIcon />
+                ) : (
+                  <OpenInFullRoundedIcon />
+                )
+              }
             >
               {expand ? "縮小" : "拡大"}
             </Button>

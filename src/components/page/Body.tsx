@@ -32,7 +32,8 @@ const Body: React.VFC = () => {
   const [showMessageDialog, setShowMessageDialog] = useState<boolean>(false);
   const [errorDialogTitle, setErrorDialogTitle] = useState<string>("");
   const [errorDialogMessage, setErrorDialogMessage] = useState<string>("");
-  const [networkErrorDialogOpen, setNetworkErrorDialogOpen] = useState<boolean>(false);
+  const [networkErrorDialogOpen, setNetworkErrorDialogOpen] =
+    useState<boolean>(false);
 
   useEffect(() => {
     if (token) {

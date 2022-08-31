@@ -46,7 +46,8 @@ const AllAreaPieChart: React.VFC = () => {
         })
         .catch((err: AxiosError) => {
           handleApiError(err, "exhibit_info_get");
-        }).finally(() => {
+        })
+        .finally(() => {
           setLoading(false);
         });
     }
@@ -86,7 +87,9 @@ const AllAreaPieChart: React.VFC = () => {
           <Typography variant="body1">読み込み中...</Typography>
         </Box>
       ) : (
-        <Typography variant="body1" sx={{ p: 2 }}>現在校内に来場者はいません。</Typography>
+        <Typography variant="body1" sx={{ p: 2 }}>
+          現在校内に来場者はいません。
+        </Typography>
       )}
     </>
   );

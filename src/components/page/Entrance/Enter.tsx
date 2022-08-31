@@ -161,7 +161,8 @@ const EntranceEnter: React.VFC = () => {
           })
           .then(() => {
             setDialogMessage(
-              `予約ID: ${reservation.reservation_id}へ${guestList.length
+              `予約ID: ${reservation.reservation_id}へ${
+                guestList.length
               }つのリストバンド(${guestList.join(
                 ", "
               )})の紐付けが完了しました。`
@@ -206,7 +207,8 @@ const EntranceEnter: React.VFC = () => {
                 sx={{ mt: 1, mx: !largerThanMD ? 1 : 0 }}
               >
                 同じ予約の来場者が他にもいる場合は「すべて登録」を押さず、
-                {!largerThanSM && "画面上部をタップし"}<strong>連続でスキャンしてください</strong>
+                {!largerThanSM && "画面上部をタップし"}
+                <strong>連続でスキャンしてください</strong>
               </Alert>
             )}
             <Card
@@ -260,10 +262,13 @@ const EntranceEnter: React.VFC = () => {
                     <Button
                       variant="contained"
                       onClick={registerWristband}
-                      disabled={loading || reservation.registered
-                        .filter((guest) => guest.is_spare === 0)
-                        .map((guest) => guest.guest_id)
-                        .includes(guestList[guestList.length - 1])}
+                      disabled={
+                        loading ||
+                        reservation.registered
+                          .filter((guest) => guest.is_spare === 0)
+                          .map((guest) => guest.guest_id)
+                          .includes(guestList[guestList.length - 1])
+                      }
                     >
                       すべて登録
                     </Button>
@@ -339,10 +344,7 @@ const EntranceEnter: React.VFC = () => {
             </SwipeableDrawer>
           )}
           {reservation && (
-            <Card
-              variant="outlined"
-              sx={{ my: 1, p: 2 }}
-            >
+            <Card variant="outlined" sx={{ my: 1, p: 2 }}>
               <Typography variant="h4">予約情報</Typography>
               <List>
                 <ListItem>

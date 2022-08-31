@@ -295,7 +295,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
             </Dialog>
           </div>
         )}
-        {(!refreshQrReader || scannerStatus === "loading") && (<Loading />)}
+        {(!refreshQrReader || scannerStatus === "loading") && <Loading />}
       </Box>
       <MessageDialog
         open={errorDialogOpen}

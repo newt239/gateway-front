@@ -183,10 +183,10 @@ const EntranceExit: React.VFC = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -213,13 +213,21 @@ const EntranceExit: React.VFC = () => {
               >
                 スキャンし直す
               </Button>
-              <Box sx={{
-                display: "flex",
-                gap: 2,
-                alignItems: "center",
-              }}>
-                {registerLoading && <CircularProgress size={25} thickness={6} />}
-                <Button variant="contained" onClick={registerSession} disabled={registerLoading}>
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  alignItems: "center",
+                }}
+              >
+                {registerLoading && (
+                  <CircularProgress size={25} thickness={6} />
+                )}
+                <Button
+                  variant="contained"
+                  onClick={registerSession}
+                  disabled={registerLoading}
+                >
                   退場記録
                 </Button>
               </Box>

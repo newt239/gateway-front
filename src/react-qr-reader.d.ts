@@ -4,10 +4,12 @@ declare namespace QrReader {
   export interface props {
     onScan: (data: string | null) => void;
     onError: (err: unknown) => void;
-    onLoad?: ((data: { mirrorVideo: boolean; streamLabel: string; }) => void) | undefined;
+    onLoad?:
+      | ((data: { mirrorVideo: boolean; streamLabel: string }) => void)
+      | undefined;
     onImageLoad?:
-    | ((event: React.SyntheticEvent<HTMLImageElement>) => void)
-    | undefined;
+      | ((event: React.SyntheticEvent<HTMLImageElement>) => void)
+      | undefined;
     delay?: number | false | undefined;
     facingMode?: "user" | "environment" | undefined;
     legacyMode?: boolean | undefined;

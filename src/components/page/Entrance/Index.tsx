@@ -21,12 +21,16 @@ const Entrance: React.VFC = () => {
       <Grid item xs={12}>
         <Alert severity="warning">
           <AlertTitle>リストバンド紐付け処理</AlertTitle>
-          予約の人数分だけ<strong>連続でリストバンドをスキャン</strong>してから「すべて登録」を押してください。
+          予約の人数分だけ<strong>連続でリストバンドをスキャン</strong>
+          してから「すべて登録」を押してください。
         </Alert>
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Card variant="outlined" sx={{ height: "100%" }}>
-          <CardActionArea onClick={() => navigate("reserve-check")} sx={{ height: "100%" }}>
+          <CardActionArea
+            onClick={() => navigate("reserve-check")}
+            sx={{ height: "100%" }}
+          >
             <CardContent sx={{ p: 2, height: "100%" }}>
               <Typography variant="h3">入場処理</Typography>
               <Typography variant="body1" sx={{ p: 1 }}>
@@ -38,7 +42,10 @@ const Entrance: React.VFC = () => {
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Card variant="outlined" sx={{ height: "100%" }}>
-          <CardActionArea onClick={() => navigate("exit")} sx={{ height: "100%" }}>
+          <CardActionArea
+            onClick={() => navigate("exit")}
+            sx={{ height: "100%" }}
+          >
             <CardContent sx={{ p: 2, height: "100%" }}>
               <Typography variant="h3">退場処理</Typography>
               <Typography variant="body1" sx={{ p: 1 }}>
@@ -50,7 +57,10 @@ const Entrance: React.VFC = () => {
       </Grid>
       <Grid item xs={12} md={6} lg={4}>
         <Card variant="outlined" sx={{ height: "100%" }}>
-          <CardActionArea onClick={() => navigate("other-enter")} sx={{ height: "100%" }}>
+          <CardActionArea
+            onClick={() => navigate("other-enter")}
+            sx={{ height: "100%" }}
+          >
             <CardContent sx={{ p: 2, height: "100%" }}>
               <Typography variant="h3">保護者以外の入場</Typography>
               <Typography variant="body1" sx={{ p: 1 }}>

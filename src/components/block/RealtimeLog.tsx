@@ -161,7 +161,13 @@ const RealtimeLog: React.VFC = () => {
                   divider
                   disablePadding
                 >
-                  <Grid container sx={{ alignItems: "center", justifyContent: "space-between" }}>
+                  <Grid
+                    container
+                    sx={{
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <Grid item xs={3.5} sm={2}>
                       <ListItemText>
                         {moment(v.timestamp).format("HH:mm:ss")}
@@ -171,7 +177,9 @@ const RealtimeLog: React.VFC = () => {
                       <Grid item sm={4}>
                         <ListItemText
                           secondary={
-                            maskId ? v.guest_id.slice(0, 6) + "____" : v.guest_id
+                            maskId
+                              ? v.guest_id.slice(0, 6) + "____"
+                              : v.guest_id
                           }
                           secondaryTypographyProps={{ sx: { p: 0 } }}
                         >
@@ -188,7 +196,12 @@ const RealtimeLog: React.VFC = () => {
                           "エントランス"}
                       </ListItemText>
                     </Grid>
-                    <Grid item xs={1.5} sm={1} sx={{ whiteSpace: "nowrap", textAlign: "right" }}>
+                    <Grid
+                      item
+                      xs={1.5}
+                      sm={1}
+                      sx={{ whiteSpace: "nowrap", textAlign: "right" }}
+                    >
                       <ListItemText>
                         {v.activity_type === "enter" ? "入室" : "退室"}
                       </ListItemText>

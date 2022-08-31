@@ -35,7 +35,8 @@ const Login: React.VFC = () => {
   const [userIdValue, setUserIdValue] = useState<string>("");
   const [passwordValue, setPasswordValue] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [networkErrorDialogOpen, setNetworkErrorDialogOpen] = useState<boolean>(false);
+  const [networkErrorDialogOpen, setNetworkErrorDialogOpen] =
+    useState<boolean>(false);
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   useEffect(() => {
@@ -127,7 +128,9 @@ const Login: React.VFC = () => {
                         label="パスワード"
                         type={showPassword ? "text" : "password"}
                         autoComplete="current-password"
-                        onChange={(event) => setPasswordValue(event.target.value)}
+                        onChange={(event) =>
+                          setPasswordValue(event.target.value)
+                        }
                         onKeyPress={(e) => {
                           if (e.key === "Enter") {
                             login();
@@ -139,12 +142,20 @@ const Login: React.VFC = () => {
                             <InputAdornment position="end">
                               <IconButton
                                 aria-label="パスワードの表示を切り替える"
-                                onClick={() => setShowPassword((showPassword) => !showPassword)}
+                                onClick={() =>
+                                  setShowPassword(
+                                    (showPassword) => !showPassword
+                                  )
+                                }
                               >
-                                {showPassword ? <Visibility /> : <VisibilityOff />}
+                                {showPassword ? (
+                                  <Visibility />
+                                ) : (
+                                  <VisibilityOff />
+                                )}
                               </IconButton>
                             </InputAdornment>
-                          )
+                          ),
                         }}
                       />
                     </Grid>
@@ -168,7 +179,9 @@ const Login: React.VFC = () => {
                         }}
                         variant="outlined"
                         disabled={
-                          userIdValue.length === 0 || passwordValue.length === 0 || loading
+                          userIdValue.length === 0 ||
+                          passwordValue.length === 0 ||
+                          loading
                         }
                         size="large"
                         startIcon={<LoginRoundedIcon />}
@@ -218,7 +231,9 @@ const Login: React.VFC = () => {
                   <IosShareIcon sx={{ verticalAlign: -5 }} />{" "}
                   から「ホーム画面に追加」をタップ
                 </li>
-                <li>ホーム画面に追加された「Gateway」アイコンをタップして起動</li>
+                <li>
+                  ホーム画面に追加された「Gateway」アイコンをタップして起動
+                </li>
               </ol>
             </Card>
           </Grid>

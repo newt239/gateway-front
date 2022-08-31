@@ -66,10 +66,10 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                    ? "教員"
-                    : v.guest_type === "family"
-                      ? "保護者"
-                      : "その他",
+                  ? "教員"
+                  : v.guest_type === "family"
+                  ? "保護者"
+                  : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:mm:ss"),
             };
           });
@@ -77,7 +77,8 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
         })
         .catch((err: AxiosError) => {
           handleApiError(err, "exhibit_current_each_get");
-        }).finally(() => {
+        })
+        .finally(() => {
           setDataLoading(false);
         });
     }
@@ -115,7 +116,8 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
         .catch((err: AxiosError) => {
           handleApiError(err, "activity_exit_post");
           setSnackbarMessage("一括退場処理に失敗しました。");
-        }).finally(() => {
+        })
+        .finally(() => {
           setDialogOpen(false);
           setBatchExitLoading(false);
         });
@@ -139,7 +141,11 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
             <CircularProgress size={25} thickness={6} sx={{ mx: 2 }} />
           )}
           <Button onClick={onClose}>閉じる</Button>
-          <Button onClick={leaveGuest} color="error" disabled={batchExitLoading}>
+          <Button
+            onClick={leaveGuest}
+            color="error"
+            disabled={batchExitLoading}
+          >
             実行
           </Button>
         </DialogActions>
@@ -150,18 +156,24 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
   return (
     <>
       <Grid container spacing={1} sx={{ width: "100%" }}>
-        <Grid item xs={12} sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: largerThanSM ? "center" : "flex-start",
-          flexDirection: largerThanSM ? "row" : "column",
-          gap: 2,
-        }}>
+        <Grid
+          item
+          xs={12}
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: largerThanSM ? "center" : "flex-start",
+            flexDirection: largerThanSM ? "row" : "column",
+            gap: 2,
+          }}
+        >
           <Box sx={{ display: "flex", gap: 1 }}>
             <Typography variant="h3">滞在中のゲスト一覧</Typography>
-            {dataLoading && (<CircularProgress size={25} thickness={6} />)}
+            {dataLoading && <CircularProgress size={25} thickness={6} />}
           </Box>
-          <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}>
+          <Box
+            sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
+          >
             <Button
               disabled={selectedGuestList.length === 0}
               variant="outlined"

@@ -88,9 +88,7 @@ const AnalyticsExhibit: React.VFC = () => {
               {profile?.user_type === "moderator" && (
                 <Button
                   startIcon={<ArrowBackIosNewRoundedIcon />}
-                  onClick={() =>
-                    navigate("/exhibit/", { replace: true })
-                  }
+                  onClick={() => navigate("/exhibit/", { replace: true })}
                 >
                   展示選択
                 </Button>

@@ -21,7 +21,7 @@ import ListItemButton, {
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import ConfirmationNumberRoundedIcon from '@mui/icons-material/ConfirmationNumberRounded';
+import ConfirmationNumberRoundedIcon from "@mui/icons-material/ConfirmationNumberRounded";
 import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
@@ -152,7 +152,10 @@ const DrawerLeft: React.VFC = () => {
               </List>
               <List subheader={<ListSubheader>エントランス</ListSubheader>}>
                 <StyledListItemButton
-                  selected={path === `/entrance/reserve-check` || path === `/entrance/enter`}
+                  selected={
+                    path === `/entrance/reserve-check` ||
+                    path === `/entrance/enter`
+                  }
                   onClick={() => navigate("/entrance/reserve-check")}
                 >
                   <ListItemIcon>
