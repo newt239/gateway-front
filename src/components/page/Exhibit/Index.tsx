@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAtomValue } from "jotai";
 import { profileAtom, setTitle } from "#/components/lib/jotai";
@@ -19,7 +19,11 @@ const ExhibitIndex: React.VFC = () => {
   setTitle("展示選択");
   const navigate = useNavigate();
   const profile = useAtomValue(profileAtom);
-  const [currentExhibit, setCurrentExhibit] = useState<string>("");
+  const [currentExhibit, setCurrentExhibit] = useState<string>(localStorage.getItem("currentExhibit") || "");
+
+  useEffect(() => {
+    localStorage.setItem("currentExhibit", currentExhibit);
+  }, [currentExhibit]);
 
   return (
     <Grid container spacing={2}>

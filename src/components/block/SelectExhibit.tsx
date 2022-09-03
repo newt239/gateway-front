@@ -46,10 +46,14 @@ const SelectExhibit: React.VFC<SelectExhibitProps> = ({
               (v) => v.exhibit_type === "stage" || v.exhibit_type === "other"
             );
             setExhibitList(executiveExhibitList);
-            setCurrentExhibit(executiveExhibitList[0].exhibit_id);
+            if (currentExhibit === "") {
+              setCurrentExhibit(executiveExhibitList[0].exhibit_id);
+            }
           } else {
             setExhibitList(res);
-            setCurrentExhibit(res[0].exhibit_id);
+            if (currentExhibit === "") {
+              setCurrentExhibit(res[0].exhibit_id);
+            }
           }
           ReactGA.event({
             category: "exhibit",
