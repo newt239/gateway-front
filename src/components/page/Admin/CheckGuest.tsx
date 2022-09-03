@@ -176,32 +176,36 @@ const AdminCheckGuest: React.VFC = () => {
           <Grid item xs={12} md={6}>
             <Card variant="outlined" sx={{ p: 2 }}>
               <Typography variant="h3">行動履歴</Typography>
-              <Timeline position="alternate">
-                {guestActivity.map((v, i) => {
-                  return (
-                    <TimelineItem key={i}>
-                      <TimelineOppositeContent color="text.secondary">
-                        {v.datetime.format("MM/DD HH:mm:ss")}
-                      </TimelineOppositeContent>
-                      <TimelineSeparator>
-                        <TimelineDot color="primary" />
+              {guestActivity.length === 0 ? (
+                <Typography variant="body1" sx={{ p: 2 }}>このゲストの入退室記録がありません。</Typography>
+              ) : (
+                <Timeline position="alternate">
+                  {guestActivity.map((v, i) => {
+                    return (
+                      <TimelineItem key={i}>
+                        <TimelineOppositeContent color="text.secondary">
+                          {v.datetime.format("MM/DD HH:mm:ss")}
+                        </TimelineOppositeContent>
+                        <TimelineSeparator>
+                          <TimelineDot color="primary" />
+                          {v.activity_type === "enter" ? (
+                            <TimelineConnector sx={{ bgcolor: "primary.main" }} />
+                          ) : (
+                            <TimelineConnector />
+                          )}
+                        </TimelineSeparator>
                         {v.activity_type === "enter" ? (
-                          <TimelineConnector sx={{ bgcolor: "primary.main" }} />
+                          <TimelineContent>
+                            {getExhibitName(v.exhibit_id)}
+                          </TimelineContent>
                         ) : (
-                          <TimelineConnector />
+                          <TimelineContent>退室</TimelineContent>
                         )}
-                      </TimelineSeparator>
-                      {v.activity_type === "enter" ? (
-                        <TimelineContent>
-                          {getExhibitName(v.exhibit_id)}
-                        </TimelineContent>
-                      ) : (
-                        <TimelineContent>退室</TimelineContent>
-                      )}
-                    </TimelineItem>
-                  );
-                })}
-              </Timeline>
+                      </TimelineItem>
+                    );
+                  })}
+                </Timeline>
+              )}
             </Card>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -230,10 +234,10 @@ const AdminCheckGuest: React.VFC = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                      ? "生徒"
-                      : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : "その他"}
+                        ? "生徒"
+                        : guestInfo.guest_type === "teacher"
+                          ? "教員"
+                          : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>

@@ -216,12 +216,11 @@ const EntranceEnter: React.VFC = () => {
               sx={{ my: 1, mx: !largerThanMD ? 1 : 0, p: 2 }}
             >
               <Typography variant="h4">リストバンド</Typography>
-              {guestList.length === 0 && (
+              {guestList.length === 0 ? (
                 <Typography variant="body1" sx={{ p: 2 }}>
                   ここに予約と紐づけるリストバンドのIDが表示されます
                 </Typography>
-              )}
-              {guestList.length !== 0 && (
+              ) : (
                 <>
                   <List dense>
                     {guestList.map((guest, index) => (

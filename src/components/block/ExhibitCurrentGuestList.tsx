@@ -199,6 +199,7 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
             onSelectionModelChange={(newSelection) => {
               setSelectedGuestList(newSelection);
             }}
+            pageSize={25}
             localeText={{
               ...jaJP.components.MuiDataGrid.defaultProps.localeText,
               noRowsLabel: "現在この展示に滞在中のゲストはいません。",
