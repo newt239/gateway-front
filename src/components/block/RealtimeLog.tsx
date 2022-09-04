@@ -66,9 +66,6 @@ const RealtimeLog: React.VFC = () => {
         })
         .then((res) => {
           const newActivityList = res
-            .map((v) => {
-              return { ...v, activity_type: "enter" };
-            })
             .sort((a, b) => {
               if (a.timestamp < b.timestamp) {
                 return 1;
