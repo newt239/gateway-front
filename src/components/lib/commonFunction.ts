@@ -67,7 +67,7 @@ export const reservationIdValidation = (reservation_id: string) => {
 export const handleApiError = (error: AxiosError, name: string) => {
   console.log(error);
   const env = process.env.REACT_APP_ENV;
-  if (env && (env === "production" || env === "develop")) {
+  if (env && (env === "production" || env === "develop") && error?.code !== "401") {
     ReactGA.event({
       category: `error_${name}`,
       action: error.message,
