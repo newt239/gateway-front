@@ -34,6 +34,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
+import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 
 import {
   getTimePart,
@@ -216,12 +217,11 @@ const EntranceEnter: React.VFC = () => {
               sx={{ my: 1, mx: !largerThanMD ? 1 : 0, p: 2 }}
             >
               <Typography variant="h4">リストバンド</Typography>
-              {guestList.length === 0 && (
+              {guestList.length === 0 ? (
                 <Typography variant="body1" sx={{ p: 2 }}>
                   ここに予約と紐づけるリストバンドのIDが表示されます
                 </Typography>
-              )}
-              {guestList.length !== 0 && (
+              ) : (
                 <>
                   <List dense>
                     {guestList.map((guest, index) => (
@@ -342,6 +342,17 @@ const EntranceEnter: React.VFC = () => {
             >
               <ReservationInfoCard />
             </SwipeableDrawer>
+          )}
+          {!largerThanSM && (
+            <Box sx={{ textAlign: "center", mb: 2 }}>
+              <Button
+                variant="text"
+                onClick={() => setSMDrawerOpen(true)}
+                startIcon={<AssignmentRoundedIcon />}
+              >
+                スキャンしたリストバンドを表示
+              </Button>
+            </Box>
           )}
           {reservation && (
             <Card variant="outlined" sx={{ my: 1, p: 2 }}>

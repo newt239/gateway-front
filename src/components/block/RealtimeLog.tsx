@@ -6,7 +6,6 @@ import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
 
 import {
-  Box,
   CircularProgress,
   FormControlLabel,
   Grid,
@@ -66,17 +65,13 @@ const RealtimeLog: React.VFC = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          const newActivityList = res
-            .map((v) => {
-              return { ...v, activity_type: "enter" };
-            })
-            .sort((a, b) => {
-              if (a.timestamp < b.timestamp) {
-                return 1;
-              } else {
-                return -1;
-              }
-            });
+          const newActivityList = res.sort((a, b) => {
+            if (a.timestamp < b.timestamp) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
           setActivityList([...activityList, ...newActivityList]);
           setLastUpdate(moment());
         })
@@ -106,24 +101,20 @@ const RealtimeLog: React.VFC = () => {
 
   return (
     <Grid container>
-      <Grid item xs={12}>
-        <Grid
-          container
-          sx={{
-            alignItems: "center",
-            justifyContent: "space-between",
-            height: 30,
-          }}
-        >
-          <Grid item>
-            <Tooltip title="15秒更新">
-              <Typography variant="h3">リアルタイムログ</Typography>
-            </Tooltip>
-          </Grid>
-          <Grid item>
-            {loading && <CircularProgress size={25} thickness={6} />}
-          </Grid>
-        </Grid>
+      <Grid
+        item
+        xs={12}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: 30,
+        }}
+      >
+        <Tooltip title="15秒更新">
+          <Typography variant="h3">リアルタイムログ</Typography>
+        </Tooltip>
+        {loading && <CircularProgress size={25} thickness={6} />}
       </Grid>
       {activityList.length !== 0 ? (
         <>
@@ -176,14 +167,12 @@ const RealtimeLog: React.VFC = () => {
                     {largerThanSM && (
                       <Grid item sm={4}>
                         <ListItemText
-                          secondary={
-                            maskId
-                              ? v.guest_id.slice(0, 6) + "____"
-                              : v.guest_id
-                          }
-                          secondaryTypographyProps={{ sx: { p: 0 } }}
+                          secondary={v.activity_id}
+                          secondaryTypographyProps={{ p: 0 }}
                         >
-                          {v.activity_id}
+                          {maskId
+                            ? v.guest_id.slice(0, 6) + "____"
+                            : v.guest_id}
                         </ListItemText>
                       </Grid>
                     )}
@@ -213,10 +202,9 @@ const RealtimeLog: React.VFC = () => {
           </Grid>
         </>
       ) : loading ? (
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, p: 2 }}>
-          <CircularProgress size={25} thickness={6} />
-          <Typography variant="body1">読み込み中...</Typography>
-        </Box>
+        <Typography variant="body1" sx={{ p: 2 }}>
+          読み込み中...
+        </Typography>
       ) : (
         <Typography variant="body1" sx={{ m: 2 }}>
           データがありません。

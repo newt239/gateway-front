@@ -453,59 +453,60 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
                 </Typography>
               </Grid>
-              <Grid
-                item
-                flexGrow={1}
-                xs={12}
-                sm
-                sx={{
-                  width: "100%",
-                  display: "flex",
-                  overflowX: "scroll",
-                  flexDirection: "row",
-                  justifyContent: largerThanSM ? "flex-end" : "flex-start",
-                  alignItems: "center",
-                  whiteSpace: "nowrap",
-                  p: 0,
-                  pb: largerThanSM ? 0 : 1,
-                }}
-              >
-                <Box sx={{ display: "flex", gap: 1 }}>
-                  <Button
-                    startIcon={<PublishedWithChangesRoundedIcon />}
-                    onClick={() =>
-                      navigate(
-                        `/exhibit/${exhibitId || "unknown"}/${
-                          scanType === "enter" ? "exit" : "enter"
-                        } `,
-                        { replace: true }
-                      )
-                    }
-                  >
-                    {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
-                  </Button>
-                  {profile &&
-                    ["moderator", "exhibit"].includes(profile.user_type) && (
-                      <Button
-                        startIcon={<BarChartRoundedIcon />}
-                        onClick={() =>
-                          navigate(`/analytics/exhibit/${exhibitId}`, {
-                            replace: true,
-                          })
-                        }
-                      >
-                        滞在状況
-                      </Button>
-                    )}
-                  {profile &&
-                    ["moderator", "executive"].includes(profile.user_type) && (
-                      <Button
-                        startIcon={<ArrowBackIosNewRoundedIcon />}
-                        onClick={() => navigate("/exhibit", { replace: true })}
-                      >
-                        一覧に戻る
-                      </Button>
-                    )}
+              <Grid item flexGrow={1} xs={12} sm>
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    overflowX: "scroll",
+                    flexDirection: "row",
+                    justifyContent: largerThanSM ? "flex-end" : "flex-start",
+                    alignItems: "center",
+                    whiteSpace: "nowrap",
+                    p: 0,
+                  }}
+                >
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <Button
+                      startIcon={<PublishedWithChangesRoundedIcon />}
+                      onClick={() =>
+                        navigate(
+                          `/exhibit/${exhibitId || "unknown"}/${
+                            scanType === "enter" ? "exit" : "enter"
+                          } `,
+                          { replace: true }
+                        )
+                      }
+                    >
+                      {scanType === "enter" ? "退室スキャン" : "入室スキャン"}
+                    </Button>
+                    {profile &&
+                      ["moderator", "exhibit"].includes(profile.user_type) && (
+                        <Button
+                          startIcon={<BarChartRoundedIcon />}
+                          onClick={() =>
+                            navigate(`/analytics/exhibit/${exhibitId}`, {
+                              replace: true,
+                            })
+                          }
+                        >
+                          滞在状況
+                        </Button>
+                      )}
+                    {profile &&
+                      ["moderator", "executive"].includes(
+                        profile.user_type
+                      ) && (
+                        <Button
+                          startIcon={<ArrowBackIosNewRoundedIcon />}
+                          onClick={() =>
+                            navigate("/exhibit", { replace: true })
+                          }
+                        >
+                          一覧に戻る
+                        </Button>
+                      )}
+                  </Box>
                 </Box>
               </Grid>
             </Grid>

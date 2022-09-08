@@ -6,20 +6,30 @@ import apiClient from "#/axios-config";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-import { Typography, Box, CircularProgress } from "@mui/material";
+import {
+  Typography,
+  Box,
+  CircularProgress,
+  List,
+  ListItem,
+} from "@mui/material";
 
 import { handleApiError } from "#/components/lib/commonFunction";
+import useDeviceWidth from "#/components/lib/useDeviceWidth";
 
 const AllAreaPieChart: React.VFC = () => {
+  const { largerThanSM, largerThanLG } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
-  const [allAreaTotalCount, setAllAreaTotalCount] = useState<number>(0);
+  const [allAreaCount, setAllAreaCount] = useState<
+    { guest_type: string; count: number }[]
+  >([]);
   const [allAreaChartCategories, setAllAreaChartCategories] = useState<
     string[]
   >(["保護者", "生徒", "教員"]);
   const [allAreaChartSeries, setAllAreaChartSeries] = useState<number[]>([0]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
+  const getAllAreaInfo = () => {
     if (token) {
       setLoading(true);
       apiClient(process.env.REACT_APP_API_BASE_URL)
@@ -27,7 +37,7 @@ const AllAreaPieChart: React.VFC = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          setAllAreaTotalCount(res.reduce((a, c) => a + c.count, 0));
+          setAllAreaCount(res);
           setAllAreaChartCategories(
             res.map((v) => {
               switch (v.guest_type) {
@@ -51,6 +61,17 @@ const AllAreaPieChart: React.VFC = () => {
           setLoading(false);
         });
     }
+  };
+
+  // 15秒ごとに自動で取得
+  useEffect(() => {
+    getAllAreaInfo();
+    const intervalId = setInterval(() => {
+      getAllAreaInfo();
+    }, 5 * 60 * 1000);
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   const options: ApexOptions = {
@@ -65,27 +86,86 @@ const AllAreaPieChart: React.VFC = () => {
     },
   };
 
+  const EachGuestTypeListItem: React.VFC<{
+    guest_type: string;
+    type_name: string;
+  }> = ({ guest_type, type_name }) => {
+    return (
+      <ListItem
+        divider
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="body1">{type_name}</Typography>
+        <Typography variant="body1">
+          <span style={{ fontSize: "1.5rem", fontWeight: 800 }}>
+            {allAreaCount.filter((v) => v.guest_type === guest_type)[0]
+              ?.count || 0}
+          </span>{" "}
+          人
+        </Typography>
+      </ListItem>
+    );
+  };
   return (
     <>
-      <Typography variant="h3">全体の滞在状況</Typography>
-      {allAreaTotalCount ? (
-        <>
-          <Typography sx={{ p: 2 }}>
-            校内滞在者数 {allAreaTotalCount}人
-          </Typography>
-          <Box sx={{ margin: "auto" }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: 30,
+        }}
+      >
+        <Typography variant="h3">全体の滞在状況</Typography>
+        {loading && <CircularProgress size={25} thickness={6} />}
+      </Box>
+      {allAreaCount.length !== 0 ? (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: largerThanSM && !largerThanLG ? "row" : "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Box sx={{ flexGrow: 1 }}>
             <ReactApexChart
               options={options}
               series={allAreaChartSeries}
               type="pie"
             />
           </Box>
-        </>
-      ) : loading ? (
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2, p: 2 }}>
-          <CircularProgress size={25} thickness={6} />
-          <Typography variant="body1">読み込み中...</Typography>
+          <List dense sx={{ width: "100%", maxWidth: 350 }}>
+            <EachGuestTypeListItem guest_type="family" type_name="保護者" />
+            <EachGuestTypeListItem guest_type="student" type_name="生徒" />
+            <EachGuestTypeListItem guest_type="teacher" type_name="教員" />
+            <EachGuestTypeListItem guest_type="other" type_name="その他" />
+            <ListItem
+              divider
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h4">総数</Typography>
+              <Typography variant="body1">
+                <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+                  {allAreaCount.reduce((a, c) => a + c.count, 0) || 0}
+                </span>{" "}
+                人
+              </Typography>
+            </ListItem>
+          </List>
         </Box>
+      ) : loading ? (
+        <Typography variant="body1" sx={{ p: 2 }}>
+          読み込み中...
+        </Typography>
       ) : (
         <Typography variant="body1" sx={{ p: 2 }}>
           現在校内に来場者はいません。

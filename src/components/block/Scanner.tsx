@@ -82,7 +82,7 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
       )
       .then((devices) => {
         setDeviceList(devices);
-        if (currentDeviceId === "") {
+        if (currentDeviceId === "" && devices.length !== 0) {
           setCurrentDeviceId(devices[0].deviceId);
         }
       })
@@ -105,10 +105,10 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
     }
   }, [location]);
 
-  // out of memory の対策として、2 分 30 秒ごとに react-qr-reader を unmount して、直後に mount している
+  // out of memory の対策として、2 分ごとに react-qr-reader を unmount して、直後に mount している
   // https://github.com/afes-website/cappuccino-app/blob/d0201aa5506e6b3aa7c3cc887171d83b0e773b18/src/components/QRScanner.tsx#L146
   const [refreshQrReader, setRefreshQrReader] = useState(true);
-  const interval = isAndroid() ? 30 * 1000 : 2.5 * 60 * 1000;
+  const interval = isAndroid() ? 30 * 1000 : 2 * 60 * 1000;
   useEffect(() => {
     const intervalId = setInterval(() => {
       setScannerStatus("loading");
@@ -150,6 +150,9 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
           reason =
             "カメラを使用する権限がありません。お使いのブラウザの設定を確認してください。";
           break;
+        case "NotFoundError":
+          reason = "この端末には利用可能なカメラがありません。";
+          break;
         case "OverconstrainedError":
           reason = "この端末には利用可能なカメラがありません。";
           break;
@@ -183,7 +186,6 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   };
 
   const onClickChangeCameraIcon = () => {
-    setScannerStatus("loading");
     getCameraDeviceList();
     if (deviceList.length === 2) {
       const newCurrentDevice = deviceList.find((v) => {
@@ -197,10 +199,10 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
           newCurrentDevice.deviceId
         );
         setCurrentDeviceId(newCurrentDevice.deviceId);
+        setScannerStatus("loading");
         setRefreshQrReader(false);
       }
     } else {
-      setScannerStatus("waiting");
       setSelectCameraModalOpen(true);
     }
   };

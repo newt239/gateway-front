@@ -69,56 +69,55 @@ const AnalyticsExhibit: React.VFC = () => {
         </Grid>
       ) : (
         <Grid container spacing={2}>
-          <Grid
-            item
-            xs={12}
-            sx={{
-              width: "100%",
-              display: "flex",
-              overflowX: "scroll",
-              flexDirection: "row",
-              justifyContent: largerThanSM ? "flex-end" : "flex-start",
-              alignItems: "center",
-              whiteSpace: "nowrap",
-              p: 0,
-              pb: largerThanSM ? 0 : 1,
-            }}
-          >
-            <Box sx={{ display: "flex", gap: 1 }}>
-              {profile?.user_type === "moderator" && (
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                overflowX: "scroll",
+                flexDirection: "row",
+                justifyContent: largerThanSM ? "flex-end" : "flex-start",
+                alignItems: "center",
+                whiteSpace: "nowrap",
+                p: 0,
+              }}
+            >
+              <Box sx={{ display: "flex", gap: 1 }}>
+                {profile?.user_type === "moderator" && (
+                  <Button
+                    startIcon={<ArrowBackIosNewRoundedIcon />}
+                    onClick={() => navigate("/exhibit/", { replace: true })}
+                  >
+                    展示選択
+                  </Button>
+                )}
+                {profile?.user_type === "moderator" && (
+                  <Button
+                    startIcon={<ArrowBackIosNewRoundedIcon />}
+                    onClick={() =>
+                      navigate("/analytics/summary", { replace: true })
+                    }
+                  >
+                    展示一覧
+                  </Button>
+                )}
                 <Button
-                  startIcon={<ArrowBackIosNewRoundedIcon />}
-                  onClick={() => navigate("/exhibit/", { replace: true })}
-                >
-                  展示選択
-                </Button>
-              )}
-              {profile?.user_type === "moderator" && (
-                <Button
-                  startIcon={<ArrowBackIosNewRoundedIcon />}
+                  startIcon={<LoginRoundedIcon />}
                   onClick={() =>
-                    navigate("/analytics/summary", { replace: true })
+                    navigate(`/exhibit/${exhibitId}/enter`, { replace: true })
                   }
                 >
-                  展示一覧
+                  入室スキャン
                 </Button>
-              )}
-              <Button
-                startIcon={<LoginRoundedIcon />}
-                onClick={() =>
-                  navigate(`/exhibit/${exhibitId}/enter`, { replace: true })
-                }
-              >
-                入室スキャン
-              </Button>
-              <Button
-                startIcon={<LogoutRoundedIcon />}
-                onClick={() =>
-                  navigate(`/exhibit/${exhibitId}/exit`, { replace: true })
-                }
-              >
-                退室スキャン
-              </Button>
+                <Button
+                  startIcon={<LogoutRoundedIcon />}
+                  onClick={() =>
+                    navigate(`/exhibit/${exhibitId}/exit`, { replace: true })
+                  }
+                >
+                  退室スキャン
+                </Button>
+              </Box>
             </Box>
           </Grid>
           <Grid item xs={12} lg={6}>

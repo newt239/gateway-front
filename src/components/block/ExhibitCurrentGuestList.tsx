@@ -20,7 +20,13 @@ import {
   Snackbar,
   Typography,
 } from "@mui/material";
-import { DataGrid, GridColDef, GridRowId } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRowId,
+  GridToolbar,
+  jaJP,
+} from "@mui/x-data-grid";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
@@ -153,6 +159,10 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
     );
   };
 
+  const CustomGridToolbar: React.VFC = () => {
+    return <GridToolbar sx={{ gap: 1 }} />;
+  };
+
   return (
     <>
       <Grid container spacing={1} sx={{ width: "100%" }}>
@@ -187,18 +197,20 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
         </Grid>
         <Grid item xs={12} sx={{ height: "100%" }}>
           <DataGrid
+            components={{ Toolbar: CustomGridToolbar }}
             autoHeight
             rows={rows}
             columns={columns}
-            rowHeight={50}
             checkboxSelection
-            hideFooter
             onSelectionModelChange={(newSelection) => {
               setSelectedGuestList(newSelection);
             }}
+            pageSize={25}
             localeText={{
-              noRowsLabel: "現在この展示に滞在中のゲストはいません",
+              ...jaJP.components.MuiDataGrid.defaultProps.localeText,
+              noRowsLabel: "現在この展示に滞在中のゲストはいません。",
             }}
+            sx={{ "& *": { my: 0, minHeight: 10 } }}
           />
         </Grid>
       </Grid>
