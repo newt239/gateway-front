@@ -157,6 +157,11 @@ const Login: React.VFC = () => {
                             </InputAdornment>
                           ),
                         }}
+                        sx={{
+                          '& *::-ms-reveal': {
+                            display: "none",
+                          }
+                        }}
                       />
                     </Grid>
                     <Grid
