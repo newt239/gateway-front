@@ -6,7 +6,13 @@ import apiClient from "#/axios-config";
 import ReactApexChart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 
-import { Typography, Box, CircularProgress, List, ListItem } from "@mui/material";
+import {
+  Typography,
+  Box,
+  CircularProgress,
+  List,
+  ListItem,
+} from "@mui/material";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
@@ -14,7 +20,9 @@ import useDeviceWidth from "#/components/lib/useDeviceWidth";
 const AllAreaPieChart: React.VFC = () => {
   const { largerThanSM, largerThanLG } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
-  const [allAreaCount, setAllAreaCount] = useState<{ guest_type: string; count: number; }[]>([]);
+  const [allAreaCount, setAllAreaCount] = useState<
+    { guest_type: string; count: number }[]
+  >([]);
   const [allAreaChartCategories, setAllAreaChartCategories] = useState<
     string[]
   >(["保護者", "生徒", "教員"]);
@@ -78,32 +86,52 @@ const AllAreaPieChart: React.VFC = () => {
     },
   };
 
-  const EachGuestTypeListItem: React.VFC<{ guest_type: string; type_name: string; }> = ({ guest_type, type_name }) => {
+  const EachGuestTypeListItem: React.VFC<{
+    guest_type: string;
+    type_name: string;
+  }> = ({ guest_type, type_name }) => {
     return (
-      <ListItem divider sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+      <ListItem
+        divider
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Typography variant="body1">{type_name}</Typography>
-        <Typography variant="body1"><span style={{ fontSize: "1.5rem", fontWeight: 800 }}>{allAreaCount.filter(v => v.guest_type === guest_type)[0]?.count || 0}</span> 人</Typography>
+        <Typography variant="body1">
+          <span style={{ fontSize: "1.5rem", fontWeight: 800 }}>
+            {allAreaCount.filter((v) => v.guest_type === guest_type)[0]
+              ?.count || 0}
+          </span>{" "}
+          人
+        </Typography>
       </ListItem>
-    )
-  }
+    );
+  };
   return (
     <>
-      <Box sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        height: 30,
-      }}>
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: 30,
+        }}
+      >
         <Typography variant="h3">全体の滞在状況</Typography>
         {loading && <CircularProgress size={25} thickness={6} />}
       </Box>
       {allAreaCount.length !== 0 ? (
-        <Box sx={{
-          display: "flex",
-          flexDirection: (largerThanSM && !largerThanLG) ? "row" : "column",
-          justifyContent: "center",
-          alignItems: "center",
-        }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: largerThanSM && !largerThanLG ? "row" : "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <Box sx={{ flexGrow: 1 }}>
             <ReactApexChart
               options={options}
@@ -116,14 +144,28 @@ const AllAreaPieChart: React.VFC = () => {
             <EachGuestTypeListItem guest_type="student" type_name="生徒" />
             <EachGuestTypeListItem guest_type="teacher" type_name="教員" />
             <EachGuestTypeListItem guest_type="other" type_name="その他" />
-            <ListItem divider sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <ListItem
+              divider
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
               <Typography variant="h4">総数</Typography>
-              <Typography variant="body1"><span style={{ fontSize: "2rem", fontWeight: 800 }}>{allAreaCount.reduce((a, c) => a + c.count, 0) || 0}</span> 人</Typography>
+              <Typography variant="body1">
+                <span style={{ fontSize: "2rem", fontWeight: 800 }}>
+                  {allAreaCount.reduce((a, c) => a + c.count, 0) || 0}
+                </span>{" "}
+                人
+              </Typography>
             </ListItem>
           </List>
         </Box>
       ) : loading ? (
-        <Typography variant="body1" sx={{ p: 2 }}>読み込み中...</Typography>
+        <Typography variant="body1" sx={{ p: 2 }}>
+          読み込み中...
+        </Typography>
       ) : (
         <Typography variant="body1" sx={{ p: 2 }}>
           現在校内に来場者はいません。

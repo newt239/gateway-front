@@ -156,7 +156,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   // すでに該当の展示に入室中の場合
                   setScanStatus("error");
                   setAlertMessage(
-                    `このゲストはすでに${exhibitName ? `「${exhibitName}」` : "この展示"
+                    `このゲストはすでに${
+                      exhibitName ? `「${exhibitName}」` : "この展示"
                     }に入室中です。退室スキャンと間違えていませんか？`
                   );
                   ReactGA.event({
@@ -217,7 +218,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   // どこの展示にも入室していない
                   setScanStatus("error");
                   setAlertMessage(
-                    `このゲストの${exhibitName ? `「${exhibitName}」` : "この展示"
+                    `このゲストの${
+                      exhibitName ? `「${exhibitName}」` : "この展示"
                     }への入室記録がありません。入室スキャンと間違えていませんか？`
                   );
                   ReactGA.event({
@@ -229,7 +231,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   // 別の展示に入室中
                   setScanStatus("success");
                   setAlertMessage(
-                    `このゲストは他の展示に入室中です。まずは${exhibitName ? `「${exhibitName}」` : "この展示"
+                    `このゲストは他の展示に入室中です。まずは${
+                      exhibitName ? `「${exhibitName}」` : "この展示"
                     }への入室スキャンをしてください。`
                   );
                   ReactGA.event({
@@ -273,7 +276,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   useEffect(() => {
     if (scanStatus === "success") {
       setGuideMessage(
-        `情報を確認し、問題がなければ${scanType === "enter" ? "入室記録" : "退室記録"
+        `情報を確認し、問題がなければ${
+          scanType === "enter" ? "入室記録" : "退室記録"
         }を押してください`
       );
     }
@@ -375,10 +379,10 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                        ? "教員"
-                        : guestInfo.guest_type === "family"
-                          ? "保護者"
-                          : "その他"
+                      ? "教員"
+                      : guestInfo.guest_type === "family"
+                      ? "保護者"
+                      : "その他"
                   }
                 />
               </ListItem>
@@ -449,28 +453,26 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   {scanType === "enter" ? "入室スキャン" : "退室スキャン"}
                 </Typography>
               </Grid>
-              <Grid
-                item
-                flexGrow={1}
-                xs={12}
-                sm
-              >
-                <Box sx={{
-                  width: "100%",
-                  display: "flex",
-                  overflowX: "scroll",
-                  flexDirection: "row",
-                  justifyContent: largerThanSM ? "flex-end" : "flex-start",
-                  alignItems: "center",
-                  whiteSpace: "nowrap",
-                  p: 0,
-                }}>
+              <Grid item flexGrow={1} xs={12} sm>
+                <Box
+                  sx={{
+                    width: "100%",
+                    display: "flex",
+                    overflowX: "scroll",
+                    flexDirection: "row",
+                    justifyContent: largerThanSM ? "flex-end" : "flex-start",
+                    alignItems: "center",
+                    whiteSpace: "nowrap",
+                    p: 0,
+                  }}
+                >
                   <Box sx={{ display: "flex", gap: 1 }}>
                     <Button
                       startIcon={<PublishedWithChangesRoundedIcon />}
                       onClick={() =>
                         navigate(
-                          `/exhibit/${exhibitId || "unknown"}/${scanType === "enter" ? "exit" : "enter"
+                          `/exhibit/${exhibitId || "unknown"}/${
+                            scanType === "enter" ? "exit" : "enter"
                           } `,
                           { replace: true }
                         )
@@ -492,10 +494,14 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                         </Button>
                       )}
                     {profile &&
-                      ["moderator", "executive"].includes(profile.user_type) && (
+                      ["moderator", "executive"].includes(
+                        profile.user_type
+                      ) && (
                         <Button
                           startIcon={<ArrowBackIosNewRoundedIcon />}
-                          onClick={() => navigate("/exhibit", { replace: true })}
+                          onClick={() =>
+                            navigate("/exhibit", { replace: true })
+                          }
                         >
                           一覧に戻る
                         </Button>

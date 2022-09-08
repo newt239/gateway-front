@@ -20,7 +20,13 @@ import {
   Snackbar,
   Typography,
 } from "@mui/material";
-import { DataGrid, GridColDef, GridRowId, GridToolbar, jaJP } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  GridColDef,
+  GridRowId,
+  GridToolbar,
+  jaJP,
+} from "@mui/x-data-grid";
 
 import { handleApiError } from "#/components/lib/commonFunction";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
@@ -66,10 +72,10 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                    ? "教員"
-                    : v.guest_type === "family"
-                      ? "保護者"
-                      : "その他",
+                  ? "教員"
+                  : v.guest_type === "family"
+                  ? "保護者"
+                  : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:mm:ss"),
             };
           });
@@ -154,7 +160,7 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
   };
 
   const CustomGridToolbar: React.VFC = () => {
-    return <GridToolbar sx={{ gap: 1 }} />
+    return <GridToolbar sx={{ gap: 1 }} />;
   };
 
   return (
@@ -204,7 +210,7 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
               ...jaJP.components.MuiDataGrid.defaultProps.localeText,
               noRowsLabel: "現在この展示に滞在中のゲストはいません。",
             }}
-            sx={{ '& *': { my: 0, minHeight: 10 } }}
+            sx={{ "& *": { my: 0, minHeight: 10 } }}
           />
         </Grid>
       </Grid>

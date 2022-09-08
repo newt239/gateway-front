@@ -19,7 +19,9 @@ const ExhibitIndex: React.VFC = () => {
   setTitle("展示選択");
   const navigate = useNavigate();
   const profile = useAtomValue(profileAtom);
-  const [currentExhibit, setCurrentExhibit] = useState<string>(localStorage.getItem("currentExhibit") || "");
+  const [currentExhibit, setCurrentExhibit] = useState<string>(
+    localStorage.getItem("currentExhibit") || ""
+  );
 
   useEffect(() => {
     localStorage.setItem("currentExhibit", currentExhibit);

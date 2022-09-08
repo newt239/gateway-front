@@ -43,14 +43,21 @@ const SelectExhibit: React.VFC<SelectExhibitProps> = ({
         .then((res) => {
           const newExhibitList = [];
           if (profile.user_type === "executive") {
-            newExhibitList.push(...res.filter(
-              (v) => v.exhibit_type === "stage" || v.exhibit_type === "other"
-            ));
+            newExhibitList.push(
+              ...res.filter(
+                (v) => v.exhibit_type === "stage" || v.exhibit_type === "other"
+              )
+            );
           } else {
             newExhibitList.push(...res);
           }
           setExhibitList(newExhibitList);
-          if (currentExhibit === "" || newExhibitList.filter(exhibit => exhibit.exhibit_id === currentExhibit).length === 0) {
+          if (
+            currentExhibit === "" ||
+            newExhibitList.filter(
+              (exhibit) => exhibit.exhibit_id === currentExhibit
+            ).length === 0
+          ) {
             setCurrentExhibit(newExhibitList[0].exhibit_id);
           }
           ReactGA.event({

@@ -65,14 +65,13 @@ const RealtimeLog: React.VFC = () => {
           headers: { Authorization: `Bearer ${token}` },
         })
         .then((res) => {
-          const newActivityList = res
-            .sort((a, b) => {
-              if (a.timestamp < b.timestamp) {
-                return 1;
-              } else {
-                return -1;
-              }
-            });
+          const newActivityList = res.sort((a, b) => {
+            if (a.timestamp < b.timestamp) {
+              return 1;
+            } else {
+              return -1;
+            }
+          });
           setActivityList([...activityList, ...newActivityList]);
           setLastUpdate(moment());
         })
@@ -102,12 +101,16 @@ const RealtimeLog: React.VFC = () => {
 
   return (
     <Grid container>
-      <Grid item xs={12} sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        height: 30,
-      }}>
+      <Grid
+        item
+        xs={12}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: 30,
+        }}
+      >
         <Tooltip title="15秒更新">
           <Typography variant="h3">リアルタイムログ</Typography>
         </Tooltip>
@@ -167,11 +170,9 @@ const RealtimeLog: React.VFC = () => {
                           secondary={v.activity_id}
                           secondaryTypographyProps={{ p: 0 }}
                         >
-                          {
-                            maskId
-                              ? v.guest_id.slice(0, 6) + "____"
-                              : v.guest_id
-                          }
+                          {maskId
+                            ? v.guest_id.slice(0, 6) + "____"
+                            : v.guest_id}
                         </ListItemText>
                       </Grid>
                     )}
@@ -201,7 +202,9 @@ const RealtimeLog: React.VFC = () => {
           </Grid>
         </>
       ) : loading ? (
-        <Typography variant="body1" sx={{ p: 2 }}>読み込み中...</Typography>
+        <Typography variant="body1" sx={{ p: 2 }}>
+          読み込み中...
+        </Typography>
       ) : (
         <Typography variant="body1" sx={{ m: 2 }}>
           データがありません。

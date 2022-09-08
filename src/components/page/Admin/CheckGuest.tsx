@@ -177,7 +177,9 @@ const AdminCheckGuest: React.VFC = () => {
             <Card variant="outlined" sx={{ p: 2 }}>
               <Typography variant="h3">行動履歴</Typography>
               {guestActivity.length === 0 ? (
-                <Typography variant="body1" sx={{ p: 2 }}>このゲストの入退室記録がありません。</Typography>
+                <Typography variant="body1" sx={{ p: 2 }}>
+                  このゲストの入退室記録がありません。
+                </Typography>
               ) : (
                 <Timeline position="alternate">
                   {guestActivity.map((v, i) => {
@@ -189,7 +191,9 @@ const AdminCheckGuest: React.VFC = () => {
                         <TimelineSeparator>
                           <TimelineDot color="primary" />
                           {v.activity_type === "enter" ? (
-                            <TimelineConnector sx={{ bgcolor: "primary.main" }} />
+                            <TimelineConnector
+                              sx={{ bgcolor: "primary.main" }}
+                            />
                           ) : (
                             <TimelineConnector />
                           )}
@@ -234,10 +238,10 @@ const AdminCheckGuest: React.VFC = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                        ? "生徒"
-                        : guestInfo.guest_type === "teacher"
-                          ? "教員"
-                          : "その他"}
+                      ? "生徒"
+                      : guestInfo.guest_type === "teacher"
+                      ? "教員"
+                      : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>

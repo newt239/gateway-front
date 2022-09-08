@@ -34,7 +34,7 @@ import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded";
 import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ReplayRoundedIcon from "@mui/icons-material/ReplayRounded";
-import AssignmentRoundedIcon from '@mui/icons-material/AssignmentRounded';
+import AssignmentRoundedIcon from "@mui/icons-material/AssignmentRounded";
 
 import {
   getTimePart,
@@ -162,7 +162,8 @@ const EntranceEnter: React.VFC = () => {
           })
           .then(() => {
             setDialogMessage(
-              `予約ID: ${reservation.reservation_id}へ${guestList.length
+              `予約ID: ${reservation.reservation_id}へ${
+                guestList.length
               }つのリストバンド(${guestList.join(
                 ", "
               )})の紐付けが完了しました。`
@@ -344,7 +345,13 @@ const EntranceEnter: React.VFC = () => {
           )}
           {!largerThanSM && (
             <Box sx={{ textAlign: "center", mb: 2 }}>
-              <Button variant="text" onClick={() => setSMDrawerOpen(true)} startIcon={<AssignmentRoundedIcon />}>スキャンしたリストバンドを表示</Button>
+              <Button
+                variant="text"
+                onClick={() => setSMDrawerOpen(true)}
+                startIcon={<AssignmentRoundedIcon />}
+              >
+                スキャンしたリストバンドを表示
+              </Button>
             </Box>
           )}
           {reservation && (

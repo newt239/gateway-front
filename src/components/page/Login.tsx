@@ -158,9 +158,9 @@ const Login: React.VFC = () => {
                           ),
                         }}
                         sx={{
-                          '& *::-ms-reveal': {
+                          "& *::-ms-reveal": {
                             display: "none",
-                          }
+                          },
                         }}
                       />
                     </Grid>

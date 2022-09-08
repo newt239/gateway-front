@@ -69,20 +69,19 @@ const AnalyticsExhibit: React.VFC = () => {
         </Grid>
       ) : (
         <Grid container spacing={2}>
-          <Grid
-            item
-            xs={12}
-          >
-            <Box sx={{
-              width: "100%",
-              display: "flex",
-              overflowX: "scroll",
-              flexDirection: "row",
-              justifyContent: largerThanSM ? "flex-end" : "flex-start",
-              alignItems: "center",
-              whiteSpace: "nowrap",
-              p: 0,
-            }} >
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                width: "100%",
+                display: "flex",
+                overflowX: "scroll",
+                flexDirection: "row",
+                justifyContent: largerThanSM ? "flex-end" : "flex-start",
+                alignItems: "center",
+                whiteSpace: "nowrap",
+                p: 0,
+              }}
+            >
               <Box sx={{ display: "flex", gap: 1 }}>
                 {profile?.user_type === "moderator" && (
                   <Button
@@ -118,7 +117,8 @@ const AnalyticsExhibit: React.VFC = () => {
                 >
                   退室スキャン
                 </Button>
-              </Box></Box>
+              </Box>
+            </Box>
           </Grid>
           <Grid item xs={12} lg={6}>
             <ExhibitCurrentGuestList exhibit_id={exhibitId} />
