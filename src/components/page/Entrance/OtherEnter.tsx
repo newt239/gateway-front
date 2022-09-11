@@ -81,11 +81,11 @@ const EntranceOtherEnter: React.VFC = () => {
               setScanStatus("error");
               if (res.reservation_id === "family") {
                 setAlertMessage(
-                  "このリストバンドは未使用かつ保護者用のものです。この処理では新しいリストバンドは使用しないでください。対象のゲストが持っているリストバンドをスキャンしてください。"
+                  "このリストバンドは未使用ですが、保護者用のものです。"
                 );
               } else {
                 setAlertMessage(
-                  "このリストバンドは保護者用のもので、すでに使用されています。対象のゲストが持っているリストバンドをスキャンしてください。"
+                  "このリストバンドは保護者用のもので、すでに使用されています。"
                 );
               }
             } else if (res.available) {
@@ -196,10 +196,10 @@ const EntranceOtherEnter: React.VFC = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -267,7 +267,7 @@ const EntranceOtherEnter: React.VFC = () => {
             <Grid item>
               <Typography variant="h3">保護者以外の入場</Typography>
               <Typography variant="body1">
-                保護者の入場は{" "}
+                リストバンドをかざしてください。保護者の入場は{" "}
                 <Link component={RouterLink} to="/entrance/reserve-check">
                   予約確認
                 </Link>{" "}
@@ -281,7 +281,7 @@ const EntranceOtherEnter: React.VFC = () => {
         </Grid>
         <Grid item xs={12}>
           <Alert severity="warning">
-            生徒の再入場及びその他事前にリストバンドが配られている特別なゲスト用の処理です。対象のゲストがリストバンドを持っていない場合この操作はしないでください。
+            生徒の再入場及びその他特別なゲスト用の処理です。生徒の再入場の場合は本人が持っているリストバンドを使ってください。
           </Alert>
         </Grid>
         <Grid item xs={12} md="auto">

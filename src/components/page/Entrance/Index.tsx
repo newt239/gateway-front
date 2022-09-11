@@ -64,7 +64,7 @@ const Entrance: React.VFC = () => {
             <CardContent sx={{ p: 2, height: "100%" }}>
               <Typography variant="h3">保護者以外の入場</Typography>
               <Typography variant="body1" sx={{ p: 1 }}>
-                生徒の再入場及びその他事前にリストバンドが配られている特別なゲスト用の処理です。
+                生徒の再入場及びその他特別なゲスト用の処理です。
               </Typography>
             </CardContent>
           </CardActionArea>
