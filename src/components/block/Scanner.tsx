@@ -111,13 +111,15 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const interval = isAndroid() ? 30 * 1000 : 2 * 60 * 1000;
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setScannerStatus("loading");
-      setRefreshQrReader(false);
+      if (qrReaderIsShow) {
+        setScannerStatus("loading");
+        setRefreshQrReader(false);
+      }
     }, interval);
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [qrReaderIsShow]);
   useEffect(() => {
     if (!refreshQrReader) setRefreshQrReader(true);
   }, [refreshQrReader]);
