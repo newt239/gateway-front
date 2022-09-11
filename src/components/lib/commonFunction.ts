@@ -64,6 +64,12 @@ export const reservationIdValidation = (reservation_id: string) => {
   return false;
 };
 
+export const beforeTimePartEndTime = (partNum: number) => {
+  const now = moment();
+  const endTime = moment(generalProps.time_part[partNum].end);
+  return now < endTime;
+}
+
 export const handleApiError = (error: AxiosError, name: string) => {
   console.log(error);
   const env = process.env.REACT_APP_ENV;
