@@ -509,7 +509,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                             navigate("/exhibit", { replace: true })
                           }
                         >
-                          一覧に戻る
+                          展示選択
                         </Button>
                       )}
                   </Box>

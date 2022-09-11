@@ -6,9 +6,10 @@ import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 
 import { Grid, Button, Typography, Card, Box } from "@mui/material";
-import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRounded";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
+import DvrIcon from '@mui/icons-material/Dvr';
 
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import { handleApiError } from "#/components/lib/commonFunction";
@@ -85,7 +86,7 @@ const AnalyticsExhibit: React.VFC = () => {
               <Box sx={{ display: "flex", gap: 1 }}>
                 {profile?.user_type === "moderator" && (
                   <Button
-                    startIcon={<ArrowBackIosNewRoundedIcon />}
+                    startIcon={<RoomRoundedIcon />}
                     onClick={() => navigate("/exhibit/", { replace: true })}
                   >
                     展示選択
@@ -93,7 +94,7 @@ const AnalyticsExhibit: React.VFC = () => {
                 )}
                 {profile?.user_type === "moderator" && (
                   <Button
-                    startIcon={<ArrowBackIosNewRoundedIcon />}
+                    startIcon={<DvrIcon />}
                     onClick={() =>
                       navigate("/analytics/summary", { replace: true })
                     }

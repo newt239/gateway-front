@@ -24,9 +24,9 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import ConfirmationNumberRoundedIcon from "@mui/icons-material/ConfirmationNumberRounded";
 import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
-import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 import ExploreOffRoundedIcon from "@mui/icons-material/ExploreOffRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
+import DvrIcon from '@mui/icons-material/Dvr';
 
 import theme from "#/components/lib/theme";
 import UserInfo from "#/components/block/UserInfo";
@@ -130,7 +130,7 @@ const DrawerLeft: React.VFC = () => {
                   }
                 >
                   <ListItemIcon>
-                    <BarChartRoundedIcon />
+                    <MapRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="滞在状況" />
                 </StyledListItemButton>
@@ -192,7 +192,7 @@ const DrawerLeft: React.VFC = () => {
                   onClick={() => navigate("/analytics")}
                 >
                   <ListItemIcon>
-                    <BarChartRoundedIcon />
+                    <MapRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="滞在状況" />
                 </StyledListItemButton>
@@ -201,7 +201,7 @@ const DrawerLeft: React.VFC = () => {
                   onClick={() => navigate("/analytics/summary")}
                 >
                   <ListItemIcon>
-                    <MapRoundedIcon />
+                    <DvrIcon />
                   </ListItemIcon>
                   <ListItemText primary="展示一覧" />
                 </StyledListItemButton>
