@@ -26,7 +26,7 @@ import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import ExploreOffRoundedIcon from "@mui/icons-material/ExploreOffRounded";
 import MapRoundedIcon from "@mui/icons-material/MapRounded";
-import DvrIcon from '@mui/icons-material/Dvr';
+import DvrIcon from "@mui/icons-material/Dvr";
 
 import theme from "#/components/lib/theme";
 import UserInfo from "#/components/block/UserInfo";

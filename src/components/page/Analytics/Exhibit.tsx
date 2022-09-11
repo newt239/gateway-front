@@ -9,7 +9,7 @@ import { Grid, Button, Typography, Card, Box } from "@mui/material";
 import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import RoomRoundedIcon from "@mui/icons-material/RoomRounded";
-import DvrIcon from '@mui/icons-material/Dvr';
+import DvrIcon from "@mui/icons-material/Dvr";
 
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
 import { handleApiError } from "#/components/lib/commonFunction";
