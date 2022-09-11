@@ -17,6 +17,7 @@ export type Methods = {
       exhibit_type: string;
       count: number;
       capacity: number;
+      status: number;
     }[];
   };
 };

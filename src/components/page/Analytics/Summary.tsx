@@ -38,6 +38,7 @@ type ExhibitSummaryProps = {
   exhibit_type: string;
   count: number;
   capacity: number;
+  status: number;
 };
 
 const AnalyticsSummary: React.VFC = () => {
@@ -181,16 +182,16 @@ const AnalyticsSummary: React.VFC = () => {
       sx={
         expand
           ? {
-              position: "fixed",
-              top: 0,
-              left: 0,
-              height: "100vh",
-              overflowY: "scroll",
-              my: 0,
-              px: 1,
-              backgroundColor: "white",
-              transform: "translateZ(3px)",
-            }
+            position: "fixed",
+            top: 0,
+            left: 0,
+            height: "100vh",
+            overflowY: "scroll",
+            my: 0,
+            px: 1,
+            backgroundColor: "white",
+            transform: "translateZ(3px)",
+          }
           : null
       }
     >
@@ -272,7 +273,7 @@ const AnalyticsSummary: React.VFC = () => {
           ) : (
             <>
               {exhibitList
-                .filter((e) => e.exhibit_type === "club")
+                .filter((e) => e.exhibit_type === "club" && e.status === 1)
                 .sort(sortExhibitByCount)
                 .map((exhibit) => (
                   <EachExhibit key={exhibit.exhibit_id} exhibit={exhibit} />
@@ -289,7 +290,7 @@ const AnalyticsSummary: React.VFC = () => {
           ) : (
             <>
               {exhibitList
-                .filter((e) => e.exhibit_type === "class")
+                .filter((e) => e.exhibit_type === "class" && e.status === 1)
                 .sort(sortExhibitByCount)
                 .map((exhibit) => (
                   <EachExhibit key={exhibit.exhibit_id} exhibit={exhibit} />
@@ -307,7 +308,7 @@ const AnalyticsSummary: React.VFC = () => {
             <>
               {exhibitList
                 .filter(
-                  (e) => ["stage", "other"].indexOf(e.exhibit_type) !== -1
+                  (e) => ["stage", "other"].indexOf(e.exhibit_type) !== -1 && e.status === 1
                 )
                 .sort(sortExhibitByCount)
                 .map((exhibit) => (
