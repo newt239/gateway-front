@@ -172,8 +172,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   // すでに該当の展示に入室中の場合
                   setScanStatus("error");
                   setAlertMessage(
-                    `このゲストはすでに${
-                      exhibitName ? `「${exhibitName}」` : "この展示"
+                    `このゲストはすでに${exhibitName ? `「${exhibitName}」` : "この展示"
                     }に入室中です。退室スキャンと間違えていませんか？`
                   );
                   ReactGA.event({
@@ -234,8 +233,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   // どこの展示にも入室していない
                   setScanStatus("error");
                   setAlertMessage(
-                    `このゲストの${
-                      exhibitName ? `「${exhibitName}」` : "この展示"
+                    `このゲストの${exhibitName ? `「${exhibitName}」` : "この展示"
                     }への入室記録がありません。入室スキャンと間違えていませんか？`
                   );
                   ReactGA.event({
@@ -247,8 +245,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                   // 別の展示に入室中
                   setScanStatus("success");
                   setAlertMessage(
-                    `このゲストは他の展示に入室中です。まずは${
-                      exhibitName ? `「${exhibitName}」` : "この展示"
+                    `このゲストは他の展示に入室中です。まずは${exhibitName ? `「${exhibitName}」` : "この展示"
                     }への入室スキャンをしてください。`
                   );
                   ReactGA.event({
@@ -292,8 +289,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   useEffect(() => {
     if (scanStatus === "success") {
       setGuideMessage(
-        `情報を確認し、問題がなければ${
-          scanType === "enter" ? "入室記録" : "退室記録"
+        `情報を確認し、問題がなければ${scanType === "enter" ? "入室記録" : "退室記録"
         }を押してください`
       );
     }
@@ -338,10 +334,10 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
           .then(() => {
             if (scanType === "enter") {
               setCurrentCount((current) => current + 1);
-              setSnackbarMessage("入室処理が完了しました。");
+              setSnackbarMessage(`${text}の入室処理が完了しました。`);
             } else if (scanType === "exit") {
               setCurrentCount((current) => current - 1);
-              setSnackbarMessage("退室処理が完了しました。");
+              setSnackbarMessage(`${text}の退室処理が完了しました。`);
             }
             setAlertMessage(null);
             setScanStatus("waiting");
@@ -395,10 +391,10 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
@@ -489,8 +485,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                       startIcon={<PublishedWithChangesRoundedIcon />}
                       onClick={() =>
                         navigate(
-                          `/exhibit/${exhibitId || "unknown"}/${
-                            scanType === "enter" ? "exit" : "enter"
+                          `/exhibit/${exhibitId || "unknown"}/${scanType === "enter" ? "exit" : "enter"
                           } `,
                           { replace: true }
                         )
@@ -626,11 +621,12 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
       <Snackbar
         open={snackbarMessage !== null}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: "bottom",
+          horizontal: "center",
         }}
         autoHideDuration={6000}
         onClose={() => setSnackbarMessage(null)}
+        sx={{ mb: largerThanMD ? 0 : 7 }}
       >
         <Alert variant="filled" severity="success">
           {snackbarMessage}
