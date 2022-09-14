@@ -46,7 +46,7 @@ type ExhibitCurrentGuestTableListProp = {
 const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
   exhibit_id,
 }) => {
-  const { largerThanSM } = useDeviceWidth();
+  const { largerThanMD, largerThanSM } = useDeviceWidth();
   const token = useAtomValue(tokenAtom);
   const profile = useAtomValue(profileAtom);
   const [rows, setRows] = useState<ExhibitCurrentGuestTableListProp>([]);
@@ -72,10 +72,10 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
                 v.guest_type === "student"
                   ? "生徒"
                   : v.guest_type === "teacher"
-                  ? "教員"
-                  : v.guest_type === "family"
-                  ? "保護者"
-                  : "その他",
+                    ? "教員"
+                    : v.guest_type === "family"
+                      ? "保護者"
+                      : "その他",
               enter_at: moment(v.enter_at).format("MM/DD HH:mm:ss"),
             };
           });
@@ -217,9 +217,10 @@ const ExhibitCurrentGuestList: React.VFC<{ exhibit_id: string }> = ({
       <Snackbar
         open={snackbarMessage !== null}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: "bottom",
+          horizontal: "center",
         }}
+        sx={{ mb: largerThanMD ? 0 : 7 }}
         autoHideDuration={6000}
         onClose={() => setSnackbarMessage(null)}
       >
