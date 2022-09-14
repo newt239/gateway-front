@@ -182,16 +182,16 @@ const AnalyticsSummary: React.VFC = () => {
       sx={
         expand
           ? {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            height: "100vh",
-            overflowY: "scroll",
-            my: 0,
-            px: 1,
-            backgroundColor: "white",
-            transform: "translateZ(3px)",
-          }
+              position: "fixed",
+              top: 0,
+              left: 0,
+              height: "100vh",
+              overflowY: "scroll",
+              my: 0,
+              px: 1,
+              backgroundColor: "white",
+              transform: "translateZ(3px)",
+            }
           : null
       }
     >
@@ -308,7 +308,9 @@ const AnalyticsSummary: React.VFC = () => {
             <>
               {exhibitList
                 .filter(
-                  (e) => ["stage", "other"].indexOf(e.exhibit_type) !== -1 && e.status === 1
+                  (e) =>
+                    ["stage", "other"].indexOf(e.exhibit_type) !== -1 &&
+                    e.status === 1
                 )
                 .sort(sortExhibitByCount)
                 .map((exhibit) => (

@@ -247,8 +247,11 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
           >
             <Box
               sx={{
-                transform: reverseCamera ? "translateZ(0.5px) scale(-1, 1)" : "translateZ(0.5px) scale(1, 1)",
-              }}>
+                transform: reverseCamera
+                  ? "translateZ(0.5px) scale(-1, 1)"
+                  : "translateZ(0.5px) scale(1, 1)",
+              }}
+            >
               <QrReader
                 onScan={(text: string | null) => handleScan(text)}
                 onLoad={() => {
