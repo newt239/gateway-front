@@ -106,7 +106,7 @@ const AnalyticsSummary: React.VFC = () => {
   const EachExhibit: React.VFC<{ exhibit: ExhibitSummaryProps }> = ({
     exhibit,
   }) => {
-    const over = exhibit.count >= exhibit.capacity;
+    const over = exhibit.count >= exhibit.capacity / 10 * 9;
     return (
       <ListItem
         divider
@@ -322,7 +322,7 @@ const AnalyticsSummary: React.VFC = () => {
         </List>
       </Grid>
       <Grid item xs={12} sx={{ textAlign: "right" }}>
-        <Typography variant="body1" sx={{ pb: 1 }}>データは通常1分おきに更新されます。最終更新 {lastUpdate.format("HH:mm:ss")} ／ © 栄東祭実行委員会 技術部</Typography>
+        <Typography variant="body1" sx={{ pb: 1 }}>最終更新 {lastUpdate.format("HH:mm:ss")}{largerThanSM && " ／ 栄東祭実行委員会 技術部"}</Typography>
       </Grid>
     </Grid >
   );
