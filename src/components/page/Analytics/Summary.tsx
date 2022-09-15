@@ -157,7 +157,7 @@ const AnalyticsSummary: React.VFC = () => {
           </Grid>
           <LinearProgress
             variant="determinate"
-            value={(exhibit.count / exhibit.capacity) * 100 || 1}
+            value={Math.min((exhibit.count / exhibit.capacity) * 100, 100) || 1}
             sx={{
               width: "100%",
               height: 10,
@@ -182,16 +182,17 @@ const AnalyticsSummary: React.VFC = () => {
       sx={
         expand
           ? {
-              position: "fixed",
-              top: 0,
-              left: 0,
-              height: "100vh",
-              overflowY: "scroll",
-              my: 0,
-              px: 1,
-              backgroundColor: "white",
-              transform: "translateZ(3px)",
-            }
+            position: "fixed",
+            top: 0,
+            left: 0,
+            height: "100vh",
+            overflowY: "scroll",
+            my: 0,
+            px: 1,
+            backgroundColor: "white",
+            transform: "translateZ(4px)",
+            zIndex: 500,
+          }
           : null
       }
     >
@@ -213,7 +214,7 @@ const AnalyticsSummary: React.VFC = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant="h2">{lastUpdate.format("HH:mm:ss")}</Typography>
+          <Typography variant="h2" sx={{ whiteSpace: "nowrap" }}>展示別滞在状況</Typography>
           {loading && <CircularProgress size={25} thickness={6} />}
         </Box>
         <Box
@@ -267,9 +268,9 @@ const AnalyticsSummary: React.VFC = () => {
       </Grid>
       <Grid item xs={12} md={3}>
         <Typography variant="h3">部活動</Typography>
-        <List sx={{ columnCount: 1, height: "90vh", overflowX: "scroll" }}>
+        <List sx={{ columnCount: 1, height: "80vh", overflowX: "scroll" }}>
           {exhibitList.length === 0 ? (
-            <Skeleton variant="rounded" height="90vh" />
+            <Skeleton variant="rounded" height="80vh" />
           ) : (
             <>
               {exhibitList
@@ -284,9 +285,9 @@ const AnalyticsSummary: React.VFC = () => {
       </Grid>
       <Grid item xs={12} md={6}>
         <Typography variant="h3">クラス</Typography>
-        <List sx={{ columnCount: 2, height: "90vh", overflowX: "scroll" }}>
+        <List sx={{ columnCount: 2, height: "80vh", overflowX: "scroll" }}>
           {exhibitList.length === 0 ? (
-            <Skeleton variant="rounded" height="180vh" />
+            <Skeleton variant="rounded" height="160vh" />
           ) : (
             <>
               {exhibitList
@@ -301,9 +302,9 @@ const AnalyticsSummary: React.VFC = () => {
       </Grid>
       <Grid item xs={12} md={3}>
         <Typography variant="h3">ステージ・その他の展示</Typography>
-        <List sx={{ columnCount: 1, height: "90vh", overflowX: "scroll" }}>
+        <List sx={{ columnCount: 1, height: "80vh", overflowX: "scroll" }}>
           {exhibitList.length === 0 ? (
-            <Skeleton variant="rounded" height="90vh" />
+            <Skeleton variant="rounded" height="80vh" />
           ) : (
             <>
               {exhibitList
@@ -320,7 +321,10 @@ const AnalyticsSummary: React.VFC = () => {
           )}
         </List>
       </Grid>
-    </Grid>
+      <Grid item xs={12} sx={{ textAlign: "right" }}>
+        <Typography variant="body1" sx={{ pb: 1 }}>データは通常1分おきに更新されます。最終更新 {lastUpdate.format("HH:mm:ss")} ／ © 栄東祭実行委員会 技術部</Typography>
+      </Grid>
+    </Grid >
   );
 };
 
