@@ -40,17 +40,20 @@ const NotFound: React.VFC<extraType> = ({ type }) => {
       ) : type === "unauthorized" ? (
         <Typography>このページを表示する権限がありません。</Typography>
       ) : type === "keepout" ? (
-        <Typography>
-          現在メンテナンス中です。最新の情報は
-          <Link
-            href={process.env.REACT_APP_MANUAL_URL || "/"}
-            target="_blank"
-            underline="hover"
-          >
-            こちら
-          </Link>
-          からご確認ください。
-        </Typography>
+        <>
+          <Typography variant="h2">メンテナンス中</Typography>
+          <Typography>
+            トラブルが発生したため機能を制限しています。最新の情報は
+            <Link
+              href={process.env.REACT_APP_MANUAL_URL || "/"}
+              target="_blank"
+              underline="hover"
+            >
+              こちら
+            </Link>
+            からご確認ください。
+          </Typography>
+        </>
       ) : type === "unknown" ? (
         <>
           <Typography>

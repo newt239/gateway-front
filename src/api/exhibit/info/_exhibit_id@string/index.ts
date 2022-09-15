@@ -11,6 +11,7 @@ export type Methods = {
 
     /** 正常レスポンス */
     resBody: {
+      status: number;
       exhibit_id: string;
       exhibit_name: string;
       exhibit_type: string;

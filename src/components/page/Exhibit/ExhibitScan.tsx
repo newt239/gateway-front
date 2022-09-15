@@ -38,6 +38,7 @@ import ArrowBackIosNewRoundedIcon from "@mui/icons-material/ArrowBackIosNewRound
 import BarChartRoundedIcon from "@mui/icons-material/BarChartRounded";
 
 import {
+  beforeTimePartEndTime,
   getTimePart,
   guestIdValidation,
   handleApiError,
@@ -45,6 +46,7 @@ import {
 import Scanner from "#/components/block/Scanner";
 import { GuestInfoProps } from "#/components/lib/types";
 import useDeviceWidth from "#/components/lib/useDeviceWidth";
+import Extra from "#/components/page/Extra";
 import NumPad from "#/components/block/NumPad";
 import ScanGuide from "#/components/block/ScanGuide";
 
@@ -64,6 +66,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [registerLoading, setRegisterLoading] = useState<boolean>(false);
   const [guestInfo, setGuestInfo] = useState<GuestInfoProps | null>(null);
+  const [status, setStatus] = useState<boolean>(true);
   const [capacity, setCapacity] = useState<number>(0);
   const [currentCount, setCurrentCount] = useState<number>(0);
   const [exhibitName, setExhibitName] = useState<string | null>(null);
@@ -95,6 +98,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             },
           })
           .then((res) => {
+            setStatus(res.status === 1);
             setTitle(`${res.exhibit_name} - ${res.room_name}`);
             setCapacity(res.capacity);
             setCurrentCount(res.current);
@@ -145,13 +149,25 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             } else {
               if (scanType === "enter") {
                 if (res.exhibit_id === "") {
-                  // 正常な入室処理
                   setScanStatus("success");
-                  ReactGA.event({
-                    category: "scan",
-                    action: "exhibit_success",
-                    label: profile.user_id,
-                  });
+                  if (beforeTimePartEndTime(res.part)) {
+                    // 正常な入室処理
+                    ReactGA.event({
+                      category: "scan",
+                      action: "exhibit_success",
+                      label: profile.user_id,
+                    });
+                  } else {
+                    setAlertMessage(
+                      "このゲストが滞在可能な時間を過ぎています。"
+                    );
+                    // 正常な入室処理
+                    ReactGA.event({
+                      category: "scan",
+                      action: "over_time",
+                      label: profile.user_id,
+                    });
+                  }
                 } else if (res.exhibit_id === exhibitId) {
                   // すでに該当の展示に入室中の場合
                   setScanStatus("error");
@@ -322,10 +338,10 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
           .then(() => {
             if (scanType === "enter") {
               setCurrentCount((current) => current + 1);
-              setSnackbarMessage("入室処理が完了しました。");
+              setSnackbarMessage(`${text}の入室処理が完了しました。`);
             } else if (scanType === "exit") {
               setCurrentCount((current) => current - 1);
-              setSnackbarMessage("退室処理が完了しました。");
+              setSnackbarMessage(`${text}の退室処理が完了しました。`);
             }
             setAlertMessage(null);
             setScanStatus("waiting");
@@ -444,6 +460,8 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
             </Card>
           </Grid>
         </Grid>
+      ) : !status ? (
+        <Extra type="keepout" />
       ) : (
         <Grid container spacing={2} sx={{ justifyContent: "space-evenly" }}>
           <Grid item xs={12}>
@@ -503,7 +521,7 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
                             navigate("/exhibit", { replace: true })
                           }
                         >
-                          一覧に戻る
+                          展示選択
                         </Button>
                       )}
                   </Box>
@@ -608,11 +626,12 @@ const ExhibitScan: React.VFC<{ scanType: "enter" | "exit" }> = ({
       <Snackbar
         open={snackbarMessage !== null}
         anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
+          vertical: "bottom",
+          horizontal: "center",
         }}
         autoHideDuration={6000}
         onClose={() => setSnackbarMessage(null)}
+        sx={{ mb: largerThanMD ? 0 : 7 }}
       >
         <Alert variant="filled" severity="success">
           {snackbarMessage}

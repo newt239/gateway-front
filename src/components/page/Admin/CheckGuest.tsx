@@ -5,6 +5,7 @@ import ReactGA from "react-ga4";
 import { AxiosError } from "axios";
 import apiClient from "#/axios-config";
 import moment, { Moment } from "moment";
+import QRCode from "react-qr-code";
 
 import {
   Grid,
@@ -227,7 +228,11 @@ const AdminCheckGuest: React.VFC = () => {
                     <ListItemIcon>
                       <AssignmentIndRoundedIcon />
                     </ListItemIcon>
-                    <ListItemText>{guestInfo.reservation_id}</ListItemText>
+                    <ListItemText>
+                      {guestInfo.reservation_id === "family"
+                        ? "予約と紐付けられていません"
+                        : guestInfo.reservation_id}
+                    </ListItemText>
                   </ListItem>
                 )}
                 <ListItem>
@@ -253,6 +258,12 @@ const AdminCheckGuest: React.VFC = () => {
                   </ListItemText>
                 </ListItem>
               </List>
+            </Card>
+            <Card variant="outlined" sx={{ p: 2, mt: 2 }}>
+              <Typography variant="h3">QRコード</Typography>
+              <Box sx={{ textAlign: "center", m: 2 }}>
+                <QRCode value={guestInfo.guest_id} level="H" />
+              </Box>
             </Card>
           </Grid>
         </>

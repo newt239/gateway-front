@@ -38,6 +38,7 @@ type ExhibitSummaryProps = {
   exhibit_type: string;
   count: number;
   capacity: number;
+  status: number;
 };
 
 const AnalyticsSummary: React.VFC = () => {
@@ -105,12 +106,16 @@ const AnalyticsSummary: React.VFC = () => {
   const EachExhibit: React.VFC<{ exhibit: ExhibitSummaryProps }> = ({
     exhibit,
   }) => {
-    const over = exhibit.count >= exhibit.capacity;
+    const over = exhibit.count >= exhibit.capacity / 10 * 9;
     return (
       <ListItem
         divider
         disablePadding
-        sx={{ pageBreakInside: "avoid", breakInside: "avoid" }}
+        sx={{
+          pageBreakInside: "avoid",
+          breakInside: "avoid",
+          "&:hover": { backgroundColor: "#bdbdbd" },
+        }}
       >
         <Link
           to={`/analytics/exhibit/${exhibit.exhibit_id}`}
@@ -152,7 +157,7 @@ const AnalyticsSummary: React.VFC = () => {
           </Grid>
           <LinearProgress
             variant="determinate"
-            value={(exhibit.count / exhibit.capacity) * 100 || 1}
+            value={Math.min((exhibit.count / exhibit.capacity) * 100, 100) || 1}
             sx={{
               width: "100%",
               height: 10,
@@ -177,16 +182,17 @@ const AnalyticsSummary: React.VFC = () => {
       sx={
         expand
           ? {
-              position: "fixed",
-              top: 0,
-              left: 0,
-              height: "100vh",
-              overflowY: "scroll",
-              my: 0,
-              px: 1,
-              backgroundColor: "white",
-              transform: "translateZ(3px)",
-            }
+            position: "fixed",
+            top: 0,
+            left: 0,
+            height: "100vh",
+            overflowY: "scroll",
+            my: 0,
+            px: 1,
+            backgroundColor: "white",
+            transform: "translateZ(4px)",
+            zIndex: 500,
+          }
           : null
       }
     >
@@ -208,7 +214,7 @@ const AnalyticsSummary: React.VFC = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant="h2">{lastUpdate.format("HH:mm:ss")}</Typography>
+          <Typography variant="h2" sx={{ whiteSpace: "nowrap" }}>展示別滞在状況</Typography>
           {loading && <CircularProgress size={25} thickness={6} />}
         </Box>
         <Box
@@ -262,13 +268,13 @@ const AnalyticsSummary: React.VFC = () => {
       </Grid>
       <Grid item xs={12} md={3}>
         <Typography variant="h3">部活動</Typography>
-        <List sx={{ columnCount: 1, height: "90vh", overflowX: "scroll" }}>
+        <List sx={{ columnCount: 1, height: "80vh", overflowX: "scroll" }}>
           {exhibitList.length === 0 ? (
-            <Skeleton variant="rounded" height="90vh" />
+            <Skeleton variant="rounded" height="80vh" />
           ) : (
             <>
               {exhibitList
-                .filter((e) => e.exhibit_type === "club")
+                .filter((e) => e.exhibit_type === "club" && e.status === 1)
                 .sort(sortExhibitByCount)
                 .map((exhibit) => (
                   <EachExhibit key={exhibit.exhibit_id} exhibit={exhibit} />
@@ -279,13 +285,13 @@ const AnalyticsSummary: React.VFC = () => {
       </Grid>
       <Grid item xs={12} md={6}>
         <Typography variant="h3">クラス</Typography>
-        <List sx={{ columnCount: 2, height: "90vh", overflowX: "scroll" }}>
+        <List sx={{ columnCount: 2, height: "80vh", overflowX: "scroll" }}>
           {exhibitList.length === 0 ? (
-            <Skeleton variant="rounded" height="180vh" />
+            <Skeleton variant="rounded" height="160vh" />
           ) : (
             <>
               {exhibitList
-                .filter((e) => e.exhibit_type === "class")
+                .filter((e) => e.exhibit_type === "class" && e.status === 1)
                 .sort(sortExhibitByCount)
                 .map((exhibit) => (
                   <EachExhibit key={exhibit.exhibit_id} exhibit={exhibit} />
@@ -296,14 +302,16 @@ const AnalyticsSummary: React.VFC = () => {
       </Grid>
       <Grid item xs={12} md={3}>
         <Typography variant="h3">ステージ・その他の展示</Typography>
-        <List sx={{ columnCount: 1, height: "90vh", overflowX: "scroll" }}>
+        <List sx={{ columnCount: 1, height: "80vh", overflowX: "scroll" }}>
           {exhibitList.length === 0 ? (
-            <Skeleton variant="rounded" height="90vh" />
+            <Skeleton variant="rounded" height="80vh" />
           ) : (
             <>
               {exhibitList
                 .filter(
-                  (e) => ["stage", "other"].indexOf(e.exhibit_type) !== -1
+                  (e) =>
+                    ["stage", "other"].indexOf(e.exhibit_type) !== -1 &&
+                    e.status === 1
                 )
                 .sort(sortExhibitByCount)
                 .map((exhibit) => (
@@ -313,7 +321,10 @@ const AnalyticsSummary: React.VFC = () => {
           )}
         </List>
       </Grid>
-    </Grid>
+      <Grid item xs={12} sx={{ textAlign: "right" }}>
+        <Typography variant="body1" sx={{ pb: 1 }}>最終更新 {lastUpdate.format("HH:mm:ss")}{largerThanSM && " ／ 栄東祭実行委員会 技術部"}</Typography>
+      </Grid>
+    </Grid >
   );
 };
 

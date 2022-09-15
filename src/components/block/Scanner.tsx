@@ -111,13 +111,15 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
   const interval = isAndroid() ? 30 * 1000 : 2 * 60 * 1000;
   useEffect(() => {
     const intervalId = setInterval(() => {
-      setScannerStatus("loading");
-      setRefreshQrReader(false);
+      if (qrReaderIsShow) {
+        setScannerStatus("loading");
+        setRefreshQrReader(false);
+      }
     }, interval);
     return () => {
       clearInterval(intervalId);
     };
-  }, []);
+  }, [qrReaderIsShow]);
   useEffect(() => {
     if (!refreshQrReader) setRefreshQrReader(true);
   }, [refreshQrReader]);
@@ -241,29 +243,42 @@ const Scanner: React.VFC<ScannerProps> = ({ handleScan }) => {
           <div
             style={{
               position: "relative",
-              transform: reverseCamera ? "scale(-1, 1)" : "scale(1, 1)",
             }}
           >
-            <QrReader
-              onScan={(text: string | null) => handleScan(text)}
-              onLoad={() => {
-                setScannerStatus("waiting");
+            <Box
+              sx={{
+                transform: reverseCamera
+                  ? "translateZ(0.5px) scale(-1, 1)"
+                  : "translateZ(0.5px) scale(1, 1)",
               }}
-              onError={handleError}
-              delay={1}
-              showViewFinder={false}
-              facingMode="environment"
-              // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-qr-reader/index.d.ts
-              // @types/react-qr-readerがv2.1.0用でv2.1.1に追加されたconstraints propの型定義に対応していなかったためsrc直下にオリジナルの型定義ファイルを配置
-              constraints={{
-                deviceId: currentDeviceId,
-                facingMode: "environment",
-              }}
-              className="qrcode"
-            />
+            >
+              <QrReader
+                onScan={(text: string | null) => handleScan(text)}
+                onLoad={() => {
+                  setScannerStatus("waiting");
+                }}
+                onError={handleError}
+                delay={1}
+                showViewFinder={false}
+                facingMode="environment"
+                // https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/react-qr-reader/index.d.ts
+                // @types/react-qr-readerがv2.1.0用でv2.1.1に追加されたconstraints propの型定義に対応していなかったためsrc直下にオリジナルの型定義ファイルを配置
+                constraints={{
+                  deviceId: currentDeviceId,
+                  facingMode: "environment",
+                }}
+                className="qrcode"
+              />
+            </Box>
             <IconButton
               onClick={onClickChangeCameraIcon}
-              sx={{ position: "absolute", color: "white", top: 0, left: 0 }}
+              sx={{
+                position: "absolute",
+                color: "white",
+                top: 0,
+                right: 0,
+                transform: "translateZ(0.8px)",
+              }}
             >
               <CameraswitchRoundedIcon />
             </IconButton>
