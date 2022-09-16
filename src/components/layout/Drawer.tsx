@@ -179,7 +179,7 @@ const DrawerLeft: React.VFC = () => {
                   <ListItemIcon>
                     <ConfirmationNumberRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="保護者以外の入場" />
+                  <ListItemText primary="特別入場" />
                 </StyledListItemButton>
               </List>
             </>
