@@ -5,8 +5,9 @@ import ReactGA from "react-ga4";
 import generalProps from "#/components/lib/generalProps";
 import moment from "moment";
 
+const time_part = generalProps.time_part;
+
 export const getTimePart = (part: number) => {
-  const time_part = generalProps.time_part;
   if (part < time_part.length) {
     return time_part[part];
   } else {
@@ -66,8 +67,12 @@ export const reservationIdValidation = (reservation_id: string) => {
 
 export const beforeTimePartEndTime = (partNum: number) => {
   const now = moment();
-  const endTime = moment(generalProps.time_part[partNum].end);
-  return now <= endTime;
+  if (partNum < time_part.length) {
+    const endTime = moment(generalProps.time_part[partNum].end);
+    return now <= endTime;
+  } else {
+    return false;
+  }
 };
 
 export const handleApiError = (error: AxiosError, name: string) => {

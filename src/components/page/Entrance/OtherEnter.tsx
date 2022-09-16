@@ -78,7 +78,7 @@ const EntranceOtherEnter: React.VFC = () => {
             setLoading(false);
             setGuestInfo(res);
             if (res.guest_type === "family") {
-              setScanStatus("error");
+              setScanStatus("success");
               if (res.reservation_id === "family") {
                 setAlertMessage(
                   "このリストバンドは未使用ですが、保護者用のものです。"
@@ -265,7 +265,7 @@ const EntranceOtherEnter: React.VFC = () => {
             }}
           >
             <Grid item>
-              <Typography variant="h3">保護者以外の入場</Typography>
+              <Typography variant="h3">特別入場</Typography>
               <Typography variant="body1">
                 リストバンドをかざしてください。保護者の入場は{" "}
                 <Link component={RouterLink} to="/entrance/reserve-check">

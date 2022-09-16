@@ -32,7 +32,7 @@ import theme from "#/components/lib/theme";
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";
 
-const drawerWidth = 250;
+const drawerWidth = localStorage.getItem("viewOnly") === "yes" ? 0 : 250;
 
 const DrawerLeft: React.VFC = () => {
   const path = useLocation().pathname;
@@ -179,7 +179,7 @@ const DrawerLeft: React.VFC = () => {
                   <ListItemIcon>
                     <ConfirmationNumberRoundedIcon />
                   </ListItemIcon>
-                  <ListItemText primary="保護者以外の入場" />
+                  <ListItemText primary="特別入場" />
                 </StyledListItemButton>
               </List>
             </>

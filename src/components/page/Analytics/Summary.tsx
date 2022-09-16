@@ -106,7 +106,7 @@ const AnalyticsSummary: React.VFC = () => {
   const EachExhibit: React.VFC<{ exhibit: ExhibitSummaryProps }> = ({
     exhibit,
   }) => {
-    const over = exhibit.count >= exhibit.capacity / 10 * 9;
+    const over = exhibit.count >= (exhibit.capacity / 10) * 9;
     return (
       <ListItem
         divider
@@ -182,17 +182,17 @@ const AnalyticsSummary: React.VFC = () => {
       sx={
         expand
           ? {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            height: "100vh",
-            overflowY: "scroll",
-            my: 0,
-            px: 1,
-            backgroundColor: "white",
-            transform: "translateZ(4px)",
-            zIndex: 500,
-          }
+              position: "fixed",
+              top: 0,
+              left: 0,
+              height: "100vh",
+              overflowY: "scroll",
+              my: 0,
+              px: 1,
+              backgroundColor: "white",
+              transform: "translateZ(4px)",
+              zIndex: 500,
+            }
           : null
       }
     >
@@ -214,7 +214,9 @@ const AnalyticsSummary: React.VFC = () => {
             alignItems: "center",
           }}
         >
-          <Typography variant="h2" sx={{ whiteSpace: "nowrap" }}>展示別滞在状況</Typography>
+          <Typography variant="h2" sx={{ whiteSpace: "nowrap" }}>
+            展示別滞在状況
+          </Typography>
           {loading && <CircularProgress size={25} thickness={6} />}
         </Box>
         <Box
@@ -322,9 +324,12 @@ const AnalyticsSummary: React.VFC = () => {
         </List>
       </Grid>
       <Grid item xs={12} sx={{ textAlign: "right" }}>
-        <Typography variant="body1" sx={{ pb: 1 }}>最終更新 {lastUpdate.format("HH:mm:ss")}{largerThanSM && " ／ 栄東祭実行委員会 技術部"}</Typography>
+        <Typography variant="body1" sx={{ pb: 1 }}>
+          最終更新 {lastUpdate.format("HH:mm:ss")}
+          {largerThanSM && " ／ 栄東祭実行委員会 技術部"}
+        </Typography>
       </Grid>
-    </Grid >
+    </Grid>
   );
 };
 

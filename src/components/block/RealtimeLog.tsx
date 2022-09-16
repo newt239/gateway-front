@@ -127,7 +127,7 @@ const RealtimeLog: React.VFC = () => {
               }}
             >
               <Grid item sx={{ px: 2 }}>
-                {largerThanSM && (
+                {largerThanSM && localStorage.getItem("viewOnly") !== "yes" && (
                   <FormControlLabel
                     control={
                       <Switch

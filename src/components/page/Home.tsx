@@ -16,78 +16,84 @@ const Home: React.VFC = () => {
   const { largerThanMD } = useDeviceWidth();
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12} lg={8}>
-        <Box
-          sx={{
-            textAlign: "center",
-            height: "100%",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <img
-            src={GatewayThumbnail}
-            style={{
-              width: "100%",
-              maxWidth: "80vh",
-              maxHeight: "35vh",
-              objectFit: "cover",
-            }}
-          />
-        </Box>
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <QuickMenu />
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-          <Suspense fallback={<p>読み込み中...</p>}>
-            <UserInfo />
-          </Suspense>
-        </Card>
-      </Grid>
-      <Grid item xs={12} md={6} lg={4}>
-        <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-          <Grid
-            container
-            sx={{
-              flexDirection: "column",
-              justifyContent: "space-between",
-              height: "100%",
-            }}
-          >
-            <Typography variant="h3">アプリ情報</Typography>
-            <Version />
-            <Box sx={{ width: "100%", textAlign: "right" }}>
-              <Button
-                variant="outlined"
-                color="info"
-                onClick={() => {
-                  window.open(
-                    process.env.REACT_APP_MANUAL_URL || "/",
-                    "_blank"
-                  );
+    <>
+      {localStorage.getItem("viewOnly") === "yes" ? (
+        <Typography variant="body1">閲覧専用</Typography>
+      ) : (
+        <Grid container spacing={2}>
+          <Grid item xs={12} lg={8}>
+            <Box
+              sx={{
+                textAlign: "center",
+                height: "100%",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <img
+                src={GatewayThumbnail}
+                style={{
+                  width: "100%",
+                  maxWidth: "80vh",
+                  maxHeight: "35vh",
+                  objectFit: "cover",
                 }}
-                sx={{ mt: 2 }}
-                startIcon={<LibraryBooksRoundedIcon />}
-              >
-                操作方法
-              </Button>
+              />
             </Box>
           </Grid>
-        </Card>
-      </Grid>
-      {largerThanMD && (
-        <Grid item xs={12} md={6} lg={4}>
-          <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
-            <Typography variant="h3">アプリ設定</Typography>
-            <Settings />
-          </Card>
+          <Grid item xs={12} md={6} lg={4}>
+            <QuickMenu />
+          </Grid>
+          <Grid item xs={12} md={6} lg={4}>
+            <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+              <Suspense fallback={<p>読み込み中...</p>}>
+                <UserInfo />
+              </Suspense>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={6} lg={4}>
+            <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+              <Grid
+                container
+                sx={{
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  height: "100%",
+                }}
+              >
+                <Typography variant="h3">アプリ情報</Typography>
+                <Version />
+                <Box sx={{ width: "100%", textAlign: "right" }}>
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    onClick={() => {
+                      window.open(
+                        process.env.REACT_APP_MANUAL_URL || "/",
+                        "_blank"
+                      );
+                    }}
+                    sx={{ mt: 2 }}
+                    startIcon={<LibraryBooksRoundedIcon />}
+                  >
+                    操作方法
+                  </Button>
+                </Box>
+              </Grid>
+            </Card>
+          </Grid>
+          {largerThanMD && (
+            <Grid item xs={12} md={6} lg={4}>
+              <Card variant="outlined" sx={{ p: 2, height: "100%" }}>
+                <Typography variant="h3">アプリ設定</Typography>
+                <Settings />
+              </Card>
+            </Grid>
+          )}
         </Grid>
       )}
-    </Grid>
+    </>
   );
 };
 
