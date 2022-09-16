@@ -41,7 +41,7 @@ const BottomNav: React.VFC = () => {
 
   return (
     <>
-      {profile && profile.available && (
+      {profile && profile.available && localStorage.getItem("viewOnly") !== "yes" && (
         <Paper
           // https://rishuntrading.co.jp/blog/programing/safari_z-index_notwork/
           sx={{

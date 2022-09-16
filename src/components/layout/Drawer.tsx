@@ -32,7 +32,7 @@ import theme from "#/components/lib/theme";
 import UserInfo from "#/components/block/UserInfo";
 import Version from "#/components/block/Version";
 
-const drawerWidth = localStorage.getItem("hideDrawer") === "yes" ? 0 : 250;
+const drawerWidth = localStorage.getItem("viewOnly") === "yes" ? 0 : 250;
 
 const DrawerLeft: React.VFC = () => {
   const path = useLocation().pathname;
