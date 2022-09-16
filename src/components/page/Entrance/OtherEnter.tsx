@@ -78,7 +78,7 @@ const EntranceOtherEnter: React.VFC = () => {
             setLoading(false);
             setGuestInfo(res);
             if (res.guest_type === "family") {
-              setScanStatus("error");
+              setScanStatus("success");
               if (res.reservation_id === "family") {
                 setAlertMessage(
                   "このリストバンドは未使用ですが、保護者用のものです。"
@@ -196,10 +196,10 @@ const EntranceOtherEnter: React.VFC = () => {
                     guestInfo.guest_type === "student"
                       ? "生徒"
                       : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : guestInfo.guest_type === "family"
-                      ? "保護者"
-                      : "その他"
+                        ? "教員"
+                        : guestInfo.guest_type === "family"
+                          ? "保護者"
+                          : "その他"
                   }
                 />
               </ListItem>
