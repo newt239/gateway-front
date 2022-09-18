@@ -126,11 +126,11 @@ const AdminCheckGuest: React.VFC = () => {
   };
 
   const getExhibitName = (exhibit_id: string) => {
-    const exhibit = exhibitList.find((v) => v.exhibit_id === v.exhibit_id);
+    const exhibit = exhibitList.find((v) => v.exhibit_id === exhibit_id);
     if (exhibit_id === "entrance") {
       return "エントランス";
     } else if (exhibit) {
-      return exhibit.group_name;
+      return exhibit.exhibit_name;
     } else {
       return exhibit_id;
     }
@@ -243,10 +243,10 @@ const AdminCheckGuest: React.VFC = () => {
                     {guestInfo.guest_type === "family"
                       ? "保護者"
                       : guestInfo.guest_type === "student"
-                      ? "生徒"
-                      : guestInfo.guest_type === "teacher"
-                      ? "教員"
-                      : "その他"}
+                        ? "生徒"
+                        : guestInfo.guest_type === "teacher"
+                          ? "教員"
+                          : "その他"}
                   </ListItemText>
                 </ListItem>
                 <ListItem>
